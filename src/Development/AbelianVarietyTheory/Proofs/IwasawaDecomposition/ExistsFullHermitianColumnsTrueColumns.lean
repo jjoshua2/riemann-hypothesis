@@ -513,13 +513,9 @@ theorem exists_colsFullS : ∀ {B : GlobalTheory.Mem.Base} {X : PreX B.toPre} (I
       vol := hV
       levelZeroCompatibility := C.herm.levelZeroCompatibility
       g := g
-      cof := C.herm.cof
       piG := C.herm.piG
-      stabMap := C.herm.stabMap
-      fvI := C.herm.fvI
       relDet := relDet_std I l Z C hI hS
       std := C.herm.std
-      vpos := B.V_pos
       baseL := C.herm.baseL }
   refine ⟨⟨Fu, rfl⟩, HEq.rfl, ?_⟩
   intro x a ha

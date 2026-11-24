@@ -80,10 +80,7 @@ structure ColsHermS (D : D7) where
   base : HermColsCh D
   atT : ∀ u, AtT D u (base.vT u) (base.Fv u)
   levelZeroCompatibility : SymmetricLevelZeroData D base atT
-  cof : SymmetricCofactorCompatibility D base atT
   piG : PiGConstS D base atT levelZeroCompatibility
-  stabMap : SymmetricStabilizerMapCompatibility D base atT
-  fvI : SymmetricResidueFieldLevels D base atT
   std : StdTied D
   baseL : SymmetricBaseCompatibility D base atT
 

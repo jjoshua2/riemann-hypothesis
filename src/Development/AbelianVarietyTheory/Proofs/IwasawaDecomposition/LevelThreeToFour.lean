@@ -444,11 +444,6 @@ def hermRe_atT {B : Formalism.L2.Herm.HermColsCh D} {u : D.what₂.Word}
     (A : Formalism.L2.Herm.AtT D u (B.vT u) (B.Fv u)) :
     Formalism.L2.Herm.AtT (reD' D Z) u ((hermRe_base Z B).vT u) ((hermRe_base Z B).Fv u) := { A with }
 
-theorem hermRe_ad {B : Formalism.L2.Herm.HermColsCh D} {A : ∀ u, Formalism.L2.Herm.AtT D u (B.vT u) (B.Fv u)}
-    (Ad : Formalism.L2.Herm.SymmetricAdelicCompatibility D B A) :
-    Formalism.L2.Herm.SymmetricAdelicCompatibility (reD' D Z) (hermRe_base Z B) (fun u => hermRe_atT Z (A u)) :=
-  { Ad with }
-
 def hermRe (H : Formalism.L2.Herm.ColsHermS D) : Formalism.L2.Herm.ColsHermS (reD D Z) :=
   ({ H with
     base := hermRe_base Z H.base

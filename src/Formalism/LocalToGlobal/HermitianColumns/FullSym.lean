@@ -58,23 +58,16 @@ structure SymmetricCompatibleData (D : D7) where
 structure FullTiedS (D : D7) extends SymmetricCompatibleData D where
   levelZeroCompatibility : SymmetricLevelZeroData D base.toHermColsCh atT
   g : SymmetricGroupCompatibility D base.toHermColsCh
-  cof : SymmetricCofactorCompatibility D base.toHermColsCh atT
   piG : PiGConstS D base.toHermColsCh atT levelZeroCompatibility
-  stabMap : SymmetricStabilizerMapCompatibility D base.toHermColsCh atT
-  fvI : SymmetricResidueFieldLevels D base.toHermColsCh atT
   relDet : SymmetricRelativeDeterminant D base
   std : StdTied D
-  vpos : PositiveVolumeCompatible D
   baseL : SymmetricBaseCompatibility D base.toHermColsCh atT
 
 def FullTiedS.cols {D : D7} (X : FullTiedS D) : ColsHermS D where
   base := X.base.toHermColsCh
   atT := X.atT
   levelZeroCompatibility := X.levelZeroCompatibility
-  cof := X.cof
   piG := X.piG
-  stabMap := X.stabMap
-  fvI := X.fvI
   std := X.std
   baseL := X.baseL
 
