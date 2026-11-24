@@ -291,8 +291,6 @@ theorem UpperTheory.LiteratureTheorems.bernstein_zelevinsky_finiteness_of_open (
   PositivityTheory.Prw.bernsteinZelevinskyFiniteness_holds
 theorem UpperTheory.LiteratureTheorems.bloch_kato_local_of_open (O : _root_.UpperTheory.LiteratureTheorems.OpenImageCondition) : GlobalTheory.Published.BlochKatoLocal :=
   _root_.GlobalTheory.CompanionTheory.Hypotheses₂.BK.blochKatoLocal
-theorem UpperTheory.LiteratureTheorems.brauer_degree_zero_of_open (O : _root_.UpperTheory.LiteratureTheorems.OpenImageCondition) : GlobalTheory.Published.BrauerDegreeZero :=
-  (GlobalTheory.BrauerZero.brauerDegreeZero )
 theorem UpperTheory.LiteratureTheorems.ess_square_integrable_segments_of_open (O : _root_.UpperTheory.LiteratureTheorems.OpenImageCondition) : GlobalTheory.Published.EssSquareIntegrableSegments :=
   PositivityTheory.Exh.essSquareIntegrableSegments_of_seg (PositivityTheory.RgGu.segmentRepresentation)
 theorem UpperTheory.LiteratureTheorems.cusp_forms_bounded_gl_of_open (O : _root_.UpperTheory.LiteratureTheorems.OpenImageCondition) : GlobalTheory.Published.CuspFormsBoundedGL :=
@@ -1584,7 +1582,6 @@ theorem UpperTheory.One.Join.local_inputs_from_literature (O : _root_.UpperTheor
     exh := (_root_.UpperTheory.LiteratureTheorems.langlands_exhaustion_gl_of_open O)
     cos := (_root_.UpperTheory.LiteratureTheorems.standard_cosocle_gl_of_open O)
     dzi := (_root_.UpperTheory.LiteratureTheorems.depth_zero_induction_of_open O)
-    brauer := (_root_.UpperTheory.LiteratureTheorems.brauer_degree_zero_of_open O)
     chev := (_root_.UpperTheory.LiteratureTheorems.chevalley_units_of_open O)
     green := (_root_.UpperTheory.LiteratureTheorems.green_regular_characters_of_open O) }
 theorem UpperTheory.One.Join.automorphic_inputs_from_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenImageCondition) (bc : _root_.PositivityTheory.Rg.BcN.BaseChangeIsobaricN)

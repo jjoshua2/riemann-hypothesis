@@ -1016,8 +1016,6 @@ theorem UpperTheory.LiteratureTheorems.bloch_kato_local_of_literature (O : _root
   _root_.GlobalTheory.CompanionTheory.Hypotheses₂.BK.blochKatoLocal
 theorem UpperTheory.LiteratureTheorems.borel_casselman_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.BorelCasselman :=
   PositivityTheory.Stage1.PM.borelCasselman
-theorem UpperTheory.LiteratureTheorems.brauer_degree_zero_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.BrauerDegreeZero :=
-  (GlobalTheory.BrauerZero.brauerDegreeZero )
 theorem UpperTheory.LiteratureTheorems.cm_curve_good_outside_prime_st_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.CMCurveGoodOutsidePrimeSt :=
   GlobalTheory.Published.cmCurveGoodOutsidePrime
 theorem UpperTheory.LiteratureTheorems.ess_square_integrable_segments_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.EssSquareIntegrableSegments :=
@@ -1296,7 +1294,6 @@ theorem UpperTheory.LiteratureTheorems.literature_local (O : _root_.UpperTheory.
     cos := (_root_.UpperTheory.LiteratureTheorems.standard_cosocle_gl_of_literature O),
     llc := (_root_.UpperTheory.LiteratureTheorems.local_langlands_recT_exists_of_literature O),
     dzi := (_root_.UpperTheory.LiteratureTheorems.depth_zero_induction_of_literature O),
-    brauer := (_root_.UpperTheory.LiteratureTheorems.brauer_degree_zero_of_literature O),
     chev := (_root_.UpperTheory.LiteratureTheorems.chevalley_units_of_literature O),
     green := (_root_.UpperTheory.LiteratureTheorems.green_regular_characters_of_literature O)
   }

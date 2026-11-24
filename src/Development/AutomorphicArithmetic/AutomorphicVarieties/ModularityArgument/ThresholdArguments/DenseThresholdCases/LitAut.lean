@@ -58,7 +58,6 @@ structure LitLocAlt : Prop where
   exh : LanglandsExhaustionGL
   cos : StandardCosocleGL
   dzi : DepthZeroInduction
-  brauer : BrauerDegreeZero
   chev : ChevalleyUnits
   green : GreenRegularCharacters
 structure LiteratureAutomorphyHypothesis : Prop where
