@@ -69,7 +69,6 @@ theorem heckeOpen_withLoc_alt : âˆ€ (D : D7) (cf : CharFrame D) (jE : D.host.E â
     { B := { Sp.B with }
       Q_eq := Sp.Q_eq
       mx := Sp.mx
-      mx_max := Sp.mx_max
       mx_inj := Sp.mx_inj
       mx_all := Sp.mx_all
       phO := Sp.phO

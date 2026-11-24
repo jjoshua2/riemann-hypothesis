@@ -595,7 +595,6 @@ theorem exists_types : GlobalTheory.Published.RayClassFieldSt → GlobalTheory.P
   refine ⟨X, D.nStage_trivialCharacter_compat, D.nStage_trivialCharacter_coeff_eq, rfl, rfl, rfl, rfl, rfl, ⟨?_⟩, fun _ => ?_⟩
   · exact
       { eM := RingEquiv.refl _
-        eM_K := fun _ => rfl
         eP := Equiv.refl _
         locPar_def := fun _ _ => rfl }
   · intro lam k v x

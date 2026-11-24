@@ -309,7 +309,6 @@ structure NdSpec (Pl : PlSide D) (M : MtFam D) (C : NChoice D) (big : D.what₂.
   B : NLocBase D M
   Q_eq : ∀ j w i, i ∈ X.nd.locs j w → X.nd.Q i = B.Qc j w
   mx : ∀ j w, X.nd.Loc → Ideal (heckeAlg B j w)
-  mx_max : ∀ j w i, i ∈ X.nd.locs j w → (mx j w i).IsMaximal
   mx_inj : ∀ j w, Set.InjOn (mx j w) (X.nd.locs j w)
   mx_all : ∀ j w, 1 ≤ j → j ≤ D.R.m → D.what₂.muAt w ≠ D.what₂.mu0 → ∀ I : Ideal (heckeAlg B j w), I.IsMaximal →
     ∃ i ∈ X.nd.locs j w, mx j w i = I

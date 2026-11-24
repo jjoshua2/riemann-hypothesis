@@ -104,7 +104,6 @@ def Mv.sideA_alt {cf : CharFrame D} {jE : D.host.E →+* Qb} (A : _root_.GlobalT
       (O_tw := (by with_unfolding_all exact (A.grp.O_tw :))))
     (par := @_root_.GlobalTheory.HeightCounting.ParSide.mk (_) (_)
       (eM := (by with_unfolding_all exact (A.par.eM :)))
-      (eM_K := (by with_unfolding_all exact (A.par.eM_K :)))
       (eP := (by with_unfolding_all exact (A.par.eP :)))
       (locPar_def := (by with_unfolding_all exact (A.par.locPar_def :))))
     (au := @_root_.GlobalTheory.HeightCounting.AUSideAlt.mk (_)

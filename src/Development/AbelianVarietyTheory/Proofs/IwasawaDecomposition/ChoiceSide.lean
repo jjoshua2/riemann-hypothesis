@@ -105,7 +105,6 @@ def Mv.sideA {cf : CharFrame D} {jE : D.host.E →+* Qb} (A : SideA D cf jE) : S
       (O_tw := (A.grp.O_tw)))
     (par := @_root_.GlobalTheory.HeightCounting.ParSide.mk (_) (_)
       (eM := (A.par.eM))
-      (eM_K := (A.par.eM_K))
       (eP := (A.par.eP))
       (locPar_def := (A.par.locPar_def)))
     (au := @_root_.GlobalTheory.HeightCounting.AUSide.mk (_)

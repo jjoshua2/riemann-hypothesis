@@ -93,7 +93,6 @@ structure GrpSide where
 
 structure ParSide (jE : D.host.E →+* Qb) where
   eM : D.ntypes.Mray ≃+* MrayC D jE
-  eM_K : ∀ x : D.host.K, ((eM (algebraMap D.host.K D.ntypes.Mray x) : MrayC D jE) : Qb) = jE x
   eP : D.ntypes.Par ≃ ParC D
   locPar_def : ∀ σ w, D.ntypes.locPar σ w = isoLoc D.nd D.naut (eP σ).1 w
 

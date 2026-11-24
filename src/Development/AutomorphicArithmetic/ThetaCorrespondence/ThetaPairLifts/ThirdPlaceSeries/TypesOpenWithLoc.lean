@@ -49,7 +49,7 @@ theorem typesOpen_withLoc_alt : ∀ (D : D7) (cf : CharFrame D) (jE : D.host.E �
   intro D cf jE A low Pq S hL eig θ Bs M C tp _ _ _ _ _ _ big L Sp Au hss
   refine ⟨{ grp := ?_, par := ?_, plB := A.pl.plB, plκ := A.pl.plκ, plB_loc := ?_, plB_iota := ?_, rbarSS := ?_, rbar := ?_ }⟩
   · exact ⟨A.grp.tA, A.grp.tκ, A.grp.teichC_def, A.grp.ζ, A.grp.ζ_gen, A.grp.O, A.grp.eSer_def, A.grp.kv, A.grp.tg_tame, A.grp.O_equiv, A.grp.O_tw⟩
-  · exact ⟨A.par.eM, A.par.eM_K, A.par.eP, A.par.locPar_def⟩
+  · exact ⟨A.par.eM, A.par.eP, A.par.locPar_def⟩
   · exact Au.kFbar
   · exact fun i k v x => A.iota _ k v x
   · exact fun σ lam _ => hss σ lam

@@ -62,9 +62,6 @@ theorem mxC_self (i : LocT B) : mxC B (jOf B i) (wOf B i) i = i.2.1 := by
   unfold mxC
   exact (dif_pos (rfl : i.1 = (jOf B i, wOf B i))).trans rfl
 
-theorem mxC_max (i : LocT B) : (mxC B (jOf B i) (wOf B i) i).IsMaximal := by
-  rw [mxC_self]; exact i.2.2.1
-
 theorem mxC_inj (hF : LocsFin B) (j : ℕ) (w : what₂.places.Pl) : Set.InjOn (mxC B j w) (locsC B hF j w) := by
   rintro ⟨⟨j1, w1⟩, I1⟩ h1 ⟨⟨j2, w2⟩, I2⟩ h2 he
   have h1' := (locsC_mem B hF j w _).1 (Finset.mem_coe.1 h1)

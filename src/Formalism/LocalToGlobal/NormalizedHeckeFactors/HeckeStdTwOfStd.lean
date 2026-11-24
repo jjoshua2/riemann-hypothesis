@@ -103,7 +103,6 @@ structure NormalizedLocalCompatibility (D : D7) (M : MtFam D) where
   Q_eq : ∀ j w i, i ∈ D.nd.locs j w → D.nd.Q i = B.Qc j w
 
   mx : ∀ j w, D.nd.Loc → Ideal (heckeAlg B j w)
-  mx_max : ∀ j w i, i ∈ D.nd.locs j w → (mx j w i).IsMaximal
 
   mx_inj : ∀ j w, Set.InjOn (mx j w) (D.nd.locs j w)
 

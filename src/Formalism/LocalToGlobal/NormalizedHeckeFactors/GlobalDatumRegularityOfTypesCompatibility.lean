@@ -31,7 +31,6 @@ def ParC : Type :=
 structure NormalizedTypesCompatibility (jE : D.host.E →+* Qb) where
 
   eM : D.ntypes.Mray ≃+* MrayC D jE
-  eM_K : ∀ x : D.host.K, ((eM (algebraMap D.host.K D.ntypes.Mray x) : MrayC D jE) : Qb) = jE x
 
   tA : Fin 2 → ValuationSubring ℂ
   tκ : ∀ k, haveI : Fact (D.host.g k).Prime := ⟨D.host.g_prime k⟩

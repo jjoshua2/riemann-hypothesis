@@ -98,9 +98,6 @@ theorem trPsi_act (hs : HeckeStd0 B) (hd : FinDimV B) (hL : MtLoc B (partCompl_o
   obtain ⟨rfl, rfl⟩ := h
   exact hA i v k hvk z
 
-include h in
-theorem tr_max : (mxC B j w i).IsMaximal := by obtain ⟨rfl, rfl⟩ := h; exact mxC_max B i
-
 end Transport
 
 variable {D : D7}
@@ -207,7 +204,6 @@ theorem nonempty_spec
   B := recBase M B0 hdef hO hc
   Q_eq j w i h := congrArg B0.Qw ((locsC_mem B0 (locsFin_of hs hd) j w i).1 h).2
   mx := mxC B0
-  mx_max j w i h := tr_max ((locsC_mem B0 (locsFin_of hs hd) j w i).1 h)
   mx_inj := mxC_inj B0 (locsFin_of hs hd)
   mx_all := mxC_all B0 (locsFin_of hs hd)
   phO j w i h := trO ((locsC_mem B0 (locsFin_of hs hd) j w i).1 h)
