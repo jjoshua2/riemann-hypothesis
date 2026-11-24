@@ -513,7 +513,6 @@ theorem exists_colsFullS : ∀ {B : GlobalTheory.Mem.Base} {X : PreX B.toPre} (I
       vol := hV
       levelZeroCompatibility := C.herm.levelZeroCompatibility
       g := g
-      ad := C.herm.ad
       cof := C.herm.cof
       piG := C.herm.piG
       stabMap := C.herm.stabMap
