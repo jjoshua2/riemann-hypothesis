@@ -828,8 +828,6 @@ theorem UpperTheory.LiteratureTheorems.green_cuspidal_of_literature : GlobalTheo
   PositivityTheory.Stage1.PM.greenCuspidal
 theorem UpperTheory.LiteratureTheorems.green_regular_characters_of_literature : GlobalTheory.Published.GreenRegularCharacters :=
   PositivityTheory.Stage1.PM.greenRegularCharacters
-theorem UpperTheory.LiteratureTheorems.green_series_st_of_literature : GlobalTheory.Published.GreenSeriesSt :=
-  _root_.GlobalTheory.GreenSeries.green_series _root_.UpperTheory.LiteratureTheorems.green_cuspidal_of_literature
 theorem UpperTheory.LiteratureTheorems.abelian_lifting_of_literature : GlobalTheory.Published.AbelianLifting :=
   GlobalTheory.abelianScheme_hom_lifting_nilpotent_dividedPowers
 theorem UpperTheory.LiteratureTheorems.grothendieck_deformation_of_literature : GlobalTheory.Published.GrothendieckDeformation :=
