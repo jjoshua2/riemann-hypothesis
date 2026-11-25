@@ -59,7 +59,6 @@ section -- clump:auto
 
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.MainNotions.S IsDedekindDomain NumberField Formalism.L2.Theta Formalism.L2.NTheta Formalism.IndefR.Mult
 open scoped TensorProduct
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory
 
@@ -84,8 +83,6 @@ open Formalism.IndefR.Bridge (IsDC SplitOff)
 open scoped TensorProduct
 
 namespace GlobalTheory.HeckeParts
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 section Group
 
@@ -299,7 +296,7 @@ theorem mem_hPart_of_partFull (hg : GoodPl V β Pg ok pl q Sb) (Q : LevelP Pg r 
   rw [mem_hPart_iff]
   intro P hP k hk α hα R hR
   have hq := (hg P hP).1
-  rw [heckeOn_lev hg Q hT hP hk hα hR, ← hSg P hP, coeff_heckePolyOf, if_pos hk, mul_div_cancel_left₀]
+  rw [heckeOn_lev hg Q hT hP hk hα hR, ← hSg P hP, coeff_heckePolyOf, ite_eq_left hk, mul_div_cancel_left₀]
   simp [hq]
 
 end Lev

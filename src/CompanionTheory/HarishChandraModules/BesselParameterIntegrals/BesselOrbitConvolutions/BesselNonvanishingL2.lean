@@ -139,8 +139,7 @@ theorem bessel_nonvanishing_from_L2 : CompanionTheory.D.Upq.BesselFunctionalCons
   classical
   intro hSch hNI hGS hGG hDD hBC hInp _ k r ε lam h H _ _ _ σ w0 Wp _ _ _ _ z c u π μW μN μG νq hS W hWc hWeq
     hRe hpos hfin
-  by_contra hcon
-  push_neg at hcon
+  by_contra! hcon
   obtain ⟨hlam, hσ, hgap, hGapOK, hw0, hz, hT, hc, hπ, hWh, hNh, hGh, hq⟩ := hS
   have hS' : Side k r ε lam h σ w0 z c u π μW μN μG νq :=
     ⟨hlam, hσ, hgap, hGapOK, hw0, hz, hT, hc, hπ, hWh, hNh, hGh, hq⟩
@@ -196,7 +195,7 @@ theorem bessel_nonvanishing_from_L2 : CompanionTheory.D.Upq.BesselFunctionalCons
       filter_upwards [hGae] with g hg
       have hxg : x0 * Matrix.of g ∈ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk k r) := DDSmoothness.uh_mul hx0 hg
       have hmem : Formalism.QuantumDeterminants.lmulM x0 g ∈ U := hxg
-      simp only [Function.comp, Φ', Set.piecewise, hmem, if_true, Φ]
+      simp only [Function.comp, Φ', Set.piecewise, hmem, ite_true, Φ]
       show _ = ⟪η, PI.BesselPeriodGGP.eFun μG σ w0 (x0⁻¹ * (x0 * Matrix.of g)) • W (x0 * Matrix.of g)⟫_ℂ
       rw [← Matrix.mul_assoc, hxx', Matrix.one_mul]
     have hmapEq : μG.map (Formalism.QuantumDeterminants.lmulM x0) = μG := hGh.2.2.2 x0 hx0
@@ -236,7 +235,7 @@ theorem bessel_nonvanishing_from_L2 : CompanionTheory.D.Upq.BesselFunctionalCons
       have hsx : Matrix.of p.1 * Matrix.of p.2 * Matrix.of x ∈ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk k r) :=
         DDSmoothness.uh_mul hs hx
       have hmem : mulMt (fun i j => (Matrix.of p.1 * Matrix.of p.2) i j) x ∈ U := hsx
-      simp only [Φ', Set.piecewise, hmem, if_true, Φ]
+      simp only [Φ', Set.piecewise, hmem, ite_true, Φ]
       show ⟪η, PI.BesselPeriodGGP.eFun μG σ w0 (x0⁻¹ * (Matrix.of p.1 * Matrix.of p.2 * Matrix.of x)) •
           W (Matrix.of p.1 * Matrix.of p.2 * Matrix.of x)⟫_ℂ = _
       rw [hWeq _ hp.1 _ hp.2 _ hx]

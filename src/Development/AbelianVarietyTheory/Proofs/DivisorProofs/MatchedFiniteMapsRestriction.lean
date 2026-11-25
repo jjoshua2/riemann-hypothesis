@@ -131,8 +131,7 @@ theorem scalar_of_irred {V : Type} [AddCommGroup V] [Module ℂ V] (P : Submodul
     (hrank : Module.rank ℂ V ≤ Cardinal.aleph0) (hirr : ∀ N, P N → N = ⊥ ∨ N = ⊤) (T : Module.End ℂ V)
     (hker : ∀ c : ℂ, P (LinearMap.ker (T - c • 1))) (hran : ∀ c : ℂ, P (LinearMap.range (T - c • 1))) :
     ∃ c : ℂ, T = c • 1 := by
-  by_contra hne
-  push_neg at hne
+  by_contra! hne
   have hinj : ∀ c : ℂ, Function.Injective ⇑(T - c • (1 : Module.End ℂ V)) := by
     intro c
     rw [← LinearMap.ker_eq_bot]
@@ -140,7 +139,7 @@ theorem scalar_of_irred {V : Type} [AddCommGroup V] [Module ℂ V] (P : Submodul
     · exact h
     · exact absurd (sub_eq_zero.mp (LinearMap.ker_eq_top.mp h)) (hne c)
   obtain ⟨v₀, hv₀⟩ : ∃ v : V, v ≠ 0 := by
-    by_contra h; push_neg at h
+    by_contra h; push Not at h
     exact hne 0 (LinearMap.ext fun v => (h _).trans (h _).symm)
   have hsurj : ∀ c : ℂ, Function.Surjective ⇑(T - c • (1 : Module.End ℂ V)) := by
     intro c
@@ -316,9 +315,5 @@ theorem equiv_of_ker_eq' {κ : Type} [TopologicalSpace κ] {P Q : Type} [AddComm
   exact ⟨e, fun φ hφ => he ⟨φ, hφ⟩⟩
 
 end Ker
-
-section Main
-
-end Main
 
 end GlobalTheory.FinUniq

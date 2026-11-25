@@ -699,8 +699,7 @@ theorem germ_ne_zero {a : ℂ → ℂ} (ha : DifferentiableOn ℂ a Hs) {z₀ : 
   exact h (eqOn_of_germ ha (differentiableOn_const 0) h0 z₀ hz₀)
 
 theorem exists_ne_zero {a : ℂ → ℂ} (h : (a : Mero) ≠ 0) : ∃ z ∈ Hs, a z ≠ 0 := by
-  by_contra hc
-  push_neg at hc
+  by_contra! hc
   exact h (germ_eq_of_eqOn (ψ := fun _ => 0) hc)
 
 theorem eventually_ne_zero {a : ℂ → ℂ} (ha : DifferentiableOn ℂ a Hs) {z₀ : ℂ} (hz₀ : z₀ ∈ Hs) (h : a z₀ ≠ 0) :
@@ -939,7 +938,7 @@ theorem finite_mod_powers : ∀ {Ω : Type} [Field Ω] [Algebra ℚ Ω] [IsAlgCl
   intro f hfU hfinv
   let f' : Sset := ⟨f, hfU, hfinv⟩
   have hex : ∃ g : Sset, sig g = sig f' := ⟨f', rfl⟩
-  have hrep : rep (sig f') = hex.choose.1 := dif_pos hex
+  have hrep : rep (sig f') = hex.choose.1 := dite_eq_left hex
   have hsig : sig hex.choose = sig f' := hex.choose_spec
   have hsame : ∀ s : S, Z hex.choose s = Z f' s := fun s => congrArg Subtype.val (congrFun hsig s)
   let r : Sset := hex.choose

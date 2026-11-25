@@ -358,9 +358,9 @@ theorem jumps_of_exact_degree : ∀ (l : ℕ) [Fact l.Prime] (P : LocPrime l) (A
     unfold FildR
     rw [key c]
     by_cases hc : c ≤ d τ
-    · rw [if_pos hc, if_pos hc, h1]
+    · rw [ite_eq_left hc, ite_eq_left hc, h1]
       rfl
-    · rw [if_neg hc, if_neg hc, finrank_bot]
+    · rw [ite_eq_right hc, ite_eq_right hc, finrank_bot]
       rfl
   unfold multV
   rw [fk b, fk (b + 1)]
@@ -696,8 +696,7 @@ theorem norm_le_one (l : ℕ) [Fact l.Prime] (K : FinExt l) (c : ↥(GK K) →* 
     ‖(((c g : (↥(K0 K))ˣ) : ↥(K0 K)) : Om l)‖ ≤ 1 := by
   haveI := GlobalTheory.BlochKatoIntegralScalars.compactSpace_GK K
   obtain ⟨B, hB⟩ := (isCompact_univ (X := ↥(GK K))).exists_bound_of_continuousOn hc.continuousOn
-  by_contra h
-  push_neg at h
+  by_contra! h
   obtain ⟨n, hn⟩ := pow_unbounded_of_one_lt B h
   have hpow : (((c (g ^ n) : (↥(K0 K))ˣ) : ↥(K0 K)) : Om l) = ((((c g : (↥(K0 K))ˣ) : ↥(K0 K)) : Om l)) ^ n := by
     simp [map_pow]
@@ -1093,7 +1092,7 @@ theorem GlobalTheory.CrysCharJumps.adm20_of_fonOf :
     rw [hp.2.2]
     have hex : ∃ i, Formalism.MainNotions.tableLineDegreeTwo.Over ((HW l).W K 1 LL hA.2.2).emb i τ := ⟨i, hi⟩
     have hc : c τ = a i := by
-      simp only [c, dif_pos hex]
+      simp only [c, dite_eq_left hex]
       congr 1
       apply ((HW l).W K 1 LL hA.2.2).emb_bij.1
       have h1 := hex.choose_spec

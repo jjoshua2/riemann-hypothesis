@@ -77,8 +77,6 @@ open GlobalTheory.CuspGeneric GlobalTheory.CuspRep GlobalTheory.UnitaryBC Global
 open GroundTheory.Automorphic GroundTheory.Automorphic.FourierWhittaker GroundTheory.Automorphic.Reduction GroundTheory.Automorphic.Spherical
 open scoped ENNReal ComplexConjugate
 
-attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
-
 namespace GlobalTheory.CompanionTheory.UnipotentNormalizer
 
 variable {E : Type} [Field E] [NumberField E] {k : ℕ}
@@ -245,7 +243,7 @@ theorem colS_eq (l : Fin k → ℤ) (c : Fin k) : colS l c = ∑ i : Fin k, if i
   rw [Finset.sum_eq_single c]
   · simp only [le_refl, and_true, Fin.val_fin_lt]
   · intro b _ hb
-    rw [if_neg]
+    rw [ite_eq_right]
     rintro ⟨-, h1, h2⟩
     have h1' : (c : ℕ) ≤ b := h1
     have h2' : (b : ℕ) ≤ c := h2

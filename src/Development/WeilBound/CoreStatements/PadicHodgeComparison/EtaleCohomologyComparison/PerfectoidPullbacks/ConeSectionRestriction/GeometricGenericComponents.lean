@@ -155,15 +155,14 @@ theorem exists_homogeneous_relation {K σ ι : Type*} [Field K] (I : Ideal (MvPo
     (h : ¬ AlgebraicIndependent K fun i => Ideal.Quotient.mk I (l i)) :
     ∃ (d : ℕ) (F : MvPolynomial ι K), F ≠ 0 ∧ F.IsHomogeneous d ∧ aeval l F ∈ I := by
   rw [algebraicIndependent_iff] at h
-  push_neg at h
+  push Not at h
   obtain ⟨F, hF, hF0⟩ := h
   have hmem : aeval l F ∈ I := by
     rw [← Ideal.Quotient.eq_zero_iff_mem, ← hF]
     have := comp_aeval_apply (R := K) (f := l) (Ideal.Quotient.mkₐ K I) F
     simpa using this
   obtain ⟨n, hn⟩ : ∃ n, homogeneousComponent n F ≠ 0 := by
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     exact hF0 (by rw [← sum_homogeneousComponent F]; simp [hc])
   exact ⟨n, _, hn, homogeneousComponent_isHomogeneous n F, by
     rw [← homogeneousComponent_aeval l hl]; exact hI _ hmem n⟩
@@ -229,7 +228,7 @@ theorem exists_linear_of_integral {K σ : Type} [Field K] [Infinite K]
     have hG0 : (X j * F : MvPolynomial ι K) ≠ 0 := mul_ne_zero (X_ne_zero j) hF0
     obtain ⟨a, ha⟩ : ∃ a : ι → K, eval a (X j * F) ≠ 0 := by
       by_contra hc'
-      push_neg at hc'
+      push Not at hc'
       exact hG0 (MvPolynomial.funext fun x => by simpa using hc' x)
     have haj : a j ≠ 0 := fun h0 => ha (by simp [h0])
     have hGI : aeval l (X j * F) ∈ I := by
@@ -394,7 +393,6 @@ section -- clump:auto
 
 set_option backward.isDefEq.respectTransparency false
 open CategoryTheory AlgebraicGeometry ReciprocityTheory.ChartRestriction.G.Geo.Tor CrystallineSemistableComparison.Pb
-attribute [local instance] MvPolynomial.gradedAlgebra
 
 end -- clump:auto
 end -- clump:auto
@@ -848,8 +846,6 @@ open CategoryTheory AlgebraicGeometry ReciprocityTheory.ChartRestriction.G.Geo.T
 
 namespace CrystallineSemistableComparison.Pb
 
-attribute [local instance] MvPolynomial.gradedAlgebra
-
 theorem exists_frac_basicOpen {X : Scheme.{0}} {W : X.Opens} (hW : IsAffineOpen W) (g : Γ(X, W))
     (hne : (X.basicOpen g : Set X).Nonempty) :
     ∀ r : Γ(X, X.basicOpen g), ∃ b ∈ Set.range (resO (X.basicOpen_le g)), ∃ b' ∈ Set.range (resO (X.basicOpen_le g)),
@@ -1290,7 +1286,7 @@ theorem constantCoeff_gen {K : Type} [Field K] {X : Scheme.{0}} {N : ℕ} (i : X
   rw [MvPolynomial.homogeneousComponent_zero] at hc
   rw [MvPolynomial.constantCoeff_eq]
   by_cases hd : 0 = d • 1
-  · rw [if_pos hd] at hc
+  · rw [ite_eq_left hd] at hc
     have hd0 : d = 0 := by simpa using hd.symm
     subst hd0
     obtain ⟨c, rfl⟩ : ∃ c, f = MvPolynomial.C c := ⟨_, hc.symm⟩
@@ -1305,7 +1301,7 @@ theorem constantCoeff_gen {K : Type} [Field K] {X : Scheme.{0}} {N : ℕ} (i : X
     have e := congrArg (evV i (MvPolynomial.X j) _ le_rfl) (mk_C_mul_inv j c hne hf hb)
     rw [map_mul, map_one, h0 j, zero_mul] at e
     exact zero_ne_one e
-  · rw [if_neg hd, MvPolynomial.C_eq_zero] at hc
+  · rw [ite_eq_right hd, MvPolynomial.C_eq_zero] at hc
     exact hc
 
 theorem homIdeal_ne_top : ∀ {K : Type} [Field K] {X : Scheme.{0}} {N : ℕ} (i : X ⟶ PSpace K N),

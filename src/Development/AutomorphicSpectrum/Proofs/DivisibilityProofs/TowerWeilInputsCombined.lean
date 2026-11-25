@@ -1,5 +1,6 @@
 module
 
+import Development.AutomorphicSpectrum.Proofs.MetricProofs.FlagCoverArithmeticFourth
 public import Development.AutomorphicSpectrum.Definitions.DivisibilityTowers.HasBaseDegreeSetting
 public import Development.AutomorphicSpectrum.Statements.MetricStatements.AgreementIffGuarded
 public import Development.AutomorphicSpectrum.Proofs.DivisibilityProofs.FlagHeightPolynomialEval
@@ -159,16 +160,8 @@ theorem yFl_coordMap (σ : Equiv.Perm Ψ) (p : Σ q : FlBlock Ψ N, FlIdx Ψ N q
 
 theorem mCoordIdeal_ringHom {K : Type} [Fintype K] {J : K → Type} [∀ k, Fintype (J k)] {Ω₀ Ω : Type} [Field Ω₀] [Field Ω]
     (i : Ω₀ →+* Ω) (y₀ : (Σ k, J k) → Ω₀) : mCoordIdeal (fun p => i (y₀ p)) = mCoordIdeal y₀ := by
-  have key : ∀ f : MRing J, mConeMap (fun p => i (y₀ p)) f = MvPolynomial.map i (mConeMap y₀ f) := by
-    intro f
-    induction f using MvPolynomial.induction_on with
-    | C a => simp [mConeMap]
-    | add p q hp hq => simp only [map_add (f := _), hp, hq]
-    | mul_X p n hp => simp only [map_mul, hp]; simp [mConeMap]
-  ext f
-  show mConeMap _ f = 0 ↔ mConeMap _ f = 0
-  rw [key]
-  exact map_eq_zero_iff _ (MvPolynomial.map_injective i i.injective)
+  intros
+  apply _root_.GlobalTheory.CompanionTheory.Ar.PB.BaseCount.mCoordIdeal_map <;> assumption
 
 theorem imageZ_PFl (σ : Equiv.Perm Ψ) : imageZ (coordMap σ) (PFl Ψ N) = PFl Ψ N := by
   unfold PFl
@@ -478,10 +471,10 @@ theorem negX_fibClass (j : ℕ) : negX (fibClass j : RP Ψ N) = vR j := by
 def sAll : RP Ψ N := ∑ τ, pk τ 1
 
 theorem muSmall_of_le {j : ℕ} (h : N - j ≤ j) : (muSmall j : RP Ψ N) = muR j := by
-  rw [muSmall, if_pos h, muR_eq]
+  rw [muSmall, ite_eq_left h, muR_eq]
 
 theorem muR_sub_muSmall {j : ℕ} (h : ¬ N - j ≤ j) : (muR j : RP Ψ N) - muSmall j = sAll := by
-  rw [muSmall, if_neg h, muR_eq, sAll, sub_neg_eq_add, ← Finset.sum_add_distrib]
+  rw [muSmall, ite_eq_right h, muR_eq, sAll, sub_neg_eq_add, ← Finset.sum_add_distrib]
   refine Finset.sum_congr rfl fun τ _ => ?_
   rw [pk, pkLow, Finset.sum_filter, Finset.sum_filter, ← Finset.sum_add_distrib]
   refine Finset.sum_congr rfl fun i _ => ?_
@@ -702,7 +695,7 @@ theorem gap_nonneg_of_dominant {Ψ : Type} [Fintype Ψ] {N : ℕ} {j : ℕ} (hj1
     {mu : Wt Ψ N} (hd : Dominant mu) (τ : Ψ) : 0 ≤ gap j mu τ := by
   have h1 : j - 1 < N := by omega
   have hle : mu τ ⟨j, hjN⟩ ≤ mu τ ⟨j - 1, h1⟩ := hd τ ⟨j - 1, h1⟩ ⟨j, hjN⟩ (by rw [Fin.mk_le_mk]; omega)
-  simp only [gap, ent, dif_pos h1, dif_pos hjN]
+  simp only [gap, ent, dite_eq_left h1, dite_eq_left hjN]
   exact sub_nonneg.mpr hle
 
 theorem NefThreshold.mono {Ψ : Type} [Fintype Ψ] {N : ℕ} {j : ℕ} (hj1 : 1 ≤ j) (hjN : j < N)
@@ -1227,7 +1220,7 @@ theorem inv_linear_eval (Ψ : Type) [Fintype Ψ] [DecidableEq Ψ] (N j : ℕ) (l
     rw [← hc, coeff_sum, Finset.sum_eq_single p]
     · simp
     · intro q _ hq
-      rw [MvPolynomial.coeff_smul, coeff_X, if_neg, smul_zero]
+      rw [MvPolynomial.coeff_smul, coeff_X, ite_eq_right, smul_zero]
       intro h
       exact hq (Finsupp.single_left_injective one_ne_zero h)
     · simp

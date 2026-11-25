@@ -464,8 +464,6 @@ open Matrix NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism
 
 namespace PI.UnitaryDimensionFormula
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem mat_idem_mul {Rg : Type} [Ring Rg] (E a b : Rg) (hE : E * E = E) (hc : ∀ x : Rg, E * x = x * E) :
     (E * a + (1 - E)) * (E * b + (1 - E)) = E * (a * b) + (1 - E) := by
   have h1 : E * (1 - E) = 0 := by rw [mul_sub, mul_one, hE, sub_self]
@@ -752,8 +750,6 @@ open Matrix NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism
 
 namespace PI.UnitaryDimensionFormula.FrameX
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} (X : HidaSetting D)
 
 def E1 (e : Af X.B.I.F) : X.B.I.E ⊗[X.B.I.F] Af X.B.I.F := (1 : X.B.I.E) ⊗ₜ[X.B.I.F] e
@@ -876,8 +872,6 @@ theorem rel_fz (u : D.what₂.Word) (a : Fin D.R.rS) : hA X.B.I (incl X.B.I (X.f
 end PI.UnitaryDimensionFormula.FrameX
 
 namespace PI.UnitaryDimensionFormula.FrameX
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7} (X : HidaSetting D)
 
@@ -1040,8 +1034,6 @@ end PI.UnitaryDimensionFormula.FrameX
 
 namespace PI.UnitaryDimensionFormula.FrameX
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 open PI.UnitaryDimensionFormula
 
 variable {D : D7} {X : HidaSetting D}
@@ -1183,8 +1175,6 @@ open Matrix NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism
 
 namespace PI.UnitaryDimensionFormula
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 theorem idxDFrame_of (hS : IdxDSig) (hJ : IdxDJacE) (hG : FrGram) : IdxDFrame := by
   intro D X u e hE
   set eps := epsX X e with heps
@@ -1241,7 +1231,7 @@ theorem idxDFrame_of (hS : IdxDSig) (hJ : IdxDJacE) (hG : FrGram) : IdxDFrame :=
     have hs : ∀ (F : Fin D.R.k → X.B.I.E ⊗[X.B.I.F] Af X.B.I.F),
         ∑ l, M i l * (F l - if l = j then eps else 0) = ∑ l, M i l * F l - M i j := fun F => by
       simp only [mul_sub, Finset.sum_sub_distrib, mul_ite, mul_zero, Finset.sum_ite_eq', Finset.mem_univ,
-        if_true, hMe]
+        ite_true, hMe]
     rw [hs, hMG] at h2
     rw [hs] at h1
     refine to_ew hE (hA_int X.B.I (Submodule.sum_mem _ fun l _ =>
@@ -1272,8 +1262,6 @@ open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.L2.SG.
   Formalism.L2.SG.Full Formalism.MainNotions.S.Cnt
 
 namespace PI.UnitaryDimensionFormula
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem cj_good {D : D7} {X : HidaSetting D} (u : D.what₂.Word) (s : Hfin X u) (hs : cj X u s ∈ X.B.I.Kset) :
     NormCutK.Good X (cj X u s) := by
@@ -1324,8 +1312,6 @@ open scoped Classical
 open Matrix NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.L2.SG.HidaSetting Formalism.L2.SG.PoincareInHH.PoincareSetting Formalism.L2.SG.TermOp
 
 namespace PI.UnitaryDimensionFormula.StabB
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7} (X : HidaSetting D)
 
@@ -1574,8 +1560,6 @@ theorem eq_of_ind (u : D.what₂.Word) (g1 g2 : (VS D).V ≃ₗ[D.host.E] (VS D)
 end PI.UnitaryDimensionFormula.StabB
 
 namespace PI.UnitaryDimensionFormula
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 open StabB
 

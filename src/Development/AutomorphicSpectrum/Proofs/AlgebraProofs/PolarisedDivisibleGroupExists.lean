@@ -1,5 +1,6 @@
 module
 
+import Development.WeilBound.CoreStatements.HomogeneousNonvanishing.Imports
 public import Mathlib.LinearAlgebra.DFinsupp
 public import Mathlib.LinearAlgebra.TensorProduct.Defs
 public import Development.AutomorphicSpectrum.Definitions.CommutativeAlgebra.PairingExtends
@@ -550,17 +551,17 @@ theorem exists_diag {C : Type} [Field C] {v : Valuation C NNReal} {O : Type} [Co
   · rw [hφg, hPA]
     change (if (j : ℕ) < m then a j else 0) ∣ _
     by_cases h : (j : ℕ) < m
-    · rw [if_pos h]
+    · rw [ite_eq_left h]
       refine Finset.dvd_sum fun l _ => ?_
       split_ifs
       · exact dvd_mul_right _ _
       · simp
     · have h0 : ∑ l : Fin m, (if (l : ℕ) = (j : ℕ) then a j else 0) * Q⁻¹ l k = 0 :=
-        Finset.sum_eq_zero fun l _ => by rw [if_neg (fun hl : (l : ℕ) = j => h (hl ▸ l.2)), zero_mul]
+        Finset.sum_eq_zero fun l _ => by rw [ite_eq_right (fun hl : (l : ℕ) = j => h (hl ▸ l.2)), zero_mul]
       rw [h0]
       exact dvd_zero _
   · by_cases h : (j : ℕ) < m
-    · simp only [if_pos h]
+    · simp only [ite_eq_left h]
       let x : F := ∑ k, Q k ⟨j, h⟩ • g k
       have hx : x ∈ Submodule.span O (Set.range g) :=
         Submodule.sum_mem _ fun k _ => Submodule.smul_mem _ _ (Submodule.subset_span ⟨k, rfl⟩)
@@ -573,12 +574,12 @@ theorem exists_diag {C : Type} [Field C] {v : Valuation C NNReal} {O : Type} [Co
         rw [h1, hD]
       have hxe : a j • e j = x := by
         rw [hsum x, Finset.sum_eq_single j]
-        · rw [hφx, if_pos rfl]
+        · rw [hφx, ite_eq_left rfl]
         · intro i _ hij
-          rw [hφx, if_neg fun hh => hij (Fin.ext hh.symm), zero_smul]
+          rw [hφx, ite_eq_right fun hh => hij (Fin.ext hh.symm), zero_smul]
         · simp
       rwa [hxe]
-    · simp only [if_neg h, zero_smul]
+    · simp only [ite_eq_right h, zero_smul]
       exact zero_mem _
 
 end Diag
@@ -1293,33 +1294,8 @@ theorem baseChange_alt {R A W : Type} [CommRing R] [CommRing A] [Algebra R A] [A
 theorem baseChange_perfect {R W : Type} [CommRing R] [AddCommGroup W] [Module.Free ℤ W]
     [Module.Finite ℤ W] (B : LinearMap.BilinForm ℤ W) (h : ∀ x, B x x = 0) (hb : Function.Bijective B) :
     Function.Bijective (LinearMap.BilinForm.baseChange R B) := by
-  classical
-  have hs : ∀ x y, B x y = - B y x := fun x y => by
-    have := h (x + y)
-    simp only [map_add (f := _), LinearMap.add_apply, h, zero_add, add_zero] at this
-    exact eq_neg_of_add_eq_zero_right this
-  let b := Module.finBasis ℤ W
-  let bR := Algebra.TensorProduct.basis R b
-  have hbR : ∀ i, bR i = 1 ⊗ₜ b i := fun i => by simp [bR]
-  choose d hd using fun i => hb.2 (b.coord i)
-  have hdb : ∀ i k, B (d i) (b k) = if k = i then 1 else 0 := fun i k => by
-    rw [hd]; simp [Module.Basis.coord_apply, Finsupp.single_apply]
-  constructor
-  · rw [injective_iff_map_eq_zero]
-    intro x hx
-    refine bR.ext_elem fun k => ?_
-    have h1 := LinearMap.congr_fun hx (1 ⊗ₜ d k)
-    rw [← bR.sum_repr x] at h1
-
-    simp only [map_sum, map_smul, LinearMap.sum_apply, LinearMap.smul_apply, hbR,
-    LinearMap.BilinForm.baseChange_tmul, hs (b _), hdb] at h1
-    simpa [Finset.sum_ite_eq] using h1
-  · intro f
-    refine ⟨∑ i, f (1 ⊗ₜ b i) • ((1 : R) ⊗ₜ[ℤ] d i), bR.ext fun k => ?_⟩
-
-    simp only [map_sum, map_smul, LinearMap.sum_apply, LinearMap.smul_apply, hbR,
-    LinearMap.BilinForm.baseChange_tmul, hdb]
-    simp [Finset.sum_ite_eq]
+  intros
+  apply _root_.GlobalTheory.CompanionTheory.UnimodularBaseChange.bijective_baseChange <;> assumption
 
 theorem span_gen_baseChange {R O W T : Type} [CommRing R] [CommRing O] [Algebra R O] [AddCommGroup W]
     [AddCommGroup T] [Module R T] (j : R ⊗[ℤ] W ≃ₗ[R] T) :

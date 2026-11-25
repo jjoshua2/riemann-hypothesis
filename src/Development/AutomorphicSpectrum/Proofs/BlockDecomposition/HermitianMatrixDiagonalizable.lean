@@ -175,8 +175,7 @@ variable {σ : R →+* R} {ϖ : R} {q : ℕ} {ε : ℤ}
 
 theorem exists_trace (hR : IsUnrQuad R σ ϖ q ε) {y : R} (hy : y ∉ lev ϖ 1) :
     ∃ s, s * y + σ (s * y) ∉ lev ϖ 1 := by
-  by_contra hcon
-  push_neg at hcon
+  by_contra! hcon
   obtain ⟨u, hu, -⟩ := hR.basis
   apply hy
   have h3 : (u - σ u) * y ∈ lev ϖ 1 := by
@@ -238,7 +237,7 @@ theorem exists_pivot (hR : IsUnrQuad R σ ϖ q ε) {h : Matrix ι ι R} (hh : Hm
   by_cases h1 : ∃ k, h k k ∉ lev ϖ 1
   · obtain ⟨k, hk⟩ := h1
     exact ⟨k, 1, 1, by simp, by simp, by simpa [ct_one] using hk⟩
-  · push_neg at h1
+  · push Not at h1
     have hij : i ≠ j := by
       rintro rfl
       exact hy (h1 i)
@@ -249,8 +248,7 @@ theorem exists_prim (hR : IsUnrQuad R σ ϖ q ε) {h : Matrix ι ι R} (hh : Hm 
     ∃ (a : ℕ) (h' : Matrix ι ι R), Hm σ h' ∧ h = (ϖ ^ a) • h' ∧ ∃ i j, h' i j ∉ lev ϖ 1 := by
   classical
   have hex : ∃ k, ∃ i j, h i j ∉ lev ϖ k := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     apply h0
     ext i j
     exact hR.sep _ (fun k => hcon k i j)
@@ -264,7 +262,7 @@ theorem exists_prim (hR : IsUnrQuad R σ ϖ q ε) {h : Matrix ι ι R} (hh : Hm 
   rw [ha] at hij
   have hall : ∀ i j, h i j ∈ lev ϖ a := by
     have := Nat.find_min hex (m := a) (by omega)
-    push_neg at this
+    push Not at this
     exact this
   choose c hc using fun i j => mem_lev_iff.1 (hall i j)
   refine ⟨a, Matrix.of c, ?_, ?_, i, j, ?_⟩

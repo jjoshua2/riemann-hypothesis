@@ -22,8 +22,7 @@ theorem nontrivial_piTensorProduct {ι : Type} [Fintype ι] {X : ι → Type} [�
   classical
   choose v hv using fun a => exists_ne (0 : X a)
   have hex : ∀ a, ∃ φ : Module.Dual ℂ (X a), φ (v a) ≠ 0 := fun a => by
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     exact hv a ((Module.forall_dual_apply_eq_zero_iff ℂ (v a)).1 hc)
   choose φ hφ using hex
   let L := PiTensorProduct.lift ((MultilinearMap.mkPiAlgebra ℂ ι ℂ).compLinearMap φ)
@@ -56,19 +55,6 @@ theorem nontrivial_prodIrr {h N : ℕ} (x : Fin h → IrrGL (k := k)) (hd : ∑ 
   haveI : ∀ a, Nontrivial (x a).2.rep.V := fun a => GlobalTheory.SmGL.Model.nontrivial_of_isIrreducible (x a).2.rep.irr
   haveI := nontrivial_piTensorProduct (X := fun a => (x a).2.rep.V)
   exact nontrivial_indSp _ (isSmooth_piTensor fun a => (x a).2.rep.smooth)
-
-section Two
-
-variable {V U W : Type} [AddCommGroup V] [Module ℂ V] [AddCommGroup U] [Module ℂ U] [AddCommGroup W] [Module ℂ W]
-  {r t N : ℕ}
-
-end Two
-
-section Concat
-
-
-
-end Concat
 
 end GlobalTheory.CompanionTheory.AdjQuot
 end

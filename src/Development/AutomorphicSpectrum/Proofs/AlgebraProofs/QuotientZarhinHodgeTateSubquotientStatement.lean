@@ -290,10 +290,10 @@ theorem sub_closed : ∀ (p : ℕ) [Fact p.Prime] (C : Type) [Field C] [IsAlgClo
       ⟨fun k => ⟨_, hJ (hb k), rfl⟩, e⟩
       ⟨fun k => by
         by_cases hk : k = 0
-        · rw [if_pos hk]; exact ⟨g, hg, rfl⟩
-        · rw [if_neg hk]; exact Submodule.zero_mem _, by simp⟩
+        · rw [ite_eq_left hk]; exact ⟨g, hg, rfl⟩
+        · rw [ite_eq_right hk]; exact Submodule.zero_mem _, by simp⟩
     have h0 := congrFun hu 0
-    rw [if_pos rfl] at h0
+    rw [ite_eq_left rfl] at h0
     have : b 0 = g := by
       funext q
       obtain ⟨x, rfl⟩ := QuotientAddGroup.mk_surjective q
@@ -571,8 +571,7 @@ theorem _root_.GlobalTheory.CompanionTheory.Relay.torsion_points_homomorphism_co
       by_contra hx
       have hne : ∀ k ∈ K, ∃ c : T.A, φ k c ≠ φ x c := by
         intro k hk
-        by_contra hall
-        push_neg at hall
+        by_contra! hall
         have e1 : φ k = φ x := AlgHom.ext hall
         have e2 : pt k = pt x := by rw [← hφ k, ← hφ x, e1]
         exact hx (hpt.inj e2 ▸ hk)
@@ -909,7 +908,6 @@ open CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj Alg
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi
 open ReciprocityTheory.ChartRestriction.G.Chart (sp spMap)
 open scoped CategoryTheory.Obj CategoryTheory.MonObj
-attribute [local instance] Over.cartesianMonoidalCategory
 
 end -- clump:auto
 end -- clump:auto

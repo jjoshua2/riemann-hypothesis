@@ -103,7 +103,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj MeasureTheory
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor
-attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.AbLaw
 open GlobalTheory.KeyKa
 
@@ -197,7 +196,7 @@ open EtBaseChange ClosedApprox
 theorem exists_comb_sub_mem_sup_pow : Out.Laws → ∀ (O : Type) [CommRing O] [IsLocalRing O] [IsNoetherianRing O] (K : Type) [Field K] [IsAlgClosed K] (f : O →+* K) (x : KeyIn O) (n l : ℕ) (s : Fin x.P.g → RR x n) (b : ∀ j, Fin ((l - j * n) ^ x.P.g) → RR x (l - j * n)) (m) (Y : Type) (θ : Y → (Sp (MvPowerSeries (Fin x.P.g) O) ⟶ x.P.A.left)) (c : Y → x.P.L.ι), RingHom.ker f = IsLocalRing.maximalIdeal O → 1 ≤ n → x.P.g * n < l → (∀ j ≤ x.P.g, IsBasis x (b j)) → IsMul x l s b m → FinZ x s → (∀ y, θ y ≫ x.P.A.hom = spMap (algebraMap O (MvPowerSeries (Fin x.P.g) O))) → (∀ y, (∃ (V : x.P.A.left.Opens) (t : Fin x.P.g → Γ(x.P.A.left, V)), ⊤ ≤ (θ y) ⁻¹ᵁ V ∧ ∀ i, valT (T := (MvPowerSeries (Fin x.P.g) O)) (θ y) V (t i) = MvPowerSeries.X i)) → (∀ y, ⊤ ≤ (θ y) ⁻¹ᵁ x.P.L.U (c y)) → Function.Injective (fun y => θ y (IsLocalRing.closedPoint (MvPowerSeries (Fin x.P.g) O))) → (∀ y i, θ y (IsLocalRing.closedPoint (MvPowerSeries (Fin x.P.g) O)) ∉ Out.nonzeroLocus (s i)) → ∀ (r : ℕ) (G : Y → MvPowerSeries (Fin x.P.g) K), ∃ v : Fin ((l - 0 * n) ^ x.P.g) → K, ∀ y, G y - ∑ k, v k • MvPowerSeries.map f (valT (T := (MvPowerSeries (Fin x.P.g) O)) (θ y) (x.P.L.U (c y)) ((b 0 k).f (c y))) ∈ Ideal.span (Set.range fun i => MvPowerSeries.map f (valT (T := (MvPowerSeries (Fin x.P.g) O)) (θ y) (x.P.L.U (c y)) ((s i).f (c y)))) ⊔ Ideal.span (Set.range MvPowerSeries.X) ^ r := by
   intro hL O _ _ _ K _ _ f x n l s b m Y θ c hf hn hl hb hm hZ hθ hco hc hinj hz r G
   obtain ⟨x', φ, w, hg, s', b', m', ⟨_, _, _, hp, -⟩, hs', hb', hB', hm', -, hZ'⟩ :=
-    GlobalTheory.T.exists_keyData_baseChange_sections_matrices hL O K f x n l s b m hl hb hm
+    _root_.GlobalTheory.KeyBaseChangeData.exists_baseChange_data hL O K f x n l s b m hl hb hm
   replace hZ' := hZ' (inferInstanceAs (Finite (PrimeSpectrum K))) hZ
   let F : MvPowerSeries (Fin x.P.g) O →+* MvPowerSeries (Fin x.P.g) K := MvPowerSeries.map f
   have hF : IsLocalHom F := isLocalHom_map f hf
@@ -409,7 +408,7 @@ theorem _root_.GlobalTheory.KeyKa.KoszulTors.koszul_tors : ∀ (O : Type) [CommR
       · subst hI
         show ev 0 a l = ∑ b, Pm a b * (if (∅ : Finset (Fin g)) = ∅ then ev₀ 0 b l else 0)
         rw [hev]
-        exact Matrix.mul_apply.trans (Finset.sum_congr rfl fun b _ => by rw [if_pos rfl])
+        exact Matrix.mul_apply.trans (Finset.sum_congr rfl fun b _ => by rw [ite_eq_left rfl])
       · show (if I = ∅ then ev I.card a l else 0) = ∑ b, Pm a b * (if I = ∅ then ev₀ I.card b l else 0)
         simp [hI]
     · simp [hK, hK₀, kosD_inr_eq_zero]
@@ -542,8 +541,8 @@ theorem _root_.GlobalTheory.KeyKa.KoszulTors.koszul_tors : ∀ (O : Type) [CommR
         intro J
         by_cases h : ∃ i, J = {i}
         · obtain ⟨i, rfl⟩ := h
-          rw [Finset.sum_eq_single i (fun j _ hj => if_neg fun h' => hj (Finset.singleton_inj.mp h').symm)
-            (fun h' => absurd (Finset.mem_univ _) h'), if_pos rfl]
+          rw [Finset.sum_eq_single i (fun j _ hj => ite_eq_right fun h' => hj (Finset.singleton_inj.mp h').symm)
+            (fun h' => absurd (Finset.mem_univ _) h'), ite_eq_left rfl]
           refine Finset.sum_congr rfl fun l' _ => ?_
           congr 1
           · rw [hK₀]
@@ -553,8 +552,8 @@ theorem _root_.GlobalTheory.KeyKa.KoszulTors.koszul_tors : ∀ (O : Type) [CommR
           · first
               | (simp [wf]; done)
               | (simp [wf]; rfl)
-        · push_neg at h
-          rw [Finset.sum_eq_zero fun i _ => if_neg (h i)]
+        · push Not at h
+          rw [Finset.sum_eq_zero fun i _ => ite_eq_right (h i)]
           refine Finset.sum_eq_zero fun l' _ => ?_
           rw [hK₀]
           simp [_root_.GlobalTheory.KeyKa.kosD, h]
@@ -679,8 +678,6 @@ open ReciprocityTheory.ChartRestriction.G.Geo.Tor (Sp epsR IsTangent IsLieComb I
 open TrivSqZeroExt (inl inr)
 open GlobalTheory.SqZero GlobalTheory.LieComb IsLocalRing MvPowerSeries
 
-attribute [local instance] Over.cartesianMonoidalCategory
-
 variable {O : Type} [CommRing O] [IsLocalRing O] [IsNoetherianRing O] [IsAdicComplete (maximalIdeal O) O]
   {G : Over (Spec (CommRingCat.of O))} [GrpObj G] [IsCommMonObj G] {n : ℕ} {v : Fin n → (epsR O ⟶ G)}
 
@@ -739,7 +736,6 @@ end GlobalTheory.JacSer
 section
 open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj MeasureTheory
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor
-attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.AbLaw
 open GlobalTheory.KeyKa
 
@@ -804,7 +800,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj MeasureTheory
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor
-attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.AbLaw
 open GlobalTheory.KeyKa
 
@@ -871,7 +866,7 @@ theorem transport {O K : Type} [CommRing O] [CommRing K] (f : O →+* K) {g g' :
 theorem main : Out.Laws → ∀ (O : Type) [CommRing O] [IsLocalRing O] [IsNoetherianRing O] (k : Type) [Field k] (f : O →+* k) (x : KeyIn O) (n l : ℕ) (s : Fin x.P.g → RR x n) (b : ∀ j, Fin ((l - j * n) ^ x.P.g) → RR x (l - j * n)) (m), 1 ≤ n → x.P.g * n < l → (∀ j ≤ x.P.g, IsBasis x (b j)) → IsMul x l s b m → FinZ x s → (∀ v : KIx x.P.g 0 (fun j => (l - j * n) ^ x.P.g) → k, (kosD (fun i j j' => (m i j j').map f) (fun _ => 0)).mulVec v = 0 → ∃ w, ∀ p, p.1 ≠ ∅ → v (.inl p) = (kosD (d := 0) (fun i j j' => (m i j j').map f) (fun _ => 0)).mulVec w (.inl p)) := by
   intro hL O _ _ _ k _ f x n l s b m hn hl hb hm hZ
   obtain ⟨x', φ, w, hg, s', b', m', -, -, -, hb', hm', hmm, hZ'⟩ :=
-    GlobalTheory.T.exists_keyData_baseChange_sections_matrices hL O (AlgebraicClosure k) ((algebraMap k (AlgebraicClosure k)).comp f) x n l s b m hl hb hm
+    _root_.GlobalTheory.KeyBaseChangeData.exists_baseChange_data hL O (AlgebraicClosure k) ((algebraMap k (AlgebraicClosure k)).comp f) x n l s b m hl hb hm
   have hfin : Finite (Sp (AlgebraicClosure k)) :=
     inferInstanceAs (Finite (PrimeSpectrum (AlgebraicClosure k)))
   have hc : ∀ y : x'.P.A.left, ∃ i, y ∈ x'.P.L.U i := fun y => exists_chart x'.P.isLB y
@@ -1001,7 +996,7 @@ theorem exact_kosD_map {O K : Type} [CommRing O] [CommRing K] (f : O →+* K) {g
 theorem kosD_exact_generic : Out.Laws → ∀ (O : Type) [CommRing O] [IsDomain O] [IsLocalRing O] [IsNoetherianRing O] (K : Type) [Field K] (f : O →+* K) (x : KeyIn O) (n l : ℕ) (s : Fin x.P.g → RR x n) (b : ∀ j, Fin ((l - j * n) ^ x.P.g) → RR x (l - j * n)) (m) (d : ℕ) (z : Fin d → Pt x) (ch : Fin d → x.P.L.ι), Function.Injective f → 1 ≤ n → x.P.g * n < l → (∀ j ≤ x.P.g, IsBasis x (b j)) → IsMul x l s b m → (∀ a, ⊤ ≤ (z a).left ⁻¹ᵁ x.P.L.U (ch a)) → (∀ a i, valT (T := O) (z a).left (x.P.L.U (ch a)) ((s i).f (ch a)) = 0) → (∀ a, jac x s (z a) (ch a) ≠ 0) → Function.Injective z → (∀ y : x.P.A.left, (∃ q : Sp K, spMap f q = x.P.A.hom y) → (∀ i, y ∉ Out.nonzeroLocus (s i)) → ∃ a, ∃ p : Sp O, (z a).left p = y) → ∀ v, ((kosD (N := (fun j => (l - j * n) ^ x.P.g)) m (fun j => Matrix.of fun a k => valT (T := O) (z a).left (x.P.L.U (ch a)) ((b j k).f (ch a)))).map f).mulVec v = 0 → ∃ w, ((kosD (N := (fun j => (l - j * n) ^ x.P.g)) m (fun j => Matrix.of fun a k => valT (T := O) (z a).left (x.P.L.U (ch a)) ((b j k).f (ch a)))).map f).mulVec w = v := by
   intro hL O _ _ _ _ K _ f x n l s b m d z ch hf hn hl hb hmul hz0 hs0 hjac hzi hcov v hv
   obtain ⟨x', φ, w, hg, s', b', m', hkv, hsv, hbv, hb', hmul', hm', -⟩ :=
-    GlobalTheory.T.exists_keyData_baseChange_sections_matrices hL O K f x n l s b m hl hb hmul
+    _root_.GlobalTheory.KeyBaseChangeData.exists_baseChange_data hL O K f x n l s b m hl hb hmul
   obtain ⟨z', ch', u, het, hval⟩ :=
     _root_.GlobalTheory.KeyKa.etZ_of_jac_ne_zero O K x x' f φ w n d hg s s' z ch hf hkv hsv hz0 hs0 hjac hzi hcov
   have hl' : x'.P.g * n < l := by rw [hg]; exact hl
@@ -1033,7 +1028,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj MeasureTheory
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor
-attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.AbLaw
 open GlobalTheory.KeyKa
 
@@ -1292,12 +1286,12 @@ theorem mulVec_empty {R : Type} [CommRing R] (m : Fin g → ∀ j j', Matrix (Fi
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [Fintype.sum_sigma, Finset.sum_eq_single {i}]
   · refine Finset.sum_congr rfl fun k _ => ?_
-    rw [if_pos ⟨by simp, by simp⟩]
+    rw [ite_eq_left ⟨by simp, by simp⟩]
     simp
     rfl
   · intro J _ hJ
     refine Finset.sum_eq_zero fun k _ => ?_
-    rw [if_neg (fun h => hJ (by simpa using h.2)), zero_mul]
+    rw [ite_eq_right (fun h => hJ (by simpa using h.2)), zero_mul]
   · simp
 
 theorem mulVec_inr {R : Type} [CommRing R] (m : Fin g → ∀ j j', Matrix (Fin (N j)) (Fin (N j')) R)
@@ -1306,11 +1300,11 @@ theorem mulVec_inr {R : Type} [CommRing R] (m : Fin g → ∀ j j', Matrix (Fin 
   simp only [mulVec, dotProduct, Fintype.sum_sum_type, kosD, zero_mul, Finset.sum_const_zero, add_zero]
   rw [Fintype.sum_sigma, Finset.sum_eq_single ∅]
   · refine Finset.sum_congr rfl fun k _ => ?_
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     rfl
   · intro J _ hJ
     refine Finset.sum_eq_zero fun k _ => ?_
-    rw [if_neg hJ, zero_mul]
+    rw [ite_eq_right hJ, zero_mul]
   · simp
 
 theorem mulVec_inl_map {R S : Type} [CommRing R] [CommRing S] (f : R →+* S) {d' : ℕ}
@@ -1338,7 +1332,7 @@ theorem div_unif {O : Type} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O
   let u' : KIx g d N → O := fun q => if kdeg q = 2 then u q else 0
   have h1 : ∀ a : Fin (N 0), (kosD m ev *ᵥ u') (.inl ⟨∅, a⟩) = π * v a := fun a => by
     rw [hu a]
-    exact mulVec_congr_deg hD.1 _ _ _ fun q hq => if_pos hq
+    exact mulVec_congr_deg hD.1 _ _ _ fun q hq => ite_eq_left hq
   obtain ⟨wb, hwb⟩ := hk (Sum.elim (fun q => IsLocalRing.residue O (u' (.inl q))) 0) (by
     ext p
     rcases p with ⟨I, a⟩ | a
@@ -1347,7 +1341,7 @@ theorem div_unif {O : Type} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O
       · subst hI
         rw [h1 a]
         exact (hres _).2 (dvd_mul_right _ _)
-      · rw [mulVec_congr_deg hD.1 u' 0 _ fun q hq => if_neg ?_]
+      · rw [mulVec_congr_deg hD.1 u' 0 _ fun q hq => ite_eq_right ?_]
         · simp
         · have : I.card ≠ 0 := by simpa using hI
           rw [hq]
@@ -1388,7 +1382,7 @@ theorem ker_and_image : ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValu
   refine ⟨fun v hv => ?_, ?_⟩
   · let x : KIx g d N → O := Sum.elim (fun p => if h : p.1 = ∅ then v (Fin.cast (by rw [h]; rfl) p.2) else 0) 0
     have hx0 : ∀ a : Fin (N 0), x (.inl ⟨∅, a⟩) = v a := fun a => by
-      simp only [x, Sum.elim_inl, dif_pos]
+      simp only [x, Sum.elim_inl, dite_eq_left]
       rfl
     have hx : kosD m ev *ᵥ x = 0 := by
       ext p
@@ -1396,7 +1390,7 @@ theorem ker_and_image : ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValu
       · rw [mulVec_congr_deg hD.1 x 0 _ ?_]
         · simp
         · rintro (q | q) hq
-          · refine dif_neg fun h => ?_
+          · refine dite_eq_right fun h => ?_
             simp [kdeg, h] at hq
           · rfl
       · rw [mulVec_inr, funext hx0, hv]
@@ -1421,7 +1415,7 @@ theorem ker_and_image : ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValu
     rw [mulVec_sum]
     ext b
     simp only [mulVec_smul, hv, Finset.sum_apply, Pi.smul_apply, Pi.single_apply, smul_eq_mul, mul_ite, mul_one,
-      mul_zero, Finset.sum_ite_eq, Finset.mem_univ, if_true]
+      mul_zero, Finset.sum_ite_eq, Finset.mem_univ, ite_true]
     rw [he b]
     ring
 
@@ -1561,7 +1555,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj MeasureTheory
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor
-attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.AbLaw
 open GlobalTheory.KeyKa
 

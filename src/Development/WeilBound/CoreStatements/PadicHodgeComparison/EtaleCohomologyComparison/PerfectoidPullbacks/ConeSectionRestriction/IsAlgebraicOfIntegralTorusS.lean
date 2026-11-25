@@ -1084,7 +1084,6 @@ section -- clump:auto
 
 set_option backward.isDefEq.respectTransparency false
 open CategoryTheory AlgebraicGeometry ReciprocityTheory.ChartRestriction.G.Geo.Tor CrystallineSemistableComparison.Pb
-attribute [local instance] MvPolynomial.gradedAlgebra
 
 alias _root_.GlobalTheory.T.torus_coordinate_isUnit := _root_.GlobalTheory.CompanionTheory.GeoUnit.tV_isUnit
 end -- clump:auto
@@ -1159,7 +1158,7 @@ theorem exists_shift {n : ℕ} (S : Finset (Fin n)) (v : Fin n → ℤ) (h : ∀
   by_cases hj : j ∈ S
   · have h1 : (v j).natAbs ≤ ∑ j, (v j).natAbs :=
       Finset.single_le_sum (f := fun j => (v j).natAbs) (fun _ _ => Nat.zero_le _) (Finset.mem_univ j)
-    simp only [hj, if_true]
+    simp only [hj, ite_true]
     omega
   · simpa [hj] using h j hj
 

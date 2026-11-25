@@ -243,7 +243,7 @@ theorem isHCParam_sub {N : ℕ} {lam : Fin N → ℝ} (s : Fin N) (hl : Formalis
       push_cast
       linarith
     · refine ⟨m, ?_⟩
-      simp only [Pi.sub_apply, Pi.single_apply, if_neg ha]
+      simp only [Pi.sub_apply, Pi.single_apply, ite_eq_right ha]
       linarith
 
 theorem gap_sub {N : ℕ} (ε : Fin N → Bool) (lam : Fin N → ℝ) (s : Fin N) {h : ℝ}
@@ -271,9 +271,9 @@ theorem fdegHC_le {N : ℕ} (lam : Fin N → ℝ) (s : Fin N) (hw : ∀ a c, a <
     · subst ha
       have e1 : lam' a = lam a - 1 := by simp [hlam']
       have e2 : lam' b = lam b := by simp [hlam', hne.symm]
-      rw [if_pos rfl, e1, e2, abs_of_pos (by linarith), abs_of_pos (by linarith)]
+      rw [ite_eq_left rfl, e1, e2, abs_of_pos (by linarith), abs_of_pos (by linarith)]
       linarith
-    · rw [if_neg ha, one_mul]
+    · rw [ite_eq_right ha, one_mul]
       by_cases hb : b = s
       · subst hb
         have e1 : lam' a = lam a := by simp [hlam', ha]
@@ -321,8 +321,7 @@ theorem degRatio_holds : DegRatio := by
   intro n e ε lam ε' mu B hP H H' _ _ _ _ π σ hπ hσ
   obtain ⟨i0, hi0⟩ := hP.neg
   have hε't : ∃ a, ε' a = true := by
-    by_contra hne
-    push_neg at hne
+    by_contra! hne
     have h1 := hP.pos
     have h0 : (univ.filter fun i => ε' i = true) = ∅ := by
       ext i
@@ -397,8 +396,7 @@ theorem hsn_sq_le {m : ℕ} (g : Mat m) : hsn g ^ 2 ≤ m * Real.exp (2 * Global
 theorem hsn_pos {m : ℕ} (hm : 1 ≤ m) {ε : Fin m → Bool} {g : Mat m} (hg : g ∈ UJset ε) : 0 < hsn g := by
   unfold hsn
   apply Real.sqrt_pos.2
-  by_contra hle
-  push_neg at hle
+  by_contra! hle
   have hsum : ∑ a, ∑ b, ‖g a b‖ ^ 2 = 0 := le_antisymm hle (by positivity)
   have hg0 : g = 0 := by
     ext a b
@@ -547,7 +545,7 @@ theorem one_le_hsn {m : ℕ} {ε : Fin m → Bool} (hm : 1 ≤ m) (g : UJ ε) : 
   have h : (umat g)ᴴ * Jm ε * umat g = Jm ε := g.2
   have h2 := congrFun (congrFun h a) a
   simp only [Jm, Matrix.diagonal_apply_eq] at h2
-  simp only [Matrix.mul_apply, Matrix.diagonal_apply, mul_ite, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, if_true, Matrix.conjTranspose_apply] at h2
+  simp only [Matrix.mul_apply, Matrix.diagonal_apply, mul_ite, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true, Matrix.conjTranspose_apply] at h2
   have hn : (1 : ℝ) ≤ ∑ l, ‖umat g l a‖ ^ 2 := by
     have e1 : ‖((if ε a = true then 1 else -1 : ℂ))‖ = 1 := by split_ifs <;> simp
     rw [← e1, ← h2]
@@ -1156,8 +1154,7 @@ theorem hsn_pos (hm : 0 < m) {x : Mat m} (hx : x ∈ UJset ε) : 0 < hsn x := by
   haveI : Nonempty (Fin m) := ⟨⟨0, hm⟩⟩
   have hne : x ≠ 0 := (isUnit_of_mem hx).ne_zero
   obtain ⟨i, j, hij⟩ : ∃ i j, x i j ≠ 0 := by
-    by_contra h
-    push_neg at h
+    by_contra! h
     exact hne (Matrix.ext h)
   have h1 : ‖x i j‖ ^ 2 ≤ ∑ b, ‖x i b‖ ^ 2 :=
     Finset.single_le_sum (f := fun b => ‖x i b‖ ^ 2) (fun _ _ => by positivity) (Finset.mem_univ j)
@@ -1392,7 +1389,6 @@ theorem intBounds_of (hE : EmbLaws) (hBo : Boost) (hP : PowInt) (hD : DecPow) : 
       mul_le_mul_of_nonneg_right hcb (mul_nonneg hvol hcr)
     _ = _ := by ring
 
-theorem intBounds_main : EmbLaws → Boost → PowInt → DecPow → IntBounds := intBounds_of
 
 end GlobalTheory.SepReal
 end -- clump:auto
@@ -1472,7 +1468,7 @@ theorem UpperTheory.Lit.Branch.realInputE :
   intro hPL hEM
   unfold ProjLarge at hPL
   unfold EigMap at hEM
-  obtain ⟨C1, hC1, hIB⟩ := _root_.GlobalTheory.SepReal.intBounds_main _root_.GlobalTheory.SepReal.embLaws (_root_.GlobalTheory.SepReal.boost_of_embLaws _root_.GlobalTheory.SepReal.embLaws)
+  obtain ⟨C1, hC1, hIB⟩ := _root_.GlobalTheory.SepReal.intBounds_of _root_.GlobalTheory.SepReal.embLaws (_root_.GlobalTheory.SepReal.boost_of_embLaws _root_.GlobalTheory.SepReal.embLaws)
     (_root_.GlobalTheory.SepReal.powInt_of_volBall _root_.GlobalTheory.SepReal.volBall) _root_.GlobalTheory.SepReal.decPow 10 (by norm_num)
   obtain ⟨C3, hC3, hDB⟩ := _root_.GlobalTheory.SepReal.DerInt.derBounds_of _root_.GlobalTheory.SepReal.embLaws (_root_.GlobalTheory.SepReal.powInt_of_volBall _root_.GlobalTheory.SepReal.volBall)
     _root_.GlobalTheory.SepReal.decPow _root_.GlobalTheory.SepReal.lieBound 10 (by norm_num)

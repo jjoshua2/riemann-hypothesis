@@ -1,5 +1,6 @@
 module
 
+import Development.AbelianVarietyTheory.Proofs.JetHarmonics.ExistsAlgHomValuationSubring
 public import Mathlib.NumberTheory.NumberField.Basic
 public import Mathlib.Algebra.Category.Grp.Injective
 public import Mathlib.RingTheory.FractionalIdeal.Basic
@@ -39,31 +40,8 @@ open NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.
 
 private theorem UpperTheory.V.Ws.Tw.extIdeal_inj {H G : Type} [CommGroup H] [CommGroup G] {k : Type} [Field k] [IsAlgClosed k]
     (i : H →* G) (hi : Function.Injective i) (g : H →* kˣ) : ∃ F : G →* kˣ, ∀ x, F (i x) = g x := by
-  have hdiv : ∀ {n : ℤ}, n ≠ 0 → Function.Surjective (fun a : Additive kˣ => n • a) := by
-    intro n hn y
-    have hpos : 0 < n.natAbs := Int.natAbs_pos.mpr hn
-    obtain ⟨x, hx⟩ := IsAlgClosed.exists_pow_nat_eq ((Additive.toMul y : kˣ) : k) hpos
-    have hx0 : x ≠ 0 := by
-      rintro rfl
-      rw [zero_pow hpos.ne'] at hx
-      exact (Additive.toMul y).ne_zero hx.symm
-    have hu : Units.mk0 x hx0 ^ n.natAbs = Additive.toMul y := by
-      ext
-      simp [hx]
-    rcases Int.natAbs_eq n with h | h
-    · refine ⟨Additive.ofMul (Units.mk0 x hx0), ?_⟩
-      apply Additive.toMul.injective
-      simp only [toMul_zsmul, toMul_ofMul]
-      rw [h, zpow_natCast, hu]
-    · refine ⟨Additive.ofMul (Units.mk0 x hx0)⁻¹, ?_⟩
-      apply Additive.toMul.injective
-      simp only [toMul_zsmul, toMul_ofMul]
-      rw [h, zpow_neg, zpow_natCast, inv_pow, inv_inv, hu]
-  letI : DivisibleBy (Additive kˣ) ℤ := divisibleByOfSMulRightSurj _ _ hdiv
-  obtain ⟨F, hF⟩ := (Module.Baer.of_divisible (Additive kˣ)).extension_property_addMonoidHom
-    (MonoidHom.toAdditive i) hi (MonoidHom.toAdditive g)
-  refine ⟨MonoidHom.toAdditive.symm F, fun x => ?_⟩
-  exact congrArg Additive.toMul (DFunLike.congr_fun hF (Additive.ofMul x))
+  intros
+  apply _root_.GlobalTheory.DivisibleUnits.exists_extension <;> assumption
 
 private theorem UpperTheory.V.Ws.Tw.extIdeal_mon {S G : Type} [CommMonoid S] [CommGroup G] {k : Type} [Field k] [IsAlgClosed k]
     (φ : S →* G) (g : S →* kˣ) (h : ∀ a b, φ a = φ b → g a = g b) : ∃ F : G →* kˣ, ∀ x, F (φ x) = g x := by
@@ -112,7 +90,7 @@ theorem UpperTheory.V.Ws.Tw.extIdeal :
     else Units.mk0 (I : FractionalIdeal (nonZeroDivisors (𝓞 K)) K) (FractionalIdeal.coeIdeal_ne_zero.mpr hI)
   have hιv : ∀ I : Ideal (𝓞 K), I ≠ ⊥ → ((ι I : FractionalIdeal (nonZeroDivisors (𝓞 K)) K)) = I := by
     intro I hI
-    simp only [ι, dif_neg hI, Units.val_mk0]
+    simp only [ι, dite_eq_right hI, Units.val_mk0]
   have hι : ∀ I J : Ideal (𝓞 K), I ≠ ⊥ → J ≠ ⊥ → ι (I * J) = ι I * ι J := by
     intro I J hI hJ
     have hIJ : I * J ≠ ⊥ := fun h => (Ideal.mul_eq_bot.mp h).elim hI hJ
@@ -330,7 +308,7 @@ theorem UpperTheory.V.Ws.Tw.kap0 :
   let g : 𝓞 K → (PadicAlgCl l)ˣ := fun a => if h : IsUnit (ρ a) then χ.toUnitHom h.unit else 1
   have hg : ∀ a (h : IsUnit (ρ a)), ((g a : (PadicAlgCl l)ˣ) : PadicAlgCl l) = χ (ρ a) := by
     intro a h
-    simp only [g, dif_pos h, MulChar.coe_toUnitHom, IsUnit.unit_spec]
+    simp only [g, dite_eq_left h, MulChar.coe_toUnitHom, IsUnit.unit_spec]
   have hχm1 : χ (-1) = 1 := by
     obtain ⟨c0, hc0⟩ := exists_cc (Ω := Ω)
     have h1 := hcc c0 hc0

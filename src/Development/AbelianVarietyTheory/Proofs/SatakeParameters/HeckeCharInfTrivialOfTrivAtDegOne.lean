@@ -623,8 +623,7 @@ theorem infinitePlace_eq_of_embedding_comp_algebraMap_eq (F E : Type) [Field F] 
   have hcard : Fintype.card (E →ₐ[F] ℂ) = 2 := by
     rw [AlgHom.card, Algebra.IsQuadraticExtension.finrank_eq_two]
   have hcab : c = a ∨ c = b := by
-    by_contra hne
-    push_neg at hne
+    by_contra! hne
     have h3 : ({a, b, c} : Finset (E →ₐ[F] ℂ)).card = 3 := by
       rw [Finset.card_insert_of_notMem, Finset.card_pair]
       · exact fun e => hne.2 e.symm
@@ -954,7 +953,7 @@ theorem inf_trivial_of_trivAt_degOne : ∀ (F E : Type) [Field F] [NumberField F
     refine (pi_norm_le_iff_of_nonneg (le_max_right _ _)).2 fun i => ?_
     have hy' : y' (τ i) = y i := by
       have h : ∃ j, τ j = τ i := ⟨i, rfl⟩
-      simp only [y', dif_pos h]
+      simp only [y', dite_eq_left h]
       rw [hτinj h.choose_spec]
     rw [Pi.sub_apply, Real.norm_eq_abs, ← hy']
     exact (hbC (τ i)).trans (le_max_left _ _)

@@ -1,5 +1,6 @@
 module
 
+import Development.AutomorphicSpectrum.Proofs.GeometryProofs.ModelOnHodgeFromFamily
 public import Development.AutomorphicSpectrum.Definitions.CommutativeAlgebra.IsSplitGaussChars
 public import Mathlib.RingTheory.Coalgebra.IsFrobenius
 public import Mathlib.RingTheory.HopfAlgebra.Basic
@@ -505,7 +506,6 @@ section -- clump:auto
 open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj NumberField
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor Formalism.L2.Pj Formalism.MainNotions.ModuliIntegralCharts.H1 GlobalTheory.CompanionTheory.Ar.Crv GlobalTheory.CompanionTheory.Ar.Conj
 open scoped CategoryTheory.Obj
-attribute [local instance] Over.cartesianMonoidalCategory
 
 noncomputable section
 
@@ -862,16 +862,8 @@ theorem deg_one {G G' : Lat ξ Ω} {T : Set (Cpt ξ)} {a : K → ℤ} {e : Ω} (
 theorem deg_neg_one {G G' : Lat ξ Ω} {T : Set (Cpt ξ)} {a : K → ℤ} {e : Ω} (hG : G.IsVBOn Set.univ 1 ⊤)
     (hd : (Lat.tens (fun _ : Unit => G) fun _ => (-1 : ℤ)).IsDegOn Set.univ y a e) (h : ∀ q ∈ T, G' q = G q) :
     G'.IsDegOn T y (-a) e⁻¹ := by
-  refine ⟨inv_ne_zero hd.1, fun q hq c hc => ?_⟩
-  obtain ⟨s, hs⟩ := exists_gen hG (Set.mem_univ q)
-  have ht := tens_gen hG (-1) (Set.mem_univ q) hs
-  have h1 := hd.2 q (Set.mem_univ q) c hc
-  rw [ht.2, zpow_neg_one] at h1
-  have h2 := span_inv (regAt ξ q) hs.1 h1
-  have e1 : (∏ k, y ⟨k, c k⟩ ^ (-a) k) • e⁻¹ = ((∏ k, y ⟨k, c k⟩ ^ a k) • e)⁻¹ := by
-    simp [Pi.neg_apply, zpow_neg, Finset.prod_inv_distrib, mul_comm]
-  rw [h q hq, hs.2, e1]
-  exact h2
+  intros
+  apply _root_.GlobalTheory.CompanionTheory.Ar.TwoLevelLat.isDegOn_of_tens_neg_one <;> assumption
 
 theorem natCast_residue_eq_zero (q : Cpt ξ) {p : ℕ} (h : InFibre ξ p q) : (p : X.residueField q.1) = 0 := by
   by_contra hne
@@ -978,14 +970,14 @@ theorem drTie_of_hodgeCpt : ∀ (E : Type) [Field E] [NumberField E] [IsCMField 
     exact h1
   · rw [Fintype.card_sum] at hcard
     omega
-  · have hidx : HodgeCpt.rootIdx D (τ, i) = ⟨.inl τ, ⟨i, h⟩⟩ := dif_pos h
-    have hsgn : HodgeCpt.rootSgn D (τ, i) = 1 := if_pos h
+  · have hidx : HodgeCpt.rootIdx D (τ, i) = ⟨.inl τ, ⟨i, h⟩⟩ := dite_eq_left h
+    have hsgn : HodgeCpt.rootSgn D (τ, i) = 1 := ite_eq_left h
     have h1 := hroot (τ, i)
     rw [hidx, hsgn] at h1
     exact deg_one (hG _) h1 fun q hq => gr_congr (hV _ q hq) _ _
   · have hn : ¬ (i : ℕ) < D.p := not_lt.2 hj
-    have hidx : HodgeCpt.rootIdx D (τ, i) = ⟨.inr τ, ⟨D.p + D.q - 1 - i, by have := i.2; show _ < D.q; omega⟩⟩ := dif_neg hn
-    have hsgn : HodgeCpt.rootSgn D (τ, i) = -1 := if_neg hn
+    have hidx : HodgeCpt.rootIdx D (τ, i) = ⟨.inr τ, ⟨D.p + D.q - 1 - i, by have := i.2; show _ < D.q; omega⟩⟩ := dite_eq_right hn
+    have hsgn : HodgeCpt.rootSgn D (τ, i) = -1 := ite_eq_right hn
     have h1 := hroot (τ, i)
     rw [hidx, hsgn] at h1
     rw [gr_cast]

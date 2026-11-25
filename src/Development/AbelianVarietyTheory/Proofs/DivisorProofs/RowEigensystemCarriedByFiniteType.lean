@@ -89,8 +89,7 @@ theorem exists_sys_of_mem_span {K V W I ι : Type} [Field K] [AddCommGroup V] [M
   have hin : u ∈ Submodule.span ℂ (j '' ((Z ⊓ Formalism.L2.Col.eigAt op s : Submodule K V) : Set V)) := by
     rw [← GlobalTheory.span_image_inf_of_linearIndependent σ j b hli]
     exact ⟨huZ, (key.1 s) ▸ hmem⟩
-  by_contra hcon
-  push_neg at hcon
+  by_contra! hcon
   apply hu0
   have hle : Submodule.span ℂ (j '' ((Z ⊓ Formalism.L2.Col.eigAt op s : Submodule K V) : Set V)) ≤ ⊥ := by
     rw [Submodule.span_le]
@@ -121,7 +120,7 @@ theorem carries_of_eEc_ne_bot : ∀ {D : D7} {G : Type} [Group G] [Fintype G] {P
     intro w hw
     have h := h0 w hw
     simp only [Submodule.mem_comap, h, Submodule.zero_mem]
-  push_neg at h0
+  push Not at h0
   obtain ⟨w, hw, hne⟩ := h0
   let b := (A3.A.fam.R A3.A.μ0).S.basis
   let j := R.jX A3.A.μ0

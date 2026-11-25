@@ -65,8 +65,6 @@ open scoped TensorProduct
 
 namespace GlobalTheory.GeoTie
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 variable {D : D7} {Γ : Type} [Group Γ] [Fintype Γ] {Pl0 I0 T1 : Type}
   {A3 : FamIn3 D.what₂.LL Γ Pl0 I0 (List ℕ) T1 D.R.m} {T0 : CoreJ D} [Algebra T0.Q.c.F D.what₂.LL]
   {Rl : RealDat3 D A3 T0.Q.c.F} {cG : Formalism.L2.DIV.G0 Rl.Pg D.R.r ≃* G0g D.nd} {S : NX.RatDat D.ntw} (YS : NX.NExpRealS Rl cG S)
@@ -121,7 +119,7 @@ def extLift {m : ℕ} {α : ℕ → Type} (f : ∀ n : Fin m, α ((n : ℕ) + 1)
   | n + 1 => if h : n < m then f ⟨n, h⟩ else d _
 
 theorem extLift_succ {m : ℕ} {α : ℕ → Type} (f : ∀ n : Fin m, α ((n : ℕ) + 1)) (d : ∀ j, α j) (n : Fin m) :
-    extLift f d ((n : ℕ) + 1) = f n := dif_pos n.2
+    extLift f d ((n : ℕ) + 1) = f n := dite_eq_left n.2
 
 theorem lift_cases {m : ℕ} {p : ℕ → Prop} (h1 : ∀ n : Fin m, p ((n : ℕ) + 1)) (h2 : ∀ j, j ∉ Finset.Icc 1 m → p j) (j : ℕ) :
     p j := by
@@ -133,9 +131,9 @@ theorem lift_cases {m : ℕ} {p : ℕ → Prop} (h1 : ∀ n : Fin m, p ((n : ℕ
 
 def atSide {P : Bool → Type} (b : Bool) (y : Σ b', P b') : Option (P b) := if h : y.1 = b then some (h ▸ y.2) else none
 
-theorem atSide_same {P : Bool → Type} (b : Bool) (z : P b) : atSide b (⟨b, z⟩ : Σ b', P b') = some z := dif_pos rfl
+theorem atSide_same {P : Bool → Type} (b : Bool) (z : P b) : atSide b (⟨b, z⟩ : Σ b', P b') = some z := dite_eq_left rfl
 
-theorem atSide_other {P : Bool → Type} {b : Bool} {y : Σ b', P b'} (h : y.1 ≠ b) : atSide b y = none := dif_neg h
+theorem atSide_other {P : Bool → Type} {b : Bool} {y : Σ b', P b'} (h : y.1 ≠ b) : atSide b y = none := dite_eq_right h
 
 theorem eq_of_atSide {P : Bool → Type} {b : Bool} {y : Σ b', P b'} {z : P b} (h : atSide b y = some z) : y = ⟨b, z⟩ := by
   obtain ⟨b', z'⟩ := y
@@ -189,14 +187,14 @@ theorem GeoLaws.move (h : GeoLaws YS fw iC) {j : Fin D.R.m} {k P} (hk : HkIdx i 
       (q : HkKer P.asIdeal (charAt P) k z.1 → Pts YS iC b ((j : ℕ) + 1)),
       (∀ C, IsHkQuot P.asIdeal (charAt P) k z.1 C (q C).1) ∧ ∀ c, allMove YS iC _ k P c ⟨b, z⟩ = ⟨b, q (e c)⟩ := by
   have h1 : Nonempty (Fin (kerNum YS iC ((j : ℕ) + 1) k P) ≃ HkKer P.asIdeal (charAt P) k z.1) := by
-    rw [kerNum, dif_pos (h.count j k P hk)]
+    rw [kerNum, dite_eq_left (h.count j k P hk)]
     exact (h.count j k P hk).choose_spec b z
   have h2 := h.stable b j k P hk z
-  exact ⟨h1.some, fun C => (h2 C).choose, fun C => (h2 C).choose_spec, fun c => dif_pos ⟨h1, h2⟩⟩
+  exact ⟨h1.some, fun C => (h2 C).choose, fun C => (h2 C).choose_spec, fun c => dite_eq_left ⟨h1, h2⟩⟩
 
 theorem GeoLaws.hkUnit_spec (h : GeoLaws YS fw iC) {j : Fin D.R.m} {k P} (hk : HkIdx i k P) (b : Bool) :
     ‖hkUnit YS fw iC j b k P‖ = 1 ∧ HeckeIs YS fw iC b j k P (hkUnit YS fw iC j b k P) := by
-  rw [hkUnit, dif_pos (h.hecke b j k P hk)]
+  rw [hkUnit, dite_eq_left (h.hecke b j k P hk)]
   exact (h.hecke b j k P hk).choose_spec
 
 theorem exists_hkUnit_eq (j : Fin D.R.m) (b : Bool) (k : ℕ) (P : PlE D.host) :
@@ -384,8 +382,6 @@ namespace GlobalTheory.HeightCounting
 open Formalism.BasicNotions Formalism.MainNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.L2 Formalism.L2.Host Formalism.L2.Theta Formalism.L2.DIV Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev
   Formalism.IndefR.RecTie Formalism.IndefR.NX Formalism.ConjugateSelfDual ReciprocityTheory.Gal ReciprocityTheory.Aut Formalism.AUTREP NumberField IsDedekindDomain GlobalTheory.Mem
 open scoped TensorProduct
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 set_option genInjectivity false

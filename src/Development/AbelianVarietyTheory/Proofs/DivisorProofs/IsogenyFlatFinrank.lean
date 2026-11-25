@@ -50,7 +50,6 @@ open CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj Alg
 open scoped CategoryTheory.Obj CategoryTheory.MonObj TensorProduct
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor
 open GlobalTheory GlobalTheory.HTLat GlobalTheory.Published.AbVarRed GlobalTheory.CechPic GlobalTheory.AV GlobalTheory.AV.AbVar
-attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace GlobalTheory.AV.AbVar
 
@@ -76,7 +75,7 @@ theorem isogeny_flat_finrank : ∀ (K : Type) [Field K] (A B : AbVar K) (f : A �
     rw [e']
     exact Flat.comp _ _
   obtain ⟨hBint, hBnoeth, -⟩ := GlobalTheory.T.abelianVariety_isIntegral_noetherian_compact K B
-  have hdeg : deg f = f.hom.left.finrank B.origin := if_pos ⟨hfin, hsurj⟩
+  have hdeg : deg f = f.hom.left.finrank B.origin := ite_eq_left ⟨hfin, hsurj⟩
   have hconst : ∀ y : B.X.left, f.hom.left.finrank y = deg f := by
     intro y
     rw [hdeg]

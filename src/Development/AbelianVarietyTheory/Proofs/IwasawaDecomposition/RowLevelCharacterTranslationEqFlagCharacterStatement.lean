@@ -1,5 +1,6 @@
 module
 
+import Formalism.LocalToGlobal.Columns.RowFormsLemmas
 public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ReadsDeco
 public import Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.StepZeroTwistReferenceTupleEqId
 public import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.UnitaryFiniteAdelicPointAsMatrixMemFlagIwahori
@@ -53,7 +54,6 @@ section -- clump:auto
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.MainNotions.S MeasureTheory IsDedekindDomain NumberField Matrix Formalism.L2.Theta Formalism.L2.DIV Formalism.L2.Indef Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Mult Formalism.IndefR.Datum Formalism.IndefR.Cx
 open scoped TensorProduct InnerProductSpace
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Formalism.IndefR.RecTie Formalism.IndefR.Lev Formalism.L2.Rows GlobalTheory.Mem GlobalTheory.Mem.R3 GlobalTheory.Mem.Col2
 
 noncomputable section
@@ -93,17 +93,8 @@ theorem blockDeterminant_eq_diagonalBlockDet {n : ℕ} {β : ℕ → ℕ} {b : F
 
 theorem blkDet_diagEmb {n r : ℕ} (h : r ≤ n) (bl : List ℕ) (g : GL (Fin r) κ) (s : ℕ) :
     Formalism.L2.Col.blkDet n κ (Formalism.L2.Col.coarse r bl) (s + 1) ⟨_, Formalism.L2.Col.diagEmb_mem_blockUT h bl g⟩ = 1 := by
-  apply Units.ext
-  rw [Formalism.L2.Col.blkDet_val, Units.val_one]
-  refine (congrArg Matrix.det (a₂ := 1) ?_).trans Matrix.det_one
-  ext i j
-  have hi : ¬ i.1.val < r := fun hi => by
-    have h1 := i.2
-    rw [Formalism.L2.Col.coarse_of_lt hi] at h1
-    omega
-  simp only [Matrix.toSquareBlock_def, Matrix.of_apply]
-  rw [Formalism.L2.Col.diagEmb_val, Formalism.L2.Col.diagMat_of_not_left _ _ hi]
-  simp only [Matrix.one_apply, Subtype.ext_iff]
+  intros
+  apply _root_.Formalism.L2.Col.blkDet_diagEmb_one <;> assumption
 
 theorem reindex_refl {n : ℕ} (R : GL (Fin n) κ) :
     Units.map (Matrix.reindexAlgEquiv κ κ (finCongr (rfl : n = n))).toMonoidHom R = R := by
@@ -215,14 +206,14 @@ theorem prod_uSG {E : Type} [Field E] [NumberField E] {M : Type} [CommMonoid M] 
   have h1 : ∏ w, f w = ∏ w : Formalism.L2.Col.uSG A B, (fun P => if P ∈ A then a P else b P) w.1 := by
     refine Finset.prod_congr rfl fun w _ => ?_
     by_cases h : w.1 ∈ A
-    · simp only [h, if_true]; exact ha w h
-    · simp only [h, if_false]; exact hb w h ((Finset.mem_union.mp w.2).resolve_left h)
+    · simp only [h, ite_true]; exact ha w h
+    · simp only [h, ite_false]; exact hb w h ((Finset.mem_union.mp w.2).resolve_left h)
   rw [h1, Finset.prod_coe_sort (Formalism.L2.Col.uSG A B) (fun P => if P ∈ A then a P else b P)]
   have h2 : Disjoint A B := Finset.disjoint_right.2 fun P hP => hd P hP
   rw [Finset.prod_union h2]
   congr 1
-  · exact Finset.prod_congr rfl fun P hP => if_pos hP
-  · exact Finset.prod_congr rfl fun P hP => if_neg (hd P hP)
+  · exact Finset.prod_congr rfl fun P hP => ite_eq_left hP
+  · exact Finset.prod_congr rfl fun P hP => ite_eq_right (hd P hP)
 
 theorem lam_congr {κ K : Type} [CommRing κ] [Field K] {n : ℕ} {l l' : Formalism.L2.Col.Lev κ K n} (e : l = l') (u : GL (Fin n) κ)
     (h : u ∈ l.inv.H) : l.inv.lam ⟨u, h⟩ = l'.lam⁻¹ ⟨u, e ▸ h⟩ := by
@@ -323,7 +314,6 @@ section -- clump:auto
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.MainNotions.S MeasureTheory IsDedekindDomain NumberField Matrix Formalism.L2.Theta Formalism.L2.DIV Formalism.L2.Indef Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Mult Formalism.IndefR.Datum Formalism.IndefR.Cx
 open scoped TensorProduct InnerProductSpace
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Formalism.IndefR.RecTie Formalism.IndefR.Lev Formalism.L2.Rows GlobalTheory.Mem GlobalTheory.Mem.R3 GlobalTheory.Mem.Col2
 
 end -- clump:auto

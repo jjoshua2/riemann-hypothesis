@@ -114,7 +114,6 @@ variable {D : D7} {B : WeightFamilies.Prov D} {P : ModuliIntegralCharts.Prov D} 
 
 abbrev NormDatum (B : WeightFamilies.Prov D) := GlobalTheory.RunIn.SecNorm B
 
-def NormDatum.sup (B : WeightFamilies.Prov D) : NormDatum B := GlobalTheory.RunIn.SecNorm.sup B
 namespace NormDatum
 variable (n : NormDatum B)
 
@@ -330,7 +329,7 @@ theorem sum_primeBound (N Q q d : ℕ) (g : Fin 2 → ℕ) (a b : ℝ) (S : Fins
   unfold primeBound
   simp only [add_mul, Finset.sum_add_distrib, ite_mul, zero_mul, Finset.sum_mul]
   rw [hQ, Finset.sum_ite_mem, Finset.inter_eq_right.2 hA, Finset.sum_comm]
-  simp only [Finset.sum_ite_eq', hq, hd, hg, if_true, Finset.mul_sum]
+  simp only [Finset.sum_ite_eq', hq, hd, hg, ite_true, Finset.mul_sum]
   congr 2
   refine Finset.sum_congr rfl fun p _ => ?_
   ring
@@ -426,33 +425,33 @@ theorem depth_sum {D : D7} (B : WeightFamilies.Prov D) {j : ℕ} (large₂ : Siz
       have hc := (H1algLink.prime_mem_iff la (hg _)).1 (Classical.choose_spec ha)
       have := Finset.single_le_sum (fun i (_ : i ∈ Finset.univ) => e3 (resCharOf la) i)
         (Finset.mem_univ (Classical.choose ha))
-      rw [if_pos hc] at this
+      rw [ite_eq_left hc] at this
       linarith
     · rw [dite_eq_right ha]
       refine mul_le_mul_of_nonneg_left ?_ (by positivity)
       by_cases hb : ((D.host.QS : ℕ) : 𝓞 B.KO) ∈ la.asIdeal
-      · rw [if_pos hb, show ringChar (𝓞 B.KO ⧸ la.asIdeal) = resCharOf la from rfl]
+      · rw [ite_eq_left hb, show ringChar (𝓞 B.KO ⧸ la.asIdeal) = resCharOf la from rfl]
         linarith
-      · rw [if_neg hb]
+      · rw [ite_eq_right hb]
         by_cases hc : ((D.host.q : ℕ) : 𝓞 B.KO) ∈ la.asIdeal ∨ ((D.host.d : ℕ) : 𝓞 B.KO) ∈ la.asIdeal
-        · rw [if_pos hc]
+        · rw [ite_eq_left hc]
           rw [H1algLink.prime_mem_iff la hq, H1algLink.prime_mem_iff la hd] at hc
           rcases hc with hc | hc
-          · rw [if_pos hc]
+          · rw [ite_eq_left hc]
             linarith
-          · rw [if_pos hc]
+          · rw [ite_eq_left hc]
             linarith
-        · rw [if_neg hc]
+        · rw [ite_eq_right hc]
           linarith
   · intro la hla
     have hne : ∀ p ∈ S, p.Prime → ((p : ℕ) : 𝓞 B.KO) ∉ la.asIdeal := fun p hp hpp hm =>
       hla ((H1algLink.prime_mem_iff la hpp).1 hm ▸ hp)
     have hnA : resCharOf la ∉ A := fun h => hla (Finset.mem_union_left _ h)
     have a5 := e4 la
-    rw [if_neg hnA] at a5
+    rw [ite_eq_right hnA] at a5
     unfold nusOf
-    rw [dite_eq_right (fun ⟨i, hi⟩ => hne _ (hgS i) (hg i) hi), if_neg (fun h => hla (hsm ((hQ la).1 h))),
-      if_neg (not_or.2 ⟨hne _ (by simp [hS]) hq, hne _ (by simp [hS]) hd⟩), le_antisymm a5 (h0 la)]
+    rw [dite_eq_right (fun ⟨i, hi⟩ => hne _ (hgS i) (hg i) hi), ite_eq_right (fun h => hla (hsm ((hQ la).1 h))),
+      ite_eq_right (not_or.2 ⟨hne _ (by simp [hS]) hq, hne _ (by simp [hS]) hd⟩), le_antisymm a5 (h0 la)]
     simp
 
 theorem depth_sum_record : ∀ (D : D7) (T : Top D) (h : LawsP T) (j : ℕ) (hj : InR D j) (large₂ : SizeData₂ D) (w : WeightFamilies.Wt D j), 2 * D.R.f * D.R.r ≤ w.n → Real.log (WeightAlgebra.DF w) ≤ 2 * large₂.sc.L → WeightedPrimeSumBoundAlt large₂ (recPJ h j hj) w (nusOf (recB h.toLawsCore) w (nuWt T w)) ∧ ∀ (Nd : NormDatum (recB h.toLawsCore)), WeightedPrimeSumBoundAlt large₂ (Nd.X' (recPJ h j hj) (extAll h j hj) (intAtExt_extAll h j hj)) w (nusOf (recB h.toLawsCore) w (nuWt T w)) := by
@@ -650,7 +649,7 @@ theorem integralityCondition_algebraicPoints (D : D7) (T : Top D) (h : LawsP T) 
     refine _root_.GlobalTheory.PlaceTop.thc_le_of_shortBound _root_.GlobalTheory.ShortBound.shortBound D T h hs j hj hinj EX ho w _ _ _ a b ?_
     rw [hp, e]
     exact congrArg (· * _) (mul_assoc _ _ _)
-  refine ⟨GlobalTheory.T.scaledThetaLattice_le_supLattice_every_weight D T h j hj hinj EX ho wL, ?_, ?_, ?_⟩
+  refine ⟨_root_.GlobalTheory.PlaceTop.thInt_of_oriented D T h j hj hinj EX ho wL, ?_, ?_, ?_⟩
   · refine _root_.GlobalTheory.PlaceTop.thc_le_of_shortBound _root_.GlobalTheory.ShortBound.shortBound D T h hs j hj hinj EX ho wF _ _ _ le_rfl le_rfl ?_
     rw [hp]
     rfl
@@ -718,7 +717,7 @@ theorem hypC_record : ∀ (D : D7) (T : Top D) (h : LawsP T) (hinj : Function.In
     exact hq
   have hH2 := (_root_.GlobalTheory.PlaceTop.scaledRunLatticesInSupLattices_proof D T h hpar.sh j hj hinj EX hpar.orient p hpar.own ka wL wF Tn nP hIsF).1
   have hth : ∀ w : WeightFamilies.Wt D j, GlobalTheory.RunIn.ThInt (recPJ h j hj) hinj EX w :=
-    fun w => GlobalTheory.T.scaledThetaLattice_le_supLattice_every_weight D T h j hj hinj EX hpar.orient w
+    fun w => _root_.GlobalTheory.PlaceTop.thInt_of_oriented D T h j hj hinj EX hpar.orient w
   have helper : Formalism.MainNotions.ModuliIntegralCharts.H1.ChartIndepSt2 → ∀ (D : D7) (T : Top D) (h : LawsP T), GlobalTheory.RunIn.GamAt T.toCore → LawsSh T → 0 < badN D → (∀ j, InR D j → ∀ n, (T.dδ j n).l₂.A = 1) → (∀ j, InR D j → ∀ k k', ((T.U j T.σ₀).X k).Gm = ((T.U j T.σ₀).X k').Gm ∧ ((T.U j T.σ₀).X k).ξ0 = ((T.U j T.σ₀).X k').ξ0) → ∀ (hinj : Function.Injective D.what₂.OtoLL) (EX : ErrX D) (p : ℕ) (j : ℕ) (hj : InR D j) (large₂ : SizeData₂ D) (H : KHyp) (C2 A2 CR CT : ℝ) (ka wL wF : WeightFamilies.Wt D j) (Tn nP nW : ℕ) (h0 : ℝ) (Gc Prw : ℝ), FamilyHypotheses.OwnPr D p → FamilyHypotheses.HypPage large₂ (recPJ h j hj) H C2 A2 CR CT ka wL wF Tn nP nW h0 → PageAt large₂ C2 A2 → 4 * H.CK ≤ WeightFamilies.PPv D large₂ C2 A2 ^ 2 * D.R.f → (∀ w2, IsG2 wL wF w2 → GlobalTheory.RunIn.ThInt (recPJ h j hj) hinj EX w2) → (j < D.R.m → ∀ w1, IsDoubledWeightWithShift wL w1 nW → GlobalTheory.RunIn.ThInt (recPJ h j hj) hinj EX w1) → H2 (recPJ h j hj) (scalOfP (recB h.toLawsCore) hinj EX p ka wL wF Tn) ka wL wF → EtaleWeightGaps.GrowthConstantBound large₂ (recB h.toLawsCore) Gc → 38 * large₂.sc.L + PO D large₂ ≤ Prw → (∀ nus, EtaleWeightGaps.WeightedPrimeSumBoundAlt large₂ (recPJ h j hj) wL nus → EtaleWeightGaps.HypC large₂ (recPJ h j hj) H C2 A2 CR 0 CT (scalOfP (recB h.toLawsCore) hinj EX p ka wL wF Tn) ka wL wF Tn nP nW h0 nus) ∧ ∃ (G₀ : EtaleWeightGaps.GlobalFamilyData (recPJ h j hj) ka wL wF) (Sh : Finset ((recB h.toLawsCore).Cusp j wF)), Submodule.span (recB h.toLawsCore).KO (Sh : Set ((recB h.toLawsCore).Cusp j wF)) = ⊤ ∧ G₀.TiedW (scalOfP (recB h.toLawsCore) hinj EX p ka wL wF Tn) Gc Prw ∧ NoCommonZero (T.Q.Xo j) T.Q.c (fun i => (G₀.w i).1) ∧ ∀ G : EtaleWeightGaps.GlobalFamilyData (recPJ h j hj) ka wL wF, (∀ i, G.th' i ∈ Sh) → G.TiedTh (scalOfP (recB h.toLawsCore) hinj EX p ka wL wF Tn) Gc := by
     suffices hInputs : _ by exact hInputs
     intro hCI D T h hGam hSh hbad hA1 hUX hinj EX p j hj large₂ H C2 A2 CR CT ka wL wF Tn nP nW h0 Gc Prw

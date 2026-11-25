@@ -383,8 +383,7 @@ end Bnd
 
 lemma quad_step {x y A B : ℝ} (hx : 0 ≤ x) (hy : 0 ≤ y) (hA : 0 ≤ A) (hB : 0 ≤ B)
     (h : x ^ 2 ≤ y * (A * y + B * x)) : x ≤ (√A + B) * y := by
-  by_contra hlt
-  push_neg at hlt
+  by_contra! hlt
   have hs0 := Real.sqrt_nonneg A
   have hss : √A * √A * (y * y) = A * (y * y) := by rw [Real.mul_self_sqrt hA]
   have hx1 : √A * y ≤ x := by nlinarith [mul_nonneg hB hy]
@@ -976,7 +975,7 @@ theorem single_mem {S : Subgroup (GL n (ι → ℂ))}
     · intro i j
       by_cases h : i = j
       · subst h
-        simp only [Matrix.diagonal_apply_eq, if_true]
+        simp only [Matrix.diagonal_apply_eq, ite_true]
         have h1 : HasDerivAt (fun t : ℝ => (t : ℂ) * Complex.log (D i)) (Complex.log (D i)) 0 := by
           simpa using (Complex.ofRealCLM.hasDerivAt (x := (0 : ℝ))).mul_const (Complex.log (D i))
         simpa using h1.cexp

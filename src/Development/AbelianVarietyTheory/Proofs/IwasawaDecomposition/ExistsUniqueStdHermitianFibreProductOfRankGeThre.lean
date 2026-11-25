@@ -1,5 +1,6 @@
 module
 
+import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.TprodComplementSplitFinset
 public import Mathlib.Probability.ProductMeasure
 public import Mathlib.Analysis.SpecialFunctions.Log.Summable
 public import Mathlib.MeasureTheory.Measure.WithDensityFinite
@@ -93,26 +94,8 @@ theorem lintegral_prod_infinitePi {ι : Type} {V : ι → Type} [∀ i, Measurab
 theorem tail_split {ι : Type} [DecidableEq ι] (c : ι → ℝ) (hs : Summable fun i => |c i - 1|)
     {T S : Finset ι} (h : T ⊆ S) :
     ∏' i : {i : ι // i ∉ T}, c i.1 = (∏ i ∈ S \ T, c i) * ∏' i : {i : ι // i ∉ S}, c i.1 := by
-  have key : ∀ U : Finset ι, ∏' i : {i : ι // i ∉ U}, c i.1 = ∏' i, (if i ∈ U then 1 else c i) := by
-    intro U
-    have := tprod_subtype {i | i ∉ U} c
-    refine this.trans (tprod_congr fun i => ?_)
-    by_cases hi : i ∈ U <;> simp [Set.mulIndicator, hi]
-  have hm : Multipliable fun i => (if i ∈ S then 1 else c i) := by
-    have h1 : Summable fun i => (if i ∈ S then (0 : ℝ) else c i - 1) := by
-      refine Summable.of_norm_bounded hs fun i => ?_
-      by_cases hi : i ∈ S <;> simp [hi]
-    refine (Real.multipliable_one_add_of_summable h1).congr fun i => ?_
-    by_cases hi : i ∈ S <;> simp [hi]
-  have hf : HasProd (fun i => if i ∈ S \ T then c i else 1) (∏ i ∈ S \ T, c i) := by
-    have := hasProd_prod_of_ne_finset_one (f := fun i => if i ∈ S \ T then c i else 1)
-      (s := S \ T) (L := SummationFilter.unconditional ι) (fun b hb => if_neg hb)
-    rwa [Finset.prod_congr rfl (fun i hi => if_pos hi)] at this
-  rw [key, key, ← hf.tprod_eq, ← hf.multipliable.tprod_mul hm]
-  refine tprod_congr fun i => ?_
-  by_cases hT : i ∈ T
-  · simp [hT, h hT]
-  · by_cases hS : i ∈ S <;> simp [hT, hS]
+  intros
+  apply _root_.GlobalTheory.CompanionTheory.SW.TailCut.tprod_tail_cut <;> assumption
 
 theorem exists_piece {ι : Type} {V : ι → Type} [∀ i, MeasurableSpace (V i)]
     (a : ∀ i, Measure (V i)) (hσ : ∀ i, SigmaFinite (a i)) (T : Finset ι) (c : ι → ℝ)
@@ -144,7 +127,7 @@ theorem exists_piece {ι : Type} {V : ι → Type} [∀ i, MeasurableSpace (V i)
     by_cases hi : i ∈ T
     · refine ⟨(a i).toFinite, (a i).rnDeriv (a i).toFinite, inferInstance,
         Measure.measurable_rnDeriv _ _, fun h => (h hi).elim, fun f hf => ?_⟩
-      rw [if_pos hi, one_mul]
+      rw [ite_eq_left hi, one_mul]
       conv_lhs => rw [← Measure.withDensity_rnDeriv_eq (a i) (a i).toFinite
         (absolutelyContinuous_toFinite _)]
       rw [lintegral_withDensity_eq_lintegral_mul _ (Measure.measurable_rnDeriv _ _) hf]
@@ -152,7 +135,7 @@ theorem exists_piece {ι : Type} {V : ι → Type} [∀ i, MeasurableSpace (V i)
     · haveI : IsFiniteMeasure (a i) := ⟨by rw [ha i hi]; exact ENNReal.ofReal_lt_top⟩
       refine ⟨(a i Set.univ)⁻¹ • a i, fun _ => 1, inferInstance, measurable_const,
         fun _ _ => rfl, fun f _ => ?_⟩
-      rw [if_neg hi, ← ha i hi, lintegral_smul_measure, smul_eq_mul, ← mul_assoc,
+      rw [ite_eq_right hi, ← ha i hi, lintegral_smul_measure, smul_eq_mul, ← mul_assoc,
         ENNReal.mul_inv_cancel (by simpa using h0 i) (measure_ne_top _ _)]
       simp
   choose P g hP hg hg1 hint using hP
@@ -181,8 +164,8 @@ theorem exists_piece {ι : Type} {V : ι → Type} [∀ i, MeasurableSpace (V i)
   have h2 : ∏ i ∈ S, (if i ∈ T then 1 else ENNReal.ofReal (c i)) =
       ∏ i ∈ S \ T, ENNReal.ofReal (c i) := by
     rw [← Finset.prod_subset (Finset.sdiff_subset (s := S) (t := T))
-      (fun i hi hi' => if_pos (by simpa [hi] using hi'))]
-    exact Finset.prod_congr rfl fun i hi => if_neg (Finset.mem_sdiff.1 hi).2
+      (fun i hi hi' => ite_eq_left (by simpa [hi] using hi'))]
+    exact Finset.prod_congr rfl fun i hi => ite_eq_right (Finset.mem_sdiff.1 hi).2
   rw [h2]
   ring
 

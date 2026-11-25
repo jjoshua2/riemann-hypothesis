@@ -4,6 +4,7 @@ public import Formalism.PeriodIntegrals.LocJacTyp
 public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.JacobianTransvectionSplitting.DiscreteHaar
 public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.AdelicLocalCompactness.AdeleLC
 public import ReciprocityTheory.ClassFieldTheory.GlobalClassField.LocPowB
+import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.GlobalProductGramFiberRankOne
 
 @[expose] public section
 
@@ -36,16 +37,7 @@ abbrev Ov : Set (Fv F v) := (v.adicCompletionIntegers F : Set (Fv F v))
 theorem mem_Ov {x : Fv F v} : x ∈ Ov v ↔ Valued.v x ≤ 1 := Iff.rfl
 
 theorem isOpen_Ov : IsOpen (Ov v) := by
-  rw [isOpen_iff_mem_nhds]
-  intro x hx
-  rw [Valued.mem_nhds]
-  refine ⟨1, fun y hy => ?_⟩
-  have hy' : Valued.v (y - x) < 1 := by simpa using hy
-  have hx' : Valued.v x ≤ 1 := (mem_Ov v).1 hx
-  refine (mem_Ov v).2 ?_
-  calc Valued.v y = Valued.v ((y - x) + x) := by rw [sub_add_cancel]
-    _ ≤ max (Valued.v (y - x)) (Valued.v x) := Valuation.map_add _ _ _
-    _ ≤ 1 := max_le hy'.le hx'
+  apply _root_.GlobalTheory.CompanionTheory.SW.EulerDens.isOpen_int <;> assumption
 
 theorem isCompact_Ov : IsCompact (Ov v) := PI.AdicCompletionValuation.isCompact_adicCompletionIntegers F v
 
@@ -217,7 +209,7 @@ theorem modF_Fv (a : Fv F v) (ha : a ≠ 0) :
     first
     | exact (map_ne_zero _).mpr ha
   unfold PI.NglqJacSplitW.modF PI.LocJacTyp.absV
-  simp only [dif_neg ha, dif_neg hva]
+  simp only [dite_eq_right ha, dite_eq_right hva]
   obtain ⟨m, hm, hmdef⟩ : ∃ m : ℤ, Valued.v a = WithZero.exp m ∧
       Multiplicative.toAdd (WithZero.unzero hva) = m :=
     ⟨_, (WithZero.coe_unzero hva).symm, rfl⟩

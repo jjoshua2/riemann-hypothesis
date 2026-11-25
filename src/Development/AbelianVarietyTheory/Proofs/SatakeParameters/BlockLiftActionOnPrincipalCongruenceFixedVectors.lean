@@ -64,8 +64,7 @@ theorem val_lt_one_of_norm_lt_one (e : ℚ_[g] ≃+* F) (he : Continuous e) {z :
   have h3 : {x : F | valuation F x < 1} ∈ nhds (0 : F) :=
     (IsValuativeTopology.mem_nhds_zero_iff _).2 ⟨1, fun x hx => by simpa using hx⟩
   obtain ⟨n, hn⟩ := (h2.eventually h3).exists
-  by_contra hc
-  push_neg at hc
+  by_contra! hc
   have : 1 ≤ valuation F (e z ^ n) := by rw [map_pow]; exact one_le_pow₀ hc
   exact absurd hn (not_lt.2 this)
 
@@ -92,8 +91,7 @@ theorem val_le_one_of_norm_le_one (e : ℚ_[g] ≃+* F) (he : Continuous e) {z :
 
 theorem norm_lt_one_of_val_lt_one (e : ℚ_[g] ≃+* F) (he : Continuous e) {y : ℚ_[g]}
     (hy : valuation F (e y) < 1) : ‖y‖ < 1 := by
-  by_contra hc
-  push_neg at hc
+  by_contra! hc
   have hy0 : y ≠ 0 := by rintro rfl; simp at hc; exact absurd hc (by norm_num)
   have h1 : ‖y⁻¹‖ ≤ 1 := by rw [norm_inv]; exact inv_le_one_of_one_le₀ hc
   have h2 := val_le_one_of_norm_le_one e he h1
@@ -141,7 +139,7 @@ def bm (r t : ℕ) (h : Gn g r) : Mt g (r + t) := fun i j =>
 theorem bm_isUnit (r t : ℕ) (h : Gn g r) : IsUnit (bm r t h) := by
   set M := bm r t h with hM
   have h0 : InPar r M := fun i j hj hi => by
-    rw [hM]; show bm r t h i j = 0; unfold bm; rw [if_neg (by omega), if_neg (by omega)]
+    rw [hM]; show bm r t h i j = 0; unfold bm; rw [ite_eq_right (by omega), ite_eq_right (by omega)]
   have h1 : tl r M = h := by
     ext i j
     have hi : (i : ℕ) < r + t := by omega
@@ -158,24 +156,24 @@ theorem bm_isUnit (r t : ℕ) (h : Gn g r) : IsUnit (bm r t h) := by
 theorem blk_val (r t : ℕ) (h : Gn g r) : ((blk r t (r + t) h 1 : Gn g (r + t)) : Mt g (r + t)) = bm r t h := by
   show ((toG (bm r t h) : Gn g (r + t)) : Mt g (r + t)) = bm r t h
   unfold toG
-  rw [dif_pos (bm_isUnit r t h)]
+  rw [dite_eq_left (bm_isUnit r t h)]
   exact IsUnit.unit_spec _
 
 theorem bm_apply (r t : ℕ) (h : Gn g r) (a b : Fin (r + t)) : bm r t h a b =
     if hab : (a : ℕ) < r ∧ (b : ℕ) < r then (h : Mt g r) ⟨a, hab.1⟩ ⟨b, hab.2⟩ else if a = b then 1 else 0 := by
   unfold bm
   by_cases hab : (a : ℕ) < r ∧ (b : ℕ) < r
-  · rw [if_pos hab, dif_pos hab]; simp [entN, hab]
-  · rw [if_neg hab, dite_eq_right hab]
+  · rw [ite_eq_left hab, dite_eq_left hab]; simp [entN, hab]
+  · rw [ite_eq_right hab, dite_eq_right hab]
     by_cases h2 : r ≤ (a : ℕ) ∧ r ≤ (b : ℕ)
-    · rw [if_pos h2]
+    · rw [ite_eq_left h2]
       have ha : (a : ℕ) - r < t := by omega
       have hb : (b : ℕ) - r < t := by omega
-      simp only [entN, dif_pos (And.intro ha hb), Units.val_one, Matrix.one_apply, Fin.ext_iff]
+      simp only [entN, dite_eq_left (And.intro ha hb), Units.val_one, Matrix.one_apply, Fin.ext_iff]
       congr 1
       apply propext
       omega
-    · rw [if_neg h2, if_neg]
+    · rw [ite_eq_right h2, ite_eq_right]
       intro e; subst e; omega
 
 end Mat
@@ -199,7 +197,7 @@ theorem blockLift_act (g : ℕ) [Fact g.Prime] (F : Type) [Field F] [ValuativeRe
     have hab := hl a b
     rw [bm_apply]
     by_cases hc : (a : ℕ) < r ∧ (b : ℕ) < r
-    · rw [dif_pos hc] at hab ⊢
+    · rw [dite_eq_left hc] at hab ⊢
       obtain ⟨hA, hA'⟩ := entry_of_val e he _ _ hab
       exact ⟨hA, by rw [hA', ZMod.natCast_zmod_val]⟩
     · rw [dite_eq_right hc] at hab ⊢

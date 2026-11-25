@@ -18,7 +18,6 @@ section -- clump:auto
 
 open NumberField Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.L2.Theta Matrix
 open scoped TensorProduct
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Published GlobalTheory.Published.AutFin GlobalTheory.StdPar GlobalTheory.ThK.SmoothLev GlobalTheory.CompanionTheory.Hypotheses₂.ConstFin GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart
 open GlobalTheory.UAut GlobalTheory.AdelicU GlobalTheory.SiegelSet
 
@@ -123,7 +122,7 @@ theorem exists_basis_of_duality {E : Type} [Field E] {n m : ℕ} (X Y : Matrix (
   · intro i j h k
     have h1 : i.val < m := h ▸ j.2
     rw [hCk]
-    simp only [col, dif_pos h1]
+    simp only [col, dite_eq_left h1]
     congr 1
     exact Fin.ext h
   · intro i j h k
@@ -131,7 +130,7 @@ theorem exists_basis_of_duality {E : Type} [Field E] {n m : ℕ} (X Y : Matrix (
     have e1 : ¬ (i.val < m) := by omega
     have e2 : ¬ (i.val + m < n) := by omega
     rw [hCk]
-    simp only [col, dif_neg e1, dif_neg e2]
+    simp only [col, dite_eq_right e1, dite_eq_right e2]
     congr 1
     exact Fin.ext (by simp; omega)
   · intro i h1 h2
@@ -139,7 +138,7 @@ theorem exists_basis_of_duality {E : Type} [Field E] {n m : ℕ} (X Y : Matrix (
     have : (fun k => C.1 k i) = (b ⟨i.val - m, by have := i.2; omega⟩ : K).1 := by
       funext k
       rw [hCk]
-      simp only [col, dif_neg e1, dif_pos h2]
+      simp only [col, dite_eq_right e1, dite_eq_left h2]
     rw [this]
     exact (hmem _).1 (b _).2
 
@@ -167,7 +166,6 @@ section -- clump:auto
 
 open NumberField Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.L2.Theta Matrix
 open scoped TensorProduct
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Published GlobalTheory.Published.AutFin GlobalTheory.StdPar GlobalTheory.ThK.SmoothLev GlobalTheory.CompanionTheory.Hypotheses₂.ConstFin GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart
 open GlobalTheory.UAut GlobalTheory.AdelicU GlobalTheory.SiegelSet
 

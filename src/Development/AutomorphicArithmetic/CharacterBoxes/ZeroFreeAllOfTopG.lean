@@ -17,56 +17,6 @@ public import Development.AutomorphicArithmetic.CharacterBoxes.Supply
 public import Development.AutomorphicArithmetic.CharacterBoxes.DivinNOfHypV
 public import Formalism.SharpRestriction.RamificationFrobenius.TotientGaloisClasses.TopDefs
 public import Development.AutomorphicArithmetic.PrimitiveCosets.LevelGmLeOnFamilyScales
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Topology.Sheaves.Init
-import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
-import Mathlib.Analysis.Calculus.Deriv.Star
-import Mathlib.NumberTheory.MulChar.Lemmas
-import Mathlib.Tactic.Basify
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected
-import Mathlib.NumberTheory.LSeries.Nonvanishing
 import Mathlib.Tactic.Linter.Style
 import Std.Tactic.BVDecide.Normalize.Prop
 import Development.AutomorphicArithmetic.DedekindLFunctions.SplitInertia
@@ -246,10 +196,10 @@ theorem Gchi_conj {N : ℕ} [NeZero N] (χ : DirichletCharacter ℂ N) (y : ℝ)
     (starRingEnd ℂ) (Gchi χ y) = Gchi χ⁻¹ y := by
   by_cases h1 : χ = 1
   · subst h1
-    simp only [Gchi, inv_one, if_true]
+    simp only [Gchi, inv_one, ite_true]
     rw [map_add (f := _), map_sub, Gchi_conj_ramp, inv_one, Complex.conj_ofReal, Complex.conj_ofReal]
   · have h2 : χ⁻¹ ≠ 1 := fun h => h1 (inv_eq_one.mp h)
-    simp only [Gchi, h1, h2, if_false]
+    simp only [Gchi, h1, h2, ite_false]
     have hL := Gchi_conj_LFunction χ
     have h1c : (starRingEnd ℂ) (1 : ℂ) = 1 := map_one _
     rw [map_add (f := _), map_mul, map_div₀, Gchi_conj_ramp, Complex.conj_ofReal, hL]
@@ -313,7 +263,7 @@ theorem Gchi_growth {N : ℕ} [NeZero N] (χ : DirichletCharacter ℂ N) :
     have hl : Real.log y ≤ y := Real.log_le_self hy0
     have hyy : y ≤ y ^ 2 := by nlinarith
     unfold Gchi
-    rw [if_pos h]
+    rw [ite_eq_left h]
     refine (norm_add_le _ _).trans ?_
     refine (add_le_add (norm_sub_le _ _) le_rfl).trans ?_
     rw [Complex.norm_real, Complex.norm_real, Real.norm_of_nonneg (mul_nonneg hy0 hl0),
@@ -327,7 +277,7 @@ theorem Gchi_growth {N : ℕ} [NeZero N] (χ : DirichletCharacter ℂ N) :
     have hy0 : 0 ≤ y := by linarith
     have hyy : y ≤ y ^ 2 := by nlinarith
     unfold Gchi
-    rw [if_neg h]
+    rw [ite_eq_right h]
     refine (norm_add_le _ _).trans ?_
     rw [norm_mul, Complex.norm_real, Real.norm_of_nonneg hy0]
     have h2 := mul_le_mul_of_nonneg_left hyy
@@ -593,7 +543,7 @@ theorem mellin_Gchi_modOne (χ : DirichletCharacter ℂ 1) (s : ℂ) (hs : 1 < s
       field_simp
     beta_reduce
     rw [tsum_eq_sum (hz y)]
-    simp only [Gchi, if_pos h1, h2, ramp, T, E, h3, mul_one, ← mul_assoc,
+    simp only [Gchi, ite_eq_left h1, h2, ramp, T, E, h3, mul_one, ← mul_assoc,
       ← Finset.sum_mul]
     push_cast
     ring
@@ -726,7 +676,7 @@ theorem mellin_Gchi_of_ne_one_ramp (f : ℕ → ℂ) (s : ℂ) (hs : 1 < s.re)
     simp only [F]
     simp_rw [norm_mul (a (m + 1))]
     rw [integral_const_mul, mellin_Gchi_of_ne_one_norm (m + 1) (by omega) s hs,
-      LSeries.norm_term_eq, if_neg (by omega), Real.rpow_neg (Nat.cast_nonneg _)]
+      LSeries.norm_term_eq, ite_eq_right (by omega), Real.rpow_neg (Nat.cast_nonneg _)]
     ring
   have h := hasSum_integral_of_summable_integral_norm hint hsum
   have hF : ∀ y, ∑' n, F n y = ramp f y * (y : ℂ) ^ (-s - 1) + g y := by
@@ -778,7 +728,7 @@ theorem mellin_Gchi_of_ne_one {N : ℕ} [NeZero N] (χ : DirichletCharacter ℂ 
     ring
   · intro y hy
     have hy0 : (y : ℂ) ≠ 0 := by exact_mod_cast (lt_trans one_pos hy).ne'
-    simp only [Gchi, if_neg hχ, ← hc]
+    simp only [Gchi, ite_eq_right hχ, ← hc]
     rw [cpow_sub _ _ hy0, cpow_one]
     field_simp
 

@@ -63,7 +63,6 @@ open CategoryTheory AlgebraicGeometry Limits MonoidalCategory CartesianMonoidalC
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor
 open GlobalTheory GlobalTheory.VB GlobalTheory.LieVB GlobalTheory.CurveRootGeometry GlobalTheory.TwoSeq GlobalTheory.DeRham GlobalTheory.AbDual GlobalTheory.ConjSeq GlobalTheory.PDiv GlobalTheory.PDivGroup GlobalTheory.BadPt
 open GlobalTheory.Cris (dp0)
-attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace GlobalTheory.WeilIntegral
 
@@ -131,11 +130,5 @@ theorem contract_twoMap (χ : CartierDual R B) (u : B ⊗[R] B) :
       _root_.mul_one, smul_assoc, one_smul, tmul_smul]
 
 end Algebra
-
-section Level
-
-variable {p : ℕ} {R K : Type} [CommRing R] [CommRing K] [Algebra R K] {Γ : PDivGroup p R} {𝒜 : PDivGroup p K}
-
-end Level
 
 end GlobalTheory.WeilIntegral

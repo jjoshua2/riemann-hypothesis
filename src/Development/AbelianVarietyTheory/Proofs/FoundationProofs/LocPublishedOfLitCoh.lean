@@ -923,12 +923,11 @@ theorem tors_bound : ∀ (l : ℕ) [Fact l.Prime] (Ω : Type) [Field Ω] [Algebr
   by_cases hnm : n < m
   · exact (hBf n N z (fun i => ⟨(hz i).1, (hz i).2.1⟩) hnc).trans
       ((Finset.le_sup (f := Bf) (Finset.mem_range.2 hnm)).trans (le_max_left _ _))
-  push_neg at hnm
+  push Not at hnm
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hnm
   refine le_trans ?_ (le_max_right _ _)
   choose x hxO hx using hcob
-  by_contra hlt
-  push_neg at hlt
+  by_contra! hlt
   let f : Fin N → T := fun i => cls (fun j => ⟨x i j, hxO i j⟩)
   classical
   obtain ⟨t, ht⟩ := Fintype.exists_lt_card_fiber_of_mul_lt_card f (by rw [Fintype.card_fin]; exact hlt)
@@ -1175,7 +1174,7 @@ theorem dual_classes_unbounded : GlobalTheory.Mem.LiteralAutomorphy.LitCoh → �
   intro hL l _ Ω _ _ _ e S A W hN hG
   obtain ⟨y, hyZ, hyU, hyG, hyB⟩ : ∃ y ∈ Z1 (Loc.colRep W), Unr W y ∧ Gr W A y ∧
       y ∉ ReciprocityTheory.Gal.B1 (Loc.colRep W) := by
-    unfold GrZero at hG; push_neg at hG; exact hG
+    unfold GrZero at hG; push Not at hG; exact hG
   have hcol : ∀ s (x : Fin 2 → Qbar l), Loc.colRep W s x = mat W s *ᵥ x := fun s x => by
     simp [Loc.colRep, Matrix.toLin'_apply]
   obtain ⟨c0, hc0⟩ := hN.int
@@ -1247,8 +1246,7 @@ theorem dual_classes_unbounded : GlobalTheory.Mem.LiteralAutomorphy.LitCoh → �
       rw [← this, abs_lt]; constructor <;> omega
   obtain ⟨N', z, hNC, hzS, hzne⟩ := hC (t + k0) (by omega) (l ^ t) yF hsel hne
   have hex : ∃ i, ¬ Cob1 c (t + k0) (dual1 W) ⊤ (fun s => ((l : ℕ) : Qbar l) ^ m • z i s) := by
-    by_contra h
-    push_neg at h
+    by_contra! h
     have h1 := hB (t + k0) N' z hzS hzne h
     have h2 : C * N' ≤ C * B := Nat.mul_le_mul_left C h1
     omega
@@ -1333,8 +1331,7 @@ theorem exists_pair_ne [IsAlgClosed k] [CharZero k] {W : Γ →* GL (Fin 2) k} {
     (hz : ∀ s ∈ H, ∀ g ∈ N, z (s * g * s⁻¹) = (W s : Matrix (Fin 2) (Fin 2) k) *ᵥ z g)
     (hy0 : ∃ g ∈ N, y g ≠ 0) (hz0 : ∃ g ∈ N, z g ≠ 0) :
     ∃ g ∈ N, ∃ h ∈ N, y h 0 * z g 1 - y h 1 * z g 0 ≠ y g 0 * z h 1 - y g 1 * z h 0 := by
-  by_contra hcon
-  push_neg at hcon
+  by_contra! hcon
   let Sig : Submodule k ((Fin 2 → k) × (Fin 2 → k)) := Submodule.span k ((fun g => (y g, z g)) '' N)
   have hgen : ∀ g ∈ N, (y g, z g) ∈ Sig := fun g hg => Submodule.subset_span ⟨g, hg, rfl⟩
   have hinv : ∀ s ∈ H, ∀ σ ∈ Sig,
@@ -1786,15 +1783,13 @@ theorem main : GlobalTheory.Mem.LiteralAutomorphy.LitCoh → ∀ (l : ℕ) [Fact
         ⟨x2, hx2, fun s hs => cv_of_eq n (hx2e s hs)⟩⟩
 
   have hyN : ∃ g ∈ N0g W, y' g ≠ 0 := by
-    by_contra h
-    push_neg at h
+    by_contra! h
     apply hyG
     refine _root_.GlobalTheory.Ord2.GrOfKill.gr_of_vanish_on_trivial l Ω e S A W hN y hy fun g hg => ?_
     have := h g hg
     exact (smul_eq_zero.mp this).resolve_left ha1
   have hzN : ∃ g ∈ N0g W, z' g ≠ 0 := by
-    by_contra h
-    push_neg at h
+    by_contra! h
     apply hzB
     refine _root_.GlobalTheory.Ord2.h1dual_of_vanish_fix l Ω e S A W hN z hz fun g hg => ?_
     have := h g hg

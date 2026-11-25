@@ -481,8 +481,7 @@ theorem exists_colength_one (k A : Type) [Field k] [CommRing A] [Algebra k A] [F
     rw [Ne, Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero]
     exact htW
   obtain ⟨φ, hφ⟩ : ∃ φ : Module.Dual k (A ⧸ W), φ (W.mkQ t) ≠ 0 := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     exact hq ((Module.forall_dual_apply_eq_zero_iff k _).mp hcon)
   set l : A →ₗ[k] k := (φ (W.mkQ t))⁻¹ • (φ ∘ₗ W.mkQ) with hl
   have hlt : l t = 1 := by
@@ -592,7 +591,7 @@ theorem freeAt_of_basis_lattice (K : Type) [Field K] (C : ACurve K) (V : Type) [
     rw [map_sum, LinearMap.sum_apply]
     refine Finset.sum_congr rfl fun j _ => ?_
     dsimp only
-    rw [if_pos rfl, map_zsmul, Int.cast_smul_eq_zsmul]
+    rw [ite_eq_left rfl, map_zsmul, Int.cast_smul_eq_zsmul]
     rfl
   refine ⟨x, fun l s => ∑ j, algebraMap k K (l (1 ⊗ₜ[ℤ] b j)) • B.coord (s, j), ?_, ?_, ?_, ?_⟩
   · intro s

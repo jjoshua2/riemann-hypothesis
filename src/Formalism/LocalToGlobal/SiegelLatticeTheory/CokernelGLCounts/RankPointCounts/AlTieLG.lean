@@ -258,7 +258,7 @@ theorem t_factor_product_of_eta (hη : EtaF X) (u : D.what₂.Word) : Formalism.
     refine (Formalism.L2.SG.TypedSets.finite_over X.B.I.F ((D.mem u).A.T) (D.mem u).A.T_prime.ne_zero).subset ?_
     intro v hv
     by_contra hc
-    exact (Function.mem_mulSupport.1 hv) (if_neg hc)
+    exact (Function.mem_mulSupport.1 hv) (ite_eq_right hc)
   have hfh : f = h ∘ maxEquiv X := by
     funext v
     show _ = if (((D.mem u).A.T : ℕ) : 𝓞 D.host.F) ∈ (plEquiv X v).asIdeal then
@@ -578,8 +578,7 @@ theorem nsub_le {K : Type*} [NormedField K] [IsUltrametricDist K] (a b : K) : �
 
 theorem root_norm_le {K : Type*} [NormedField K] [IsUltrametricDist K] {tr nm β : K} (htr : ‖tr‖ ≤ 1)
     (hnm : ‖nm‖ ≤ 1) (h : β ^ 2 - tr * β + nm = 0) : ‖β‖ ≤ 1 := by
-  by_contra hb
-  push_neg at hb
+  by_contra! hb
   have h1 : β ^ 2 = tr * β - nm := by linear_combination h
   have hn : ‖β‖ ^ 2 ≤ max (‖tr‖ * ‖β‖) ‖nm‖ := by
     rw [← norm_pow, h1, ← norm_mul]
@@ -918,8 +917,8 @@ theorem etaLoc_of_tied (hL : Formalism.L2.SG.Pf.LocCP.LocTied D) (p : PlF D) :
       exact h4
   unfold Formalism.HermitianLattices.Ext.L3.etaF
   by_cases hp : (p.asIdeal.map (algebraMap (𝓞 D.host.F) (𝓞 D.host.E))).IsPrime
-  · rw [if_pos (h1.2 hp), if_pos hp]
-  · rw [if_neg (mt h1.1 hp), if_neg hp]
+  · rw [ite_eq_left (h1.2 hp), ite_eq_left hp]
+  · rw [ite_eq_right (mt h1.1 hp), ite_eq_right hp]
 
 end Final
 

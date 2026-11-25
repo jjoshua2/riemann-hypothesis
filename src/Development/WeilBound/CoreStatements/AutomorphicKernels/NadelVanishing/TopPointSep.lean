@@ -439,7 +439,7 @@ theorem not_kltAt_sub_of_not_lcAt : ∀ (X : Scheme.{0}) [IsIntegral X] [IsLocal
   obtain ⟨m₁, g₁, hm₁, hg₁, hd₁⟩ := _root_.GlobalTheory.PairStep.isLogEqn_add_smul X p n Δ D η x m m' g f 1 hm hm' hg hDf
   rw [one_smul] at hg₁
   have hnl := (_root_.GlobalTheory.PairStep.lcAt_iff_of_isLogEqn X p n hp hn (Δ + D) η x m₁ g₁ hη hm₁ hg₁).not.1 hlc
-  push_neg at hnl
+  push Not at hnl
   obtain ⟨E, hE, hlt⟩ := hnl
   rw [hd₁, one_mul] at hlt
   set a := discrep E η m g with ha
@@ -671,8 +671,7 @@ private lemma two_mul_lt_pow_mul_of_le (a t t' c : ℚ) (k : ℕ) (ha : 0 ≤ a)
     (h : 2 * a < t ^ k * c) : 2 * a < t' ^ k * c ∧ a < t' ^ k * c := by
   have htk : 0 < t ^ k := pow_pos ht k
   have hc : 0 < c := by
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     have : t ^ k * c ≤ 0 := mul_nonpos_of_nonneg_of_nonpos htk.le hc
     linarith
   have hpow : t ^ k ≤ t' ^ k := by
@@ -691,8 +690,7 @@ theorem twoPoint_step : GlobalTheory.Published.Principalisation → GlobalTheory
 
   have hex : ∃ z, z ⤳ x ∧ ¬ KltAt p n (Δ + D) z ∧
       ¬ topologicalKrullDim (closure ({z} : Set X)) ≤ 0 := by
-    by_contra hne
-    push_neg at hne
+    by_contra! hne
     apply h0
     unfold LcCut
     refine ⟨hlcx, hnkx, fun z hz hkz => ?_⟩

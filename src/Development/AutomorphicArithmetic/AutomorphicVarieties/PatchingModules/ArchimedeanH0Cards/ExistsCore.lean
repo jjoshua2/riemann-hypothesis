@@ -1,5 +1,6 @@
 module
 
+import all Development.AutomorphicArithmetic.AutomorphicVarieties.PatchingModules.SeparableMatrixStability.PlProps
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.PatchingModules.ArchimedeanH0Cards.ObstructionBoundFromDuality
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.AlgebraTools.CentraliserRank
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.PatchingModules.ArchimedeanH0Cards.OdKill
@@ -103,7 +104,7 @@ private theorem odd_kill {A : Type} [CommRing A] [IsDomain A] {n : ℕ} (a : ℕ
     set_option backward.isDefEq.respectTransparency.instanceSearchTypes false in rw [injective_iff_map_eq_zero]
     intro Z hZ
     have od : ∀ i j : Fin n, (((i : ℕ) < a) ↔ ((j : ℕ) < a)) → (Z - evP A n a Z) i j = 0 := fun i j e => by
-      rw [Matrix.sub_apply, localComponent_apply₂, if_pos e, sub_self]
+      rw [Matrix.sub_apply, localComponent_apply₂, ite_eq_left e, sub_self]
     have h1 : evP A n a Z = 0 := by
       ext i j
       by_cases e : ((i : ℕ) < a) ↔ ((j : ℕ) < a)
@@ -118,7 +119,7 @@ private theorem odd_kill {A : Type} [CommRing A] [IsDomain A] {n : ℕ} (a : ℕ
           by_cases e' : ((i : ℕ) < a) ↔ ((k : ℕ) < a)
           · rw [od k j (by tauto), mul_zero]
           · rw [ev i k e', zero_mul]
-      · rw [localComponent_apply₂, if_neg e]; rfl
+      · rw [localComponent_apply₂, ite_eq_right e]; rfl
     rw [hΦ, h1, sub_zero, add_zero, sub_eq_zero] at hZ
     rw [h1, sub_zero] at od
     exact odd_comm a S Z al hal hS ev od hZ
@@ -290,12 +291,7 @@ end Coc
 private theorem exists_core {Γ : Type} [Group Γ] [TopologicalSpace Γ] [IsTopologicalGroup Γ] [CompactSpace Γ]
     (K P : Subgroup Γ) [P.Normal] (hK : IsOpen (K : Set Γ)) (hP : P ≤ K) :
     ∃ U : OpenNormalSubgroup Γ, P ≤ U.toSubgroup ∧ U.toSubgroup ≤ K := by
-  haveI : Finite (Γ ⧸ K) := Subgroup.quotient_finite_of_isOpen K hK
-  haveI : K.FiniteIndex := Subgroup.finiteIndex_of_finite_quotient
-  have hc : IsClosed (K.normalCore : Set Γ) := Subgroup.normalCore_isClosed K (K.isClosed_of_isOpen hK)
-  have ho : IsOpen (K.normalCore : Set Γ) := Subgroup.isOpen_of_isClosed_of_finiteIndex _ hc
-  exact ⟨{ toSubgroup := K.normalCore, isOpen' := ho, isNormal' := inferInstance },
-    Subgroup.normal_le_normalCore.2 hP, K.normalCore_le⟩
+  apply _root_.exists_core <;> assumption
 
 section Main
 

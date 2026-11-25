@@ -232,8 +232,7 @@ theorem mem_dcos_iff : ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpa
       rw [e] at this
       exact this
     obtain ⟨a₀, ha₀⟩ : ∃ c, y c ≠ 0 := by
-      by_contra hcon
-      push_neg at hcon
+      by_contra! hcon
       have h0 : y = 0 := funext hcon
       rw [h0, zero_vecMul] at hyg
       have := congrFun hyg (Fin.last (i + t))
@@ -381,7 +380,7 @@ theorem exists_equivariant_extension :
     rw [dite_eq_left h]
     obtain ⟨hc', κ', hκ', e⟩ := h.choose_spec.choose_spec
     exact wd _ _ _ _ hc' hc κ' hκ' κ hκ e.symm
-  have h0 : ∀ g, ¬ Ω g → f g = 0 := fun g h => dif_neg h
+  have h0 : ∀ g, ¬ Ω g → f g = 0 := fun g h => dite_eq_right h
   refine ⟨f, ?_, ?_, ?_, ?_⟩
   · intro q g
     by_cases h : Ω g
@@ -861,8 +860,7 @@ theorem exists_ne_of_mem {i t : ℕ} (h : (i + 1) + t = i + t + 1) (q p : GL (Fi
     (hq : q ∈ parab k (two (stdSum h))) (hp : p ∈ Mir k (i + t)) :
     ∃ a : Fin (i + 1), (((q * wGL k h * p)⁻¹ : GL (Fin (i + t + 1)) k) :
       Matrix (Fin (i + t + 1)) (Fin (i + t + 1)) k) (Fin.last (i + t)) (stdSum h (Sum.inl a)) ≠ 0 := by
-  by_contra hc
-  push_neg at hc
+  by_contra! hc
   let r : parab k (two (stdSum h)) := ⟨q⁻¹, inv_mem hq⟩
   let M : GL (Fin (i + 1)) k := leviProj k (two (stdSum h)) r false
   have hrow : ∀ a, (M : Matrix (Fin (i + 1)) (Fin (i + 1)) k) (Fin.last i) a = 0 := fun a => by
@@ -1363,7 +1361,7 @@ theorem orbit_cover {i t : ℕ} (h : (i + 1) + t = i + t + 1) (ht : 0 < t) (g : 
   by_cases hy : ∀ a : Fin (i + 1), ((g⁻¹ : GL (Fin (i + t + 1)) k) : Matrix (Fin (i + t + 1)) (Fin (i + t + 1)) k)
       (Fin.last (i + t)) (stdSum h (Sum.inl a)) = 0
   · exact Or.inl ((_root_.GlobalTheory.CompanionTheory.BZRes.ClosedOrbit.mem_dcos_iff k h ht g).2 hy)
-  · push_neg at hy
+  · push Not at hy
     exact Or.inr ((_root_.GlobalTheory.CompanionTheory.BZRes.mem_dcos_wGL_iff k h ht g).2 hy)
 
 theorem isClosed_orbit {i t : ℕ} (h : (i + 1) + t = i + t + 1) (ht : 0 < t) :

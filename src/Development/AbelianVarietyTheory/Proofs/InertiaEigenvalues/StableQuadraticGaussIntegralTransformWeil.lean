@@ -195,8 +195,7 @@ theorem eq_zpow_smul (O : Subring R) (p : Rˣ) (D : Set R) (hpO : (p : R) ∈ O)
   obtain ⟨n, hn⟩ := hbig
   have hinh : ∃ v : ℤ, ((p ^ v : Rˣ) : R) ∈ D := ⟨n, by simpa using hn 1 (one_mem O)⟩
   have hbdd : ∃ b : ℤ, ∀ v : ℤ, ((p ^ v : Rˣ) : R) ∈ D → b ≤ v := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     have hall : ∀ v : ℤ, ((p ^ v : Rˣ) : R) ∈ D := by
       intro v
       obtain ⟨w, hw, hwv⟩ := hcon v
@@ -420,7 +419,7 @@ theorem gaussInt_stable_of_dual : ∀ (F E : Type) [NontriviallyNormedField F] [
     · rw [Set.not_nonempty_iff_eq_empty.1 hne, Measure.restrict_empty, integral_zero_measure]
     obtain ⟨y₀, ⟨hy₀Λ, hy₀D⟩, hy₀q⟩ := hne
     have hy₀ : ¬ ∀ m ∈ M, A.kerL ψ (t * x) y₀ m = 1 := fun h => hy₀D ((hmemD y₀).2 h)
-    push_neg at hy₀
+    push Not at hy₀
     obtain ⟨m₀, hm₀, hc⟩ := hy₀
     have hm₀D : m₀ ∈ D := hMD hm₀
     have hshift : ∀ y ∈ S q, g (m₀ + y) = A.kerL ψ (t * x) y₀ m₀ * g y := by
@@ -1376,8 +1375,7 @@ theorem level1 : ∀ (F E : Type) [NontriviallyNormedField F] [NontriviallyNorme
     rwa [← mul_assoc] at this
 
   have hnt : ∃ s : A.K, algebraMap A.K A.L s ∈ O ∧ A.psiK ψ (t * x * s) ≠ 1 := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     have h1 : ∀ m ∈ O, A.kerL ψ (t * x) 1 m = 1 := fun m hm => by
       rw [kerL_one]
       exact hcon _ (by rw [htrL]; exact O.add_mem hm (hOs m hm))

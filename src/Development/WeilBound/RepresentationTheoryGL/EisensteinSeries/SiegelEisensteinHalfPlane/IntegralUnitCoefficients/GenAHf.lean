@@ -149,8 +149,6 @@ noncomputable section
 open scoped Matrix TensorProduct
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.L2.Theta GlobalTheory.AdelicU GlobalTheory.StdUnn IsDedekindDomain NumberField
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace PositivityTheory.Rg.Sw.Glob.GenFinLocHf
 
 open PositivityTheory.Rg.Sw.Glob.GenFinLocAH
@@ -476,8 +474,6 @@ noncomputable section
 open scoped Matrix TensorProduct
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.L2.Theta GlobalTheory.AdelicU GlobalTheory.StdUnn IsDedekindDomain NumberField
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace PositivityTheory.Rg.Sw.Glob.GenFinLocHf
 
 open PositivityTheory.Rg.Sw.Glob.GenFinLocAH
@@ -523,8 +519,6 @@ noncomputable section
 open scoped Matrix TensorProduct
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.L2.Theta
 open GlobalTheory.AdelicU GlobalTheory.StdUnn IsDedekindDomain
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace PositivityTheory.Rg.Sw.Glob.GenFinH
 
@@ -736,8 +730,6 @@ open scoped Matrix TensorProduct
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.L2.Theta Formalism.IndefR.Datum
 open GlobalTheory.AdelicU GlobalTheory.StdUnn
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace PositivityTheory.Rg.Sw.Glob.GenTopH
 
 variable {D : D7} {n : ℕ}
@@ -912,9 +904,9 @@ theorem locRedSplit : LocRedSplit := by
     have := congrFun hu j
     rw [vecMul_mix] at this
     by_cases h : j ∈ I
-    · rw [if_pos h] at this
+    · rw [ite_eq_left h] at this
       exact ⟨fun _ => this, fun h' => absurd h h'⟩
-    · rw [if_neg h] at this
+    · rw [ite_eq_right h] at this
       exact ⟨fun h' => absurd h' h, fun _ => this⟩
   have hC0 : u ᵥ* C = 0 := hInjC u (fun i hi => (hmix i).1 hi)
   have hD0 : u ᵥ* D = 0 := by
@@ -967,8 +959,6 @@ open scoped Matrix NNReal ENNReal ComplexConjugate TensorProduct
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.L2.Theta Formalism.L2.Pj Formalism.IndefR.Datum MeasureTheory
 open GlobalTheory.AutomorphicL2Unitary GlobalTheory.AdelicU GlobalTheory.Doubling GlobalTheory.Cont GlobalTheory.MixModel
 open GlobalTheory.StdUnn GlobalTheory.StdUnn.Model
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace PositivityTheory.Rg.Sw.Glob.GlobalGaussBlockRelations
 

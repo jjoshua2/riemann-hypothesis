@@ -223,8 +223,7 @@ theorem exists_tF_ne (σ : E →ₐ[F] E) (hσ : ∀ x, σ (σ x) = x) {h : Matr
     (hh : ct σ h = h) (h0 : h ≠ 0) : ∃ k ∈ hermF σ r, (tF h k : F) ≠ 0 := by
   classical
   obtain ⟨i, j, hij⟩ : ∃ i j, h i j ≠ 0 := by
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     exact h0 (Matrix.ext hc)
   obtain ⟨z, hz⟩ := Algebra.trace_surjective F E 1
   let s : E ≃ₐ[F] E := AlgEquiv.ofAlgHom σ σ (AlgHom.ext hσ) (AlgHom.ext hσ)
@@ -290,7 +289,7 @@ theorem exists_dual (σ : E →ₐ[F] E) (hσ : ∀ x, σ (σ x) = x) (r : ℕ) 
     · have := hd i i
       rw [tB_apply, this]; simp
     · intro j _ hj
-      rw [tB_apply, hd, if_neg hj, mul_zero]
+      rw [tB_apply, hd, ite_eq_right hj, mul_zero]
     · simp
   refine ⟨_, fun i => (b i).1, fun i => (b' i).1, fun i => (b i).2, fun i => (b' i).2, ?_, ?_, ?_⟩
   · intro i j

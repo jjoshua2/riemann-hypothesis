@@ -793,7 +793,7 @@ theorem exists_trace_one [IsLocalRing O] [Module.Finite O O'] (ℓ : ℕ) (τ : 
       rw [map_mul, AlgEquiv.commutes]
     simp_rw [h]
     rw [← Finset.mul_sum, ← hc i, ← map_mul, ← hu, Units.inv_mul, map_one]
-  · push_neg at hunit
+  · push Not at hunit
     have htop : (⊤ : Submodule O O') ≤ IsLocalRing.maximalIdeal O • ⊤ := by
       intro z _
       have hz : z = ∑ i, c i • (z * x i) := by
@@ -1569,8 +1569,7 @@ theorem exists_moved (hU : IsUnramifiedLoc k E) (τ : E ≃ₐ[k] E) (hτ : τ �
     (hval : ∀ x : E, valuation E (τ x) = valuation E x) :
     ∃ x : E, x ∈ intO E ∧ valuation E (τ x - x) = 1 := by
   classical
-  by_contra hcon
-  push_neg at hcon
+  by_contra! hcon
   obtain ⟨π, -, hπE⟩ := uniformiser_of_unramified hU
   obtain ⟨hπ1, hπ0, hπmax⟩ := hπE
   haveI := GroundTheory.LocalField.isDiscreteValuationRing E

@@ -341,8 +341,7 @@ theorem exists_multiplier_descend_of_closed {σ X : Type} [Fintype σ] [Nonempty
   obtain ⟨b, hb, hbs⟩ := _root_.GlobalTheory.exists_common_denominator_of_isNilpotent B A Subtype.val_injective (s.image π) hnil
   obtain ⟨b, c, rfl⟩ := b
   refine ⟨c, ?_, fun f hf => ?_⟩
-  · by_contra hc
-    push_neg at hc
+  · by_contra! hc
     exact hb (Subtype.ext (Subtype.ext (funext fun x => hc x)))
   · obtain ⟨⟨b', c', rfl⟩, hb'⟩ := hbs (π f) (Finset.mem_image_of_mem _ hf)
     exact ⟨c', fun x => congrFun (congrArg Subtype.val hb') x⟩
@@ -1439,7 +1438,7 @@ private lemma exists_finset_integral_classes {R : Type} [CommRing R] [Algebra �
     choose z a ha hza using fun i j => hi L hL0 _ (hwN i j)
     have hc : ∃ w', Cls (fun i j => (z i j : ZMod L)) w' :=
       ⟨w, hw, fun i j => ⟨z i j, a i j, ha i j, rfl, hza i j⟩⟩
-    refine ⟨hc.choose, Finset.mem_image.2 ⟨_, Finset.mem_univ _, dif_pos hc⟩, ?_⟩
+    refine ⟨hc.choose, Finset.mem_image.2 ⟨_, Finset.mem_univ _, dite_eq_left hc⟩, ?_⟩
     obtain ⟨htS, ht⟩ := hc.choose_spec
     obtain ⟨t, htdef⟩ : ∃ t, t = hc.choose := ⟨_, rfl⟩
     rw [← htdef] at htS ht ⊢

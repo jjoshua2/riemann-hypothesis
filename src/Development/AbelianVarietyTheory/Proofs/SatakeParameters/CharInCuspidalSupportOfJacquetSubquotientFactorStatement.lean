@@ -390,7 +390,7 @@ theorem inSupport_of_flag_jac (π : Representation ℂ (GL n k) V) (f : (Σ j, c
     rw [EmptyBlocks.sum_card_blocks E, EmptyBlocks.sum_card_blocks e, Finset.sum_filter,
       Finset.sum_filter, Finset.sum_filter, ← f.sum_comp, Fintype.sum_sigma,
       ← Finset.sum_erase_add _ _ (Finset.mem_univ j₀), ← Finset.sum_erase_add _ _ (Finset.mem_univ j₀),
-      if_neg h0, add_zero]
+      ite_eq_right h0, add_zero]
     congr 1
     · refine Finset.sum_congr rfl fun j hj => ?_
       simp only [hE, h1 j _ (Finset.ne_of_mem_erase hj)]
@@ -399,7 +399,7 @@ theorem inSupport_of_flag_jac (π : Representation ℂ (GL n k) V) (f : (Σ j, c
   have hD : D (o j₀ a) = 1 := by
     have := count (· = o j₀ a) (fun _ => False) (· = a) not_false
       (fun j b hj => by simp [heq, hj]) (fun b => by simp [heq])
-    rw [Finset.filter_eq', if_pos (Finset.mem_univ _)] at this
+    rw [Finset.filter_eq', ite_eq_left (Finset.mem_univ _)] at this
     simpa [Finset.filter_eq', ha] using this
   have hmod : modExp (fun b => Fin (D b)) (o j₀ a) =
       modExp c j₀ + modExp (fun a => Fin (d a)) a := by
@@ -530,7 +530,6 @@ section -- clump:auto
 @[expose] public section
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formalism.ConjugateSelfDual ReciprocityTheory.Gal ReciprocityTheory.Aut Formalism.AUTREP Formalism.L2 Formalism.L2.Host Formalism.L2.NT NumberField IsDedekindDomain Polynomial GlobalTheory.HeightCounting GlobalTheory.RowTie GlobalTheory.SplitRead GlobalTheory.NPin
-attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 open GlobalTheory.PRep GlobalTheory.SmGL GlobalTheory.SplitWeil
 
 end -- clump:auto

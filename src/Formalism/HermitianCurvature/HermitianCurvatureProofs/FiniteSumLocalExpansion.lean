@@ -450,8 +450,6 @@ namespace Formalism.FourierDecayAlt.P.FiniteSumLocalExpansion
 open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.P.B5 Formalism.FourierDecayAlt.P.CapelliWordSumExpansion Formalism.FourierDecayAlt.P.LieDecompositionLocal
   Formalism.FourierDecayAlt.P.FourTermExpansion
 
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
 variable {k r : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
 
 theorem gv_inv {y : Mat k r} (hy : y ∈ GV k r) : y * y⁻¹ = 1 ∧ y⁻¹ * y = 1 := by
@@ -537,7 +535,7 @@ theorem conv (y : Mat k r) (hy : y ∈ GV k r) {Ψ : Mat k r → E} {g : Mat k r
     have h2 : ∑ ab : Fin (2 * r + k + 1) × Fin (2 * r + k + 1),
         (if ab.1 = ab.2 then (y⁻¹) ab.1 a * y b ab.2 else 0) = if a = b then 1 else 0 := by
       rw [Fintype.sum_prod_type]
-      simp only [Finset.sum_ite_eq, Finset.mem_univ, if_true]
+      simp only [Finset.sum_ite_eq, Finset.mem_univ, ite_true]
       have := congrFun (congrFun (gv_inv hy).1 b) a
       rw [Matrix.mul_apply] at this
       rw [Finset.sum_congr rfl (fun p _ => mul_comm _ _), this, Matrix.one_apply]
@@ -553,8 +551,6 @@ namespace Formalism.FourierDecayAlt.P.FiniteSumLocalExpansion
 
 open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.P.B5 Formalism.FourierDecayAlt.P.CapelliWordSumExpansion Formalism.FourierDecayAlt.P.LieDecompositionLocal
   Formalism.FourierDecayAlt.P.FourTermExpansion
-
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 variable {k r : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
 
@@ -630,8 +626,6 @@ namespace Formalism.FourierDecayAlt.P.FiniteSumLocalExpansion
 open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.P.B5 Formalism.FourierDecayAlt.P.CapelliWordSumExpansion Formalism.FourierDecayAlt.P.LieDecompositionLocal
   Formalism.FourierDecayAlt.P.FourTermExpansion
 
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
 variable {k r : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
 
 theorem skewRow {t : ℕ} (a b : Fin t → Fin (2 * r + k + 1)) (u : ℂ) (Φ : Mat k r → E) (g : Mat k r)
@@ -648,7 +642,7 @@ theorem skewRow {t : ℕ} (a b : Fin t → Fin (2 * r + k + 1)) (u : ℂ) (Φ : 
 theorem row_zero {t : ℕ} (c b : Fin t → Fin (2 * r + k + 1)) (u : ℂ) (Φ : Mat k r → E) (g : Mat k r)
     (hc : ¬ Function.Injective c) : qminorOp (Q.EH k r) c b u Φ g = 0 := by
   unfold Function.Injective at hc
-  push_neg at hc
+  push Not at hc
   obtain ⟨i, j, hij, hne⟩ := hc
   have hcτ : c ∘ Equiv.swap i j = c := by
     funext x
@@ -669,7 +663,7 @@ theorem col_zero {t : ℕ} (a d : Fin t → Fin (2 * r + k + 1)) (u : ℂ) (Φ :
     (hg : g ∈ GV k r) (hloc : Loc (t : ℕ∞) Φ g) (hd : ¬ Function.Injective d) :
     qminorOp (Q.EH k r) a d u Φ g = 0 := by
   unfold Function.Injective at hd
-  push_neg at hd
+  push Not at hd
   obtain ⟨i, j, hij, hne⟩ := hd
   have hdτ : d ∘ Equiv.swap i j = d := by
     funext x
@@ -685,25 +679,6 @@ theorem col_zero {t : ℕ} (a d : Fin t → Fin (2 * r + k + 1)) (u : ℂ) (Φ :
   have h2 := sub_eq_zero.mpr this
   rw [sub_neg_eq_add] at h2
   exact FourTermExpansion.half _ h2
-
-end Formalism.FourierDecayAlt.P.FiniteSumLocalExpansion
-
-namespace Formalism.FourierDecayAlt.P.FiniteSumLocalExpansion
-
-open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.P.B5 Formalism.FourierDecayAlt.P.CapelliWordSumExpansion Formalism.FourierDecayAlt.P.LieDecompositionLocal
-  Formalism.FourierDecayAlt.P.FourTermExpansion
-
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
-variable {k r : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
-
-end Formalism.FourierDecayAlt.P.FiniteSumLocalExpansion
-
-namespace Formalism.FourierDecayAlt.P.FiniteSumLocalExpansion
-
-open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt Formalism.FourierDecayAlt.B Formalism.FourierDecayAlt.P.CapelliWordSumExpansion
-
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 end Formalism.FourierDecayAlt.P.FiniteSumLocalExpansion
 end -- clump:auto

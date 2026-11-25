@@ -35,6 +35,7 @@ import Development.WeilBound.CoreStatements.HodgeTatePoints.HtatLieBc
 import Mathlib.Tactic.Linter.Style
 import Development.AutomorphicSpectrum.Definitions.MetricPeriods.PairRelationOfScaledRatio
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.ArithmeticIntersection.CompRightEqZero
+import Development.AutomorphicSpectrum.Proofs.MetricProofs.ExistsTriangularRegularFrameChange
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.WeilBound.CoreStatements.PluriharmonicCharts.XCFmExistsFlagsChgbasis, Development.AutomorphicSpectrum.Proofs.MetricProofs.ExistsGenericTriangularFactorization, Development.WeilBound.CoreStatements.PluriharmonicCharts.XCFmExistsFlagsTie, Development.AutomorphicSpectrum.Proofs.MetricProofs.FlagCoordinateTieTransfer, Development.WeilBound.CoreStatements.PluriharmonicCharts.ExistsFlagsLieCompactDominated, Development.AutomorphicSpectrum.Proofs.MetricProofs.HodgeCptDescentGenericPoint, Development.WeilBound.CoreStatements.PluriharmonicCharts.XCFmExistsFlagsDualflag, Development.AutomorphicSpectrum.Proofs.MetricProofs.HodgeCptLatticeBaseChange, Development.WeilBound.CoreStatements.PluriharmonicCharts.XCFmExistsFlagsField, Development.WeilBound.CoreStatements.PluriharmonicCharts.XCFmExistsFlagsCharts, Development.WeilBound.CoreStatements.PluriharmonicCharts.XCFmExistsFlagsDegree, Development.AutomorphicSpectrum.Proofs.MetricProofs.IsGenFamAlgebraicIndependentFinrank, Development.WeilBound.CoreStatements.PluriharmonicCharts.XCFmExistsFlagsRevgen, Development.AutomorphicSpectrum.Proofs.MetricProofs.IsGenFamRevInvSubfamily, Development.WeilBound.CoreStatements.PluriharmonicCharts.XCFmExistsFlagsPullmap, Development.AutomorphicSpectrum.Proofs.MetricProofs.LatticePullSplitInjection, Development.AutomorphicSpectrum.Proofs.MetricProofs.HodgeCptFrameDivisorFormula
@@ -579,7 +580,7 @@ private theorem dual_lemma_4 {Ω V : Type} [Field Ω] [AddCommGroup V] [Module �
   rw [LinearMap.sum_apply]
 
   simp only [LinearMap.smul_apply, map_sum, map_smul, hv, smul_eq_mul, mul_ite, mul_one, mul_zero,
-  Finset.sum_ite_eq, Finset.mem_univ, if_true, Matrix.transpose_apply]
+  Finset.sum_ite_eq, Finset.mem_univ, ite_true, Matrix.transpose_apply]
   exact Finset.sum_congr rfl fun _ _ => mul_comm _ _
 
 open PositivityTheory.Xgp.c_fm_exists_flags_dualflag in
@@ -964,15 +965,15 @@ theorem PositivityTheory.Xgp.t_c_fm_exists_flags_revgen : ∀ (Ω G : Type) [Fie
   refine PositivityTheory.Xgp.GenFam.of_gen hu ?_ ?_ ?_
   · intro s a
     by_cases h : P s
-    · rw [if_pos h]
+    · rw [ite_eq_left h]
       exact (key s).1 a
-    · rw [if_neg h]
+    · rw [ite_eq_right h]
       exact hd s a
   · intro s a b hab
     by_cases h : P s
-    · rw [if_pos h]
+    · rw [ite_eq_left h]
       exact (key s).2.1 a b hab
-    · rw [if_neg h]
+    · rw [ite_eq_right h]
       exact hl s a b hab
   · intro s a b
     have hsub : ∀ x y, (if P s then revInv (u s) else u s) x y ∈
@@ -980,9 +981,9 @@ theorem PositivityTheory.Xgp.t_c_fm_exists_flags_revgen : ∀ (Ω G : Type) [Fie
           (if P q.fst then revInv (u q.fst) else u q.fst) q.snd.1 q.snd.2) :=
       fun x y => IntermediateField.subset_adjoin _ _ ⟨⟨s, x, y⟩, rfl⟩
     by_cases h : P s
-    · rw [if_pos h] at hsub
+    · rw [ite_eq_left h] at hsub
       exact (key s).2.2 _ hsub a b
-    · rw [if_neg h] at hsub
+    · rw [ite_eq_right h] at hsub
       exact hsub a b
 end -- clump:auto
 end -- clump:auto
@@ -1125,20 +1126,7 @@ theorem flagStep_colFrame {G M : Type} [Field G] [AddCommGroup M] [Module G M] {
 theorem linearIndependent_colFrame {G M : Type} [Field G] [AddCommGroup M] [Module G M] {r : ℕ} {e : Fin r → M}
     (he : LinearIndependent G e) (B : Matrix (Fin r) (Fin r) G) (hu : IsUnit B.det) :
     LinearIndependent G (colFrame e B) := by
-  rw [Fintype.linearIndependent_iff] at he ⊢
-  intro g hg
-  have h0 : B.mulVec g = 0 := by
-    funext l
-    refine he (fun l => B.mulVec g l) ?_ l
-    rw [← hg]
-    simp only [colFrame, Matrix.mulVec, dotProduct, Finset.sum_smul, Finset.smul_sum, smul_smul]
-    rw [Finset.sum_comm]
-    refine Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun l _ => ?_
-    rw [mul_comm]
-  have := Matrix.eq_zero_of_mulVec_eq_zero (hu.ne_zero) h0
-  intro k
-  rw [this]
-  rfl
+  apply _root_.GlobalTheory.CompanionTheory.Ar.PB.FrameTrans.linearIndependent_colFrame <;> assumption
 
 theorem exists_mat {Ω M : Type} [Field Ω] [AddCommGroup M] [Module Ω M] (W : Submodule Ω M) {r : ℕ} (C e : Fin r → M)
     (hC : LinearIndependent Ω C) (he : LinearIndependent Ω e) (hCm : ∀ k, C k ∈ W) (hem : ∀ k, e k ∈ W)
@@ -1307,7 +1295,7 @@ theorem exists_colFlags : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E]
     rintro (τ | τ)
     · exact ⟨(bW τ).linearIndependent.map' (𝔐.Vgen (.inl τ)).subtype (Submodule.ker_subtype _), fun k => (bW τ k).2⟩
     · have h1 : LinearIndependent Ω (v τ) := LinearIndependent.of_pairwise_dual_eq_zero_one (v τ) (bO τ)
-        (fun a b hab => (hv τ a b).trans (if_neg hab)) (fun a => by rw [hv, if_pos rfl])
+        (fun a b hab => (hv τ a b).trans (ite_eq_right hab)) (fun a => by rw [hv, ite_eq_left rfl])
       have h2 := h1.map' (𝔐.Vgen (.inr τ)).subtype (Submodule.ker_subtype _)
       exact ⟨h2.comp Fin.rev Fin.rev_injective, fun k => (v τ k.rev).2⟩
   have hA : ∀ s, ∃ A : Matrix (Fin (labelRk D s)) (Fin (labelRk D s)) Ω, IsUnit A.det ∧
@@ -1324,8 +1312,8 @@ theorem exists_colFlags : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E]
   have hU : IsGenFam Ω (GenField Ω (rk (CMType H) D.p D.q)) U :=
     _root_.GlobalTheory.CompanionTheory.Ar.PB.FMX.GenFl.isGenFam_revInv_ite Ω _ _ (rk (CMType H) D.p D.q) (genU Ω (rk (CMType H) D.p D.q)) (fun s => Sum.isRight s = true)
       (genU_isGenFam Ω _)
-  have hUl : ∀ τ, U (.inl τ) = genU Ω (rk (CMType H) D.p D.q) (.inl τ) := fun τ => if_neg (by simp)
-  have hUr : ∀ τ, U (.inr τ) = revInv (genU Ω (rk (CMType H) D.p D.q) (.inr τ)) := fun τ => if_pos (by simp)
+  have hUl : ∀ τ, U (.inl τ) = genU Ω (rk (CMType H) D.p D.q) (.inl τ) := fun τ => ite_eq_right (by simp)
+  have hUr : ∀ τ, U (.inr τ) = revInv (genU Ω (rk (CMType H) D.p D.q) (.inr τ)) := fun τ => ite_eq_left (by simp)
   let b : ∀ s, Fin (labelRk D s) → 𝔐'.Li := fun s k => ∑ a, U s a k • j (eb s a)
   have hbW : ∀ τ k, b (.inl τ) k = ∑ a, genU Ω (rk (CMType H) D.p D.q) (.inl τ) a k • j (bW τ a) := fun τ k => by
     show ∑ a, U (.inl τ) a k • j (bW τ a) = _

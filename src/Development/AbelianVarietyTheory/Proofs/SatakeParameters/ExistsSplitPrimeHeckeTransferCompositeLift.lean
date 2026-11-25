@@ -67,7 +67,6 @@ open Formalism.L2.Theta Formalism.L2.DIV Formalism.L2.Indef Formalism.DivisionVa
 open Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.IndefR.Mult Formalism.IndefR.Datum Formalism.IndefR.Cx
 open scoped TensorProduct InnerProductSpace
 open GlobalTheory.Hk3
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.thetaVacua_matching_conjugatePrime : ∀ {D : D7} (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (χS χT : (AE D)ˣ →* Circle) (om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)) (P : Pl D.host.E), IsWeilDatumO ψ S T χS χT om → (∀ f, IsVacAt ψ S T (conjPl P) f ↔ IsVacAt ψ S T P f) ∧ (VacFix ψ om P → VacFix ψ om (conjPl P) ∧ ∀ cS cT, Match ψ om (conjPl P) cS cT ↔ Match ψ om P (dualC cS) (dualC cT)) := by
   first | exact @GlobalTheory.Hk3.ConjMatch.match_conj
@@ -87,7 +86,6 @@ open Formalism.L2.Theta Formalism.L2.DIV Formalism.L2.Indef Formalism.DivisionVa
 open Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.IndefR.Mult Formalism.IndefR.Datum Formalism.IndefR.Cx
 open scoped TensorProduct InnerProductSpace
 open GlobalTheory.Hk3
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.Hk3.SplitChain
 
@@ -105,8 +103,8 @@ theorem step_poly (q n t : ℕ) (ν s : ℂ) (a : ℕ → ℂ) :
     heckePolyOf (n + t) q (fun l => ∑ i ∈ Finset.range (n + 1), stepMat q n t ν s l i * a i) =
       (heckePolyOf n q a).comp (C s * X) * blockPoly (ν * (q : ℂ) ^ n) q t := by
   have h := GlobalTheory.KerRangeCount.card_ker_and_heckePolyOf_conv.2 ℂ q n t (fun j => if j ≤ n then a j else 0) ν s
-    (fun j hj => if_neg (by omega))
-  rw [heckePolyOf_congr (b := a) (fun k hk => if_pos hk)] at h
+    (fun j hj => ite_eq_right (by omega))
+  rw [heckePolyOf_congr (b := a) (fun k hk => ite_eq_left hk)] at h
   rw [← h]
   refine heckePolyOf_congr fun l _ => ?_
   have e1 : ∀ (f : ℕ → ℂ) (u v : ℕ), ∑ i ∈ Finset.range (u + 1), (if i ≤ v then f i else 0) =
@@ -157,7 +155,7 @@ theorem chain_poly (q t m : ℕ) (n : ℕ → ℕ) (hn : ∀ j, n (j + 1) = n j 
     simp only [Finset.Ico_self, Finset.prod_empty, C_1, one_mul, comp_X, mul_one]
     refine heckePolyOf_congr fun k hk => ?_
     simp only [h0, ite_mul, one_mul, zero_mul, Finset.sum_ite_eq', Finset.mem_range]
-    exact if_pos (by omega)
+    exact ite_eq_left (by omega)
   | succ d ih =>
     intro j hj a
     have hjm : j < m := by omega
@@ -183,10 +181,10 @@ theorem prod_alt (h σ : ℂ) (hh : h ≠ 0) (m : ℕ) (hm : Even m) (d : ℕ) :
     intro j hj
     rw [Finset.prod_eq_prod_Ico_succ_bot (by omega : j < m), ih (j + 1) (by omega)]
     rcases Nat.even_or_odd j with h1 | h1
-    · rw [if_pos h1.add_one, if_pos h1.add_one, if_neg (Nat.not_odd_iff_even.2 h1)]
+    · rw [ite_eq_left h1.add_one, ite_eq_left h1.add_one, ite_eq_right (Nat.not_odd_iff_even.2 h1)]
       field_simp
       ring
-    · rw [if_neg (Nat.not_odd_iff_even.2 h1.add_one), if_neg (Nat.not_odd_iff_even.2 h1.add_one), if_pos h1]
+    · rw [ite_eq_right (Nat.not_odd_iff_even.2 h1.add_one), ite_eq_right (Nat.not_odd_iff_even.2 h1.add_one), ite_eq_left h1]
       ring
 
 variable {D : D7}
@@ -349,7 +347,7 @@ theorem constants (q r t m : ℕ) (hq : q ≠ 0) (hr : Odd r) (ht : Odd t) (hm :
     split_ifs <;> field_simp <;> ring
   simp only [e]
   refine ⟨?_, fun i hi => ?_⟩
-  · rw [prod_alt h _ hh m hm m 0 (zero_add m), if_neg (by simp), one_mul, h2, ← pow_mul, ← pow_mul]
+  · rw [prod_alt h _ hh m hm m 0 (zero_add m), ite_eq_right (by simp), one_mul, h2, ← pow_mul, ← pow_mul]
     congr 1
     obtain ⟨c, rfl⟩ := hm
     rw [show (c + c) / 2 = c by omega]

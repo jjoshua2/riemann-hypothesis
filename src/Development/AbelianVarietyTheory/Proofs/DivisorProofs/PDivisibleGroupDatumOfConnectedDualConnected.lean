@@ -595,8 +595,7 @@ theorem exists_eq_apply_of_algHom {O : Type} [CommRing O] [IsDomain O] {N : ℕ}
     ext j
     simp [Finset.sum_apply, Pi.single_apply]
   obtain ⟨k, hk⟩ : ∃ k, f (Pi.single k 1) = 1 := by
-    by_contra hne
-    push_neg at hne
+    by_contra! hne
     have h0 : ∑ k, f (Pi.single k 1) = 0 :=
       Finset.sum_eq_zero fun k _ => (hid k).resolve_right (hne k)
     exact zero_ne_one (h0.symm.trans hsum)
@@ -785,12 +784,12 @@ theorem level_indep (p : ℕ) [Fact p.Prime] (C : Type) [Field C] [IsAlgClosed C
     simp only [f, AddMonoidHom.comp_apply, LinearMap.toAddMonoidHom_coe, Module.Basis.coord_apply,
       Module.Basis.repr_self, RingHom.toAddMonoidHom_eq_coe, AddMonoidHom.coe_coe]
     by_cases hi : i' = i
-    · subst hi; rw [Finsupp.single_eq_same, map_one, hg1, if_pos rfl]
-    · rw [Finsupp.single_eq_of_ne (Ne.symm hi), map_zero, map_zero, if_neg hi]
+    · subst hi; rw [Finsupp.single_eq_same, map_one, hg1, ite_eq_left rfl]
+    · rw [Finsupp.single_eq_of_ne (Ne.symm hi), map_zero, map_zero, ite_eq_right hi]
   have h2 := congrArg Dl hc
 
   rw [map_sum, map_zero] at h2
-  simp only [map_smul, hDl, smul_ite, smul_zero, Finset.sum_ite_eq', Finset.mem_univ, if_true] at h2
+  simp only [map_smul, hDl, smul_ite, smul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true] at h2
   rw [← Ideal.mem_span_singleton, ← Ideal.Quotient.eq_zero_iff_mem]
   rw [Algebra.smul_def, mul_one] at h2
   exact h2
@@ -869,8 +868,7 @@ theorem isLocalRing_of_integers {C : Type} [Field C] {v : Valuation C NNReal} {O
     [CommRing O] [Algebra O C] (hv : v.Integers O) : IsLocalRing O := by
   haveI : Nontrivial O := (algebraMap O C).domain_nontrivial
   refine IsLocalRing.of_isUnit_or_isUnit_one_sub_self fun a => ?_
-  by_contra h
-  push_neg at h
+  by_contra! h
   have h1 : v (algebraMap O C a) < 1 :=
     lt_of_le_of_ne (hv.map_le_one a) (fun e => h.1 (hv.isUnit_of_one' e))
   have h2 : v (algebraMap O C (1 - a)) < 1 :=
@@ -1096,7 +1094,7 @@ theorem hasDatum_dual : ∀ (p : ℕ) [Fact p.Prime] (C : Type) [Field C] [IsAlg
 
     rw [map_sum, map_sum]
     simp only [map_smul, ← hs, hj, Pi.single_apply, smul_eq_mul, mul_ite, mul_one, mul_zero,
-      Finset.sum_ite_eq', Finset.mem_univ, if_true]
+      Finset.sum_ite_eq', Finset.mem_univ, ite_true]
 
   let Φ : G.omega →ₗ[O] (Fin G.height → O) :=
     LinearMap.pi fun i => lie (D.Fil.mkQ (Pi.single i 1))

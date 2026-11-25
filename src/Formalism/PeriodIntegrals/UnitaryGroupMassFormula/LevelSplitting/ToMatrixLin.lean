@@ -5,6 +5,7 @@ public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LevelSplitting.S
 import Mathlib.RingTheory.Henselian
 import Mathlib.RingTheory.RegularLocalRing.Defs
 import Mathlib.RingTheory.SimpleRing.Principal
+import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.LevelStructures.LocLevi
 
 @[expose] public section
 
@@ -78,19 +79,7 @@ theorem N_le_S' (hP : P.IsStd σ J T) : Nsub R σ J P ≤ Ssub R σ J P := by
     exact ⟨Fin.castSucc a, Fin.castSucc_lt_castSucc_iff.mpr ha, by simp⟩
 
 theorem H_le_S : Hsub R σ J P ≤ Ssub R σ J P := by
-  intro g hg
-  unfold Hsub stabT tupH at hg
-  rw [MulAction.mem_stabilizer_iff] at hg
-  unfold Ssub uniFlag F0 UniC
-  intro b
-  have := congrFun hg (Fin.castAdd r b)
-  unfold ratTup at this
-  change lin R σ J g (ratV (F := F) R (Fin.append (F0 P) P.f (Fin.castAdd r b))) =
-    ratV (F := F) R (Fin.append (F0 P) P.f (Fin.castAdd r b)) at this
-  rw [Fin.append_left] at this
-  show lin R σ J g (ratV (F := F) R (F0 P b)) - ratV (F := F) R (F0 P b) ∈ _
-  rw [this, sub_self]
-  exact Submodule.zero_mem _
+  apply _root_.MassDataLevelSSteps.Hsub_le_Ssub <;> assumption
 
 theorem norm_N {h n : HA R σ J} (hh : h ∈ Hsub R σ J P) (hn : n ∈ Nsub R σ J P) :
     h * n * h⁻¹ ∈ Nsub R σ J P := by
@@ -188,7 +177,7 @@ theorem Pi_lin_one : (datR R σ J P T).Pi (lin R σ J 1) = LinearMap.id := by
     by_cases h : b = a
     · subst h
       simp
-    · rw [if_neg (Ne.symm h), if_neg h]
+    · rw [ite_eq_right (Ne.symm h), ite_eq_right h]
       simp
   have hez : ∀ b, (datR R σ J P T).hL ((datR R σ J P T).e b) (datR R σ J P T).z = 0 := by
     intro b

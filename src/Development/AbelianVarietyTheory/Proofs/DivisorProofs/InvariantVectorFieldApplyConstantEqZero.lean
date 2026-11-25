@@ -49,7 +49,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.O
 open ReciprocityTheory.ChartRestriction.G.PullbackSections (TanM tv)
 open GlobalTheory.LogKS (IsField)
 open GlobalTheory.Heat GlobalTheory.FormalOrigin
-attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace GlobalTheory.Heat
 
@@ -90,7 +89,7 @@ theorem isInv_constFn (R : Type) [CommRing R] (G : Over (Sp R)) [GrpObj G] [IsCo
       · rw [Over.w (g' * v'), hcomp]
         simp only [Over.mk_hom]
         rw [hφ]
-    · simp [valR, dif_neg hw]
+    · simp [valR, dite_eq_right hw]
   rw [h0] at key
   exact ((GlobalTheory.FormalValue.valR_fromSpecStalk y O hy _).symm.trans key.symm).trans
     (map_zero (G.left.presheaf.germ O y hy).hom).symm

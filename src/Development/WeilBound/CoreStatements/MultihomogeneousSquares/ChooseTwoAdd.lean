@@ -481,7 +481,7 @@ theorem flat_dual (hφ : φ.Flat) (hφi : ∀ a, (φ a : Ω') = i a) (hj : IsExt
         exact Submodule.subset_span ⟨_, hm, rfl⟩)
       rw [hev] at h2
       simp only [LinearMap.smul_apply, hBb, smul_eq_mul, mul_ite, mul_zero, apply_ite i, map_zero,
-        Finset.sum_ite_eq', Finset.mem_univ, if_true] at h2
+        Finset.sum_ite_eq', Finset.mem_univ, ite_true] at h2
       rw [_root_.mul_one, map_natCast] at h2
       rw [mul_comm]
       exact h2
@@ -960,8 +960,7 @@ theorem exists_unitAt_of_sum (hg : IsCptGen ξ) (p : Cpt ξ) {ι : Type} (s : Fi
   have hs : ∑ i ∈ s, g i = 1 := hg.inj p (by
 
     rw [map_sum, map_one, Finset.sum_congr rfl (fun i hi => hgf i hi), h1])
-  by_contra hcon
-  push_neg at hcon
+  by_contra! hcon
   have hnu : ∀ i ∈ s, g i ∈ IsLocalRing.maximalIdeal (X.presheaf.stalk p.1) := by
     intro i hi
     rw [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff]
@@ -1109,18 +1108,18 @@ theorem exists_blkF_of_not_full (K₀ : Type) (t : StepIx Ψ p q) (ht : (t.2 : �
     refine ⟨(τ, ⟨j, by omega⟩), ?_⟩
     have hP : IsProperStep (p + q) p (⟨j, by omega⟩ : Fin (p + q)) := ⟨ht, by simp only; omega⟩
     unfold blkF
-    rw [if_pos hP]
+    rw [ite_eq_left hP]
     unfold stepOf
-    simp only [dif_pos hj]
+    simp only [dite_eq_left hj]
   · simp only [Sum.elim_inr] at ht hj
     refine ⟨(τ, ⟨p + j, by omega⟩), ?_⟩
     have hP : IsProperStep (p + q) p (⟨p + j, by omega⟩ : Fin (p + q)) :=
       ⟨by simp only; omega, by simp only; omega⟩
     unfold blkF
-    rw [if_pos hP]
+    rw [ite_eq_left hP]
     unfold stepOf
     have hn : ¬ (p + (j : ℕ) < p) := by omega
-    simp only [dif_neg hn]
+    simp only [dite_eq_right hn]
     congr 2
     exact congrArg (fun z => (⟨.inr τ, z⟩ : StepIx Ψ p q)) (Fin.ext (by simp))
 

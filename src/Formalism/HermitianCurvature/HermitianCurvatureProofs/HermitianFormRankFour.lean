@@ -30,8 +30,7 @@ open scoped Matrix.Norms.L2Operator
 
 theorem exists_theta {k : ℕ} (A : Matrix (Fin k) (Fin k) ℂ) :
     ∃ θ : ℝ, -Complex.exp (θ * Complex.I) ∉ spectrum ℂ A := by
-  by_contra h
-  push_neg at h
+  by_contra! h
   have hfin : (spectrum ℂ A).Finite := by
     rw [← AlgEquiv.spectrum_eq (Matrix.toLinAlgEquiv' : Matrix (Fin k) (Fin k) ℂ ≃ₐ[ℂ] _) A]
     exact Module.End.finite_spectrum _
@@ -197,12 +196,12 @@ private theorem hpk_col_es_lemma_2 (k r : ℕ) (c : Fin r) (t : Fin (2 * r + k +
 theorem herm_e_left (w : Fin (2 * r + k + 1) → ℂ) (c : Fin r) :
     herm (Hpk k r) (bvec (eI k r c)) w = star (w (esI k r c)) := by
   simp only [herm, dotProduct, mulVec, bvec, Pi.single_apply, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq',
-    Finset.mem_univ, if_true, Pi.star_apply, hpk_col_e_lemma]
+    Finset.mem_univ, ite_true, Pi.star_apply, hpk_col_e_lemma]
 
 theorem herm_es_left (w : Fin (2 * r + k + 1) → ℂ) (c : Fin r) :
     herm (Hpk k r) (bvec (esI k r c)) w = star (w (eI k r c)) := by
   simp only [herm, dotProduct, mulVec, bvec, Pi.single_apply, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq',
-    Finset.mem_univ, if_true, Pi.star_apply, hpk_col_es_lemma_2]
+    Finset.mem_univ, ite_true, Pi.star_apply, hpk_col_es_lemma_2]
 
 theorem bvec_ee (c c' : Fin r) : bvec (eI k r c') (eI k r c) = if c = c' then 1 else 0 := by
   have := c.isLt
@@ -312,8 +311,6 @@ theorem fix_c' {z : Fin (2 * r + k + 1) → ℂ} {h : Mx k r} (hh : h ∈ UWset 
 end Geo
 
 end HermitianFormRankFour
-
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 open HermitianFormRankFour in
 theorem exp_generates : Formalism.FourierDecayAlt.Qr.ExpGen := by

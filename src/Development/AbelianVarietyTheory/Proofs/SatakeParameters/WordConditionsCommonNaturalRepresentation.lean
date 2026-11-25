@@ -479,7 +479,7 @@ theorem hcAt_eq_hc : ∀ (D : D7) (ρ : D.what₂.Tau) (g : D.R.GG), (((D.eTau �
     · unfold plc
       have h2 : (((D.eTau ρ : D.R.Psi) : D.R.GG) * D.R.cc).1.2 ≠ 1 := by
         simp [Formalism.HC.Frame.cc, c0, hm]
-      rw [if_neg h2, mul_comm, mul_assoc, _root_.Formalism.HC.Frame.cc_mul_cc, mul_one]
+      rw [ite_eq_right h2, mul_comm, mul_assoc, _root_.Formalism.HC.Frame.cc_mul_cc, mul_one]
   unfold hcAt
   have : (⟨plc g, plc_mem g⟩ : D.R.Psi) = D.eTau ρ := Subtype.ext hp
   rw [this, Equiv.symm_apply_apply]
@@ -547,13 +547,13 @@ theorem mem_twistedDualJumpsWithoutBlock_iff {R : Ranks} (P : HCParam R) (j : Fi
     u ∈ jT2 P j s ↔ (if s then -u - 1 else (R.t : ℤ) - 1 - (-u - 1)) ∈ cloud P j + lows P j := by
   unfold jT2 jW
   cases s
-  · simp only [Bool.false_eq_true, if_false, Multiset.map_map, Function.comp_def, Multiset.mem_map]
+  · simp only [Bool.false_eq_true, ite_false, Multiset.map_map, Function.comp_def, Multiset.mem_map]
     constructor
     · rintro ⟨x, hx, rfl⟩
       convert hx using 1; ring
     · intro h
       exact ⟨_, h, by ring⟩
-  · simp only [if_true, Multiset.mem_map]
+  · simp only [ite_true, Multiset.mem_map]
     constructor
     · rintro ⟨x, hx, rfl⟩
       convert hx using 1; ring
@@ -623,13 +623,13 @@ theorem rat_jump_sets_eq_int_multisets : ∀ (D : D7) (i : D.nd.Loc) (ρ : D.wha
       ring
   cases up
   · simp only [LJ.dualS, LJ.JJ, LJ.JW, LJ.cloudT, LJ.lowT, LJ.Jm, LJ.Jp, LJ.reflS, LJ.refl, LJ.cloudJ, LJ.lowJ,
-      LJ.blockJ, Set.mem_setOf_eq, Set.mem_union, Bool.false_eq_true, if_false, hsz, hc0]
+      LJ.blockJ, Set.mem_setOf_eq, Set.mem_union, Bool.false_eq_true, ite_false, hsz, hc0]
     refine ⟨or_congr Iff.rfl ?_, by push_cast⟩
     have := hblk' (-a - 1)
     push_cast at this
     exact this
   · simp only [LJ.dualS, LJ.JJ, LJ.JW, LJ.cloudT, LJ.lowT, LJ.Jm, LJ.Jp, LJ.reflS, LJ.refl, LJ.cloudJ, LJ.lowJ,
-      LJ.blockJ, Set.mem_setOf_eq, Set.mem_union, if_true, hsz, hc0]
+      LJ.blockJ, Set.mem_setOf_eq, Set.mem_union, ite_true, hsz, hc0]
     refine ⟨or_congr Iff.rfl ?_, by push_cast⟩
     have := hblk (-a - 1)
     push_cast at this
@@ -694,8 +694,8 @@ theorem hodgeTateJumps_coefficientExtension : ∀ {D : D7} (L : SizeData₂ D) (
   · intro a
     refine ((hπ ρ π hP.mem hP.dec a).2.2.2).trans ?_
     by_cases h : a ∈ jT2 (hcAt D g) (liftIdx D i) (pos (if ep = true then 1 else -1) g)
-    · rw [if_pos ((hs a).2.2 h), if_pos h]
-    · rw [if_neg (fun h' => h ((hs a).2.1 h')), if_neg h]
+    · rw [ite_eq_left ((hs a).2.2 h), ite_eq_left h]
+    · rw [ite_eq_right (fun h' => h ((hs a).2.1 h')), ite_eq_right h]
 
 end GlobalTheory.HTW.Rec
 end -- clump:auto
@@ -1277,7 +1277,7 @@ namespace GlobalTheory.HTW.Rec
 theorem wordBase_of_jumpIn : ∀ {D : D7} (L : SizeData₂ D) (C₀ : ℝ) (HW : HWOf D.loc) (i : D.nd.Loc) (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)) (C : Enl D i w hw) (hG : Good (D.nbr i w hw).Kw 1 C.LL) r ρ π (ε : ℤˣ) (κ : D.host.E →+* ↥C.LL.1), Roomy L C₀ → Formalism.MainNotions.LocalSituation.adm7 D → D.nd.l i ∉ D.host.small → D.nd.l i ≠ D.host.q → D.nd.l i ≠ D.host.d → JumpIn (D.loc (D.nd.l i)) (K := (D.nbr i w hw).Kw) D (liftIdx D i) ε (Br.cEw D.nbr i w hw) κ (fun x => C.loc (rDuO D.nd i r x)) (C.loc (T2O D.nd i ρ π)) → ∃ g, IsOrbit g (DV.frobG D (D.nd.l i))⁻¹ ∧ C.WordBase r ρ π L HW hG (recWord L (liftIdx D i) ε g) := by
   intro D L C₀ HW i w hw C hG r ρ π ε κ hR hA h2 hq hd hI
   have hU : (D.nbr i w hw).Kw.1 ≤ MaximalUnramifiedExtension (D.nd.l i) :=
-    GlobalTheory.T.placeCompletion_le_maxUnramified_away_2qd D.nbr i w hw h2 hq hd
+    _root_.GlobalTheory.bridge_field_le_unramified D.nbr i w hw h2 hq hd
   have hF : Formalism.MainNotions.LocalSituation.fontCore ((D.loc (D.nd.l i)).PD (D.nbr i w hw).Kw) := hA _ _
   obtain ⟨g, hg, hread⟩ := _root_.GlobalTheory.HTW.Rec.reads_orbit_invFrob D (D.loc (D.nd.l i)) (D.nbr i w hw).Kw C.LL
     ((HW (D.nd.l i)).W (D.nbr i w hw).Kw 1 C.LL hG) (Br.cEw D.nbr i w hw) κ h2 hq hd

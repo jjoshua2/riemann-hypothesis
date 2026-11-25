@@ -84,8 +84,7 @@ theorem exists_transcendental_norm_gt (p : ℕ) [Fact p.Prime] :
   have htr : ∀ y : ℂ_[p], y ∉ algebraicClosure ℚ ℂ_[p] → Transcendental ℚ y :=
     fun y hy h => hy (mem_algebraicClosure_iff.2 h)
   obtain ⟨x, hx⟩ : ∃ x : ℂ_[p], x ∉ algebraicClosure ℚ ℂ_[p] := by
-    by_contra h
-    push_neg at h
+    by_contra! h
     have h1 : #ℂ_[p] ≤ #(algebraicClosure ℚ ℂ_[p]) :=
       Cardinal.mk_le_of_injective (f := fun y : ℂ_[p] => (⟨y, h y⟩ : algebraicClosure ℚ ℂ_[p]))
         (fun a b hab => congrArg Subtype.val hab)
@@ -94,7 +93,7 @@ theorem exists_transcendental_norm_gt (p : ℕ) [Fact p.Prime] :
     exact absurd Cardinal.aleph0_lt_continuum (not_lt.2 h2)
   by_cases hx1 : 1 < ‖x‖
   · exact ⟨x, htr x hx, hx1⟩
-  · push_neg at hx1
+  · push Not at hx1
     have hp0 : (p : ℂ_[p]) ≠ 0 := Nat.cast_ne_zero.2 (Fact.out : p.Prime).ne_zero
     have hpn : ‖(p : ℂ_[p])‖ < 1 := Formalism.L2.Th1.D.UnramifiedCompletion.normL_lt_one p
     have hpi : 1 < ‖(p : ℂ_[p])⁻¹‖ := by
@@ -106,8 +105,7 @@ theorem exists_transcendental_norm_gt (p : ℕ) [Fact p.Prime] :
       have : x = (x + (p : ℂ_[p])⁻¹) - (p : ℂ_[p])⁻¹ := by ring
       rw [this]
       exact sub_mem hm (inv_mem (natCast_mem _ p))
-    · by_contra hle
-      push_neg at hle
+    · by_contra! hle
       have e : (p : ℂ_[p])⁻¹ = (x + (p : ℂ_[p])⁻¹) + -x := by ring
       have := IsUltrametricDist.norm_add_le_max (x + (p : ℂ_[p])⁻¹) (-x)
       rw [← e, norm_neg] at this
@@ -216,7 +214,7 @@ namespace GlobalTheory.InertGenusOne
 open Formalism.MainNotions.GL3Theta Formalism.L2.G.Pend NumberField Formalism.BasicNotions
 
 theorem lamC_coe {p : ℕ} [Fact p.Prime] (lam : Formalism.MainNotions.TaylorLogMetric.Qbar →+* ℂ_[p]) (a : Formalism.MainNotions.TaylorLogMetric.Qbar) :
-    Formalism.MainNotions.TaylorLogMetric.lamC lam (a : ℂ) = lam a := dif_pos a.2
+    Formalism.MainNotions.TaylorLogMetric.lamC lam (a : ℂ) = lam a := dite_eq_left a.2
 
 theorem datum_exists_coprime (hGood : Formalism.L2.Th1.CM.CM2) (hHt : Formalism.L2.Th1.CM.CM3) : Formalism.L2.KerInert.GenusOneModelExists := by
   intro D cc δ hcurve hδ12 p _ hcop h5 hIn lam

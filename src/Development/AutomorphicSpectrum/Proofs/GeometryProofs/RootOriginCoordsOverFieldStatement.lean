@@ -65,6 +65,7 @@ import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.ArithmeticIntersecti
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.ArithmeticIntersection.MultihomogeneousIdeals.IsFieldIntersection
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.ArithmeticIntersection.RationalSections.IsRatSectionOn
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.InterRedF
+import Development.AutomorphicSpectrum.Proofs.MetricProofs.LocalHolomorphicSectionOfPotential
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AutomorphicSpectrum.Proofs.GeometryProofs.DegreeReindexedCoords, Development.AutomorphicSpectrum.Proofs.GeometryProofs.FlatOnLogResolutionCorr, Development.AutomorphicSpectrum.Proofs.GeometryProofs.HodgeCompDescentFifth, Development.AutomorphicSpectrum.Proofs.GeometryProofs.HodgeCompDescentFirst, Development.AutomorphicSpectrum.Proofs.GeometryProofs.HodgeCompDescentThird, Development.AutomorphicSpectrum.Proofs.GeometryProofs.HolomorphicDegreeComposition, Development.WeilBound.CoreStatements.PluriharmonicCharts.X_line_conj, Development.AutomorphicSpectrum.Proofs.MetricProofs.ConjugationInvariantHermitianMetric, Development.AutomorphicSpectrum.Proofs.GeometryProofs.PositiveHomogeneousPotential, Development.AutomorphicSpectrum.Proofs.GeometryProofs.RootOriginCoordsOverField, Development.AutomorphicSpectrum.Proofs.GeometryProofs.RootOriginCoordsOverFieldStatement
@@ -293,7 +294,7 @@ theorem exists_isRatio : ∀ (X : Scheme.{0}) (Ω Ω₀ : Type) [Field Ω] [Fiel
   have hψ : ∀ w ∈ mcPts (mCoordIdeal y), ∀ t, IsCmp i y₀ y bk bx a a₀ e e₀ w t → ψ w = t := by
     intro w hm t ht
     have h : ∃ t, IsCmp i y₀ y bk bx a a₀ e e₀ w t := ⟨t, ht⟩
-    simp only [ψ, dif_pos h]
+    simp only [ψ, dite_eq_left h]
     exact isCmp_unique hT hy hm h.choose_spec ht
   refine ⟨fun w => ‖ψ w‖, fun w hm => ?_, fun w hm => ?_, fun w hm s hs => ?_, fun w hm => ?_, ?_⟩
   · obtain ⟨t, ht⟩ := hex w hm
@@ -968,16 +969,7 @@ theorem conj_mem_mcPts {P : Ideal (MRing J)} {z : (Σ k, J k) → ℂ} (hz : z �
 
 theorem continuousOn_of_holoOn {e : ℕ} {X : Type} [TopologicalSpace X] (A : FinHolAtlas e X) {U : Set X}
     {g : X → ℂ} (h : A.HoloOn U g) : ContinuousOn g U := by
-  intro y hy
-  obtain ⟨j, hj⟩ := A.cover y
-  have hc := (A.chart j).continuousAt hj
-  have hsy : (A.chart j).symm (A.chart j y) = y := (A.chart j).left_inv hj
-  have han : ContinuousAt (g ∘ (A.chart j).symm) (A.chart j y) :=
-    (h j _ ⟨(A.chart j).map_source hj, by simpa [hsy] using hy⟩).continuousAt
-  have hcomp : ContinuousAt ((g ∘ (A.chart j).symm) ∘ (A.chart j)) y := ContinuousAt.comp han hc
-  refine (hcomp.congr ?_).continuousWithinAt
-  filter_upwards [(A.chart j).open_source.mem_nhds hj] with w hw
-  simp [(A.chart j).left_inv hw]
+  apply _root_.GlobalTheory.CompanionTheory.Ar.Giv.SecPot.holoOn_continuousOn' <;> assumption
 
 theorem analyticAt_lift {P Jd : Ideal (MRing J)} {D : ℕ} (R : AnLogRes P Jd D) (x : R.X) (j : Fin R.A.n)
     {t : Fin D → ℂ} (ht : t ∈ (R.A.chart j).target) (hx : (R.A.chart j).symm t ∈ R.U x) :

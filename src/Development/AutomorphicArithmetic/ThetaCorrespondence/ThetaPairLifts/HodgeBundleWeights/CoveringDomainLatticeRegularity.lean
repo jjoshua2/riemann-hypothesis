@@ -658,7 +658,7 @@ theorem exists_smul_nonneg_of_dvd (D : D7) (T : Core D) (j : ℕ) (Y : Deep T j)
       hlev hnab hunit h3 (fun _ => ⟨ph, 1, x₀, hpin⟩) nab b 0 a hb hdom hn hP hχ htot
     refine GlobalTheory.mem_span_of_map_mem_span_image (Formalism.L2.PjFree.rdU (Formalism.L2.PjFree.Unf.ofPj (Y.U σ)))
       (sec Y.d.Xo₂ Y.d.c₂ a n) hind (shortGen Y.d.Xo₂ Y.d.c₂ nab b 0 a n d) (fun g hg => hg.1) hf'.1 (hsp ?_)
-    exact ⟨hf'.2 _ hσ, fun k x hx => dif_neg hx⟩
+    exact ⟨hf'.2 _ hσ, fun k x hx => dite_eq_right hx⟩
   · obtain ⟨hsec, Λ, N, x0, P, hUn, hTb, hTM, hN, -, hPl, hR⟩ := hg
     obtain ⟨inst, hnab⟩ := hnab
     obtain ⟨t, ht, hb'⟩ := exists_smul_nonneg_of_shortRule_any_level D _ _ _ Y.d.Xo₂ Y.d.c₂ n d hlev hnab
@@ -898,7 +898,7 @@ theorem exists_dom_exponents_bar : ∀ (E : Type) [Field E] [NumberField E] [IsC
     · simp [ex, exOf, exZ, wtOf]
     · have hi : (i : ℕ) < Dw.mult τ := i.2
       show (((if (i : ℕ) < Dw.mult τ then (val (τ, (i : ℕ))).toNat else 0 : ℕ)) : ℤ) = _
-      rw [if_pos hi, Int.toNat_of_nonneg (nonneg τ i hi)]
+      rw [ite_eq_left hi, Int.toNat_of_nonneg (nonneg τ i hi)]
       rw [Pi.add_apply, Pi.smul_apply]
       show _ = (k + 1) • (wtOf Dw la 0).1 (τ, (i : ℕ)) +
         (wtOf Dw (GlobalTheory.FlatLine.parWt Dw fun τ => (N : ℤ) * w τ) (M : ℤ)).1 (τ, (i : ℕ))
@@ -1025,8 +1025,7 @@ theorem exists_idem_zero {w : HeightOneSpectrum (𝓞 c.F)} {v : Rul Xo c → ER
       exact evalAt_one _ _ y.1 y.2.1
     rw [h1, nval_of_ne one_ne_zero]
     simp [vV]
-  by_contra hne
-  push_neg at hne
+  by_contra! hne
   have htop : ∀ Z, vAtV y (GlobalTheory.FlatLine.idem Z) = ⊤ := fun Z => by
     have hd := vAtV_mul y (GlobalTheory.FlatLine.idem Z) (GlobalTheory.FlatLine.idem Z)
     rw [GlobalTheory.FlatLine.idem_mul_idem] at hd
@@ -1707,8 +1706,7 @@ theorem pow_mul_mem_cusp_of_unit : _root_.GlobalTheory.CovTop.PublishedHodgeBund
   have hdec : ∀ (τ : D.host.E →+* ℂ) (i j' : ℕ), i ≤ j' → j' < (T.Q.Dw j).mult τ → G.1 (τ, j') ≤ G.1 (τ, i) := by
     have hne : ∀ (τ : D.host.E →+* ℂ) (m : ℕ) (hm : m + 1 < (T.Q.Dw j).mult τ), G.1 (τ, m + 1) ≤ G.1 (τ, m) := by
       intro τ m hm
-      by_contra hlt
-      push_neg at hlt
+      by_contra! hlt
       exact hR0 (GlobalTheory.NonDomVanish.eq_zero_of_lt hRG τ ⟨m, by omega⟩ ⟨m + 1, hm⟩ rfl hlt)
     intro τ i j' hij hj'
     revert hj'

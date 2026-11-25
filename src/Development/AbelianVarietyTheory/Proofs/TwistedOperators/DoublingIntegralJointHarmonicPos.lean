@@ -81,6 +81,8 @@ import Mathlib.RingTheory.Etale.Weakly
 import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
 import Mathlib.RingTheory.TotallySplit
 import Mathlib.Tactic.Linter.HaveILetI
+import CompanionTheory.HarishChandraModules.KFiniteAnalyticVectors.AnalyticIntertwiners.LogNormEstimates
+import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ProjectorOfIntegrableDiscreteSeriesCoefficient
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AbelianVarietyTheory.Proofs.TwistedOperators.DoublingCoefficientsVanishOfOneVanishes, Development.AbelianVarietyTheory.Proofs.TwistedOperators.EqZeroOfPositiveCoeffOrthogonalEmbeddings, Development.AbelianVarietyTheory.Proofs.TwistedOperators.InnerCoeffEqOfIsometricAnalyticModules, Development.AbelianVarietyTheory.Proofs.TwistedOperators.InnerEqOfIrreducible, Development.AbelianVarietyTheory.Proofs.TwistedOperators.DoublingIntegralJointHarmonicPos
@@ -806,25 +808,12 @@ theorem inner_eq_of_common_kernel_line {V H₁ H₂ ι : Type*} [AddCommGroup V]
   exact sub_eq_zero.mp hy'.symm
 
 theorem adjZ_Eab {p q : ℕ} {a b : Ix p q} (h : sameBlock a b) : adjZ (Eab a b) = Eab b a := by
-  unfold adjZ Eab Jm Formalism.UG.Jpq
-
-  have hJ : (Matrix.fromBlocks (1 : Matrix (Fin p) (Fin p) ℂ) 0 0 (-1) : Mat p q) =
-      Matrix.diagonal (Sum.elim (fun _ => (1 : ℂ)) (fun _ => -1)) := by
-    ext i j
-    rcases i with i | i <;> rcases j with j | j <;>
-      simp [Matrix.diagonal_apply, Matrix.one_apply, apply_ite]
-  rw [hJ]
-  rcases a with a | a <;> rcases b with b | b
-  all_goals try exact (h : False).elim
-  all_goals
-    ext i j
-    simp only [Matrix.mul_diagonal, Matrix.diagonal_mul, Matrix.conjTranspose_apply, Matrix.single_apply]
-    split_ifs with h1 h2 <;> (try obtain ⟨rfl, rfl⟩ := h1) <;> simp_all
+  apply _root_.CompanionTheory.D.gk.HC.adjZ_singleD <;> assumption
 
 theorem isKC_Eab {p q : ℕ} {a b : Ix p q} (h : sameBlock a b) : IsKC (Eab a b) := by
   unfold IsKC Eab
   intro c d hcd
-  rw [Matrix.single_apply, if_neg]
+  rw [Matrix.single_apply, ite_eq_right]
   rintro ⟨rfl, rfl⟩
   exact hcd h
 
@@ -959,14 +948,7 @@ variable {p q r s : ℕ}
 theorem inner_opE (T : GrpData p q) (πU : URep T) {e : T.G → ℂ} (hi : Integrable e T.haar)
     (hc : Continuous e) (z x : πU.H) :
     inner ℂ z (opE T πU.π e x) = ∫ g, e g * inner ℂ z (πU.π g x) ∂T.haar := by
-  haveI := _root_.GlobalTheory.DSProj.secondCountable_grp T
-  have h : Integrable (fun g => e g • πU.π g x) T.haar := by
-    refine Integrable.mono' (hi.norm.mul_const ‖x‖) (hc.smul (πU.cont x)).aestronglyMeasurable
-      (Filter.Eventually.of_forall fun g => ?_)
-    rw [norm_smul, πU.isom]
-  unfold opE
-  rw [← integral_inner h]
-  simp only [inner_smul_right]
+  apply _root_.GlobalTheory.CoefProjector.inner_opE <;> assumption
 
 theorem continuous_mcoef {T : GrpData p q} (D : DSRep T) (v : D.HK.V) : Continuous (mcoef D v) :=
   continuous_const.inner (D.U.cont _)
@@ -1110,7 +1092,7 @@ theorem exists_coeff_ne_zero (hn : 1 ≤ p + q) (T : GrpData p q) (π₁ π₂ :
     if h : IsKC Z then (prodAct M₁ M₂ Z).restrict (hK Z h) else 0
   have ha : ∀ Z, IsKC Z → ∀ w : E, (a Z w : M₁.V × M₂.V) = prodAct M₁ M₂ Z w := by
     intro Z hZ w
-    simp only [a, dif_pos hZ, LinearMap.restrict_coe_apply]
+    simp only [a, dite_eq_left hZ, LinearMap.restrict_coe_apply]
   have heq := _root_.GlobalTheory.RealPar.pair_kEquivariant_of_lie p q T (_root_.GlobalTheory.CoverKGen.kset_gen p q hn T) π₁ π₂ E a i₁ i₂ (by
     intro Y hY hYK w
     simp only [i₁, i₂, LinearMap.comp_apply, Submodule.subtype_apply, ha Y hYK]
@@ -1190,17 +1172,8 @@ theorem sg_lineEquiv (l : Ln p q r s) : sg (lineEquiv p q r s l) = sg l.1 * sg l
 theorem kron_mem {Y : Mat p q} (hY : Y ∈ upq p q) :
     Matrix.reindex (lineEquiv p q r s) (lineEquiv p q r s) (Matrix.kroneckerMap (· * ·) Y (1 : Mat r s)) ∈
       upq (p * r + q * s) (p * s + q * r) := by
-  rw [mem_upq_iff] at hY ⊢
-  intro a b
-  obtain ⟨⟨a, c⟩, rfl⟩ := (lineEquiv p q r s).surjective a
-  obtain ⟨⟨b, d⟩, rfl⟩ := (lineEquiv p q r s).surjective b
-  simp only [sg_lineEquiv, Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_apply_apply,
-    Matrix.kroneckerMap_apply, Matrix.one_apply]
-  by_cases h : c = d
-  · subst h
-    simp only [if_true, mul_one]
-    linear_combination sg c * hY a b
-  · simp [h, Ne.symm h]
+  intros
+  apply _root_.GlobalTheory.FockEmbExp.left_mem <;> assumption
 
 theorem fock_analytic (F : FockData T0 T1 T2) {Y : Mat p q} (hY : Y ∈ upq p q) (P : Pol p q r s) :
     AnalyticOnNhd ℝ (fun t : ℝ => (fockRep F).π (T1.expt (t • Y)) (F.ι P)) Set.univ := by
@@ -1263,7 +1236,7 @@ theorem casimir_compact (h : r = 0 ∨ s = 0) {V W : Type} [AddCommGroup V] [Mod
     {c : ℂ} (hc : casimir b w = c • w) : casimir a v = c • v := by
   have h1 := (_root_.GlobalTheory.CasimirHighest.casimir_central_and_highest r s V a ha).2 μ v hv
   have h2 := (_root_.GlobalTheory.CasimirHighest.casimir_central_and_highest r s W b hb).2 μ w hw
-  simp only [sameBlock_of_compact h, if_true] at h1 h2
+  simp only [sameBlock_of_compact h, ite_true] at h1 h2
   simp only [casimir, LinearMap.sum_apply, Module.End.mul_apply] at hc ⊢
   rw [h1]
   rw [h2] at hc

@@ -49,8 +49,7 @@ def mulC (a : ℝ → ℂ) (ha : Continuous a) (f : C₀(ℝ, ℂ)) (R : ℝ) (h
     refine (tendsto_const_nhds (x := (0 : ℂ))).congr' ?_
     filter_upwards [hK] with y hy
     have hR : R ≤ |y| := by
-      by_contra hlt
-      push_neg at hlt
+      by_contra! hlt
       exact hy ⟨(abs_lt.mp hlt).1.le, (abs_lt.mp hlt).2.le⟩
     show (0 : ℂ) = a y * f y
     rw [hf y hR]⟩
@@ -299,13 +298,11 @@ theorem exists_bdd (hd : Dense (M : Set H)) (hs : ∀ x y : M, ⟪(Ω x : H), y�
     have hx0 := norm_nonneg (x : H)
     have hΩ0 := norm_nonneg (Ω v : H)
     have hvN : ‖(v : H)‖ ≤ ‖Z₀ x‖ := by
-      by_contra h
-      push_neg at h
+      by_contra! h
       nlinarith
     rw [one_mul]
     change ‖Z₀ x‖ ≤ ‖(x : H)‖
-    by_contra h
-    push_neg at h
+    by_contra! h
     nlinarith
   let Z₁ : M →L[ℂ] H := Z₀.mkContinuous 1 hb
   refine ⟨Z₁.extend M.subtypeL, fun x v hv => ?_⟩
@@ -579,7 +576,7 @@ theorem abs_calc (Z : A) (hn : IsStarNormal Z) (hsp : Z - star Z = (-2 * I) • 
         ring_nf
         simp
         ring
-      simp only [lift, h0, if_false, hg]
+      simp only [lift, h0, ite_false, hg]
       rw [Complex.ofReal_inv, h5, map_inv₀]
       field_simp
   · intro g h hh
@@ -595,7 +592,7 @@ theorem abs_calc (Z : A) (hn : IsStarNormal Z) (hsp : Z - star Z = (-2 * I) • 
     by_cases h0 : z = 0
     · simp [lift, h0]
     · have h3 := circ_inv h0 (hK z hz)
-      simp only [lift, h0, if_false, hh, smul_eq_mul]
+      simp only [lift, h0, ite_false, hh, smul_eq_mul]
       have h4 : z * ((yOf z : ℂ) + I) = 1 := by
         rw [← h3]
         exact mul_inv_cancel₀ h0
@@ -1861,7 +1858,7 @@ theorem wvAlg : WvAlg := by
   refine ⟨?_, ?_, ?_, ?_⟩
   · have h2 : Even 2 := ⟨1, rfl⟩
     have h0 : Even 0 := ⟨0, rfl⟩
-    simp only [PositivityTheory.RgBcC.Fc.wv, PositivityTheory.RgBcC.Fc.chj, h2, h0, if_true, hsq, pow_zero, one_mul]
+    simp only [PositivityTheory.RgBcC.Fc.wv, PositivityTheory.RgBcC.Fc.chj, h2, h0, ite_true, hsq, pow_zero, one_mul]
     first
       | ring
   · simp [PositivityTheory.RgBcC.Fc.wv, PositivityTheory.RgBcC.Fc.chj]

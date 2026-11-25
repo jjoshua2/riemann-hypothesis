@@ -88,10 +88,10 @@ theorem exists_approx (T : Finset (HeightOneSpectrum (𝓞 E))) {n : ℕ} (g : T
     obtain ⟨a, -, ha, -⟩ := PI.FinOrdValD.WA.weakApprox T
       (fun v => if h : v ∈ T then algebraMap E (v.adicCompletion E) (t ⟨v, h⟩ k) else 0)
       (fun v => if h : v ∈ T then (B ⟨v, h⟩)⁻¹ else 1)
-      (fun v hv => by simp only [dif_pos hv]; exact inv_ne_zero (hB0 _))
+      (fun v hv => by simp only [dite_eq_left hv]; exact inv_ne_zero (hB0 _))
     refine ⟨a, fun P => ?_⟩
     have h := ha P.1 P.2
-    simp only [dif_pos P.2, Subtype.coe_eta] at h
+    simp only [dite_eq_left P.2, Subtype.coe_eta] at h
     rw [← map_sub, PI.FinOrdValD.WA.val_alg] at h
     exact h
   choose a ha using hk
@@ -135,7 +135,6 @@ section -- clump:auto
 @[expose] public section
 
 open NumberField IsDedekindDomain Matrix Formalism.BasicNotions Formalism.UG Formalism.L2.Col Formalism.L2.PairingIndexBounds.F Formalism.MainNotions.G.KAat Formalism.L2.Forms Formalism.L2.Ker Formalism.MainNotions Formalism.L2.DIV Formalism.MainNotions.G GlobalTheory.TwU GlobalTheory.TwV
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.exists_vector_prescribed_cosets_badPrimes_frames : ∀ {X : Fields} {Pr : Primes X} (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) {S : Set ℕ} (mu : Tup X.F X.E X.K S)

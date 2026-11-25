@@ -151,7 +151,6 @@ section -- clump:auto
 
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.S Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes MeasureTheory IsDedekindDomain NumberField Matrix Formalism.L2.Theta Formalism.L2.DIV Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.IndefR.Mult Formalism.IndefR.Datum Formalism.IndefR.AutomorphicEvaluation Formalism.L2.SG.HidaSetting Formalism.L2.SG.PoincareInHH.PoincareSetting Formalism.L2.SG.RowDict Formalism.L2.SG.RowsJoinPinned GlobalTheory.MixModel GlobalTheory.MixPer GlobalTheory.Unf GlobalTheory.Core.Rk GlobalTheory.Core.Mi
 open scoped TensorProduct InnerProductSpace Classical
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 noncomputable section
 
@@ -218,7 +217,7 @@ theorem isCuspFn_of_contRep {D : D7} (X : Formalism.L2.SG.HidaSetting.HidaSettin
     intro y
     have h := hfund.2.1 y
     have e : X.B.I.rep X.B.fund y = h.choose * y := by
-      unfold Formalism.MainNotions.S.AutInst.rep; exact dif_pos h
+      unfold Formalism.MainNotions.S.AutInst.rep; exact dite_eq_left h
     have hm : h.choose ∈ (Γ : Set X.B.I.GA) := by
       have k := h.choose_spec.1
       generalize h.choose = z at k ⊢

@@ -142,8 +142,7 @@ theorem nonempty_equiv_piTensor_contra [∀ a, T2Space (Γ a)]
     GlobalTheory.ContraRefl.contra_isIrreducible (pi_compactOpen_basis hG) (isAdmissible_piTensor hG hρ) hI
   have hB0 : pairForm ρ ≠ 0 := by
     have hne : ∀ a, ∃ v : X a, v ≠ 0 := fun a => by
-      by_contra h
-      push_neg at h
+      by_contra! h
       apply (bot_ne_top : (⊥ : Subrepresentation (ρ a)) ≠ ⊤)
       apply Subrepresentation.ext
       ext x
@@ -200,7 +199,7 @@ theorem contra_prodIrr : ∀ {k : Type} [Field k] [ValuativeRel k] [TopologicalS
   have hci := fun a => contra_rep_isIrreducible hA (x a)
   have hy : (fun a => dualCl (x a)) =
       fun a => IrrGL.of (contra (x a).rep) (isSmooth_smoothRep _) (hci a) :=
-    funext fun a => dif_pos (hci a)
+    funext fun a => dite_eq_left (hci a)
   have key : ∀ y : Fin h → IrrGL (k := k),
       y = (fun a => IrrGL.of (contra (x a).rep) (isSmooth_smoothRep _) (hci a)) →
       ∃ hd' : ∑ a, (y a).1 = N, Nonempty ((contra (prodIrr x hd)).Equiv (prodIrr y hd')) := by

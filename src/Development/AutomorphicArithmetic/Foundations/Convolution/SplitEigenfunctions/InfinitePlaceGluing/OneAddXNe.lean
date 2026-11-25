@@ -318,8 +318,7 @@ theorem UpperTheory.good_prime_split_or_inert_of_quadratic :
   · subst hw
     by_cases hn : normV w = normV (w.under (𝓞 ℚ))
     · refine Or.inl ⟨hn, ?_⟩
-      by_contra hu
-      push_neg at hu
+      by_contra! hu
       exact no_ram D w hG (fun w' h => by_contra fun hne => hu w' hne h) hn
     · exact Or.inr (norm_sq h2 hn)
 end -- clump:auto
@@ -663,7 +662,7 @@ private theorem serInert {α β c : ℂ} {S S' : PowerSeries ℂ} (h1 : starRing
     split_ifs
     · simpa [Gs] using Complex.zero_le_real.2 (gg_nonneg τ (k / 2))
     · exact le_rfl
-  · rw [coeff_expand, if_pos (by norm_num)]
+  · rw [coeff_expand, ite_eq_left (by norm_num)]
     have := one_le_gg τ
     simp only [Gs, coeff_mk, show 4 / 2 = 2 from rfl]
     rw [← Complex.ofReal_one, Complex.real_le_real]
@@ -699,7 +698,7 @@ theorem UpperTheory.ConvolutionTheory.RankTwoDescent.lan_of :
     rw [hw, pow_one] at hab
     have hetav : η.val v = 1 := by
       have := hη w hnw
-      rw [hw, if_pos hn] at this
+      rw [hw, ite_eq_left hn] at this
       exact this
     have hval' : ((ω * η)⁻¹).val v = (ω.val v)⁻¹ := by
       rw [HChar.val_inv, HChar.val_mul, hetav, mul_one]
@@ -721,7 +720,7 @@ theorem UpperTheory.ConvolutionTheory.RankTwoDescent.lan_of :
       nlinarith
     have hetav : η.val v = -1 := by
       have := hη w hnw
-      rw [hw, if_neg hne1] at this
+      rw [hw, ite_eq_right hne1] at this
       exact this
     have hval' : ((ω * η)⁻¹).val v = -(ω.val v)⁻¹ := by
       rw [HChar.val_inv, HChar.val_mul, hetav]; simp

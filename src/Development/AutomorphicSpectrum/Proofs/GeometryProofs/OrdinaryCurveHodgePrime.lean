@@ -581,7 +581,6 @@ end Abstract
 section Geom
 
 open scoped CategoryTheory.Obj CategoryTheory.MonObj
-attribute [local instance] Over.cartesianMonoidalCategory
 
 variable {R : Type} [CommRing R] {G G' : Over (Spec (CommRingCat.of R))} [GrpObj G] [GrpObj G'] {p : ℕ}
   {N N' : Type} [AddCommGroup N] [AddCommGroup N']
@@ -1203,8 +1202,8 @@ theorem testFacts (hF : GlobalTheory.CompanionTheory.Ar.HT.FarguesHodgeTate) (hQ
       simpa [map_mul] using this
     · show (if a = 0 then (0 : Ω) else 1) ∈ CR O y c'
       by_cases ha : a = 0
-      · simp only [ha, if_true]; exact zero_mem _
-      · simp only [ha, if_false]; exact one_mem _
+      · simp only [ha, ite_true]; exact zero_mem _
+      · simp only [ha, ite_false]; exact one_mem _
   have hBase' : ((chartD e b pq sc w P i).bc RC).Base RC p (algebraMap O C w) := by
     rw [hw]
     exact (_root_.GlobalTheory.CompanionTheory.Ar.Num.lattice_base_change_larger_ring (chartD e b pq sc w P i) (CR O y c') p (algebraMap O Ω w) _ hcd hBase C RC hRC).2

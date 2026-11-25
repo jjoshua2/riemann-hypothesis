@@ -105,7 +105,7 @@ theorem exists_dividing {Ω : Type} [Field Ω] [Algebra ℚ Ω] (A : ValuationSu
     have hz : ∀ y ∈ s0.image f, y = 0 := by
       intro y hy
       obtain ⟨j, hj, rfl⟩ := Finset.mem_image.1 hy
-      have := hcon hj; push_neg at this
+      have := hcon hj; push Not at this
       ext; simp [f, this]
     have h1 := hs0 i1
     rw [Submodule.mem_span_finset] at h1
@@ -154,8 +154,7 @@ theorem prim_of_bounded : ∀ {Ω : Type} [Field Ω] [Algebra ℚ Ω] [IsAlgClos
   haveI : FiniteDimensional ℚ (IntermediateField.adjoin ℚ (S : Set Ω)) :=
     IntermediateField.finiteDimensional_adjoin (fun x _ => Algebra.IsIntegral.isIntegral x)
   have hne : ∃ r, (X.exp a).coeff r ≠ 0 := by
-    by_contra h
-    push_neg at h
+    by_contra! h
     have h0 : X.exp a = 0 := HahnSeries.ext (funext h)
     exact ha ((map_eq_zero_iff X.exp (RingHom.injective X.exp.toRingHom)).1 h0)
   obtain ⟨r0, h0, hA⟩ := exists_dividing A (fun r => (X.exp a).coeff r) _ D hD hc hne

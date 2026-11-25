@@ -1170,8 +1170,7 @@ theorem sq_dvd_choose_prime_pow (l : ℕ) (hl : l.Prime) (b k : ℕ) (hb : 1 ≤
     rw [hm]; exact Nat.add_one_mul_choose_eq m j
 
   have hv : padicValNat l (j + 1) < b - 1 := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     have h1 : l ^ padicValNat l (j + 1) ≤ j + 1 :=
       Nat.le_of_dvd (Nat.succ_pos j) (_root_.Dvd.intro_left _ (_root_.Nat.divMaxPow_mul_pow_padicValNat _ _))
     have h2 : l ^ (b - 1) ≤ l ^ padicValNat l (j + 1) := Nat.pow_le_pow_right hl.pos hcon
@@ -1199,7 +1198,7 @@ theorem one_add_X_pow_prime_pow_sub_one_mem_span (l : ℕ) [Fact l.Prime] (b : �
     rw [hc, Nat.cast_mul, Nat.cast_pow, mul_left_comm]
     exact Ideal.mul_mem_right _ _ (Ideal.subset_span (Set.mem_insert _ _))
   ·
-    push_neg at hi
+    push Not at hi
     obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le hi
     rw [hd, pow_add, mul_assoc]
     exact Ideal.mul_mem_right _ _

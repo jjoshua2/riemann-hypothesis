@@ -56,7 +56,6 @@ open Formalism.L2.Theta Formalism.L2.DIV Formalism.L2.Indef Formalism.DivisionVa
 open Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.IndefR.Mult Formalism.IndefR.Datum Formalism.IndefR.Cx
 open scoped TensorProduct InnerProductSpace
 open GlobalTheory.Hk3
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.SphLabelComm
 
@@ -161,10 +160,10 @@ theorem label_ops_comm : ∀ {D : D7} (V : HSp D) (P : Pl D.host.E), ∀ c c', �
     intro d d'
     by_cases hd : IsLab V P d
     swap
-    · simp [Hk3.rep, dif_neg hd]
+    · simp [Hk3.rep, dite_eq_right hd]
     by_cases hd' : IsLab V P d'
     swap
-    · simp [Hk3.rep, dif_neg hd']
+    · simp [Hk3.rep, dite_eq_right hd']
     obtain ⟨x, hx, rA, A', rA'⟩ := reps d hd
     obtain ⟨y, hy, rB, -⟩ := reps d' hd'
     simp only [LinearMap.sum_apply]
@@ -187,7 +186,6 @@ open Formalism.L2.Theta Formalism.L2.DIV Formalism.L2.Indef Formalism.DivisionVa
 open Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.IndefR.Mult Formalism.IndefR.Datum Formalism.IndefR.Cx
 open scoped TensorProduct InnerProductSpace
 open GlobalTheory.Hk3
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.sphericalHeckeCombinations_commute_fixedVectors : ∀ {D : D7} (V : HSp D) (P : Pl D.host.E), ∀ c c', ∀ (M : Type) [AddCommGroup M] [Module ℂ M] (π : GA D V →* Module.End ℂ M) (u : M), (∀ k ∈ hyp V P, π k u = u) → opOf π P c (opOf π P c' u) = opOf π P c' (opOf π P c u) := by
   first | exact @GlobalTheory.SphLabelComm.label_ops_comm

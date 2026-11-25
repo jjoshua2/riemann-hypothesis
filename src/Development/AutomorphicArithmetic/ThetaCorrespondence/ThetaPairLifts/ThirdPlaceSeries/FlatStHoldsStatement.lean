@@ -107,7 +107,7 @@ import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsPlaceModelCo
 import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.BesselDatumAuxiliaryVectorOrthogonalImage
 
 -- This file was produced by scripts/clump.py from the modules listed below.
--- Members: Development.AbelianVarietyTheory.Proofs.DivisorProofs.GramFrMulInv, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatDatumLiftDatumSameHalfTranslateConjugatePlac, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatVectorEqUnitSmulCentralTranslatePlacePartStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatVectorThreeStepsConjugatePlacesStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.LiftVectorThreeStepDecomposition, Development.AbelianVarietyTheory.Proofs.DivisorProofs.LiftVectorThreeStepDecompositionStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaHalfMovesUnderTranslateOtherPlacesStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.TraceBoundTuple, Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.FlatStHolds, Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.FlatStHoldsStatement
+-- Members: Development.AbelianVarietyTheory.Proofs.DivisorProofs.GramFrMulInv, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatDatumLiftDatumSameHalfTranslateConjugatePlac, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatVectorEqUnitSmulCentralTranslatePlacePartStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatVectorThreeStepsConjugatePlacesStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.LiftVectorThreeStepDecomposition, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaHalfMovesUnderTranslateOtherPlacesStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.TraceBoundTuple, Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.FlatStHolds, Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.FlatStHoldsStatement
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.GramFrMulInv =====
 -- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.GramFrMulInv", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.UnivCoefNeZero\npublic import Formalism.LocalToGlobal.Divisibility.DefGroupLemmas\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.GramMapMulInv\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AbelianVarietyTheory.Definitions.Divisors.TupleReadBaseTupleEqFamily\npublic import Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.ConjTupRefl\npublic import Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.ToUnitsCompToCircle\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.SuppAtMul\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LevelLiftIsLiftPrincipalLevelDatumRealisation\nimport Formalism.LocalToGlobal.IndefiniteReal.ExistsChosenExtremalVector\n\n"}
@@ -265,7 +265,7 @@ theorem eq_of_parts {D : D7} {z w : AE D} (h1 : infPart D z = infPart D w) (h2 :
 
 theorem redM_map {D : D7} (PP : Pl D.host.E) {b a : ℕ} (X : Matrix (Fin b) (Fin a) (Formalism.L2.Herm.intAf D.host.F D.host.E)) :
     redM PP (X.map (Formalism.L2.Herm.intAf D.host.F D.host.E).subtype) = X.map (resS D.host.F PP) :=
-  Matrix.ext fun i j => dif_pos (X i j).2
+  Matrix.ext fun i j => dite_eq_left (X i j).2
 
 theorem redM_mul' {D : D7} (PP : Pl D.host.E) {c b a : ℕ} {A : Matrix (Fin c) (Fin b) (Datum.EAf D)}
     {B : Matrix (Fin b) (Fin a) (Datum.EAf D)} (hA : IsIntM A) (hB : IsIntM B) :
@@ -300,7 +300,7 @@ theorem redM_conj {D : D7} (PP : Pl D.host.E) {a b : ℕ} {y : Matrix (Fin a) (F
   ext i j
   rw [Matrix.transpose_apply, Matrix.map_apply]
   unfold redM
-  rw [dif_pos (hy i j), dif_pos (int_ct hy j i)]
+  rw [dite_eq_left (hy i j), dite_eq_left (int_ct hy j i)]
   exact resS_conj PP _ _ (sigR_sigR D.sp.cm _).symm
 
 theorem det_topL_conj {D : D7} (PP : Pl D.host.E) {n r : ℕ} (hr : r ≤ n) {y : Matrix (Fin r) (Fin n) (Datum.EAf D)} (hy : IsIntM y) :
@@ -309,19 +309,19 @@ theorem det_topL_conj {D : D7} (PP : Pl D.host.E) {n r : ℕ} (hr : r ≤ n) {y 
   congr 1
   ext i j
   simp only [Matrix.transpose_apply, Matrix.map_apply, topL]
-  rw [dif_pos ⟨j.2, by omega⟩, dif_pos ⟨by omega, j.2⟩]
+  rw [dite_eq_left ⟨j.2, by omega⟩, dite_eq_left ⟨by omega, j.2⟩]
 
 theorem red_adj {κ : Type} [CommRing κ] {n r : ℕ} (hr : r ≤ n) (v : Matrix (Fin n) (Fin r) κ) (g : Matrix (Fin r) (Fin r) κ) :
     LowZero r ((Matrix.diagonal fun k : Fin n => if k.val < r then (1 : κ) else 0) * v * g) ∧
       topL r ((Matrix.diagonal fun k : Fin n => if k.val < r then (1 : κ) else 0) * v * g) = topL r v * g := by
   constructor
   · intro i j hi _
-    rw [Matrix.mul_assoc, Matrix.diagonal_mul, if_neg (by omega), zero_mul]
+    rw [Matrix.mul_assoc, Matrix.diagonal_mul, ite_eq_right (by omega), zero_mul]
   · ext i j
     have hi : i.val < n := by omega
-    rw [Matrix.mul_assoc, topL, dif_pos ⟨hi, j.2⟩, Matrix.diagonal_mul, if_pos i.2, one_mul, Matrix.mul_apply, Matrix.mul_apply]
+    rw [Matrix.mul_assoc, topL, dite_eq_left ⟨hi, j.2⟩, Matrix.diagonal_mul, ite_eq_left i.2, one_mul, Matrix.mul_apply, Matrix.mul_apply]
     refine Finset.sum_congr rfl fun k _ => ?_
-    rw [topL, dif_pos ⟨hi, k.2⟩]
+    rw [topL, dite_eq_left ⟨hi, k.2⟩]
 
 theorem X_pval : ∀ (D : D7) (Q : Finset (Pl D.host.E)) (ϖ : 𝓞 D.host.E), (∀ PP ∈ Q, ϖ ∈ PP.asIdeal) → ∀ (n r : ℕ), r ≤ n → ∀ (Γ Γ' : Matrix (Fin r) (Fin r) (Datum.EAf D)), IsIntM Γ → IsIntM Γ' → Γ * Γ' = 1 → ∀ (ξ ξ' : ∀ PP : Pl D.host.E, (kP PP)ˣ →* ℂˣ), (∀ PP ∈ Q, ∀ u : (kP PP)ˣ, ξ' (conjPl PP) (Units.map (conjK PP).toMonoidHom u) = (ξ PP u)⁻¹) → ∃ c₀ : ℂ, GlobalTheory.ConjTwist.IsRoot1 c₀ ∧ ∀ y : Matrix (Fin r) (Fin n) (Datum.EAf D), IsIntM y → GlobalTheory.ConjTwist.omegaFlat (Q.image conjPl) r ξ' (fun PP => redM PP y) = c₀ * omegaQ Q r ξ (-1) (fun PP => redM PP (diagW D n r (ϖ : D.host.E) * GlobalTheory.ExportSeries.Model.ct y * Γ)) := by
   intro D Q ϖ hϖ n r hr Γ Γ' iΓ iΓ' hΓ ξ ξ' hξ
@@ -357,7 +357,7 @@ theorem X_pval : ∀ (D : D7) (Q : Finset (Pl D.host.E)) (ϖ : 𝓞 D.host.E), (
       have h2 : ∀ PP ∈ Q, LowZero r (redM PP (diagW D n r (ϖ : D.host.E) * ct y * Γ)) ∧
           IsUnit (topL r (redM PP (diagW D n r (ϖ : D.host.E) * ct y * Γ))).det := fun PP hPP =>
         ⟨(key PP hPP).1, by rw [(key PP hPP).2]; exact (h PP hPP).mul (hu PP)⟩
-      rw [dif_pos h1, dif_pos h2, ← Finset.prod_mul_distrib]
+      rw [dite_eq_left h1, dite_eq_left h2, ← Finset.prod_mul_distrib]
       symm
       refine Finset.prod_bij (fun P _ => ⟨conjPl P.1, Finset.mem_image_of_mem _ P.2⟩) (fun _ _ => Finset.mem_attach _ _)
         (fun a _ b _ hab => Subtype.ext ?_) (fun b _ => ?_) fun P _ => ?_
@@ -384,15 +384,15 @@ theorem X_pint : ∀ (D : D7) (Q : Finset (Pl D.host.E)) (e : AE D), IsIdemSum e
     rw [e1, diagW, Matrix.diagonal_mul]
   have h2 := h1 k l
   by_cases hk : k.val < r
-  · rwa [e2, if_pos hk, one_mul] at h2
-  · rw [if_neg hk] at e2
+  · rwa [e2, ite_eq_left hk, one_mul] at h2
+  · rw [ite_eq_right hk] at e2
     refine GlobalTheory.DilKer.mem_int_of_mul he hϖ (congrFun (congrFun hv k) l) (e2 ▸ h2) fun PP hPP => ?_
     rw [← e2]
     refine (GlobalTheory.AdIsom.resS_eq_zero_iff_cpt PP ⟨_, h2⟩).1 ?_
     have h3 : redM PP (diagW D n r (ϖ : D.host.E) * v * Γ * Γ') k l = 0 := by
       rw [redM_mul' PP hi iΓ', Matrix.mul_apply]
       exact Finset.sum_eq_zero fun j _ => by rw [hz PP hPP k j (by omega) j.2, zero_mul]
-    exact (dif_pos h2).symm.trans h3
+    exact (dite_eq_left h2).symm.trans h3
 
 theorem exists_idF_of_fixed {D : D7} (V : HSp D) (y : (AE D)ˣ) (hy : cA D (y : AE D) = y) : ∃ a, y = idF D a := by
   have h1 : ∀ z : (AE D)ˣ, cA D (z : AE D) = z → IsDetRoot V 1 z := fun z hz => by
@@ -919,16 +919,16 @@ theorem pull_flat (hC : GlobalTheory.Hk3.Core R F) (i : Fin D.R.m) {Q : Finset (
   simp only [actPull, inv_one, flatDat, adjDat, Pi.smul_apply, smul_eq_mul]
   by_cases hx : IsHalf (cA D e) x
   swap
-  · rw [if_neg fun h => hx ((isHalf_actO _ _ x).1 h.1), if_neg fun h => hx h.1, mul_zero]
+  · rw [ite_eq_right fun h => hx ((isHalf_actO _ _ x).1 h.1), ite_eq_right fun h => hx h.1, mul_zero]
   have hx' : IsHalf (cA D e) (actO (Vc D i) (Wc D i) g⁻¹ 1 x) := (isHalf_actO _ _ x).2 hx
   rw [adj_eq (R.βW i) hg hx]
   have hy : toEAf D e • ct (frMapO (Vc D i) (Wc D i) (R.βV i) (R.βW i) (actO (Vc D i) (Wc D i) g⁻¹ 1 x)) =
       ct (frMapO (Vc D i) (Wc D i) (R.βV i) (R.βW i) (actO (Vc D i) (Wc D i) g⁻¹ 1 x)) := smul_ct_frMapO _ _ hx'
   generalize frMapO (Vc D i) (Wc D i) (R.βV i) (R.βW i) (actO (Vc D i) (Wc D i) g⁻¹ 1 x) = y at hy ⊢
   by_cases hi : IsIntM y
-  · rw [if_pos ⟨hx', hi⟩, if_pos ⟨hx, int_mul (int_mul (diagW_int _ _ ϖ) (int_ct hi)) iW⟩]
+  · rw [ite_eq_left ⟨hx', hi⟩, ite_eq_left ⟨hx, int_mul (int_mul (diagW_int _ _ ϖ) (int_ct hi)) iW⟩]
     exact hval y hi
-  · rw [if_neg fun h => hi h.2]
+  · rw [ite_eq_right fun h => hi h.2]
     split_ifs with h
     · unfold omegaQ
       rw [dite_eq_right, mul_zero]
@@ -1002,8 +1002,6 @@ theorem flat_conj_eq_unit_smul_om : ∀ (D : D7) (G : Type) [Group G] [Fintype G
 
 end GlobalTheory.FlipTranslate
 
-theorem _root_.GlobalTheory.T.flatDatum_liftDatum_same_half_translate_conjugatePlaces : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) (A : FamIn D.what₂.LL G Pl0 T0 D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A), GlobalTheory.Hk3.Core R F → QGuard R → ∀ (i : Fin D.R.m) (t : T0), VStd D i → ∀ (B : Base (Vc D i) (Wc D i)) (ψ : Twist D Circle), B.Good → BaseOf R i B → ψ.Good → B.admitted ψ.Q → R.xi t = B.de.chi * ψ.chi → idem (R.Q t) + cA D (idem (R.Q t)) = idem (B.de.Q ∪ ψ.Q) + cA D (idem (B.de.Q ∪ ψ.Q)) → ∀ (eg ea et : AE D) (fg b : WO (Vc D i) (Wc D i) → ℂ), IsIdemSum eg R.Pg → IsIdemSum ea (keepPart (R := R) t (B.de.Q ∪ ψ.Q)) → IsIdemSum et (flipPart (R := R) t (B.de.Q ∪ ψ.Q)) → GlobalTheory.BaseCmp.IsTypeVec R i eg fg → ThAt R i ea fg (GlobalTheory.BaseCmp.flatDat R i (keepPart (R := R) t (B.de.Q ∪ ψ.Q)) (R.xiR t) ea) b → ∃ (z : GA D (Vc D i)) (c : ℂ), SuppAt et (Vc D i) z ∧ SuppAt (idem (R.Q t)) (Vc D i) z ∧ UnitOff (GlobalTheory.TwistField.tupPrime R t) c ∧ ∀ f₁ f₂, ThAt R i (cA D et) b (GlobalTheory.BaseCmp.flatDat R i ((flipPart (R := R) t (B.de.Q ∪ ψ.Q)).image conjPl) (fun PP => B.de.locC PP * ψ.locC PP) (cA D et)) f₁ → ThAt R i (cA D et) b (adjDat R i (flipPart (R := R) t (B.de.Q ∪ ψ.Q)) (R.xiR t) (cA D et)) f₂ → f₁ = c • R.ωP i t (z⁻¹, 1) f₂ :=
-  GlobalTheory.FlipTranslate.flat_conj_eq_unit_smul_om
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -1123,27 +1121,27 @@ theorem adjDat_union {Sa St : Finset (Pl D.host.E)} {ea et : AE D} (hg : IsIdemS
   have hc : cA D (ea + et) = cA D et + cA D ea := by rw [map_add (f := _), add_comm]
   by_cases hx : IsHalf (cA D (ea + et)) x
   · have hx' : IsHalf (cA D et + cA D ea) x := hc ▸ hx
-    rw [if_pos hx', mul_one]
+    rw [ite_eq_left hx', mul_one]
     by_cases hi : IsIntM (frMapAdj _ _ (R.βV i) (R.βW i) x)
     · obtain ⟨i1, i2⟩ := (hA x hx).1 hi
       obtain ⟨r1, r2⟩ := hB x hx hi
-      rw [if_pos (And.intro hx hi), if_pos (And.intro (hcQ x) i2), if_pos (And.intro (hcg x) i1), omegaQ_union hd, mul_comm]
+      rw [ite_eq_left (And.intro hx hi), ite_eq_left (And.intro (hcQ x) i2), ite_eq_left (And.intro (hcg x) i1), omegaQ_union hd, mul_comm]
       refine congrArg₂ (· * ·) ?_ ?_
       · exact GlobalTheory.PlaceVec.omegaQ_congr St _ ξ _ fun PP hPP => (r2 PP hPP).symm
       · exact GlobalTheory.PlaceVec.omegaQ_congr Sa _ ξ _ fun PP hPP => (r1 PP hPP).symm
     · have c1 : ¬ (IsHalf (cA D (ea + et)) x ∧ IsIntM (frMapAdj _ _ (R.βV i) (R.βW i) x)) := fun h => hi h.2
-      rw [if_neg c1]
+      rw [ite_eq_right c1]
       have := mt (hA x hx).2 hi
       rcases not_and_or.1 this with h | h
       · have c3 : ¬ (IsHalf (cA D ea) (cA D ea • x) ∧ IsIntM (frMapAdj _ _ (R.βV i) (R.βW i) (cA D ea • x))) :=
           fun h' => h h'.2
-        rw [if_neg c3, mul_zero]
+        rw [ite_eq_right c3, mul_zero]
       · have c2 : ¬ (IsHalf (cA D et) (cA D et • x) ∧ IsIntM (frMapAdj _ _ (R.βV i) (R.βW i) (cA D et • x))) :=
           fun h' => h h'.2
-        rw [if_neg c2, zero_mul]
+        rw [ite_eq_right c2, zero_mul]
   · have c1 : ¬ (IsHalf (cA D (ea + et)) x ∧ IsIntM (frMapAdj _ _ (R.βV i) (R.βW i) x)) := fun h => hx h.1
     have hx' : ¬ IsHalf (cA D et + cA D ea) x := hc ▸ hx
-    rw [if_neg c1, if_neg hx', mul_zero]
+    rw [ite_eq_right c1, ite_eq_right hx', mul_zero]
 
 end
 
@@ -1198,33 +1196,6 @@ end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.LiftVectorThreeStepDecomposition =====
 
--- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.LiftVectorThreeStepDecompositionStatement =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.LiftVectorThreeStepDecompositionStatement", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.SuppAtMul\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.NabBaseChange\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.LiftVectorThreeStepDecomposition\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AbelianVarietyTheory.Definitions.Divisors.TupleReadBaseTupleEqFamily\n\n"}
-section -- clump:auto
-@[expose] public section
-
-noncomputable section
-open NumberField IsDedekindDomain
-open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.DIV.Cons Formalism.L2.Pj Formalism.L2.DIV Formalism.L2.Indef Formalism.L2.Indef.Tree Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Cx
-open Formalism.IndefR.FWT GlobalTheory.BigTop GlobalTheory.OntoChain GlobalTheory.RealIndexBound GlobalTheory.OnTies GlobalTheory.SeriesTie GlobalTheory.ExportSeries
-open Formalism.MainNotions.StandardLattice Formalism.L2.Theta Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.IndefR.Mult Formalism.IndefR.Datum
-open GlobalTheory.ConjTwist (BaseOf UnitOff)
-open GlobalTheory.FlatVecSum (princ)
-open scoped TensorProduct
-
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-open Classical
-open GlobalTheory.BigOn.Exp.TupLe.Swap
-
-
-theorem _root_.GlobalTheory.T.lift_vector_three_step_decomposition : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) (A : FamIn D.what₂.LL G Pl0 T0 D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A), GlobalTheory.Hk3.Core R F → QGuard R → ∀ (i : Fin D.R.m) (t : T0), VStd D i → ∀ (Sa St : Finset (Pl D.host.E)), Disjoint Sa St → Sa ∪ St = R.Q t → ∀ (eg ea et : AE D) (fg : WO (Vc D i) (Wc D i) → ℂ), IsIdemSum eg R.Pg → IsIdemSum ea Sa → IsIdemSum et St → GlobalTheory.BaseCmp.IsTypeVec R i eg fg → ∃ gA : WO (Vc D i) (Wc D i) → ℂ, ThAt R i (cA D ea) fg (adjDat R i Sa (R.xiR t) (cA D ea)) gA ∧ ThAt R i (cA D et) gA (adjDat R i St (R.xiR t) (cA D et)) (R.vP i t) := by
-  first | exact @GlobalTheory.LiftThreeStep.thetaVector_three_step_decomposition
-end -- clump:auto
-end -- clump:auto
-end -- clump:auto
--- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.LiftVectorThreeStepDecompositionStatement =====
-
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaHalfMovesUnderTranslateOtherPlacesStatement =====
 -- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaHalfMovesUnderTranslateOtherPlacesStatement", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.SuppAtMul\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.NabBaseChange\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaHalfMovesUnderTranslateOtherPlaces\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AbelianVarietyTheory.Definitions.Divisors.TupleReadBaseTupleEqFamily\n\n"}
 section -- clump:auto
@@ -1253,7 +1224,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaHalfMovesUnderTranslateOtherPlacesStatement =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.TraceBoundTuple =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.TraceBoundTuple", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.TwistedInnerProducts.TupPrimeEmpty\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LevelLiftIsLiftPrincipalLevelDatumRealisation\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatDatumLiftDatumSameHalfTranslateConjugatePlac\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatVectorEqUnitSmulCentralTranslatePlacePartStatement\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatVectorThreeStepsConjugatePlacesStatement\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.LatTranslateOfPrime\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.LiftVectorThreeStepDecompositionStatement\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaHalfMovesUnderTranslateOtherPlacesStatement\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.BesselDatumAuxiliaryVectorOrthogonalImage\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.TraceBoundTuple", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.TwistedInnerProducts.TupPrimeEmpty\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LevelLiftIsLiftPrincipalLevelDatumRealisation\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatDatumLiftDatumSameHalfTranslateConjugatePlac\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatVectorEqUnitSmulCentralTranslatePlacePartStatement\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatVectorThreeStepsConjugatePlacesStatement\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.LatTranslateOfPrime\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.SuppAtMul\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.NabBaseChange\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.LiftVectorThreeStepDecomposition\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaHalfMovesUnderTranslateOtherPlacesStatement\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.BesselDatumAuxiliaryVectorOrthogonalImage\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1280,9 +1251,9 @@ theorem flat_gen : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type)
     Finset.disjoint_filter_filter_not _ _ _
   have hun : keepPart (R := R) t (B.de.Q ∪ ψ.Q) ∪ flipPart (R := R) t (B.de.Q ∪ ψ.Q) = R.Q t :=
     Finset.filter_union_filter_not_eq _ _
-  obtain ⟨gA, hgA, hvP⟩ := GlobalTheory.T.lift_vector_three_step_decomposition D G Pl0 T0 A Ks R F hC hQG i t hV _ _ hdisj hun eg ea et fg heg hea het hfg
+  obtain ⟨gA, hgA, hvP⟩ := _root_.GlobalTheory.LiftThreeStep.thetaVector_three_step_decomposition D G Pl0 T0 A Ks R F hC hQG i t hV _ _ hdisj hun eg ea et fg heg hea het hfg
   obtain ⟨zA, cA', hzA, hzA', hcA, hAeq⟩ := GlobalTheory.T.flatVector_eq_unit_smul_centralTranslate_placePart D G Pl0 T0 A Ks R F hC hQG i t hV _ (Finset.filter_subset _ _) eg ea fg heg hea hfg
-  obtain ⟨zT, cT, -, hzT', hcT, hT⟩ := GlobalTheory.T.flatDatum_liftDatum_same_half_translate_conjugatePlaces D G Pl0 T0 A Ks R F hC hQG i t hV B ψ hB hB0 hψ hQ hxi hid eg ea et fg hA heg hea het hfg hhA
+  obtain ⟨zT, cT, -, hzT', hcT, hT⟩ := _root_.GlobalTheory.FlipTranslate.flat_conj_eq_unit_smul_om D G Pl0 T0 A Ks R F hC hQG i t hV B ψ hB hB0 hψ hQ hxi hid eg ea et fg hA heg hea het hfg hhA
   have e1 : hA = cA' • R.ωP i t (zA⁻¹, 1) gA := hAeq hA gA hhA hgA
   have hm := GlobalTheory.T.theta_half_moves_under_translate_other_places D G Pl0 T0 A Ks R F hC hQG i t hV _ _ (Finset.filter_subset _ _) (Finset.filter_subset _ _) hdisj eg ea et fg gA _ _ zA cA'
     heg hea het hfg hgA hzA hcA.1 hvP

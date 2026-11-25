@@ -847,7 +847,7 @@ theorem valsAt_torus_surjective : ∀ (G : Type) [CommGroup G] (τ : G →* G), 
     split_ifs with hij
     · subst hij; rw [hy1]; rfl
     · rw [hy2 j (e i) fun h => hij (he _ _ h)]; rfl
-  simp only [hc, Finset.sum_ite_eq, Finset.mem_univ, if_true]
+  simp only [hc, Finset.sum_ite_eq, Finset.mem_univ, ite_true]
 
 end GlobalTheory.UnitLemma
 end -- clump:auto
@@ -926,8 +926,7 @@ theorem torus_mod_intUnits_structure : ∀ (K : UQ) (B : InvAlg K), B.LieReg →
     rw [B.σ_alg, ha.2.2]
   have hαpos : ∀ m, 0 < Multiplicative.toAdd (w m α) := by
     intro m
-    by_contra hle
-    push_neg at hle
+    by_contra! hle
     have h1 : 0 ≤ Multiplicative.toAdd (w m α⁻¹) := by
       rw [map_inv, toAdd_inv]
       linarith

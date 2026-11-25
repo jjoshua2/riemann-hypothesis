@@ -340,8 +340,6 @@ namespace PositivityTheory.Rg.Sw.HSt.FarP
 
 open PositivityTheory.Rg.Sw PositivityTheory.Rg.Sw.LVs PositivityTheory.Rg.Sw.AbsSt PositivityTheory.Rg.Sw.HSt
 
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
 variable {m n : ℕ} {e : ℤ} {G : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
   {Pp Γ : Subgroup G} {ι : GR n →* G} {s₀ : ℂ} {Ht : G → ℝ≥0} {f : G → ℂ} {U : Set ℂ} {d : Polynomial ℂ}
   {Ê : ℂ → G → ℂ} {t : ℝ}
@@ -794,7 +792,7 @@ theorem farId_of (hC : CurveGR) (hF : FzDer) : FarId := by
       deriv (fun (s : ℝ) => F (x * NormedSpace.exp ((s : ℂ) • if true = true then dir1 (lowQ Q) else dir2 (lowQ Q)))) 0 +
         Complex.I * deriv (fun (s : ℝ) => F (x * NormedSpace.exp ((s : ℂ) • if false = true then dir1 (lowQ Q) else dir2 (lowQ Q)))) 0 := by
     intro F x
-    simp only [rC, dir1, dir2, if_true]
+    simp only [rC, dir1, dir2, ite_true]
     rfl
   choose y₀ C hyC using fun q : GlobalTheory.Eis.Cosets Pp Γ => FarP.termSplit hS hD z (↑(Quotient.out q) * g)
   have d1 := FarP.dirSeries hC hF hD hz (lowQ Q) true g y y₀ C hyC
@@ -861,8 +859,6 @@ namespace PositivityTheory.Rg.Sw.HSt.FL
 
 open PositivityTheory.Rg.Sw PositivityTheory.Rg.Sw.LVs PositivityTheory.Rg.Sw.AbsSt PositivityTheory.Rg.Sw.HSt
 open PositivityTheory.Rg.Sw.LVs.II (cE cE_hasDerivAt0 cE_add cE_zero cE_continuous mulL mulL_apply)
-
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 variable {n : ℕ}
 
@@ -983,8 +979,6 @@ namespace PositivityTheory.Rg.Sw.HSt
 open PositivityTheory.Rg.Sw PositivityTheory.Rg.Sw.LVs PositivityTheory.Rg.Sw.AbsSt PositivityTheory.Rg.Sw.HSt.FL
 open PositivityTheory.Rg.Sw.LVs.II (cE)
 
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
 theorem fzDer : FzDer := by
   intro n m e w Z b
   have hX : IsLie (if b = true then dir1 Z else dir2 Z) := lie_dir Z b
@@ -1051,8 +1045,6 @@ namespace PositivityTheory.Rg.Sw.HSt
 open PositivityTheory.Rg.Sw PositivityTheory.Rg.Sw.LVs PositivityTheory.SiegelWeilFormula PositivityTheory.Rg.Sw.AbsSt
 
 variable {n : ℕ}
-
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 theorem lift_mR (φ : GR n → ℂ) (w : GR n) : lift φ (mR w) = φ w := by
   have h : IsUnit (mR w) ∧ InG (mR w) := ⟨⟨w.1, rfl⟩, w.2⟩

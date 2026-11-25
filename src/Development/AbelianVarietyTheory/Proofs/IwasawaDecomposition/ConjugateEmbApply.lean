@@ -1,5 +1,6 @@
 module
 
+import Development.AbelianVarietyTheory.Proofs.UnitaryExistence.ExistsIndexIdeal
 public import Development.AbelianVarietyTheory.Definitions.Foundations.RootOfUnityEightQMemCoeffGaloisSubfield
 public import Development.AbelianVarietyTheory.Definitions.Foundations.AuxiliaryFrameNormalizedSpaces
 import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsFinsetTypeNormPrincipal
@@ -60,18 +61,7 @@ variable {K K' : Type} [Field K] [Field K'] (f : K →+* K')
 
 theorem span_image_span (s : Set K) :
     Submodule.span (𝓞 K') (f '' (Submodule.span (𝓞 K) s : Set K)) = Submodule.span (𝓞 K') (f '' s) := by
-  refine le_antisymm (Submodule.span_le.2 ?_)
-    (Submodule.span_mono (Set.image_mono Submodule.subset_span))
-  rintro _ ⟨x, hx, rfl⟩
-  induction hx using Submodule.span_induction with
-  | mem x hx => exact Submodule.subset_span ⟨x, hx, rfl⟩
-  | zero => simp
-  | add x y _ _ hx hy => rw [map_add (f := _)]; exact Submodule.add_mem _ hx hy
-  | smul a x _ hx =>
-    have : f (a • x) = RingOfIntegers.mapRingHom f a • f x := by
-      rw [Algebra.smul_def, Algebra.smul_def, map_mul]; rfl
-    rw [this]
-    exact Submodule.smul_mem _ _ hx
+  first | exact _root_.GlobalTheory.BetaEx.span_image_span | exact @_root_.GlobalTheory.BetaEx.span_image_span | apply _root_.GlobalTheory.BetaEx.span_image_span <;> assumption
 
 def extend : Submodule (𝓞 K) K →* Submodule (𝓞 K') K' where
   toFun M := Submodule.span (𝓞 K') (f '' (M : Set K))
@@ -123,17 +113,17 @@ theorem sum_emb_bijective : Function.Bijective
 open Classical in
 def typeExp (p q : ℕ) (σ : H.E →+* ℂ) : ℕ := if ∃ t : Tau R, H.emb t = σ then p else q
 
-theorem typeExp_emb (p q : ℕ) (t : Tau R) : typeExp H p q (H.emb t) = p := if_pos ⟨t, rfl⟩
+theorem typeExp_emb (p q : ℕ) (t : Tau R) : typeExp H p q (H.emb t) = p := ite_eq_left ⟨t, rfl⟩
 
 theorem typeExp_conj (p q : ℕ) (t : Tau R) :
-    typeExp H p q (ComplexEmbedding.conjugate (H.emb t)) = q := if_neg ((emb_cm H _).1 ⟨t, rfl⟩)
+    typeExp H p q (ComplexEmbedding.conjugate (H.emb t)) = q := ite_eq_right ((emb_cm H _).1 ⟨t, rfl⟩)
 
 theorem typeExp_add (p q : ℕ) (σ : H.E →+* ℂ) :
     typeExp H p q σ + typeExp H p q (ComplexEmbedding.conjugate σ) = p + q := by
   unfold typeExp
   by_cases h : ∃ t : Tau R, H.emb t = σ
-  · rw [if_pos h, if_neg ((emb_cm H σ).1 h)]
-  · rw [if_neg h, if_pos (not_not.1 (fun h' => h ((emb_cm H σ).2 h'))), add_comm]
+  · rw [ite_eq_left h, ite_eq_right ((emb_cm H σ).1 h)]
+  · rw [ite_eq_right h, ite_eq_left (not_not.1 (fun h' => h ((emb_cm H σ).2 h'))), add_comm]
 
 theorem prod_typeExp {M : Type} [CommMonoid M] (p q : ℕ) (F : (H.E →+* ℂ) → M) :
     ∏ σ, F σ ^ typeExp H p q σ =

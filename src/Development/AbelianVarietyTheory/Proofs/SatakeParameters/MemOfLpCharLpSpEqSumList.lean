@@ -97,7 +97,6 @@ section -- clump:auto
 @[expose] public section
 
 open NumberField IsDedekindDomain ValuativeRel Matrix Formalism.ConjugateSelfDual ReciprocityTheory.Gal GlobalTheory.PRep GlobalTheory.SmGL GlobalTheory.SplitWeil GlobalTheory.LocGL GlobalTheory.WeilDeligne GlobalTheory.LocLanglands GlobalTheory.LocDict
-attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 noncomputable section
 
@@ -130,14 +129,14 @@ theorem shiftEnd_pow_single_zero (n j : ℕ) (hj : j < n) :
   split_ifs with hi
   · simp only [Pi.single_apply, Fin.ext_iff]
     split_ifs <;> first | rfl | (exfalso; omega)
-  · rw [Pi.single_apply, if_neg]
+  · rw [Pi.single_apply, ite_eq_right]
     intro e
     apply hi
     rw [e]
 
 theorem shiftEnd_pow_eq_zero {n j : ℕ} (hj : n ≤ j) : shiftEnd n ^ j = 0 :=
   LinearMap.ext fun y => funext fun i => by
-    rw [shiftEnd_pow_apply, if_neg (by omega)]
+    rw [shiftEnd_pow_apply, ite_eq_right (by omega)]
     rfl
 
 theorem shiftEnd_pow_self (k : ℕ) : shiftEnd (k + 1) ^ k =
@@ -178,8 +177,7 @@ theorem stable_eq_bot_or_top {ρ : Representation ℂ G V} (hρ : ρ.IsIrreducib
   · exact Or.inr (congrArg Subrepresentation.toSubmodule h)
 
 theorem exists_ne_zero {ρ : Representation ℂ G V} (hρ : ρ.IsIrreducible) : ∃ v : V, v ≠ 0 := by
-  by_contra hall
-  push_neg at hall
+  by_contra! hall
   haveI := hρ
   apply (bot_ne_top : (⊥ : Subrepresentation ρ) ≠ ⊤)
   apply Subrepresentation.ext
@@ -351,15 +349,13 @@ theorem eq_of_hasCopy (a : WDRep h V) (ha : a.ρ.IsIrreducible) (a' : WDRep h V'
   obtain ⟨f, g, hf, hc, hfg⟩ := H
   rw [tensor_sp_N_pow a' hN'] at hfg
   have hmk : m ≤ k := by
-    by_contra hlt
-    push_neg at hlt
+    by_contra! hlt
     obtain ⟨v, hv⟩ := exists_ne_zero ha'
     apply tmul_single_ne_zero (⟨k + 1, by omega⟩ : Fin (m + 1)) hv
     have := LinearMap.congr_fun Z (v ⊗ₜ Pi.single ⟨0, by omega⟩ 1)
     rwa [LinearMap.lTensor_tmul, shiftEnd_pow_single_zero, LinearMap.zero_apply] at this
   have hkm : k ≤ m := by
-    by_contra hlt
-    push_neg at hlt
+    by_contra! hlt
     apply hf
     rw [hfg, shiftEnd_pow_eq_zero (by omega), LinearMap.lTensor_zero, LinearMap.zero_comp]
   obtain rfl : m = k := le_antisymm hmk hkm

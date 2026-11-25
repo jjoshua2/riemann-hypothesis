@@ -786,8 +786,6 @@ namespace Formalism.FourierDecayAlt.P.StandardPairingDecay
 
 open Formalism.FourierDecayAlt Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Matrix Filter Topology
 
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
 def OnOldBound : Prop :=
   ∀ (k ρ : ℕ) (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
     [InnerProductSpace ℂ Wq] (Bs : B.RealPlaceData k ρ Wp Wq) (w : List C.Letter) (m : ℕ),
@@ -1139,8 +1137,6 @@ namespace Formalism.FourierDecayAlt.P.StandardPairingDecay
 
 open Formalism.FourierDecayAlt Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Matrix
 
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
 section one
 
 variable {k ρ : ℕ} {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
@@ -1176,13 +1172,13 @@ theorem waveL_sub_one_ccle (Bs : B.RealPlaceData k ρ Wp Wq) (w : List C.Letter)
       have hp : (3 : ℝ) ^ (l :: w).length = 3 * 3 ^ w.length := by rw [hlen, pow_succ, mul_comm]
       simp only [KB.uInv]
       by_cases he : e 0 = 0
-      · rw [if_pos he]
+      · rw [ite_eq_left he]
         have hxe : x e = x (Fin.cons (0 : Fin 2) (fun a => e a.succ)) := by
           conv_lhs => rw [hce, he]
         refine ⟨JCx2.pd_ccle_mono_c ih0.1 (by rw [hp]; linarith [mul_nonneg h3 hc]), ?_⟩
         rw [hxe]
         exact JCx2.pd_ccle_mono_c ih0.2 (by rw [hp]; linarith [mul_nonneg (mul_nonneg h3 hσ0) hc])
-      · rw [if_neg he]
+      · rw [ite_eq_right he]
         have he1 : e 0 = 1 := by
           rcases Fin.exists_fin_two.1 ⟨e 0, rfl⟩ with h | h
           · exact absurd h he
@@ -1271,8 +1267,6 @@ noncomputable section
 namespace Formalism.FourierDecayAlt.P.StandardPairingDecay
 
 open Formalism.FourierDecayAlt Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Matrix
-
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 theorem bound_on_earlier_region : OnOldBound := by
   intro k ρ Wp Wq _ _ _ _ Bs w m

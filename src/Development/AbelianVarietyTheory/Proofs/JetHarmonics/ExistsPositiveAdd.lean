@@ -119,18 +119,8 @@ theorem _root_.GlobalTheory.LeastExponentCompare.conj_iff (E : Type) [Field E] [
     exact φ₀.injective (by rw [h, complexEmbedding_complexConj, RCLike.star_def])
   · rintro ⟨_, rfl⟩
     refine ⟨fun φ z => by rw [complexEmbedding_complexConj, RCLike.star_def], ?_⟩
-    by_contra hall
-    push_neg at hall
+    by_contra! hall
     exact complexConj_ne_one E (AlgEquiv.ext hall)
-
-section Comparison₂
-variable {Y : Type} [AddCommGroup Y] [Module.Free ℤ Y] [Module.Finite ℤ Y]
-
-def IntegralAreSums (S : Submodule ℝ (Bil Y)) : Prop :=
-  ∀ l : S →ₗ[ℝ] ℝ, (∀ β : S, (∀ a c, ∃ z : ℤ, (β : Bil Y) a c = z) → ∃ z : ℤ, l β = z) →
-    ∃ (m : ℕ) (x x' : Fin m → Y), ∀ β : S, l β = ∑ i, (β : Bil Y) (x i) (x' i)
-
-end Comparison₂
 
 section AtLattice
 variable (E : Type) [Field E] [NumberField E] {Y : Type} [AddCommGroup Y] [Module (𝓞 E) Y]

@@ -114,8 +114,6 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 
 noncomputable section
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace GlobalTheory.TwV
 
 theorem mt_ratId : UnderTie (fun {D L hT Gi Gl Kc Y cX ex t u μ St} A dtU a => ∀ i (hi : i < D.R.m), ∃ e : D.what₂.Tau → ℤ, (∀ τ, ((e τ : ℤ) : ℚ) = (D.hc τ).e ⟨i, hi⟩) ∧ ∀ z : D.host.Eˣ, (z : D.host.E) * D.host.conj (z : D.host.E) = 1 → ∀ y : (letI := D.host.cmStar; Formalism.L2.Herm.unitaryOneFiniteAdeles D.sp.cm), Matrix.GeneralLinearGroup.det y.1 = ratId D.host.F D.host.E z → (((t.O u μ).mt (i + 1) (dtU y) : ℂˣ) : ℂ) = ∏ τ, TaylorLogMetric.embT D τ (z : D.host.E) ^ e τ) := by
@@ -177,7 +175,7 @@ theorem mt_ratId : UnderTie (fun {D L hT Gi Gl Kc Y cX ex t u μ St} A dtU a => 
     by_cases h0 : μ = D.what₂.mu0
     · rw [(hP.ref h0).2]
     · obtain ⟨ξ, hξ, hmt⟩ := hP.tw μ h0 rfl
-      rw [hmt u, twMt, if_pos ⟨by omega, by omega⟩, MonoidHom.mul_apply, hξ]
+      rw [hmt u, twMt, ite_eq_left ⟨by omega, by omega⟩, MonoidHom.mul_apply, hξ]
       have h1 : ((t.tup μ : Chr t.X.F t.X.E t.X.K)) (ratId t.X.F t.X.E k') = 1 := by
         have hm := (t.tup μ).2
         exact hm.1.1.1.1.1 ⟨k', rfl⟩
@@ -307,7 +305,7 @@ theorem fin_mem_Qbar {L : Type} [Field L] [NumberField L] (χ : HChar L) (htame 
   obtain ⟨T, hT⟩ := exists_strictHenselian_absolutely_closed_local_ring χ
   set p : Pu L := ∏ v ∈ T, Pi.mulSingle v (y v) with hp
   have hpv : ∀ v ∈ T, p v = y v := fun v hv => by
-    rw [hp, Finset.prod_apply, Finset.prod_pi_mulSingle, if_pos hv]
+    rw [hp, Finset.prod_apply, Finset.prod_pi_mulSingle, ite_eq_left hv]
   have hsplit : y = p * (p⁻¹ * y) := by rw [mul_inv_cancel_left]
   have hrest : χ.1 (Phi L (p⁻¹ * y)) = 1 :=
     hT _ fun v hv => by rw [Pi.mul_apply, Pi.inv_apply, hpv v hv, inv_mul_cancel]
@@ -351,7 +349,7 @@ theorem mt_mem_Qbar : UnderTie (fun {D L hT Gi Gl Kc Y cX ex t u μ St} A dtU a 
   · obtain ⟨ξ, hξ, hmt⟩ := hP.tw μ hμ rfl
     have e : (t.O u μ).mt (i + 1) = D.muTil (i + 1) * ξ := by
       rw [hmt u]
-      exact if_pos (⟨by omega, by omega⟩ : 1 ≤ i + 1 ∧ i + 1 ≤ D.R.m)
+      exact ite_eq_left (⟨by omega, by omega⟩ : 1 ≤ i + 1 ∧ i + 1 ≤ D.R.m)
     rw [e, MonoidHom.mul_apply, Units.val_mul, ← hx]
     refine mul_mem key ?_
     rw [hξ x, Units.coe_map]
@@ -587,11 +585,6 @@ open NumberField IsDedekindDomain Formalism.L2.Col
 noncomputable section
 namespace GlobalTheory.GprimUnder
 
-theorem conjO_conjO (X : Fields) (a : 𝓞 X.E) : X.conjO (X.conjO a) = a := by
-  apply RingOfIntegers.ext
-  show star (star (a : X.E)) = (a : X.E)
-  exact star_star _
-
 theorem conjO_algebraMap (X : Fields) (hX : X.Ok) (x : 𝓞 X.F) :
     X.conjO (algebraMap (𝓞 X.F) (𝓞 X.E) x) = algebraMap (𝓞 X.F) (𝓞 X.E) x := by
   apply RingOfIntegers.ext
@@ -607,11 +600,11 @@ def conjPrime (X : Fields) (P : HeightOneSpectrum (𝓞 X.E)) : HeightOneSpectru
     obtain ⟨x, hx, hx0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot P.ne_bot
     intro h
     have h1 : X.conjO x ∈ P.asIdeal.comap X.conjO := by
-      rw [Ideal.mem_comap, conjO_conjO]
+      rw [Ideal.mem_comap, Formalism.L2.Col.Fields.conjO_invol]
       exact hx
     rw [h, Ideal.mem_bot] at h1
     apply hx0
-    rw [← conjO_conjO X x, h1, map_zero]
+    rw [← Formalism.L2.Col.Fields.conjO_invol X x, h1, map_zero]
 
 theorem mem_conjPrime (X : Fields) (P : HeightOneSpectrum (𝓞 X.E)) (a : 𝓞 X.E) :
     a ∈ (conjPrime X P).asIdeal ↔ X.conjO a ∈ P.asIdeal := Ideal.mem_comap
@@ -660,15 +653,14 @@ namespace GlobalTheory.UnitCut
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
 
-
 open Classical in
 def cutA (z : FiniteAdeleRing (𝓞 E) E) (hz : ∀ P : HeightOneSpectrum (𝓞 E), Valued.v (z P) ≤ 1)
     (S : Set (HeightOneSpectrum (𝓞 E))) : FiniteAdeleRing (𝓞 E) E :=
   ⟨fun P => if P ∈ S then z P else 1, Filter.Eventually.of_forall fun P => by
     by_cases h : P ∈ S
-    · simp only [h, if_true]
+    · simp only [h, ite_true]
       exact (HeightOneSpectrum.mem_adicCompletionIntegers _ _ _).2 (hz P)
-    · simp only [h, if_false]
+    · simp only [h, ite_false]
       exact one_mem _⟩
 
 open Classical in
@@ -781,10 +773,10 @@ theorem cutU_mem_congN (x : (AfE F E)ˣ) (hx : x ∈ intU F E) {N : ℕ} (hN : 0
         rw [map_inv₀, map_inv₀, ← map_natCast (algebraMap (𝓞 E) E), GlobalTheory.TwistPlaces.valued_int,
           GlobalTheory.TwistPlaces.intValuation_eq_one P (natCast_notMem_of_under h), inv_one]
       have h4 : P ∈ {P : HeightOneSpectrum (𝓞 E) | (N : 𝓞 F) ∉ (P.under (𝓞 F)).asIdeal} := h
-      rw [if_pos h4, map_mul, h3, one_mul]
+      rw [ite_eq_left h4, map_mul, h3, one_mul]
       exact Valuation.map_sub_le _ (int_val hx P) (by rw [map_one])
     · have h4 : P ∉ {P : HeightOneSpectrum (𝓞 E) | (N : 𝓞 F) ∉ (P.under (𝓞 F)).asIdeal} := h
-      rw [if_neg h4, sub_self, mul_zero, map_zero]
+      rw [ite_eq_right h4, sub_self, mul_zero, map_zero]
       exact zero_le'
   · apply (afIso F E).injective
     rw [map_mul, RingEquiv.apply_symm_apply, map_natCast, GlobalTheory.Mem.ReadEx.inv_mul_mul_nat hN, map_sub, map_one]
@@ -891,8 +883,6 @@ noncomputable section
 
 namespace GlobalTheory.TieUnr
 
-
-
 theorem mt_eq_one_of_intUnit : UnderTie (fun {D L hT Gi Gl Kc Y cX ex t u μ St} A dtU a => ∀ i < D.R.m, ∀ y : (letI := D.host.cmStar; Formalism.L2.Herm.unitaryOneFiniteAdeles D.sp.cm), Matrix.GeneralLinearGroup.det y.1 ∈ intU D.host.F D.host.E → (∀ v, UnderSB t μ v → Formalism.UG.prV (E := D.host.E) v ((Matrix.GeneralLinearGroup.det y.1 : (AfE D.host.F D.host.E)ˣ) : AfE D.host.F D.host.E) = 1) → (t.O u μ).mt (i + 1) (dtU y) = 1) := by
   intro D L hT Gi Gl Kc Y cX ex t u μ St A dtU a H T i hi y hint hsupp
   classical
@@ -955,8 +945,7 @@ theorem mt_eq_one_of_intUnit : UnderTie (fun {D L hT Gi Gl Kc Y cX ex t u μ St}
     have h1 := GlobalTheory.Mem.ReadEx.map_toIdl_eq_one (H.mu0 j).tame hxint (fun P hP => ?_)
     · rw [h1]
     · have hg : ∃ k, ((t.Pr.g k : ℕ) : 𝓞 t.X.E) ∈ P.asIdeal := by
-        by_contra hc
-        push_neg at hc
+        by_contra! hc
         exact hP ((H.mu0 j).unr P hc)
       have h2 := hvG P hg
       show Valued.v (GlobalTheory.Mem.Col2.afIso t.X.F t.X.E ((x : AfE t.X.F t.X.E) - 1) P) ≤ _
@@ -978,7 +967,7 @@ theorem mt_eq_one_of_intUnit : UnderTie (fun {D L hT Gi Gl Kc Y cX ex t u μ St}
   · rw [(H.ref hμ).2]
     exact hmu ⟨i, hi⟩
   · obtain ⟨ξ, hξ, hmt⟩ := H.tw μ hμ rfl
-    rw [hmt u, twMt, if_pos ⟨by omega, by omega⟩, MonoidHom.mul_apply, hmu ⟨i, hi⟩, one_mul, hξ x, hxi, map_one]
+    rw [hmt u, twMt, ite_eq_left ⟨by omega, by omega⟩, MonoidHom.mul_apply, hmu ⟨i, hi⟩, one_mul, hξ x, hxi, map_one]
 
 end GlobalTheory.TieUnr
 end -- clump:auto
@@ -996,8 +985,6 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 noncomputable section
 
 namespace GlobalTheory.TwV.MuLawPf
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem generalLinearGroupOne_eq_of_det_eq {R : Type} [CommRing R] {g h : GL (Fin 1) R}
     (e : Matrix.GeneralLinearGroup.det g = Matrix.GeneralLinearGroup.det h) : g = h := by
@@ -1053,8 +1040,6 @@ section D2
 variable {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : G.Inst D L} {Gl : G.LatInst D} {Kc : G.Consts} {Y : DivX D} {cX : ExtraC}
   {ex : Extra D L hT Gi Gl Kc Y cX} {t : KerEntTied ex} {u : D.what₂.Word} {μ : D.what₂.Tup}
   (dtU : Formalism.L2.Herm.unitaryOneFiniteAdeles D.sp.cm →* D.Dt)
-
-
 
 theorem muOf_det_mul (j : ℕ) (x y : Formalism.L2.Herm.unitaryOneFiniteAdeles D.sp.cm) :
     muOf t u μ dtU j (Matrix.GeneralLinearGroup.det x.1 * Matrix.GeneralLinearGroup.det y.1) =

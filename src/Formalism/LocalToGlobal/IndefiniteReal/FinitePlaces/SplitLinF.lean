@@ -22,7 +22,7 @@ public import Formalism.LocalToGlobal.IndefiniteReal.FinitePlaces.LatSelf
 public import Formalism.LocalToGlobal.IndefiniteReal.FinitePlaces.PlaceFinal
 import Formalism.LocalToGlobal.IndefiniteReal.LevelTypeEquivalence.GrowthNorm
 import Mathlib.Tactic.Linter.HaveILetI
-import Formalism.LocalToGlobal.IndefiniteReal.LevelTypeEquivalence.EFinSmulEqOfFinPart
+import Formalism.LocalToGlobal.IndefiniteReal.FinitePlaces.ActsLinOfSplitLin
 import Mathlib.Tactic.Linter.Style
 import Formalism.LocalToGlobal.IndefiniteReal.FinitePlaces.FourExist
 import Formalism.LocalToGlobal.IndefiniteReal.FinitePlaces.PlaceSum
@@ -103,7 +103,7 @@ theorem actO_fix {e e₁ : AE D} (he : e * cA D e = 0) (h1 : e₁ * e = e₁) {g
       rw [← hh i k, mul_comm (e₁ + cA D e₁), mul_assoc, hz k j, mul_zero]
     have h3 : ∑ k, ((mt T h) - 1) i k * t k j = 0 := Finset.sum_eq_zero fun k _ => h2 k
     simp only [Matrix.sub_apply, sub_mul, Finset.sum_sub_distrib, Matrix.one_apply, ite_mul, one_mul, zero_mul,
-      Finset.sum_ite_eq, Finset.mem_univ, if_true] at h3
+      Finset.sum_ite_eq, Finset.mem_univ, ite_true] at h3
     rw [Matrix.mul_apply]
     exact sub_eq_zero.1 h3
   have hR : HMul.hMul (t : Matrix (Fin T.rank) (Fin S.rank) (AE D)) (mt S g) = t := by
@@ -112,7 +112,7 @@ theorem actO_fix {e e₁ : AE D} (he : e * cA D e = 0) (h1 : e₁ * e = e₁) {g
       rw [← hg k j, ← mul_assoc, mul_comm (t i k), hz i k, zero_mul]
     have h3 : ∑ k, t i k * ((mt S g) - 1) k j = 0 := Finset.sum_eq_zero fun k _ => h2 k
     simp only [Matrix.sub_apply, mul_sub, Finset.sum_sub_distrib, Matrix.one_apply, mul_ite, mul_one, mul_zero,
-      Finset.sum_ite_eq', Finset.mem_univ, if_true] at h3
+      Finset.sum_ite_eq', Finset.mem_univ, ite_true] at h3
     rw [Matrix.mul_apply]
     exact sub_eq_zero.1 h3
   have hinv : HMul.hMul (mt S g) (mt S g⁻¹) = (1 : Matrix (Fin S.rank) (Fin S.rank) (AE D)) := by
@@ -372,7 +372,7 @@ theorem chi_sum_X {k : ℕ} [Fintype (Qt k (L ⊓ X))] {y : W} (hy : y ∈ Yk L 
       hLL _ (b.out : ↥(L ⊓ X)).2 y (AddSubgroup.mem_inf.2 ⟨hyL, hy'.1⟩)
     simp only [h1, Finset.sum_const, Finset.card_univ, nsmul_eq_mul, mul_one]
   · have hne : ¬ ∀ x ∈ L ⊓ X, χ x y = 1 := fun hall => hyL (hdY y hy'.1 hall)
-    push_neg at hne
+    push Not at hne
     obtain ⟨u, hu, hχu⟩ := hne
     let m : Qt k (L ⊓ X) := QuotientAddGroup.mk ⟨u, hu⟩
     have hkey : ∀ b : Qt k (L ⊓ X), χ (((b + m).out : ↥(L ⊓ X)) : W) y = χ ((b.out : ↥(L ⊓ X)) : W) y * χ u y := by
@@ -606,7 +606,7 @@ theorem actO_nsmul (g : GA D S) (h : GA D T) (k : ℕ) (t : WO S T) : actO S T g
     rw [zero_smul, zero_smul]
     unfold actO
     rw [Matrix.mul_zero, Matrix.zero_mul]
-  | succ n ih => rw [succ_nsmul, succ_nsmul, Formalism.IndefR.Eqv.actO_add, ih]
+  | succ n ih => rw [succ_nsmul, succ_nsmul, Formalism.IndefR.Fin.LevelGroupLemmas.actO_add, ih]
 
 theorem isHalf_actO_fp {e : AE D} (g : GA D S) (h : GA D T) {t : WO S T} (ht : IsHalf e t) :
     IsHalf e (actO S T g h t) := by
@@ -649,7 +649,7 @@ theorem sb_comp {e : AE D} {Λ : AddSubgroup (WO S T)} (g : GA D S) (h : GA D T)
   refine ⟨fun t ht => (isHalf_actO_iff S T g h t).1 (hs _ ht), k * k₁ * k₂, by positivity,
     fun u hu hue t => ?_, fun t ht => ?_⟩
   · show Φ (actO S T g h (t + (k * k₁ * k₂) • u)) = Φ (actO S T g h t)
-    rw [Formalism.IndefR.Eqv.actO_add, actO_nsmul, show (k * k₁ * k₂) • actO S T g h u =
+    rw [Formalism.IndefR.Fin.LevelGroupLemmas.actO_add, actO_nsmul, show (k * k₁ * k₂) • actO S T g h u =
       k • (k₂ • (k₁ • actO S T g h u)) by rw [smul_smul, smul_smul]; ring_nf]
     exact hi _ (Λ.nsmul_mem (h₁ u hu) k₂)
       (isHalf_nsmul_fp S T (isHalf_nsmul_fp S T (isHalf_actO_fp S T g h hue) k₁) k₂) _
@@ -787,7 +787,7 @@ theorem splitLin_of (hPD : PlaceLatDual D) (hlev : LatLevel D) : SplitLin D := b
         rw [← hTm.trans _ hG _ hqu]
         congr 1
         funext t
-        rw [Formalism.IndefR.Eqv.actO_add, Formalism.IndefR.Eqv.actO_inv_actO, halfInd_add S T hu (half_sub_of S T h1 hue)]
+        rw [Formalism.IndefR.Fin.LevelGroupLemmas.actO_add, Formalism.IndefR.Eqv.actO_inv_actO, halfInd_add S T hu (half_sub_of S T h1 hue)]
       · have hqu : IsHalf (cA D e) (actO S T g⁻¹ h⁻¹ u) := isHalf_actO_fp S T _ _ (chalf_sub_of S T h1 hue)
         rw [← hTm.modul _ hG _ hqu]
         congr 1
@@ -796,7 +796,7 @@ theorem splitLin_of (hPD : PlaceLatDual D) (hlev : LatLevel D) : SplitLin D := b
         · have h1' : symplO S T t (actO S T g⁻¹ h⁻¹ u) = symplO S T (actO S T g h t) u := by
             rw [← Formalism.IndefR.Eqv.symplO_actO S T g h t (actO S T g⁻¹ h⁻¹ u), Formalism.IndefR.Eqv.actO_inv_actO]
           rw [h1', (hd2 u (chalf_sub_of S T h1 hue)).2 hu _ hc.1 hc.2, one_mul]
-        · have : halfInd e (latAll S T ΛS ΛT) (actO S T g h t) = 0 := by unfold halfInd; rw [if_neg hc]
+        · have : halfInd e (latAll S T ΛS ΛT) (actO S T g h t) = 0 := by unfold halfInd; rw [ite_eq_right hc]
           rw [this, mul_zero]
     have hfix : ∀ u ∈ latAll S T ΛS ΛT, (IsHalf e₁ u ∨ IsHalf (cA D e₁) u) →
         heisO ψ S T u (om (g, h) (Tm (fun t => halfInd e (latAll S T ΛS ΛT) (actO S T g h t))) - c • f₀) =
@@ -832,7 +832,7 @@ theorem splitLin_of (hPD : PlaceLatDual D) (hlev : LatLevel D) : SplitLin D := b
       have hq : IsHalf e (actO S T g⁻¹ h⁻¹ x₀) := isHalf_actO_fp S T _ _ hx₀
       have e1 : (fun t => Φ (actO S T g h t + x₀)) =
           fun t => Φ (actO S T g h (t + actO S T g⁻¹ h⁻¹ x₀)) := by
-        funext t; rw [Formalism.IndefR.Eqv.actO_add, Formalism.IndefR.Eqv.actO_inv_actO]
+        funext t; rw [Formalism.IndefR.Fin.LevelGroupLemmas.actO_add, Formalism.IndefR.Eqv.actO_inv_actO]
       show c⁻¹ • om (g, h) (Tm (fun t => Φ (actO S T g h t + x₀))) = _
       rw [e1, hTm.trans _ (hSBp Φ hΦ) _ hq, hω.om_heis g h _ _ (hthm _ (hSBp Φ hΦ)),
         Formalism.IndefR.Eqv.actO_inv_actO, ← heisL_apply, ← heisL_apply, map_smul]
@@ -864,7 +864,7 @@ theorem splitLin_of (hPD : PlaceLatDual D) (hlev : LatLevel D) : SplitLin D := b
       · have h2 := (isHalf_actO_iff S T g h t).2 ht
         simp only [hstab t ht, ht, h2, and_true]
       · have h2 : ¬ IsHalf e (actO S T g h t) := fun h' => ht ((isHalf_actO_iff S T g h t).1 h')
-        simp only [ht, h2, and_false, if_false]
+        simp only [ht, h2, and_false, ite_false]
     rw [hindeq, hf₀T] at hw
     have hU := hω.om_unit μ 𝓕 hHaar hFD (g, h) f₀ hf₀
     rw [hw] at hU

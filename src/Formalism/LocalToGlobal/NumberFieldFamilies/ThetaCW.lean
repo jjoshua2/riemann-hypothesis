@@ -35,11 +35,9 @@ include hδ hδ0 in
 theorem aniso_ex (W : Submodule E V.V) (hW : ∀ y ∈ W, (∀ z ∈ W, V.hT y z = 0) → y = 0) (hne : W ≠ ⊥) :
     ∃ x ∈ W, V.hT x x ≠ 0 := by
   obtain ⟨y, hy, hy0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hne
-  by_contra hall
-  push_neg at hall
+  by_contra! hall
   obtain ⟨z, hz, hz0⟩ : ∃ z ∈ W, V.hT y z ≠ 0 := by
-    by_contra h
-    push_neg at h
+    by_contra! h
     exact hy0 (hW y hy h)
   have q0 : V.hT (y + z) (y + z) = V.hT y y + V.hT y z + V.hT z y + V.hT z z := by
     simp only [map_add (f := _), LinearMap.add_apply]; ring
@@ -166,7 +164,7 @@ theorem real_eq_sqrt_sign_sqrt (l : ℝ) (hl : l ≠ 0) : (l : ℂ) = star ((Rea
     ((Real.sqrt |l| : ℝ) : ℂ) := by
   rw [Complex.star_def, Complex.conj_ofReal]
   conv_lhs => rw [← sqrt_abs_mul_sign_sqrt_abs l hl]
-  by_cases hp : 0 < l <;> simp only [hp, decide_true, decide_false, if_true, if_false, Bool.false_eq_true] <;> push_cast <;> ring
+  by_cases hp : 0 < l <;> simp only [hp, decide_true, decide_false, ite_true, ite_false, Bool.false_eq_true] <;> push_cast <;> ring
 
 end Gen
 

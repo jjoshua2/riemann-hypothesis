@@ -480,12 +480,12 @@ theorem half_lt_laOf (τ : Psi p.T.Q.H) (k : Fin ((dat p i).p + (dat p i).q)) (h
   have h := GlobalTheory.HolRead.lastPos_wtA_of_kapIs D p.T p.κ p.fw.laws p.fw.kap i τ.1 τ.2
   have hm : (dat p i).mult τ.1 = (dat p i).p := by
     unfold Datum.mult
-    exact if_pos τ.2
+    exact ite_eq_left τ.2
   rw [hm] at h
   have h2 : wtA (p.κ i) (τ.1, (dat p i).p - 1) ≤ wtA (p.κ i) (τ.1, k) := (dom_wtA (p.κ i)).1 τ.1 (show (k : ℕ) ≤ _ by omega)
   have h3 := h (by omega)
   unfold laOf weightOf
-  rw [if_pos hk]
+  rw [ite_eq_left hk]
   beta_reduce
   omega
 
@@ -692,8 +692,7 @@ theorem selfAdj_of_pyth (hv : v.IsComplex) (e : V →ₗ[K] V)
     have h2 := h x y
     linarith
   obtain ⟨a, ha⟩ : ∃ a : K, (v.embedding a).im ≠ 0 := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     apply InfinitePlace.isComplex_iff.mp hv
     first
     | (rw [ComplexEmbedding.isReal_iff]; ext t; exact Complex.conj_eq_iff_im.mpr (hcon t))

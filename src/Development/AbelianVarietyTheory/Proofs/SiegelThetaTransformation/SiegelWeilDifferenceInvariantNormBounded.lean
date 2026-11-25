@@ -751,8 +751,7 @@ theorem exists_imag : ∃ (ξ : E) (D : ℕ), ξ ≠ 0 ∧ cc ξ = -ξ ∧ 0 < D
     IsIntegral ℤ ((D : E) * ξ⁻¹) := by
   classical
   obtain ⟨x, hx⟩ : ∃ x : E, cc x ≠ x := by
-    by_contra h
-    push_neg at h
+    by_contra! h
     exact IsCMField.complexConj_ne_one E (AlgEquiv.ext h)
   obtain ⟨y, hy, h⟩ := exists_integral_multiples ℤ ℚ ({x - cc x, (x - cc x)⁻¹} : Finset E)
   have key : ∀ t : E, IsIntegral ℤ (y • t) → IsIntegral ℤ ((y.natAbs : E) * t) := fun t ht => by
@@ -1377,7 +1376,7 @@ theorem sub_mem {h : M2 E (N + 1)} (hh : h ∈ UU E (N + 1))
     have e := hU p (Sum.inl 0)
     rw [ccT_mul_J_mul_apply] at e
     simp only [hl, hr, mul_zero, Finset.sum_const_zero, sub_zero, mul_ite, mul_one, Finset.sum_ite_eq',
-      Finset.mem_univ, if_true] at e
+      Finset.mem_univ, ite_true] at e
     have e2 : Matrix.J (Fin (N + 1)) E p (Sum.inl 0) = (Pi.single (Sum.inr 0) 1 : _ → E) p := by
       rcases p with p | p <;> simp [Matrix.J, Matrix.one_apply, Pi.single_apply]
     rw [e2] at e

@@ -76,8 +76,7 @@ theorem selfDual_pair_nondeg : ∀ (F E : Type) [Field F] [NumberField F] [Field
     (∀ i j, σ (J j i) = J i j) → (∀ y, y ∈ L ↔ ∀ x ∈ L, IsIntegral ℤ (form σ J y x)) →
     ∀ x : Fin n → E, x ≠ 0 → ∃ z ∈ L, form σ J z x ≠ 0 := by
   intro F E _ _ _ _ _ σ hσ n J L hL hJ hdual x hx
-  by_contra hcon
-  push_neg at hcon
+  by_contra! hcon
   have hxw : ∀ w ∈ L, form σ J x w = 0 := fun w hw => by
     rw [sesquilinearFormOfGram_eq_conj_swap F E σ hσ n J x w hJ, hcon w hw, map_zero]
   have hmem : ∀ c : E, c • x ∈ L := fun c => by
@@ -88,7 +87,7 @@ theorem selfDual_pair_nondeg : ∀ (F E : Type) [Field F] [NumberField F] [Field
     rw [this, hxw w hw, mul_zero]
     exact isIntegral_zero
   obtain ⟨i, hi⟩ : ∃ i, x i ≠ 0 := by
-    by_contra h; push_neg at h; exact hx (funext h)
+    by_contra h; push Not at h; exact hx (funext h)
   let f : (Fin n → E) →ₗ[𝓞 E] E := (LinearMap.proj i : (Fin n → E) →ₗ[E] E).restrictScalars (𝓞 E)
   have htop : L.map f = ⊤ := by
     rw [eq_top_iff]

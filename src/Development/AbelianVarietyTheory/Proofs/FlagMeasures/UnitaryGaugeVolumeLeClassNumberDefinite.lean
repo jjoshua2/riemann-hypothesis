@@ -220,7 +220,7 @@ theorem covol_le {r : ℕ} (h : HasSig I r 0) (μf : Measure I.Gf) [SigmaFinite 
     intro z _
     have hq : ∃ x, Quot.mk (Isom I.E I.n) (latOf I h x) = Quot.mk (Isom I.E I.n) (latOf I h z) :=
       ⟨z, rfl⟩
-    have hpt : pt (Quot.mk (Isom I.E I.n) (latOf I h z)) = hq.choose := dif_pos hq
+    have hpt : pt (Quot.mk (Isom I.E I.n) (latOf I h z)) = hq.choose := dite_eq_left hq
     have e : Isom I.E I.n (latOf I h z) (latOf I h hq.choose) :=
       (isom_equivalence I.E I.n).symm
         ((Equivalence.eqvGen_iff (isom_equivalence I.E I.n)).1 (Quot.eqvGen_exact hq.choose_spec))
@@ -249,8 +249,7 @@ theorem gauge_local (N : ℕ) (ε : Fin N → Bool) (hε : ε = allPos N) (c : �
   have hne := GlobalTheory.UnitaryVolume.muG_univ_ne_zero N
   have ht : 0 < (Formalism.REAL.muG (allPos N) Set.univ).toReal := ENNReal.toReal_pos hne hlt.ne
   have hc0 : 0 < c := by
-    by_contra hle
-    push_neg at hle
+    by_contra! hle
     nlinarith [_root_.GlobalTheory.UnitaryVolume.volU_pos N]
   refine ⟨hc0.le, ?_⟩
   rw [← ENNReal.ofReal_toReal hlt.ne, ← ENNReal.ofReal_mul hc0.le, h1]

@@ -17,6 +17,7 @@ import Development.AbelianVarietyTheory.Proofs.DivisorProofs.EventuallyCompFinMe
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.AdelicLocalCompactness.T2SpaceTensorProductFiniteExtension
 import Mathlib.Tactic.Linter.Style
 import Std.Tactic.BVDecide.Normalize.Prop
+import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.WeilRepresentationCovarianceLevi
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.WeilBound.RepresentationTheoryGL.RegularisedSiegelWeil.SingularNullSets.LFixThC, Development.WeilBound.RepresentationTheoryGL.RegularisedSiegelWeil.SingularNullSets.DetMemSubring, Development.WeilBound.RepresentationTheoryGL.RegularisedSiegelWeil.SingularNullSets.LFixThD, Development.WeilBound.RepresentationTheoryGL.RegularisedSiegelWeil.SingularNullSets.LFixTh
@@ -34,7 +35,6 @@ open GlobalTheory.AutomorphicL2Unitary GlobalTheory.AdelicU GlobalTheory.Doublin
 open GlobalTheory.IndefiniteRowSideFullHecke.ModerateGrowthSchwartz (schwartzA)
 open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory.GramSchwartzFunctions.BC PositivityTheory.PfSWUS
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open IsDedekindDomain NumberField
 open GlobalTheory.RegSch (ikS projS Lvl)
 
@@ -67,7 +67,7 @@ theorem eventually_unr {χ : (AE D)ˣ →* Circle} (hχ : IsHeckeChar D χ) :
   filter_upwards [GlobalTheory.ThK.ConeEulerChr.eventually_chr_eq_one (ν := χ) hχ.1 m (Eventually.of_forall hm)] with v hv u hu
   by_contra hne
   have h : ∃ u ∈ GlobalTheory.ThK.unitsAt D.host.E v, χ u ≠ 1 := ⟨u, hu, hne⟩
-  have e : m v = h.choose := dif_pos h
+  have e : m v = h.choose := dite_eq_left h
   exact h.choose_spec.2 (e ▸ hv)
 
 theorem eventually_goodPl {χ : (AE D)ˣ →* Circle} (hχ : IsHeckeChar D χ) (b₀ : HermE D ρ) :
@@ -151,7 +151,6 @@ open GlobalTheory.AutomorphicL2Unitary GlobalTheory.AdelicU GlobalTheory.Doublin
 open GlobalTheory.IndefiniteRowSideFullHecke.ModerateGrowthSchwartz (schwartzA)
 open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory.GramSchwartzFunctions.BC PositivityTheory.PfSWUS
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open IsDedekindDomain NumberField
 open GlobalTheory.RegSch (ikS projS Lvl)
 
@@ -280,7 +279,6 @@ open GlobalTheory.AutomorphicL2Unitary GlobalTheory.AdelicU GlobalTheory.Doublin
 open GlobalTheory.IndefiniteRowSideFullHecke.ModerateGrowthSchwartz (schwartzA)
 open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory.GramSchwartzFunctions.BC PositivityTheory.PfSWUS
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open IsDedekindDomain NumberField
 open GlobalTheory.RegSch (ikS projS Lvl)
 
@@ -310,19 +308,7 @@ theorem map_one_apply {R : Type} [Ring R] (f : AE D →+* R) (i j : Fin n) :
 
 theorem mat_inv_levi {g : G D p} {a : GL (Fin p) (AE D)} (ha : mat g = blk4 a.1 0 0 (adj (a⁻¹).1)) :
     mat g⁻¹ = blk4 (a⁻¹).1 0 0 (adj a.1) := by
-  have h1 : (a⁻¹).1 * a.1 = 1 := a.inv_mul
-  have h2 : adj a.1 * adj (a⁻¹).1 = 1 := by
-    delta GlobalTheory.MixModel.adj
-    rw [← Matrix.transpose_mul, ← Matrix.map_mul, h1, Matrix.map_one _ (map_zero _) (map_one _),
-      Matrix.transpose_one]
-  have hprod : blk4 (a⁻¹).1 0 0 (adj a.1) * blk4 a.1 0 0 (adj (a⁻¹).1) = 1 := by
-    delta GlobalTheory.StdUnn.blk4
-    rw [Matrix.submatrix_mul_equiv, Matrix.fromBlocks_multiply]
-    simp only [Matrix.zero_mul, Matrix.mul_zero, add_zero, zero_add, h1, h2, Matrix.fromBlocks_one]
-    exact Matrix.submatrix_one_equiv _
-  delta GlobalTheory.StdUnn.mat at ha ⊢
-  rw [map_inv]
-  exact Units.inv_eq_of_mul_eq_one_left (by rw [ha]; exact hprod)
+  apply _root_.GlobalTheory.CompanionTheory.EisCovar.mat_inv_levi <;> assumption
 
 private theorem matHom_proj_fst_eq_mat_map_cv (g : G D p) (v : Pl D) :
     (GlobalTheory.AdelicU.matHom _ D.sp.cm.sig (GlobalTheory.StdUnn.Jst D p)
@@ -412,7 +398,7 @@ theorem levi_good {S : Finset (Pl D)} {e : AE D} (he : IsIdem S e) {g : G D p} (
       rw [map_mul, map_mul, map_one_apply]
       by_cases hv : v ∈ S
       · rw [((hb k j).2.1 v hv).1]
-      · rw [he.2 v, if_neg hv, zero_mul, zero_mul]
+      · rw [he.2 v, ite_eq_right hv, zero_mul, zero_mul]
   have hsmul : e • (y * a.1) = e • y := by
     ext i j
     rw [Matrix.smul_apply, Matrix.smul_apply, smul_eq_mul, smul_eq_mul]
@@ -441,8 +427,8 @@ theorem levi_good {S : Finset (Pl D)} {e : AE D} (he : IsIdem S e) {g : G D p} (
       exact hint _ a.1 h fun v hv k j => ((hb k j).2.2 v hv).1
   rw [hf (y * a.1), hf y, hsmul]
   by_cases h : IntOff S y
-  · rw [if_pos (hyI.mpr h), if_pos h]
-  · rw [if_neg (fun h' => h (hyI.mp h')), if_neg h]
+  · rw [ite_eq_left (hyI.mpr h), ite_eq_left h]
+  · rw [ite_eq_right (fun h' => h (hyI.mp h')), ite_eq_right h]
 
 end PositivityTheory.Rg.Rsw.L.LFixTh
 
@@ -464,7 +450,6 @@ open GlobalTheory.AutomorphicL2Unitary GlobalTheory.AdelicU GlobalTheory.Doublin
 open GlobalTheory.IndefiniteRowSideFullHecke.ModerateGrowthSchwartz (schwartzA)
 open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory.GramSchwartzFunctions.BC PositivityTheory.PfSWUS
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open IsDedekindDomain NumberField
 open GlobalTheory.RegSch (ikS projS Lvl)
 
@@ -503,7 +488,7 @@ theorem fixTh : IdemEx → GenG → GenK → FixTh := by
       rw [hΩ.unip g b hb x y, hx]
       by_cases hy : IntOff S y
       · rw [unip_one hSg hSI hg hb hy, one_mul]
-      · rw [hgoodΩ y, if_neg hy, mul_zero]
+      · rw [hgoodΩ y, ite_eq_right hy, mul_zero]
     · have hbl := levi_blocks hg ha
       obtain ⟨h1, h2⟩ := levi_chr hχ hSg a (fun i j w => ((hbl i j).1 w).1) (fun i j v hv => ((hbl i j).2.1 v hv).1)
         (fun i j v hv => (hbl i j).2.2 v hv)

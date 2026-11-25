@@ -53,7 +53,6 @@ section -- clump:auto
 
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.L2.Theta GlobalTheory.Mem.Th MeasureTheory IsDedekindDomain NumberField Matrix GlobalTheory.IndefiniteRowSideFullHecke.BesselData GlobalTheory.RootExch
 open scoped TensorProduct
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 end -- clump:auto
 end -- clump:auto
@@ -68,7 +67,6 @@ noncomputable section
 
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.L2.Theta GlobalTheory.Mem.Th MeasureTheory IsDedekindDomain NumberField Matrix GlobalTheory.IndefiniteRowSideFullHecke.BesselData GlobalTheory.RootExch
 open scoped TensorProduct
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.RootExch.ExStruct
 
@@ -150,8 +148,8 @@ theorem mem_exSet (d : BesselDatum A B ι) {ε : AE D} (h1 : ε * ε = ε) (h0 :
   refine ⟨isK_supp h1 h0 hy hk, fun x => ?_, fun l => ?_, fun l hl => ?_, ?_⟩
   · rw [isK_eps h0 hy hk, vec_dual, zero_smul, neg_zero]
   · rw [isK_eps h0 hy hk, hA_vec, p2, map_zero, zero_smul, neg_zero]
-  · rw [isK_eps h0 hy hk, hA_vec, p1, if_neg hl, map_zero, zero_smul, neg_zero]
-  · rw [isK_eps h0 hy hk, hA_vec, p1, if_pos rfl, map_one, one_smul]
+  · rw [isK_eps h0 hy hk, hA_vec, p1, ite_eq_right hl, map_zero, zero_smul, neg_zero]
+  · rw [isK_eps h0 hy hk, hA_vec, p1, ite_eq_left rfl, map_one, one_smul]
 
 theorem exists_k (d : BesselDatum A B ι) {ε : AE D} (h0 : ε * cA D ε = 0) (i) {t} (ht : ε • t = t) :
     ∃ k : GA D B, IsK B (vecA B (dual d i)) (iA ι t) k := by

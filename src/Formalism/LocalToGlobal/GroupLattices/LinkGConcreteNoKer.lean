@@ -499,7 +499,7 @@ theorem bc_Vsp {n' m : ℕ} (lam0 : Fin n' → Fin (m + 1) → ℤ) (hd : IsDomi
   intro s
   have hanti := kp_lamAt_antitone lam0 hd s
   beta_reduce
-  rw [if_pos hanti, if_pos hanti]
+  rw [ite_eq_left hanti, ite_eq_left hanti]
   exact bc_dualWeyl φK _ _ _
 
 end Lat
@@ -516,15 +516,13 @@ theorem Vsp_bot (K : Type) [Field K] {n' m : ℕ} (lam0 : Fin n' → Fin (m + 1)
     · intro ha
       apply hs
       intro a b hab
-      have h1 := ha (Fin.rev_le_rev.2 hab)
-      simp only [Fin.rev_rev] at h1
-      exact neg_le_neg_iff.1 h1
+      simpa only [Fin.rev_rev, neg_le_neg_iff] using ha (Fin.rev_le_rev.2 hab)
   unfold Vsp tensorLat
   rw [Submodule.span_eq_bot]
   rintro _ ⟨F, hF, rfl⟩
   have h2 := hF s
   beta_reduce at h2
-  rw [if_neg hs'] at h2
+  rw [ite_eq_right hs'] at h2
   apply Finset.prod_eq_zero (Finset.mem_univ s)
   rw [(Submodule.mem_bot _).1 h2, map_zero]
 
@@ -814,8 +812,7 @@ theorem geo_chain (hV : Fr.Valid L₁ N₁) (hT : TieS Fr Dt) (j : ZMod J) (i : 
   · rw [hm, chain_mem Dt hT]
     have hl := l.isLt
     refine ⟨⟨fun h => Or.inr ⟨l, rfl, ?_⟩, ?_⟩, ?_⟩
-    · by_contra hc
-      push_neg at hc
+    · by_contra! hc
       have hi' : i.val < Dt.nL j := lt_of_le_of_lt hc hl
       rw [Formalism.MainNotions.Proposition5Numerics.posU_ll' (Fr := Fr) (segZ j) (Dt.nL j) i.val hi'] at h
       rcases Nat.eq_or_lt_of_le hc with he | hlt
@@ -831,7 +828,7 @@ theorem geo_chain (hV : Fr.Valid L₁ N₁) (hT : TieS Fr Dt) (j : ZMod J) (i : 
           exact Formalism.MainNotions.Proposition5Numerics.llPos_lt (Fr := Fr) (segZ j) l.val i.val hlt (by rw [← hcard]; exact hi')
         · have he : posU Fr (Dt.nL j) (segZ j) i.val = Fr.fr (segZ j) 0 := by
             unfold posU
-            rw [if_neg hi', show i.val - Dt.nL j = 0 by omega]
+            rw [ite_eq_right hi', show i.val - Dt.nL j = 0 by omega]
           rw [he]
           exact (Formalism.MainNotions.NormalSetCounting.ll_between (Fr := Fr) (nL := Dt.nL) hT.2.1 j l).2
     · show Dt.sgn j l = decide (Even (llPos Fr (segZ j) l.val))
@@ -883,10 +880,10 @@ theorem val_chi (hVA : ValAeval) (hV : Fr.Valid L₁ N₁) (hT : TieS Fr Dt) (j 
   · intro v hvL hvS
     have hvL' : v.1 ∈ Fr.letters (segZ j) := hvL
     have hg := geo_chain Dt hV hT j i v.1 hvL'
-    exact ⟨if_pos hvL', hg.1.1 hvS, hg.2⟩
+    exact ⟨ite_eq_left hvL', hg.1.1 hvS, hg.2⟩
   · intro v hvL hvS
     have hvL' : v.1 ∈ Fr.letters (segZ j) := hvL
-    rw [if_pos hvL']
+    rw [ite_eq_left hvL']
     exact X_mem_supported.2 (fun h => hvS ((geo_chain Dt hV hT j i v.1 hvL').1.2 h))
 
 end Geo
@@ -1235,14 +1232,14 @@ theorem fdigPh : FdigPh := by
   rw [map_sum, Finset.mul_sum, hs]
   simp only [ph_monomial_mul, _root_.Formalism.MainNotions.PairMembershipBlocks.Fdig_mono]
   by_cases hd : Dt.digOK rho β
-  · rw [if_pos hd]
+  · rw [ite_eq_left hd]
     conv_rhs => rw [F.as_sum, Finset.mul_sum]
     refine Finset.sum_congr rfl (fun mo hmo => ?_)
-    rw [if_pos ((digOK_phExp Dt hP rho β mo (hsupp mo hmo)).2 hd),
+    rw [ite_eq_left ((digOK_phExp Dt hP rho β mo (hsupp mo hmo)).2 hd),
       liftMon_phExp Dt hP β mo (hsupp mo hmo), monomial_mul]
-  · rw [if_neg hd]
+  · rw [ite_eq_right hd]
     refine Finset.sum_eq_zero (fun mo hmo => ?_)
-    rw [if_neg (fun h => hd ((digOK_phExp Dt hP rho β mo (hsupp mo hmo)).1 h))]
+    rw [ite_eq_right (fun h => hd ((digOK_phExp Dt hP rho β mo (hsupp mo hmo)).1 h))]
 
 end Formalism.MainNotions.LetterSubstitution
 end -- clump:auto

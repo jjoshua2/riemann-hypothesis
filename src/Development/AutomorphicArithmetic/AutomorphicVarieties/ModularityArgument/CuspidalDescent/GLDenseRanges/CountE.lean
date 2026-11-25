@@ -366,8 +366,7 @@ private lemma isot_factor {G H W W' X Y : Type} [Group G] [Group H] [AddCommGrou
     Isot κ' τ := by
   obtain ⟨w0, hw0⟩ := _root_.exists_ne (0 : W)
   obtain ⟨φ, hφ⟩ : ∃ φ : Module.Dual ℂ W, φ w0 ≠ 0 := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     exact hw0 ((Module.forall_dual_apply_eq_zero_iff ℂ w0).1 hcon)
   let p : X →ₗ[ℂ] Y := (TensorProduct.lid ℂ Y).toLinearMap ∘ₗ
     (TensorProduct.map φ LinearMap.id) ∘ₗ f.symm.toLinearMap
@@ -871,7 +870,7 @@ private theorem span_pi {I : Type} [Finite I] {M : I → Type} [∀ i, AddCommGr
   have hm : S.mkQ.compMultilinearMap (PiTensorProduct.mapMultilinear ℂ M M) = 0 := by
     refine MultilinearMap.ext_of_span_eq_top (g := fun i (x : H i) => ρ i x) h fun y => ?_
     obtain ⟨x, hx, hx'⟩ := hx y Finset.univ
-    simp only [Finset.mem_univ, if_true] at hx'
+    simp only [Finset.mem_univ, ite_true] at hx'
     refine (Submodule.Quotient.mk_eq_zero S).2 (Submodule.subset_span ⟨⟨x, hx⟩, ?_⟩)
     simp only [hx']
     rfl

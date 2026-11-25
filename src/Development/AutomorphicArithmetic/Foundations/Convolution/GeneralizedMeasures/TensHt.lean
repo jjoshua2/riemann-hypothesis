@@ -149,9 +149,9 @@ private theorem module_le (q : Pl F) (x : AdelicGLn.FiniteAdelicGL E n)
   rw [hf]
   by_cases hb : AdeleBaseChange.below F v = q
   · have := hq ⟨v, liesOver_of_below hb⟩
-    simp only [ne_eq, hb, not_true_eq_false, if_false, one_pow]
+    simp only [ne_eq, hb, not_true_eq_false, ite_false, one_pow]
     exact this.le
-  · rw [if_pos hb]
+  · rw [ite_eq_left hb]
     exact norm_det_le_pow _
 
 end SlopeTestRemainingChoices
@@ -180,8 +180,7 @@ theorem UpperTheory.ConvolutionTheory.GM.tensHt : TensHt := by
   refine ⟨?_, he0⟩
   have hk := left_ne_zero_of_mul hg'
   obtain ⟨s, hs⟩ : ∃ s, β (infPart E n (g : AdelicGLn.AdelicGL E n) * zInf E n s) ≠ 0 := by
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     exact hk (by simp [kbar, hc])
   set x := finPart E n (g : AdelicGLn.AdelicGL E n) with hx
   set G := infEmb E n (infPart E n (g : AdelicGLn.AdelicGL E n)) with hG

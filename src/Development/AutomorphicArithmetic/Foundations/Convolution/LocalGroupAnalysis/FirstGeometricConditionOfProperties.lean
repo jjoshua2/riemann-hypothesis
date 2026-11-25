@@ -200,8 +200,8 @@ private theorem mult_smul (σ : E ≃ₐ[F] E) (w : InfinitePlace E) : (σ • w
   have h : (σ • w).IsReal ↔ w.IsReal := InfinitePlace.isReal_smul_iff
   unfold InfinitePlace.mult
   by_cases hw : w.IsReal
-  · rw [if_pos (h.2 hw), if_pos hw]
-  · rw [if_neg (fun h' => hw (h.1 h')), if_neg hw]
+  · rw [ite_eq_left (h.2 hw), ite_eq_left hw]
+  · rw [ite_eq_right (fun h' => hw (h.1 h')), ite_eq_right hw]
 
 private theorem inf_prod (σ : E ≃ₐ[F] E) {n : ℕ} (g : AdelicGLn.AdelicGL E n) :
     (∏ w : InfinitePlace E, AutomorphicForm.locHeight (infAt w (mapGL n (galAd σ) g)) ^ w.mult) =
@@ -373,8 +373,7 @@ private lemma norm_root_charpoly_le {n : ℕ} (M : Matrix (Fin n) (Fin n) ℂ) (
     rw [← Matrix.eval_charpoly]; exact hz
   obtain ⟨v, hv, hMv⟩ := Matrix.exists_mulVec_eq_zero_iff.mpr hdet
   obtain ⟨i0, hi0⟩ : ∃ i, v i ≠ 0 := by
-    by_contra h
-    push_neg at h
+    by_contra! h
     exact hv (funext h)
   obtain ⟨i, -, hi⟩ := Finset.exists_max_image Finset.univ (fun j => ‖v j‖) ⟨i0, Finset.mem_univ _⟩
   have hvi : 0 < ‖v i‖ := lt_of_lt_of_le (norm_pos_iff.mpr hi0) (hi i0 (Finset.mem_univ _))

@@ -101,7 +101,7 @@ theorem arMono_mapDomain_some {Ψ : Type} [Fintype Ψ] {N : ℕ} (M : RootModel 
   have hmain := arNum_linear_arList_symm.2 M.K M.ι M.P (dimFl Ψ N) M.arith (II M.K M.ι) (hII M.K M.ι) _ _ hsm
     (by simpa [Function.comp_def, RootModel.line] using hperm)
   unfold RootModel.arMono
-  rw [if_pos hdeg, hnone, pow_zero, mul_one]
+  rw [ite_eq_left hdeg, hnone, pow_zero, mul_one]
   congr 1
   exact hmain.symm
 
@@ -345,7 +345,7 @@ theorem GlobalTheory.CompanionTheory.Ar.Num.cycList_zp_eq_sum_places : ∀ (K : 
     rw [finsum_eq_sum_of_support_subset (s := T)]
     · refine Finset.sum_congr rfl fun W hW => ?_
       beta_reduce
-      rw [if_pos (Finset.mem_filter.mp hW).2]
+      rw [ite_eq_left (Finset.mem_filter.mp hW).2]
     · intro W hW
       rw [Function.mem_support] at hW
       have h1 := left_ne_zero_of_mul hW
@@ -353,7 +353,7 @@ theorem GlobalTheory.CompanionTheory.Ar.Num.cycList_zp_eq_sum_places : ∀ (K : 
       by_cases hc : (C (((p : ℕ) : ℤ)) : MRing ι ℤ) ∈ W
       · exact Finset.mem_coe.mpr (Finset.mem_filter.mpr ⟨hfinZ.mem_toFinset.mpr h1, hc⟩)
       · beta_reduce at h2
-        rw [if_neg hc] at h2
+        rw [ite_eq_right hc] at h2
         exact absurd rfl h2
   have hRight : ∀ l, cycList (divCycle (pointIdeal (O l) y) (MvPolynomial.map (Int.castRingHom (O l)) f)) L =
       ∑ W ∈ Tl l, divCycle (pointIdeal (O l) y) (MvPolynomial.map (Int.castRingHom (O l)) f) W * vNumL W L := fun l => by
@@ -1103,10 +1103,7 @@ theorem length_toNat_ne_zero {S : Type} [CommRing S] [IsNoetherianRing S] {J W :
 theorem facts_of_divCycle_ne_zero {K : Type} {ι : K → Type} {R : Type} [CommRing R]
     {P W : Ideal (MRing ι R)} {f : MRing ι R} (h : divCycle P f W ≠ 0) :
     W ∈ (P ⊔ Ideal.span {f}).minimalPrimes ∧ IsRelevant W := by
-  by_contra hc
-  apply h
-  unfold divCycle
-  rw [dite_eq_right hc]
+  apply _root_.GlobalTheory.CompanionTheory.Ar.Num.Places.mem_of_divCycle_ne_zero <;> assumption
 
 theorem fibre_comp : ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (ϖ : O), Irreducible ϖ → ∀ (K : Type) [Fintype K] [DecidableEq K] (ι : K → Type) [∀ k, Fintype (ι k)] (P : Ideal (MRing ι O)) (d : ℕ), IsModelOver P d → (∀ W, IsFibreComp P W ↔ divCycle P (C ϖ) W ≠ 0) ∧ (∀ (a : K → ℕ) (f : MRing ι O), IsMultiHomog f a → f ∉ P → ∀ W, divCycle P f W ≠ 0 → (C ϖ : MRing ι O) ∈ W → IsFibreComp P W) ∧ ∀ (b : K → ℤ) (f g : MRing ι O), IsVerticalDivisor P ϖ b f g → ∀ W, ratDiv P f g W ≠ 0 → IsFibreComp P W := by
   intro O _ _ _ ϖ hϖ K _ _ ι _ P d hP
@@ -1344,7 +1341,7 @@ theorem vertAt_two_of_ne (P : Ideal (MRing ι ℤ)) (p : Nat.Primes) (hp : (p : 
         rw [← C_mul, ← C_mul, ← C_add, hab, C_1]
       rw [this]
       exact W.add_mem (W.mul_mem_left _ hpW) (W.mul_mem_left _ h2)
-    exact mul_eq_zero_of_right _ (if_neg hpW)
+    exact mul_eq_zero_of_right _ (ite_eq_right hpW)
 
 theorem ptsIntegral_one_eq_vertAt (P : Ideal (MRing ι ℤ)) (D : ℕ) (hP : IsArithVar P (D + 1))
     (I : Ideal (MRing ι ℤ) → (n : ℕ) → (Fin n → HermLine ι) → ℝ) (hI : IsIntersectionFamily I)
@@ -1501,7 +1498,7 @@ theorem geoMono_mapDomain_some (M : RootModel Ψ N) [DecidableEq M.K] (II : Inte
   have hlen : (Finsupp.toMultiset (μ.mapDomain some)).toList.length = dimFl Ψ N := by
     rw [Multiset.length_toList, hmap, Multiset.card_map, hcard]
   unfold RootModel.geoMono
-  rw [if_pos hdeg, hnone, pow_zero, mul_one]
+  rw [ite_eq_left hdeg, hnone, pow_zero, mul_one]
   set L := monoLines (M.line 1) (μ.mapDomain some) (dimFl Ψ N) with hLdef
   have hL : ∀ k : Fin (dimFl Ψ N), L k = M.line 1 ((Finsupp.toMultiset (μ.mapDomain some)).toList.get
       ⟨k, by rw [hlen]; exact k.2⟩) := by
@@ -1577,8 +1574,7 @@ theorem exists_monomial_mixExpansion {σ : Type} [Fintype σ] (d : ℕ) :
   | succ d ih =>
     intro s hs
     obtain ⟨i, hi⟩ : ∃ i, s i ≠ 0 := by
-      by_contra h
-      push_neg at h
+      by_contra! h
       have h0 : s = 0 := Finsupp.ext h
       simp [h0] at hs
     have hle : Finsupp.single i 1 ≤ s := by
@@ -1601,7 +1597,7 @@ theorem exists_monomial_mixExpansion {σ : Type} [Fintype σ] (d : ℕ) :
         rw [monomial_add_single, pow_one, map_mul, map_mul, rename_X, rename_X]
         ring
       rw [key, hG', Finset.mul_sum]
-      simp only [mul_add, Finset.sum_add_distrib, mul_ite, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+      simp only [mul_add, Finset.sum_add_distrib, mul_ite, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
       congr 1
       exact Finset.sum_congr rfl fun j _ => by ring
     · have h2 : (X (Sum.inr i) * G' j : MvPolynomial (σ ⊕ σ) ℝ).IsHomogeneous d := by

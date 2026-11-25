@@ -52,8 +52,6 @@ open ReciprocityTheory.ChartRestriction.G.Semi (Gm)
 open GlobalTheory.DeRham (spOver spOver_comp GrpMor)
 open GlobalTheory.Cris (dp0)
 
-attribute [local instance] Over.cartesianMonoidalCategory
-
 namespace GlobalTheory
 
 namespace PDiv
@@ -622,12 +620,6 @@ theorem existsUnique_lieCorr [IsAdicComplete (Ideal.span {(p : O)}) O] (hv : IsT
 end Lie
 
 end TorsionTower
-
-section Values
-
-variable (p O) [Fact p.Prime]
-
-end Values
 
 end PDivGroup
 

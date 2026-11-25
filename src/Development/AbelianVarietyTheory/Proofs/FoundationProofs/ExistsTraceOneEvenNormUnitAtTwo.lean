@@ -54,8 +54,7 @@ namespace GlobalTheory.EvenTheta
 
 theorem norm_eq_one_or_of_add_eq_one {L : Type*} [NormedField L] [IsUltrametricDist L] {b c : L}
     (h : b + c = 1) (hn : ‖b * c‖ < 1) : ‖b‖ = 1 ∨ ‖c‖ = 1 := by
-  by_contra hne
-  push_neg at hne
+  by_contra! hne
   obtain ⟨hb, hc⟩ := hne
   rw [norm_mul] at hn
   have h1 : ‖c‖ = max 1 ‖b‖ := by
@@ -107,13 +106,13 @@ theorem exists_int_trace_one_unit_at_two :
   have hQ : StandardLatticesGL3.w0 D ∈ Qbar := ha ▸ hm _
   have hQ' : 1 - StandardLatticesGL3.w0 D ∈ Qbar := Qbar.sub_mem Qbar.one_mem hQ
   have hadd : lamC lam (StandardLatticesGL3.w0 D) + lamC lam (1 - StandardLatticesGL3.w0 D) = 1 := by
-    simp only [lamC, dif_pos hQ, dif_pos hQ']
+    simp only [lamC, dite_eq_left hQ, dite_eq_left hQ']
     rw [← map_add (f := _), ← map_one lam]
     congr 1
     apply Subtype.ext
     simp
   have hmul : lamC lam (StandardLatticesGL3.w0 D) * lamC lam (1 - StandardLatticesGL3.w0 D) = ((2 * k : ℕ) : ℂ_[2]) := by
-    simp only [lamC, dif_pos hQ, dif_pos hQ']
+    simp only [lamC, dite_eq_left hQ, dite_eq_left hQ']
     rw [← map_mul, ← map_natCast lam]
     congr 1
     apply Subtype.ext

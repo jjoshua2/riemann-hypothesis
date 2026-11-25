@@ -619,8 +619,7 @@ theorem finiteModule_lt_one {b : (FiniteAdeleRing (𝓞 k) k)ˣ}
     finiteModule (ofFinite b) < 1 := by
   classical
   obtain ⟨v, hv⟩ : ∃ v : HeightOneSpectrum (𝓞 k), ‖(b : FiniteAdeleRing (𝓞 k) k) v‖ < 1 := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     refine hu ((mem_finiteIntegralUnits k).2 fun v ↦ ⟨mem_integralFiniteAdeles.1 hb v, ?_⟩)
     have hv1 : ‖(b : FiniteAdeleRing (𝓞 k) k) v‖ = 1 :=
       le_antisymm (norm_le_one_of_mem_OH hb v) (hcon v)
@@ -692,7 +691,7 @@ theorem norm_integrand_le {g : (Unit → FiniteAdeleRing (𝓞 k) k) → ℂ} (�
   have hL : (b : FiniteAdeleRing (𝓞 k) k) ∈ idealFiniteAdeles (1 : (FractionalIdeal (𝓞 k)⁰ k)ˣ) := by
     rw [← SetLike.mem_coe, idealFiniteAdeles_one]
     exact hO
-  rw [finiteZetaBound, if_pos hL]
+  rw [finiteZetaBound, ite_eq_left hL]
   have hpow : finiteModule (ofFinite b) ^ (n : ℝ) ≤ finiteModule (ofFinite b) ^ (2 : ℝ) :=
     Real.rpow_le_rpow_of_exponent_ge (finiteModule_pos _) (finiteModule_le_one hO)
       (by exact_mod_cast hn)
@@ -843,7 +842,7 @@ theorem zFinPos : ZFinPos := by
       rw [hgb] at h0
       exact hr0.ne' (by exact_mod_cast h0)
     rw [Function.mem_support]
-    simp only [F, G, finiteZetaBound, if_pos hmem, hgb, Complex.ofReal_re]
+    simp only [F, G, finiteZetaBound, ite_eq_left hmem, hgb, Complex.ofReal_re]
     exact (mul_pos hr0 (Real.rpow_pos_of_pos (finiteModule_pos _) _)).ne'
   have hpos : 0 < finiteIdeleMeasure K (Function.support F) :=
     (hUo.measure_pos _ ⟨1, h1U⟩).trans_le (measure_mono hUsub)
@@ -1116,8 +1115,7 @@ theorem supp : ColLaw → InMTop → Supp := by
       linarith
     linarith
   have hex : ∃ n, C n ⊆ O := by
-    by_contra hno
-    push_neg at hno
+    by_contra! hno
     obtain ⟨κ, hκ⟩ := IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed
       (fun n => C n \ O) (fun n => Set.diff_subset_diff_left (hanti n))
       (fun n => Set.nonempty_of_not_subset (hno n)) ((hCcl 0).sdiff hO).isCompact
@@ -1606,16 +1604,16 @@ theorem liftUnit : LiftUnit := by
   have hf : ∀ v : HeightOneSpectrum (𝓞 k), f v ∈ v.adicCompletionIntegers k := by
     intro v
     by_cases hv : Valued.v (M : v.adicCompletion k) < 1
-    · simp only [f, if_pos hv]
+    · simp only [f, ite_eq_left hv]
       exact ha v
-    · simp only [f, if_neg hv]
+    · simp only [f, ite_eq_right hv]
       exact one_mem _
   have hg : ∀ v : HeightOneSpectrum (𝓞 k), g v ∈ v.adicCompletionIntegers k := by
     intro v
     by_cases hv : Valued.v (M : v.adicCompletion k) < 1
-    · simp only [g, if_pos hv]
+    · simp only [g, ite_eq_left hv]
       rw [HeightOneSpectrum.mem_adicCompletionIntegers (𝓞 k) k v, map_inv₀, hunit v hv, inv_one]
-    · simp only [g, if_neg hv]
+    · simp only [g, ite_eq_right hv]
       exact one_mem _
   let F : FiniteAdeleRing (𝓞 k) k := RestrictedProduct.mk f (Filter.Eventually.of_forall hf)
   let G : FiniteAdeleRing (𝓞 k) k := RestrictedProduct.mk g (Filter.Eventually.of_forall hg)
@@ -1623,12 +1621,12 @@ theorem liftUnit : LiftUnit := by
     refine RestrictedProduct.ext _ _ fun v => ?_
     show f v * g v = 1
     by_cases hv : Valued.v (M : v.adicCompletion k) < 1
-    · simp only [f, g, if_pos hv]
+    · simp only [f, g, ite_eq_left hv]
       refine mul_inv_cancel₀ fun h0 => ?_
       have h1 := hunit v hv
       rw [h0, map_zero] at h1
       exact zero_ne_one h1
-    · simp only [f, g, if_neg hv, mul_one]
+    · simp only [f, g, ite_eq_right hv, mul_one]
   have hGF : G * F = 1 := by
     rw [mul_comm]
     exact hFG
@@ -1642,9 +1640,9 @@ theorem liftUnit : LiftUnit := by
   have hY : ∀ v : HeightOneSpectrum (𝓞 k), Y v ∈ v.adicCompletionIntegers k := by
     intro v
     by_cases hv : Valued.v (M : v.adicCompletion k) < 1
-    · simp only [Y, if_pos hv]
+    · simp only [Y, ite_eq_left hv]
       exact zero_mem _
-    · simp only [Y, if_neg hv]
+    · simp only [Y, ite_eq_right hv]
       have hM1 : Valued.v (M : v.adicCompletion k) = 1 := le_antisymm (hMle v) (not_lt.mp hv)
       rw [HeightOneSpectrum.mem_adicCompletionIntegers (𝓞 k) k v, map_mul, map_inv₀, hM1, inv_one,
         mul_one]
@@ -1654,8 +1652,8 @@ theorem liftUnit : LiftUnit := by
   refine RestrictedProduct.ext _ _ fun v => ?_
   show a v - f v = (M : v.adicCompletion k) * Y v
   by_cases hv : Valued.v (M : v.adicCompletion k) < 1
-  · simp only [f, Y, if_pos hv, sub_self, mul_zero]
-  · simp only [f, Y, if_neg hv]
+  · simp only [f, Y, ite_eq_left hv, sub_self, mul_zero]
+  · simp only [f, Y, ite_eq_right hv]
     rw [mul_comm, mul_assoc, inv_mul_cancel₀ (hM0 v), mul_one]
 
 end GlobalTheory.CompanionTheory.EisTF

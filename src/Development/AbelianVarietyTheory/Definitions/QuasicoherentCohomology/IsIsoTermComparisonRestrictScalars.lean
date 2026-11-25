@@ -12,52 +12,8 @@ public import Mathlib.RingTheory.Flat.Basic
 public import Mathlib.Tactic.Monotonicity.Lemmas
 public import Mathlib.Algebra.Homology.HomologicalComplexAbelian
 public import Mathlib.Algebra.Homology.ShortComplex.ModuleCat
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
 import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.HaveILetI
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 
 @[expose] public section
@@ -182,10 +138,10 @@ def extend (A : Cube.{v} ι R) (p : ℕ) : Term A p →ₗ[R] ∀ s, A.obj s whe
   map_smul' r x := by ext s; by_cases h : s.card = p <;> simp [h]
 
 theorem extend_apply_of_eq (A : Cube.{v} ι R) {p : ℕ} (x : Term A p) {s : Finset ι}
-    (h : s.card = p) : extend A p x s = x ⟨s, h⟩ := dif_pos h
+    (h : s.card = p) : extend A p x s = x ⟨s, h⟩ := dite_eq_left h
 
 theorem extend_apply_of_ne (A : Cube.{v} ι R) {p : ℕ} (x : Term A p) {s : Finset ι}
-    (h : s.card ≠ p) : extend A p x s = 0 := dif_neg h
+    (h : s.card ≠ p) : extend A p x s = 0 := dite_eq_right h
 
 def termMap {A B : Cube.{v} ι R} (φ : A ⟶ B) (p : ℕ) : Term A p →ₗ[R] Term B p where
   toFun x s := (φ.app s.1).hom (x s)
@@ -619,12 +575,6 @@ theorem cubeComplex_exactAt_of_bijective (A : Cube.{v} ι R) (i : ι)
 
 end Complex
 
-section Linear
-
-variable {ι : Type} [LinearOrder ι] {R : Type u} [CommRing R]
-
-end Linear
-
 section ChangeOfRings
 
 variable {ι : Type} {R : Type u} [Ring R] {S : Type u'} [Ring S]
@@ -906,7 +856,7 @@ theorem Cube.directSumIncl_proj (A : κ → Cube.{v} ι R) (k : κ) :
 theorem Cube.directSumIncl_proj_of_ne (A : κ → Cube.{v} ι R) {k j : κ} (h : k ≠ j) :
     Cube.directSumIncl A k ≫ Cube.directSumProj A j = 0 := by
   ext s x
-  exact (DirectSum.component.of (M := fun k => (A k).obj s) R j k x).trans (dif_neg h)
+  exact (DirectSum.component.of (M := fun k => (A k).obj s) R j k x).trans (dite_eq_right h)
 
 theorem Cube.exists_sum_directSum [Finite ι] (A : κ → Cube.{v} ι R) (p : ℕ)
     (z : Cube.Term (Cube.directSum A) p) : ∃ T : Finset κ,
@@ -952,9 +902,5 @@ section TwoDirections
 variable {R : Type u} [Ring R]
 
 end TwoDirections
-
-section Examples
-
-end Examples
 
 end GlobalTheory

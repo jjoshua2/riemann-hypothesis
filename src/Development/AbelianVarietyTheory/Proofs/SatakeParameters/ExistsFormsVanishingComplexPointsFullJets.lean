@@ -280,8 +280,7 @@ theorem lin_mem (c : Fin (N + 1) → ℂ) : lin c ∈ ProjSpace.grading ℂ N 1 
 
 theorem exists_X_notMem (z : PSpace ℂ N) :
     ∃ l, (MvPolynomial.X l : MvPolynomial (Fin (N + 1)) ℂ) ∉ z.asHomogeneousIdeal.toIdeal := by
-  by_contra h
-  push_neg at h
+  by_contra! h
   have hle : Ideal.span (Set.range (MvPolynomial.X : Fin (N + 1) → MvPolynomial (Fin (N + 1)) ℂ)) ≤
       z.asHomogeneousIdeal.toIdeal := by
     rw [Ideal.span_le]
@@ -352,14 +351,6 @@ theorem Lm_apply (hp : ι ≫ PSpace.str ℂ N = p) (c : Fin (N + 1) → ℂ) :
   ev₀_algebraMap, mul_sub]
 
 end Cot
-
-section Range
-
-variable {X : Scheme.{0}} {p : X ⟶ Sp ℂ} (ι : X ⟶ PSpace ℂ N) (g₀ : MvPolynomial (Fin (N + 1)) ℂ)
-  (hg₀ : g₀ ∈ ProjSpace.grading ℂ N 1) {y : CxPts p (RingHom.id ℂ)}
-  (hy : y ∈ CxPts.ptsIn p (RingHom.id ℂ) (fOpen ι g₀))
-
-end Range
 
 end GlobalTheory.EtProj.Generic
 end -- clump:auto

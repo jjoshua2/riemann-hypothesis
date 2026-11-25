@@ -151,8 +151,6 @@ lemma rpow_compare {K : ℝ} (hK : 0 < K) (A : ℝ) {x y : ℝ} (hx : 0 < x) (hy
     calc x ^ A ≤ y ^ A / K ^ A := this
       _ = _ := by ring
 
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
 variable {k r : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
 
 end GlobalTheory.SOrb.CCBridge
@@ -312,7 +310,7 @@ theorem gap_of_nodes (D : D7) (τ : D.what₂.Tau) (h : ℝ) (hanti : StrictAnti
         apply hne
         unfold epsSH epsS
         simp only [Fin.val_cast]
-        rw [if_pos (by omega)]
+        rw [ite_eq_left (by omega)]
         split_ifs
         · rfl
         · have : b.val - (D.R.k - 1) = 0 := by omega

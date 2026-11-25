@@ -917,7 +917,7 @@ theorem UpperTheory.V.Af.Tw.unrAE :
   intro v hv
   simp only [Set.mem_setOf_eq] at hv
   unfold UpperTheory.V.Af.Tw.Unr at hv
-  push_neg at hv
+  push Not at hv
   obtain ⟨w, rfl, he⟩ := hv
   refine ⟨w, ?_, rfl⟩
   have hle : Ideal.map (algebraMap (𝓞 F) (𝓞 L)) (HeightOneSpectrum.under (𝓞 F) w).asIdeal ≤
@@ -952,8 +952,7 @@ theorem UpperTheory.V.Af.Tw.verGroup :
   have hnorm : R.Normal := Subgroup.normal_of_index_eq_two hidx
   have hsq : ∀ g, g ∉ R → g * g ∈ R := fun g _ => (hmem g g).mpr Iff.rfl
   obtain ⟨g0, hg0⟩ : ∃ g0 : Γ, g0 ∉ R := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     have htop : R = ⊤ := eq_top_iff.mpr fun x _ => hcon x
     rw [htop, Subgroup.index_top] at hidx
     exact absurd hidx (by norm_num)
@@ -989,8 +988,8 @@ theorem UpperTheory.V.Af.Tw.verGroup :
     rw [e1, kmul _ (R.mul_mem hc hx') _ (R.inv_mem hc), kmul _ hc _ hx', kinv _ hc,
       mul_inv_cancel_comm]
   let f : Γ → B := fun γ => if γ ∈ R then k γ * k (g0 * γ * g0⁻¹) else k (γ * γ)
-  have fin : ∀ γ, γ ∈ R → f γ = k γ * k (g0 * γ * g0⁻¹) := fun γ h => if_pos h
-  have fout : ∀ γ, γ ∉ R → f γ = k (γ * γ) := fun γ h => if_neg h
+  have fin : ∀ γ, γ ∈ R → f γ = k γ * k (g0 * γ * g0⁻¹) := fun γ h => ite_eq_left h
+  have fout : ∀ γ, γ ∉ R → f γ = k (γ * γ) := fun γ h => ite_eq_right h
   have fmul : ∀ x y, f (x * y) = f x * f y := by
     intro x y
     by_cases hx : x ∈ R <;> by_cases hy : y ∈ R

@@ -157,7 +157,7 @@ theorem eval_trunc'_eq_sum {R σ : Type} [CommRing R] [Fintype σ] [DecidableEq 
     · exact absurd rfl hm
   rw [MvPolynomial.eval_eq, Finset.sum_subset hsub]
   · refine Finset.sum_congr rfl fun m hm => ?_
-    rw [coeff_trunc', if_pos (Finset.mem_Iic.mp hm)]
+    rw [coeff_trunc', ite_eq_left (Finset.mem_Iic.mp hm)]
   · intro m _ hm
     rw [MvPolynomial.notMem_support_iff.mp hm, zero_mul]
 
@@ -254,8 +254,7 @@ theorem trunc'_eval_dvd_of_order :
     · simp [hc]
     · have hdeg : ¬ β.degree < (Fintype.card σ * N₀ + 1) * k := fun hlt => hc (hh β hlt)
       have : ∃ i, N₀ * k ≤ β i := by
-        by_contra hne
-        push_neg at hne
+        by_contra! hne
         apply hdeg
         rw [Finsupp.degree_eq_sum]
         calc ∑ i, β i ≤ ∑ _i : σ, N₀ * k := Finset.sum_le_sum (fun i _ => (hne i).le)
@@ -308,8 +307,7 @@ theorem GlobalTheory.tail_subst_small : ∀ (p : ℕ) [Fact p.Prime] (B O Q : Ty
         simp [hg, coeff_trunc', hα]
       rw [hcg]
       obtain ⟨i, hi⟩ : ∃ i, M < α i := by
-        by_contra h
-        push_neg at h
+        by_contra! h
         exact hα (fun i => by simpa using h i)
       obtain ⟨b, -, hb⟩ := hD α i
       obtain ⟨v, n', hn', hdec⟩ := Nat.exists_eq_pow_mul_and_not_dvd (n := α i) (by omega) p hpr.one_lt.ne'

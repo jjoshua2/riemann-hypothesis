@@ -68,7 +68,6 @@ section -- clump:auto
 
 open MeasureTheory NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.LocalSplitGroups Formalism.L2.SG.HidaSetting Formalism.L2.SG.TermOp Formalism.L2.SG.Full Formalism.L2.SG.RowsConc Formalism.L2.SG.NGData Formalism.L2.SG.TermLoc GlobalTheory.HL GlobalTheory.LocOver
 open scoped Pointwise ENNReal Classical
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 noncomputable section
 open scoped ComplexConjugate InnerProductSpace
@@ -180,7 +179,7 @@ theorem pinned_form (νq : X.B.I.Ginf → Measure X.B.I.Ginf) (hP : Formalism.L2
   haveI := FiniteDimensional.complete ℂ (X.Vpi u)
   set γw := Formalism.L2.SG.RealObj.gamW X u u' w with hγw
   have hγwP : Formalism.L2.SG.RealObj.IsPtRep X u u' w γw := by
-    simp only [hγw, Formalism.L2.SG.RealObj.gamW, dif_pos hreal]; exact hreal.choose_spec
+    simp only [hγw, Formalism.L2.SG.RealObj.gamW, dite_eq_left hreal]; exact hreal.choose_spec
   obtain ⟨μw, hμwH, hμwQ, hμwS⟩ := hP.2 w hreal
   set cj : X.B.I.Ginf → X.B.I.Ginf := fun y => g * y * g⁻¹ with hcj
   have hcjm : Measurable cj := (measurable_const_mul g).mul_const g⁻¹
@@ -235,7 +234,7 @@ theorem pinned_form (νq : X.B.I.Ginf → Measure X.B.I.Ginf) (hP : Formalism.L2
     exact (lintegral_mul_left_eq_self f g).symm
   have hFE : ∃ Ω, IsSFund X.B.I (ROinf t) Ω := Formalism.L2.SG.Pf.fundExistsC_holds D X Y u u' t
   have hFO : IsSFund X.B.I (ROinf t) (FundOf t) := by
-    unfold FundOf; rw [dif_pos hFE]; exact hFE.choose_spec
+    unfold FundOf; rw [dite_eq_left hFE]; exact hFE.choose_spec
   set Γ0 := ROsub X (X.Fu u) (X.Fu u') t.lam t.lam' t.lin with hΓ0
   have hKu : ∀ r ∈ Rset t, ∃! s, s ∈ ROinf t ∧ s * r ∈ FundOf t := by
     intro r _
@@ -316,7 +315,6 @@ section -- clump:auto
 
 open MeasureTheory NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.LocalSplitGroups Formalism.L2.SG.HidaSetting Formalism.L2.SG.TermOp Formalism.L2.SG.Full Formalism.L2.SG.RowsConc Formalism.L2.SG.NGData Formalism.L2.SG.TermLoc GlobalTheory.HL GlobalTheory.LocOver
 open scoped Pointwise ENNReal Classical
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 end -- clump:auto
 end -- clump:auto

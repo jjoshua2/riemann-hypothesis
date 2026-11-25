@@ -384,8 +384,7 @@ theorem exists_hom_near :
           rw [e] at h
           exact h
       have h1 : ∃ y ∈ B, (toMat f)ᵀ *ᵥ y ≠ 0 := by
-        by_contra hcon
-        push_neg at hcon
+        by_contra! hcon
         have : Matrix.toLin' (toMat f)ᵀ = 0 := LinearMap.ext_on hBs fun x hx => hcon x hx
         have h0 : (toMat f)ᵀ = 0 := by simpa using this
         apply hf
@@ -1001,7 +1000,7 @@ theorem exists_invol (I : AutInst) (x : I.GA) (w : InfinitePlace I.E) :
   by_cases h : w.embedding = I.φ (w.comap (algebraMap I.F I.E))
   · refine ⟨RingHom.id ℂ, fun z => rfl, fun z => rfl, fun a => by rw [h]; rfl, ?_⟩
     unfold frm
-    rw [if_pos h]
+    rw [ite_eq_left h]
     ext i j
     simp
   · have h2 : ComplexEmbedding.conjugate w.embedding = I.φ (w.comap (algebraMap I.F I.E)) :=
@@ -1010,7 +1009,7 @@ theorem exists_invol (I : AutInst) (x : I.GA) (w : InfinitePlace I.E) :
     · rw [← h2]
       simp [ComplexEmbedding.conjugate_coe_eq]
     · unfold frm
-      rw [if_neg h]
+      rw [ite_eq_right h]
 
 private theorem map_conj_mulVec_map_inv_mulVec {n : ℕ} (σ : ℂ →+* ℂ) (M T : Matrix (Fin n) (Fin n) ℂ) (hM : IsUnit M.det)
     (u : Fin n → ℂ) :

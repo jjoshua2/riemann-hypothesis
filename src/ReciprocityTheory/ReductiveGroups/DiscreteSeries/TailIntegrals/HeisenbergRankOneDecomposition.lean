@@ -1,5 +1,6 @@
 module
 
+import ReciprocityTheory.ReductiveGroups.DiscreteSeries.TailIntegrals.ProdIicCastLE
 public import ReciprocityTheory.ReductiveGroups.DiscreteSeries.TailIntegrals.Phi2
 public import ReciprocityTheory.ReductiveGroups.DiscreteSeries.TailIntegrals.GoodRowsProjectorApplyEqSum
 public import Mathlib.Analysis.Matrix.PosDef
@@ -281,11 +282,11 @@ private theorem herm_es0_left_eq_star_apply_zero (k r' : ℕ) (w : Fin (2 * (1 +
 
 private theorem e0_apply_last_eq_zero (k r' : ℕ) : e0 k r' ⟨2 * (1 + r') + k, by omega⟩ = 0 := by
   rw [goodRowsProjector_apply_eq_sum]
-  exact if_neg (show ¬(2 * (1 + r') + k = 0) by omega)
+  exact ite_eq_right (show ¬(2 * (1 + r') + k = 0) by omega)
 
 private theorem e0_apply_zero_eq_one (k r' : ℕ) : e0 k r' ⟨0, by omega⟩ = 1 := by
   rw [goodRowsProjector_apply_eq_sum]
-  exact if_pos rfl
+  exact ite_eq_left rfl
 
 theorem heisenberg_first_basis {k r' : ℕ} (hHA : HeisAct) (x : HPar k r') : heis0 k r' x *ᵥ e0 k r' = e0 k r' := by
   rw [heis0, hHA k r', herm_e0_left_eq_star_apply_last, herm_e0_left_eq_star_apply_last,
@@ -314,29 +315,29 @@ theorem ea_heis_lift {k r' : ℕ} (hHA : HeisAct) (x : HPar k r') (v : Fin (2 * 
 
 theorem last_basis_zero (k r' : ℕ) : es0 k r' 0 = 0 := by
   rw [es0_apply_eq_ite]
-  exact if_neg (by first | (rw [Fin.val_zero]; omega) | simp | omega)
+  exact ite_eq_right (by first | (rw [Fin.val_zero]; omega) | simp | omega)
 
 theorem first_basis_zero (k r' : ℕ) : e0 k r' 0 = 1 := by
   rw [goodRowsProjector_apply_eq_sum]
-  exact if_pos (by first | rfl | simp)
+  exact ite_eq_left (by first | rfl | simp)
 
 theorem last_basis_middle_zero (k r' : ℕ) (j : Fin (2 * r' + k + 1)) : es0 k r' (mp k r' j) = 0 := by
   have hj := j.isLt
   rw [es0_apply_eq_ite]
-  exact if_neg (by simp only [mp]; omega)
+  exact ite_eq_right (by simp only [mp]; omega)
 
 theorem first_basis_middle_zero (k r' : ℕ) (j : Fin (2 * r' + k + 1)) : e0 k r' (mp k r' j) = 0 := by
   rw [goodRowsProjector_apply_eq_sum]
-  exact if_neg (by simp only [mp]; omega)
+  exact ite_eq_right (by simp only [mp]; omega)
 
 theorem ea_phiV_app {k r : ℕ} (b : Fin (r + 1)) (i : Fin (2 * r + k + 1)) :
     phiV k r b i = if b.val < r then (if i.val = 2 * r + k - b.val then 1 else 0) else
       ((Real.sqrt 2)⁻¹ : ℂ) * ((if i.val = r then 1 else 0) + (if i.val = r + k then 1 else 0)) := by
   simp only [phiV]
   by_cases h1 : b.val < r
-  · rw [dite_eq_left h1, if_pos h1]
+  · rw [dite_eq_left h1, ite_eq_left h1]
     simp only [bvec, Pi.single_apply, esI, Fin.ext_iff]
-  · rw [dite_eq_right h1, if_neg h1]
+  · rw [dite_eq_right h1, ite_eq_right h1]
     simp only [epsV, bvec, Pi.smul_apply, Pi.add_apply, smul_eq_mul, Pi.single_apply, wI, Fin.ext_iff,
       Fin.val_zero, Fin.val_last, Nat.add_zero]
 
@@ -345,12 +346,12 @@ theorem ea_phiV'_app {k r : ℕ} (hk : 1 ≤ k) (b : Fin (r + 1)) (i : Fin (2 * 
       ((Real.sqrt 2)⁻¹ : ℂ) * ((if i.val = r then 1 else 0) - (if i.val = r + k then 1 else 0)) := by
   simp only [phiV']
   by_cases h1 : b.val < r
-  · rw [if_pos h1]
+  · rw [ite_eq_left h1]
     simp only [phiV]
     rw [dite_eq_left h1, mulVec_bvec_eq_fun_apply]
     simp only [Hpk, esI, Fin.ext_iff]
     split_ifs <;> first | rfl | (exfalso; omega)
-  · rw [if_neg h1]
+  · rw [ite_eq_right h1]
     simp only [phiV]
     rw [dite_eq_right h1, epsV, Matrix.mulVec_smul, Matrix.mulVec_add, mulVec_bvec_eq_fun_apply, mulVec_bvec_eq_fun_apply]
     have c1 : Hpk k r i (wI k r 0) = if i.val = r then 1 else 0 := by
@@ -366,7 +367,7 @@ theorem ea_sum_ind {n : ℕ} (j : ℕ) (hj : j < n) : ∑ i : Fin n, (if i.val =
   rw [Finset.sum_eq_single (⟨j, hj⟩ : Fin n)]
   · simp
   · intro b _ hb
-    rw [if_neg]
+    rw [ite_eq_right]
     intro h
     exact hb (Fin.ext h)
   · intro h; exact absurd (Finset.mem_univ _) h
@@ -407,29 +408,7 @@ private theorem star_inv_sqrt_two_mul_sum_ite_eq_sub (k r : ℕ) (hk : 1 ≤ k) 
 
 theorem ea_phiV'_herm {k r : ℕ} (hk : 1 ≤ k) (a b : Fin (r + 1)) :
     herm (Hpk k r) (phiV' k r a) (phiV' k r b) = 0 := by
-  have e : Hpk k r *ᵥ phiV' k r a = phiV k r a := by
-    rw [phiV', Matrix.mulVec_mulVec, hpk_sq_lemma, Matrix.one_mulVec]
-  rw [herm, e]
-  show ∑ i, star (phiV' k r b i) * phiV k r a i = 0
-  simp only [ea_phiV'_app hk, ea_phiV_app]
-  have ha := a.isLt
-  have hb := b.isLt
-  by_cases h1 : a.val < r <;> by_cases h2 : b.val < r
-  · simp only [if_pos h1, if_pos h2]
-    apply Finset.sum_eq_zero
-    intro i _
-    split_ifs <;> first | (exfalso; omega) | simp
-  · simp only [if_pos h1, if_neg h2]
-    apply Finset.sum_eq_zero
-    intro i _
-    split_ifs <;> first | (exfalso; omega) | simp
-  · simp only [if_neg h1, if_pos h2]
-    apply Finset.sum_eq_zero
-    intro i _
-    split_ifs <;> first | (exfalso; omega) | simp
-  · simp only [if_neg h1, if_neg h2, star_inv_sqrt_two_mul_sum_ite_eq_sub k r hk]
-    rw [Finset.sum_sub_distrib, ← Finset.mul_sum, ← Finset.mul_sum,
-      ea_sum_ind (n := 2 * r + k + 1) r (by omega), ea_sum_ind (n := 2 * r + k + 1) (r + k) (by omega), sub_self]
+  apply ReciprocityTheory.ChartRestriction.DS.Xi.GS.phiV'_iso' <;> assumption
 
 theorem ea_phiV'_li {k r : ℕ} (hk : 1 ≤ k) : LinearIndependent ℂ (phiV' k r) := by
   rw [Fintype.linearIndependent_iff]

@@ -747,8 +747,8 @@ theorem exists_realLines_chart : ∀ (F E : Type) [Field F] [NumberField F] [Fie
     intro w a t
     by_cases hw : (q.symm a).1 = w
     · subst hw
-      simp only [δ, Zw, if_pos rfl, projArch_embArch_self, hy]
-    · simp only [δ, Zw, if_neg hw, smul_zero, NormedSpace.exp_zero, projArch_embArch_ne σ J (Ne.symm hw), map_one]
+      simp only [δ, Zw, ite_eq_left rfl, projArch_embArch_self, hy]
+    · simp only [δ, Zw, ite_eq_right hw, smul_zero, NormedSpace.exp_zero, projArch_embArch_ne σ J (Ne.symm hw), map_one]
   have hunit : ∀ w (g : GArch σ J w), (archMat σ J (τ w) g)ᴴ * H w * archMat σ J (τ w) g = H w := fun w g => by
     rw [GlobalTheory.Orb.archMat_eq_archEquiv J h]
     exact (archEquiv J h (τ w) g).2
@@ -762,13 +762,13 @@ theorem exists_realLines_chart : ∀ (F E : Type) [Field F] [NumberField F] [Fie
       simpa using q.injective hi
     have hZj : ∀ i, Zw w (q ⟨w, i⟩) = (b w i : Matrix (Fin n) (Fin n) ℂ) := fun i => by
       show (if (q.symm (q ⟨w, i⟩)).1 = w then Zg (q ⟨w, i⟩) else 0) = _
-      rw [if_pos (by simp)]
+      rw [ite_eq_left (by simp)]
       show ((b (q.symm (q ⟨w, i⟩)).1 (q.symm (q ⟨w, i⟩)).2 : Matrix (Fin n) (Fin n) ℂ)) = _
       rw [q.symm_apply_apply]
     refine _root_.GlobalTheory.UnitaryGroupChart.unitary_chart n (H w) (hHh w) (hHu w) _ (e w) (Zw w) (fun i => q ⟨w, i⟩) hj ?_ ?_ ?_ ?_
     · intro a ha
       simp only [Zw]
-      rw [if_neg]
+      rw [ite_eq_right]
       intro hw
       apply ha
       rcases hqa : q.symm a with ⟨w', i⟩
@@ -1021,7 +1021,6 @@ end General
 
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.L2.Theta Matrix
 open scoped TensorProduct
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Published GlobalTheory.Published.AutFin GlobalTheory.StdPar GlobalTheory.ThK.SmoothLev GlobalTheory.CompanionTheory.Hypotheses₂.ConstFin
 
 theorem isSmModOn_constAlong : ∀ (D : D7) (V : HSp D) (m : ℕ) (X Y : Matrix (Fin V.rank) (Fin m) D.host.E), GlobalTheory.SiegelSet.IsWittFrame D.sp.cm.sig V.gram X Y → ∀ S T : Finset (Fin m), S ⊆ T → T.Nonempty → ∀ φ c : GA D V → ℂ, IsSmModOn D.sp.cm.sig V.gram (leftSub V X Y S : Set (GA D V)) φ → IsConstAlong D.sp.cm.sig V.gram X T φ c → IsSmModOn D.sp.cm.sig V.gram (leftSub V X Y T : Set (GA D V)) c ∧ ∀ l : List (ℝ → GA D V), (∀ γ ∈ l, GlobalTheory.SiegelSet.IsRealLine D.sp.cm.sig V.gram γ) → IsConstAlong D.sp.cm.sig V.gram X T (l.foldr GlobalTheory.SiegelSet.lineDer φ) (l.foldr GlobalTheory.SiegelSet.lineDer c) := by
@@ -1069,8 +1068,6 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 open scoped TensorProduct
 
 noncomputable section
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.CompanionTheory.Hypotheses₂.ConstFin.TypeKeep
 
@@ -1193,7 +1190,6 @@ section -- clump:auto
 
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.L2.Theta Matrix
 open scoped TensorProduct
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Published GlobalTheory.Published.AutFin GlobalTheory.StdPar GlobalTheory.ThK.SmoothLev GlobalTheory.CompanionTheory.Hypotheses₂.ConstFin
 
 noncomputable section
@@ -1324,8 +1320,6 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 open scoped TensorProduct
 
 noncomputable section
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.CompanionTheory.Hypotheses₂.ConstFin.Rg
 
@@ -1485,8 +1479,6 @@ open scoped TensorProduct
 
 noncomputable section
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
 namespace GlobalTheory.CompanionTheory.Hypotheses₂.HCF.Rg
 
 open GlobalTheory.Published GlobalTheory.Published.AutFin
@@ -1556,14 +1548,14 @@ theorem finite_of_cusp_of_constTerm {D : D7} (θ : D.what₂.Tau → (Ainf D.hos
   have hRfin : ∀ i, FiniteDimensional ℂ (R i) := fun i => by
     by_cases h : hex i.val
     · have e : R i = Submodule.span ℂ (GlobalTheory.Cusp.constTerm (GlobalTheory.Cusp.frameFlag h.choose_spec) '' forms θ V U ε fr ρ c) :=
-        dif_pos h
+        dite_eq_left h
       rw [e]; exact hct _ _ h.choose_spec
-    · have e : R i = ⊥ := dif_neg h
+    · have e : R i = ⊥ := dite_eq_right h
       rw [e]; infer_instance
   let T : ∀ i : Fin (V.rank + 1), S →ₗ[ℂ] R i := fun i =>
     if h : hex i.val then
       (Tm i.val h).codRestrict (R i) (fun f => by
-        simp only [R, dif_pos h]
+        simp only [R, dite_eq_left h]
         exact Submodule.subset_span ⟨f.1, hmem f, rfl⟩)
     else 0
   let Ψ : S →ₗ[ℂ] (∀ i, R i) := LinearMap.pi T

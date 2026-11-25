@@ -6,51 +6,9 @@ public import Formalism.LocalToGlobal.Divisibility.Numbers
 public import Development.AbelianVarietyTheory.Proofs.UnramifiedDepth.ExistsMulInvolutionAddOneMemPow
 public import Formalism.LocalToGlobal.CharacterGerms.CartesianBoundOnCurves
 public import Formalism.LocalToGlobal.CharacterGerms.RowTieLab
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Geometry.Euclidean.Volume.Basic
 public import Mathlib.LinearAlgebra.FreeModule.IdealQuotient
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
 public import Mathlib.NumberTheory.NumberField.Discriminant.Different
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.KrullDimension.PID
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.Valuation.Integral
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.Lemma
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
 import Std.Tactic.BVDecide.Normalize.BitVec
 import Std.Tactic.BVDecide.Normalize.Prop
 public import Mathlib.NumberTheory.NumberField.Discriminant.Basic
@@ -571,8 +529,8 @@ lemma tauN_ord (N : NumDatum) (pl : RPl N.R → (E →+* ℂ)) (l : ℕ) (ho : O
   unfold tauN
   rw [pos_add_ord]
   by_cases h : Even n
-  · rw [if_pos h, if_neg (Nat.not_even_iff_odd.2 (h.add_odd ho))]
-  · rw [if_neg h, if_pos ((Nat.not_even_iff_odd.1 h).add_odd ho), conj_conj]
+  · rw [ite_eq_left h, ite_eq_right (Nat.not_even_iff_odd.2 (h.add_odd ho))]
+  · rw [ite_eq_right h, ite_eq_left ((Nat.not_even_iff_odd.1 h).add_odd ho), conj_conj]
 
 theorem exists_lab {lv : Level H} (c : Coeff lv) (N : NumDatum) (pl : RPl N.R → (E →+* ℂ)) (hinj : Function.Injective pl)
     (hpsi : ∀ τ, InPsi H τ ↔ ∃ z, pl z = τ) (T : CDVR) (io : c.F →+* T.Fr) (C : Type) [Field C] [CharZero C] (V : VF C)
@@ -616,13 +574,13 @@ theorem exists_lab {lv : Level H} (c : Coeff lv) (N : NumDatum) (pl : RPl N.R �
       rw [b4]
     dsimp only [tau, tauN] at h
     by_cases a : Even s.val <;> by_cases b : Even s'.val
-    · rw [if_pos a, if_pos b] at h
+    · rw [ite_eq_left a, ite_eq_left b] at h
       exact main (hinj h) (by tauto)
-    · rw [if_pos a, if_neg b] at h
+    · rw [ite_eq_left a, ite_eq_right b] at h
       exact absurd h (hne _ _)
-    · rw [if_neg a, if_pos b] at h
+    · rw [ite_eq_right a, ite_eq_left b] at h
       exact absurd h.symm (hne _ _)
-    · rw [if_neg a, if_neg b] at h
+    · rw [ite_eq_right a, ite_eq_right b] at h
       exact main (hinj (hcinj h)) (by tauto)
   have hd0 : (N.ordP V.l : ZMod (2 * N.ordP V.l)) ≠ 0 := by
     rw [Ne, ZMod.natCast_eq_zero_iff]
@@ -644,9 +602,9 @@ theorem exists_lab {lv : Level H} (c : Coeff lv) (N : NumDatum) (pl : RPl N.R �
     unfold tauN
     rw [← pos_add]
     by_cases h : Even a.val
-    · rw [if_pos h, if_neg (fun hh => Nat.even_add_one.1 hh h)]
+    · rw [ite_eq_left h, ite_eq_right (fun hh => Nat.even_add_one.1 hh h)]
       exact hf _ _
-    · rw [if_neg h, if_pos (Nat.even_add_one.2 h)]
+    · rw [ite_eq_right h, ite_eq_left (Nat.even_add_one.2 h)]
       have := hf (N.pos V.l o.1 a.val) (H.bar x)
       simp only [emA3, RingHom.comp_apply, embK_conj_bar, conj_conj] at this ⊢
       exact this
@@ -668,8 +626,8 @@ theorem exists_lab {lv : Level H} (c : Coeff lv) (N : NumDatum) (pl : RPl N.R �
     unfold tauN
     rw [hp.2]
     by_cases h : Even p.2.val
-    · rw [if_pos h]; exact Or.inl rfl
-    · rw [if_neg h]; exact Or.inr (conj_conj _)
+    · rw [ite_eq_left h]; exact Or.inl rfl
+    · rw [ite_eq_right h]; exact Or.inr (conj_conj _)
   have key2 : ∀ σ : E →+* ℂ, (∃ x : {z // z ∈ Z} × ZMod (2 * N.ordP V.l), tau x.1 x.2 = σ) →
       ∃ x : {z // z ∈ Z} × ZMod (2 * N.ordP V.l), tau x.1 x.2 = ComplexEmbedding.conjugate σ := by
     rintro σ ⟨x, rfl⟩

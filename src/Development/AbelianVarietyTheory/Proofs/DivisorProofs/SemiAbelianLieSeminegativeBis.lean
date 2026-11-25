@@ -107,10 +107,7 @@ open Matrix
 
 lemma det_one_add_vmv {R : Type} [CommRing R] {n : ℕ} (a b : Fin n → R) :
     (1 + Matrix.vecMulVec a b).det = 1 + b ⬝ᵥ a := by
-  have h := Matrix.det_one_add_replicateCol_mul_replicateRow (ι := Unit) a b
-  have e : Matrix.replicateCol Unit a * Matrix.replicateRow Unit b = Matrix.vecMulVec a b := by
-    ext i j; simp [Matrix.mul_apply, Matrix.vecMulVec_apply]
-  rwa [e] at h
+  rw [Matrix.vecMulVec_eq Unit, Matrix.det_one_add_replicateCol_mul_replicateRow]
 
 variable {k F : Type} [Field k] [Field F] [Algebra k F]
 
@@ -140,9 +137,9 @@ lemma exists_u (v : Place k F) {r : ℕ} (y : Fin (r+1) → F) (hy : y ≠ 0) :
       exact div_le_one_of_le₀ (hle j) zero_le'
   have hu0y : ∀ j, (u0 *ᵥ y) j = y j - c j * y i := by
     intro j
-    simp only [hu0, Matrix.add_mulVec, Matrix.one_mulVec, Pi.add_apply]
-    simp [Matrix.mulVec, dotProduct, Matrix.vecMulVec_apply, Pi.single_apply, ite_mul]
-    ring
+    simp only [hu0, Matrix.add_mulVec, Matrix.one_mulVec, Matrix.vecMulVec_mulVec,
+      Pi.add_apply, single_dotProduct, one_mul, Pi.smul_apply, op_smul_eq_mul,
+      Pi.neg_apply, neg_mul, sub_eq_add_neg]
   refine ⟨u0.submatrix (Equiv.swap 0 i) id, ⟨?_, ?_⟩, ?_⟩
   · intro a b
     simp only [Matrix.submatrix_apply, id, hu0, Matrix.add_apply, Matrix.vecMulVec_apply]
@@ -160,12 +157,12 @@ lemma exists_u (v : Place k F) {r : ℕ} (y : Fin (r+1) → F) (hy : y ≠ 0) :
       have := congrArg (Equiv.swap 0 i) h
       rw [Equiv.swap_apply_self, Equiv.swap_apply_right] at this
       exact Fin.succ_ne_zero a this
-    rw [hu0y]; simp only [hc, if_neg hne]; field_simp; ring
+    rw [hu0y]; simp only [hc, ite_eq_right hne]; field_simp; ring
 
 lemma exists_h {n : ℕ} (x : Fin (n+1) → F) (hx : x ≠ 0) :
     ∃ h : Matrix (Fin (n+1)) (Fin (n+1)) F, h.det ≠ 0 ∧ ∀ a, h a 0 = x a := by
   obtain ⟨i, hi⟩ : ∃ i, x i ≠ 0 := by
-    by_contra hc; push_neg at hc; exact hx (funext hc)
+    by_contra hc; push Not at hc; exact hx (funext hc)
   refine ⟨(1 + Matrix.vecMulVec (x - Pi.single i 1) (Pi.single i 1)).submatrix id (Equiv.swap 0 i), ?_, ?_⟩
   · rw [Matrix.det_permute', det_one_add_vmv]
     simp [hi]
@@ -184,7 +181,7 @@ lemma unimod_ae [IsAlgClosed k] [CharZero k] (hF : IsFF k F) {n : ℕ} (h : Matr
   refine ((_root_.GlobalTheory.Nef.finite_support_and_sum_ord_eq_zero k F hF _ hd).1.union (Set.finite_iUnion fun p : Fin n × Fin n => fin1 (h p.1 p.2))).subset ?_
   intro v hv
   simp only [Set.mem_union, Set.mem_setOf_eq, Set.mem_iUnion]
-  by_contra hc; push_neg at hc
+  by_contra hc; push Not at hc
   exact hv ⟨fun i j => hc.2 (i, j), hc.1⟩
 
 lemma unimod_pull {E : Type} [Field E] [Algebra k E] [Algebra F E] (ρ : Place k E → Place k F) (hρ : IsRes ρ)
@@ -1001,8 +998,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 open GlobalTheory GlobalTheory.VB GlobalTheory.LieVB GlobalTheory.QCoh GlobalTheory.CechPic GlobalTheory.NeronCurve GlobalTheory.Published
 open scoped CategoryTheory.Obj
 
-attribute [local instance] Over.cartesianMonoidalCategory
-
 noncomputable section
 
 namespace GlobalTheory.NeronCurve.LieDescent
@@ -1260,8 +1255,6 @@ open CategoryTheory AlgebraicGeometry TopologicalSpace Limits MonoidalCategory C
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor
 open GlobalTheory GlobalTheory.VB GlobalTheory.LieVB GlobalTheory.QCoh GlobalTheory.CechPic GlobalTheory.NeronCurve GlobalTheory.Published
 open scoped CategoryTheory.Obj
-
-attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace GlobalTheory.SemiNegFieldChange
 

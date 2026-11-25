@@ -1,5 +1,6 @@
 module
 
+import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsInjectiveCharacterOfIsCyclic
 public import Mathlib.NumberTheory.NumberField.Basic
 public import Mathlib.Algebra.Module.FinitePresentation
 public import Mathlib.RingTheory.Flat.EquationalCriterion
@@ -639,19 +640,7 @@ theorem mem_xor {A : Type*} [CommRing A] (P : Ideal A) (hP : P.IsPrime) (p t m :
 
 theorem exists_over (K : Type*) [Field K] [NumberField K] (p : ℕ) (hp : p.Prime) :
     ∃ 𝔭 : HeightOneSpectrum (𝓞 K), (p : 𝓞 K) ∈ 𝔭.asIdeal := by
-  have hpr : (Ideal.span {(p : ℤ)}).IsPrime :=
-    (Ideal.span_singleton_prime (by exact_mod_cast hp.ne_zero)).2 (Nat.prime_iff_prime_int.1 hp)
-  obtain ⟨Q, -, hQ, hQc⟩ := Ideal.exists_ideal_over_prime_of_isIntegral (S := 𝓞 K) (Ideal.span {(p : ℤ)}) ⊥ (by
-    rw [(show Ideal.under _ ⊥ = ⊥ from Ideal.comap_bot_of_injective _ (FaithfulSMul.algebraMap_injective ℤ (𝓞 K)))]
-    exact bot_le)
-  have hmem : (p : 𝓞 K) ∈ Q := by
-    have : (p : ℤ) ∈ Ideal.under ℤ Q := by
-      rw [hQc]
-      exact Ideal.mem_span_singleton_self _
-    simpa using this
-  refine ⟨⟨Q, hQ, ?_⟩, hmem⟩
-  rintro rfl
-  exact (Nat.cast_ne_zero.2 hp.ne_zero) ((Ideal.mem_bot).1 hmem)
+  first | exact _root_.GlobalTheory.exists_heightOneSpectrum_natCast_mem | exact @_root_.GlobalTheory.exists_heightOneSpectrum_natCast_mem | apply _root_.GlobalTheory.exists_heightOneSpectrum_natCast_mem <;> assumption
 
 theorem exists_elt {R : Ranks} (H : Host R) (p : ℕ) (hp : p.Prime) (hs : Th.SplitK H p) :
     ∃ (a : H.K) (t m : ℤ), IsIntegral ℤ a ∧ a * HostK.conjK H a = (p : H.K) * m ∧ a + HostK.conjK H a = t ∧
@@ -936,9 +925,9 @@ theorem nonempty_isoKG : ∀ (K E : Type) [Field K] [CharZero K] [Field E] [Alge
       simp only [this]
       split_ifs <;> simp
     · have : w ≠ w' := fun t => hi (by rw [t])
-      rw [if_neg this, ho _ _ (fun t => hi (e.injective t)), mul_zero]
+      rw [ite_eq_right this, ho _ _ (fun t => hi (e.injective t)), mul_zero]
   have hbl : LinearIndependent K b :=
-    linearIndependent_of_orthogonal H b (fun i => by rw [hb]; simp) (fun i j hij => by rw [hb, if_neg hij])
+    linearIndependent_of_orthogonal H b (fun i => by rw [hb]; simp) (fun i j hij => by rw [hb, ite_eq_right hij])
   have : Nonempty ι := by
     rw [← Fintype.card_pos_iff, hcard]; exact Module.finrank_pos
   have hc : Fintype.card (Fin 4 × ι) = Module.finrank K (Fin 4 → E) := by
@@ -1290,7 +1279,7 @@ theorem exists_dgen : ∃ cD, Th.IsDgen H (embT H) cD := by
   letI : Algebra H.E M := (H.φ₀.codRestrict M hφ).toAlgebra
   have hal : ∀ x : H.E, ((algebraMap H.E M x : M) : ℂ) = H.φ₀ x := fun _ => rfl
   refine ⟨fun τ => s τ, M, inferInstance, fun τ x => hφ _, fun τ => ⟨s τ, rfl, ?_⟩⟩
-  have hl : ∀ x : H.E, TaylorLogMetric.liftM M (H.φ₀ x) = algebraMap H.E M x := fun x => dif_pos (hφ x)
+  have hl : ∀ x : H.E, TaylorLogMetric.liftM M (H.φ₀ x) = algebraMap H.E M x := fun x => dite_eq_left (hφ x)
   have h1 : Th.mmM H (embT H) M =
       Submodule.span (𝓞 M) ((fun (v : Tau R → H.E) (i : Tau R) => algebraMap H.E M (v i)) '' conjVec H) := by
     unfold Th.mmM

@@ -187,8 +187,7 @@ theorem UpperTheory.Gal.TP.Skew.conjAut :
   let s : Gal(E/F) := AlgEquiv.ofBijective σ ⟨σ.toRingHom.injective, hsurj⟩
   have hs : ∀ x, s x = σ x := fun x => rfl
   have hne : ∃ x, σ x ≠ x := by
-    by_contra h
-    push_neg at h
+    by_contra! h
     apply IsTotallyComplex.complexEmbedding_not_isReal τ
     show star τ = τ
     ext x
@@ -203,8 +202,7 @@ theorem UpperTheory.Gal.TP.Skew.conjAut :
   · ext y
     simp [hs, hsq]
   · intro g
-    by_contra hg
-    push_neg at hg
+    by_contra! hg
     have hle : ({1, s, g} : Finset Gal(E/F)).card ≤ Fintype.card Gal(E/F) := Finset.card_le_univ _
     rw [Finset.card_insert_of_notMem (by simp [hs1.symm, hg.1.symm]),
       Finset.card_pair hg.2.symm, hcard] at hle
@@ -242,8 +240,7 @@ theorem UpperTheory.Gal.TP.Skew.ideleStep :
     rw [hw']
     exact hFr.isReal v
   obtain ⟨c, hc⟩ : ∃ c, infiniteLocalSymbol E v c ≠ 1 := by
-    by_contra h
-    push_neg at h
+    by_contra! h
     exact hram (MonoidHom.ext h)
   have hc' : infiniteLocalSymbol E v c = s := (hall _).resolve_left hc
   have key : ∀ a' : IdeleGroup F, ideleSymbol F E a' = 1 →
@@ -581,8 +578,7 @@ private theorem mem_iff {E : Type} [Field E] [NumberField E] (I : FractionalIdea
 
 private theorem attained {E : Type} [Field E] [NumberField E] (I : FractionalIdeal (𝓞 E)⁰ E) (hI : I ≠ 0)
     (w : HeightOneSpectrum (𝓞 E)) : ∃ x ∈ I, x ≠ 0 ∧ ordE w x = FractionalIdeal.count E w I := by
-  by_contra hcon
-  push_neg at hcon
+  by_contra! hcon
   have hP : ((w.asIdeal : Ideal (𝓞 E)) : FractionalIdeal (𝓞 E)⁰ E) ≠ 0 := by
     rw [Ne, FractionalIdeal.coeIdeal_eq_zero]
     exact w.ne_bot
@@ -980,7 +976,7 @@ theorem wtId_holds : WtId := by
       congr 1
       funext k
       have h1 := hL (Fin.castAdd t k)
-      simp only [Fin.coe_castAdd, k.2, dif_pos, Fin.eta] at h1
+      simp only [Fin.coe_castAdd, k.2, dite_eq_left, Fin.eta] at h1
       simp only [Function.comp_apply, Fin.coe_castAdd]
       omega
     · rw [multiset_map_fin_rev_eq (fun i : Fin t => -p i)]
@@ -1001,7 +997,7 @@ theorem wtId_holds : WtId := by
       congr 1
       funext k
       have h1 := hL (Fin.castAdd t k)
-      simp only [Fin.coe_castAdd, k.2, dif_pos, Fin.eta] at h1
+      simp only [Fin.coe_castAdd, k.2, dite_eq_left, Fin.eta] at h1
       simp only [Function.comp_apply, Fin.coe_castAdd]
       have hk := k.2
       omega
@@ -1222,8 +1218,8 @@ theorem UpperTheory.Gal.TP.Sub.upOf_holds :
       ∃ w, τ = ComplexEmbedding.conjugate (Bs.emb w).1 ∧ lam' τ = (l' w).dual := by
     intro τ
     rcases hw₀ τ with h | h
-    · exact Or.inl ⟨w₀ τ, h, if_pos h⟩
-    · exact Or.inr ⟨w₀ τ, h, if_neg fun h' => hne (w₀ τ) (w₀ τ) (h'.symm.trans h)⟩
+    · exact Or.inl ⟨w₀ τ, h, ite_eq_left h⟩
+    · exact Or.inr ⟨w₀ τ, h, ite_eq_right fun h' => hne (w₀ τ) (w₀ τ) (h'.symm.trans h)⟩
   refine ⟨lam', hL.aut, fun τ => ?_, hD.alg, fun τ => ?_, ?_⟩
   · rcases key τ with ⟨w, rfl, h⟩ | ⟨w, rfl, h⟩
     · rw [h]

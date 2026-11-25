@@ -720,8 +720,7 @@ theorem charSum_detects_multiple : ∀ {D : D7} (ψ : AddChar (AF D.host.F) ℂ)
     rw [Finset.sum_congr rfl h1]; simp
   · intro hnot
     have hex : ∃ r₀ ∈ R, ψ (symplO S T t r₀) ≠ 1 := by
-      by_contra hall
-      push_neg at hall
+      by_contra! hall
       apply hnot
       set a : AE D := algebraMap D.host.F (AE D) ((k : D.host.F)⁻¹) with ha
       have hka : k • a = 1 := by
@@ -993,13 +992,13 @@ theorem model_coset {D : D7} (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D)
     funext t
     rw [Pi.smul_apply, Finset.sum_apply, smul_eq_mul]
     by_cases ht : t ∈ Λ ∧ IsHalf e t
-    · have h1 : halfInd e Λ t = 1 := if_pos ht
+    · have h1 : halfInd e Λ t = 1 := ite_eq_left ht
       simp only [h1, mul_one]
       by_cases hm : ∃ u ∈ Λ, IsHalf e u ∧ t = k • u
       · rw [(hsum t ht.1 ht.2).1 hm, inv_mul_cancel₀ hcardC, hΨdef, Set.indicator_of_mem ((hmem0 t).2 hm)]
         rfl
       · rw [(hsum t ht.1 ht.2).2 hm, mul_zero, hΨdef, Set.indicator_of_notMem (fun h => hm ((hmem0 t).1 h))]
-    · have h1 : halfInd e Λ t = 0 := if_neg ht
+    · have h1 : halfInd e Λ t = 0 := ite_eq_right ht
       simp only [h1, mul_zero, Finset.sum_const_zero]
       rw [hΨdef, Set.indicator_of_notMem]
       intro h
@@ -1243,7 +1242,6 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions Form
 open IsDedekindDomain NumberField GlobalTheory.ChiGrid GlobalTheory.FunObj GlobalTheory.RowTest GlobalTheory.RowClaim
 open Formalism.L2.Host (HChar)
 open GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle (Tri)
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.RowEx
 open Formalism.MainNotions.TaylorLogMetric Formalism.MainNotions.StandardLatticesGL3
 

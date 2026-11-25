@@ -122,7 +122,7 @@ theorem UpperTheory.V.AlgebraTools.monomialOfComm :
     by_contra hij
     have h1 := congrArg (fun v => b.repr v j) (h.symm.trans ha')
     simp only [map_smul, Module.Basis.repr_self, Finsupp.smul_apply, Finsupp.single_apply, hij,
-      if_true, if_false, smul_eq_mul, mul_one, mul_zero] at h1
+      ite_true, ite_false, smul_eq_mul, mul_one, mul_zero] at h1
     apply hne g i
     rw [h, h1, zero_smul]
   let F : G →* Function.End (Fin n) :=
@@ -407,8 +407,7 @@ theorem UpperTheory.V.AlgebraTools.permChar :
       have hm' := hker hm
       rwa [MonoidHom.mem_ker, map_pow] at hm'
   have hall : (∀ g : G, χ g ^ 3 = 1) ∨ (∀ g : G, χ g ^ 4 = 1) := by
-    by_contra hne
-    push_neg at hne
+    by_contra! hne
     obtain ⟨⟨g, hg⟩, ⟨g', hg'⟩⟩ := hne
     have h4 : χ g ^ 4 = 1 := (hχ g).resolve_left hg
     have h3 : χ g' ^ 3 = 1 := (hχ g').resolve_right hg'

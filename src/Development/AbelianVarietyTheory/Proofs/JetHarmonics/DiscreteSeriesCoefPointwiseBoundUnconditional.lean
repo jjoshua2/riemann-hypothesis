@@ -220,8 +220,7 @@ theorem scale_bounds {Ch b ka T : ℝ} (r : ℕ) (hb : 1 ≤ b) (hka : 0 < ka) (
   have hk2 := hpow (1 / ka) (by positivity) (by rwa [one_div])
   have hq : 0 < (1 / ka) ^ (2 * r) := by positivity
   have hT : 0 < T := by
-    by_contra hneg
-    push_neg at hneg
+    by_contra! hneg
     have := mul_nonpos_of_nonpos_of_nonneg hneg hq.le
     linarith
   have hTe : T = T * (1 / ka) ^ (2 * r) * ka ^ (2 * r) := by
@@ -823,11 +822,11 @@ theorem shiftExists_of (hA : GlobalTheory.WigSh.AmapsShExists) : GlobalTheory.Wi
     (fun i _ => by
       by_cases h : i = l + 1
       · subst h; simp
-      · rw [Function.update_of_ne h, if_neg h])
+      · rw [Function.update_of_ne h, ite_eq_right h])
     (fun i _ => by
       by_cases h : i = l
       · subst h; simp
-      · rw [Function.update_of_ne h, if_neg h])
+      · rw [Function.update_of_ne h, ite_eq_right h])
   exact ⟨Wqp, i1, i2, i3, Wqm, j1, j2, j3, pp, pm, Ap, Am, ApPt, AmPt, a1, b1, a2, a3, a4, b2, b3, b4, a8, b8,
     c1, c2, c3, c4⟩
 

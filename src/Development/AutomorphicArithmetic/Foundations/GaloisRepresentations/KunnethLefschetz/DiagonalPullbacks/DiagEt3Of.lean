@@ -1244,8 +1244,8 @@ private theorem etale_chart {A E B : Type} [CommRing A] [CommRing E] [CommRing B
   have gXj : g (X j) = ψ (s j) := by rw [hgd, eval₂Hom_X', Function.update_self]
   have σC : ∀ x, σ (MvPolynomial.C x) = MvPolynomial.C x := fun x => by rw [hσd, eval₂Hom_C]
   have σX : ∀ k, k ≠ j → σ (X k) = X k * X j := fun k hk => by
-    rw [hσd, eval₂Hom_X', if_neg hk]
-  have σXj : σ (X j) = X j := by rw [hσd, eval₂Hom_X', if_pos rfl]
+    rw [hσd, eval₂Hom_X', ite_eq_right hk]
+  have σXj : σ (X j) = X j := by rw [hσd, eval₂Hom_X', ite_eq_left rfl]
   have mem1 : (X j - 1 : MvPolynomial (Fin D) E) ∈ RingHom.ker f := by
     rw [ker]; exact Ideal.subset_span (Set.mem_insert _ _)
   have mem2 : ∀ k, (MvPolynomial.C (s k) - MvPolynomial.C (s j) * X k : MvPolynomial (Fin D) E) ∈
@@ -1365,8 +1365,7 @@ private theorem dim_unique {X Y : Scheme.{0}} (f : X ⟶ Y) {a b : ℕ} (x : X)
   haveI : Nonempty V := ⟨⟨x, hx⟩⟩
   obtain ⟨m, hm⟩ := Ideal.exists_maximal Γ(X, V)
   obtain ⟨t, ht, htm⟩ : ∃ t ∈ s, t ∉ m := by
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     exact hm.ne_top (top_le_iff.1 (hs ▸ Ideal.span_le.2 hc))
   have h1 := hl t ht
   have h0 : (algebraMap Γ(X, V) (Localization.Away t)).IsStandardSmoothOfRelativeDimension 0 :=

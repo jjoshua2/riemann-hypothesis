@@ -681,8 +681,7 @@ theorem est_at {m : ℕ} {γ : Fin m → LinearMap.BilinForm ℤ X} {N : ℕ} {�
     have h2 : 0 ≤ ∑ i, (c i : ℤ) * h (γ i) := Finset.sum_nonneg fun i _ => mul_nonneg (Nat.cast_nonneg _) (hγ i)
     rw [← e3, map_nsmul, nsmul_eq_mul] at h2
     have h3 : 0 ≤ h u := by
-      by_contra hneg
-      push_neg at hneg
+      by_contra! hneg
       have : (k : ℤ) * h u < 0 := mul_neg_of_pos_of_neg (by exact_mod_cast hk) hneg
       linarith
     have h4 : (0 : ℝ) ≤ h u := by exact_mod_cast h3
@@ -1433,9 +1432,9 @@ def extFun (H : Host E) (q : ℕ) (φ : InvFun (𝓞 E)) : InvFun (𝓞 E) where
   toFun n B := if IsDomT H q n B then φ.toFun n B else (InvFun.minVal (𝓞 E)).toFun n B
   inv n m r hr B := by
     by_cases h : IsDomT H q m B
-    · rw [if_pos ((isDomT_comp_iff hr B).2 h), if_pos h]
+    · rw [ite_eq_left ((isDomT_comp_iff hr B).2 h), ite_eq_left h]
       exact φ.inv n m r hr B
-    · rw [if_neg (mt (isDomT_comp_iff hr B).1 h), if_neg h]
+    · rw [ite_eq_right (mt (isDomT_comp_iff hr B).1 h), ite_eq_right h]
       exact (InvFun.minVal _).inv n m r hr B
   zero B := by
     split_ifs
@@ -1445,10 +1444,10 @@ def extFun (H : Host E) (q : ℕ) (φ : InvFun (𝓞 E)) : InvFun (𝓞 E) where
 variable {φ : InvFun (𝓞 E)}
 
 theorem extFun_of {B : (Fin n → 𝓞 E) → (Fin n → 𝓞 E) → ℝ} (h : IsDomT H q n B) :
-    (extFun H q φ).toFun n B = φ.toFun n B := if_pos h
+    (extFun H q φ).toFun n B = φ.toFun n B := ite_eq_left h
 
 theorem extFun_of_not {B : (Fin n → 𝓞 E) → (Fin n → 𝓞 E) → ℝ} (h : ¬ IsDomT H q n B) :
-    (extFun H q φ).toFun n B = (InvFun.minVal (𝓞 E)).toFun n B := if_neg h
+    (extFun H q φ).toFun n B = (InvFun.minVal (𝓞 E)).toFun n B := ite_eq_right h
 
 end Dom
 

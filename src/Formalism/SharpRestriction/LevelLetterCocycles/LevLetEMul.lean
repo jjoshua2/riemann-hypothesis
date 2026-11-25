@@ -1,5 +1,6 @@
 module
 
+import Formalism.SharpRestriction.LevelLetterCocycles.SaturationPullbackOfRingCondition
 public import Formalism.SharpRestriction.LevelLetterCocycles.ArcCoordinatesOfLevelZeroParts
 import Mathlib.RingTheory.PowerSeries.WeierstrassPreparation
 
@@ -23,11 +24,7 @@ variable {G : Type} [Group G] [TopologicalSpace G] {Qp K₀ K : Type} [Field Qp]
     {v : AddValuation LL (WithTop ℚ)} {n : ℕ} {W : LocWach PD LL O v n}
 
 theorem letE_mem (a : ZMod n) : (letE a : LetA O n) ∈ W.AΔ := by
-  intro δ _
-  funext i
-  simp only [LocWach.γA, letγ, AlgHom.pi_apply, AlgHom.comp_apply, Pi.evalAlgHom_apply, letE,
-    Pi.single_apply]
-  split_ifs <;> simp
+  apply _root_.Formalism.MainNotions.UnusedSlot80.SatPW.letE_mem_AΔ <;> assumption
 
 theorem lev_letE' (a : ZMod n) (ζ : LL) : W.lev a ζ (letE a : LetA O n) = 1 := by
   have h : W.lev a ζ (1 - letE a) = 0 := W.lev_letter a ζ _ (by simp [letE])
@@ -138,7 +135,7 @@ theorem step (hR : ToolsR.RingP W) (hpu : ¬ IsUnit ((PD.p : ℕ) : O))
   have hord : (D.map (Ideal.Quotient.mk I)).order.toNat = 1 := by rw [hmap, order_X]; rfl
   have hdiv : D.IsWeierstrassDivisorAt I := by
     unfold IsWeierstrassDivisorAt
-    rw [hord, hD, map_add (f := _), coeff_C, if_neg one_ne_zero, add_zero]
+    rw [hord, hD, map_add (f := _), coeff_C, ite_eq_right one_ne_zero, add_zero]
     simp [coeff_X]
   have HD := hdiv.isWeierstrassDivisionAt_div_mod (f := f a)
   set H := hdiv.div (f a)

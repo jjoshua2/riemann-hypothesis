@@ -78,18 +78,7 @@ open GroundTheory.Heights₂.Heights.AnalyticLimit
 theorem tailLogBound_of_φ_eq {e : ℕ} {X : Type} [TopologicalSpace X] (A : FinHolAtlas e X)
     (Yo : Set X) (r : X → ℝ) {Φ Ψ : Fin e → LocPot X} (h : ∀ i, (Φ i).φ = (Ψ i).φ) (CE : ℝ)
     (H : TailLogBound A Yo r Φ CE) : TailLogBound A Yo r Ψ CE := by
-  have hd : ∀ j y, ReciprocityTheory.AnForm.M.locDens A Φ j y = ReciprocityTheory.AnForm.M.locDens A Ψ j y := by
-    intro j y
-    simp only [ReciprocityTheory.AnForm.M.locDens, h]
-  have hM : ∀ g, ReciprocityTheory.AnForm.M.MIntegrable A Φ g ↔ ReciprocityTheory.AnForm.M.MIntegrable A Ψ g := by
-    intro g
-    simp only [ReciprocityTheory.AnForm.M.MIntegrable, hd]
-  have hI : ∀ g, ReciprocityTheory.AnForm.M.mInt A Φ g = ReciprocityTheory.AnForm.M.mInt A Ψ g := by
-    intro g
-    simp only [ReciprocityTheory.AnForm.M.mInt, ReciprocityTheory.AnForm.M.integralWith, hd]
-  intro R₀ hR
-  rw [← hM, ← hI]
-  exact H R₀ hR
+  apply _root_.GlobalTheory.CompanionTheory.Ar.Giv.tailLogBound_of_phi_eq <;> assumption
 
 theorem tailLogProducts : ∀ (e : ℕ) (X : Type) [TopologicalSpace X] [CompactSpace X] [T2Space X] (A : FinHolAtlas e X) (R : GroundTheory.Heights₂.Heights.Regular.RegChartData A) (Θ : LocPot X), IsPotential A Θ → IsPosPot A Θ → ∀ (P : Fin e → LocPot X) (C : ℝ), (∀ i, IsPotential A (P i)) → ∃ CE : ℝ, ∀ f : Fin e → X → ℝ, (∀ i, A.Smooth (f i)) → (∀ i, IsPsh A (P i + LocPot.ofFun (f i))) → (∀ i, ∀ x ∈ R.Yo, |f i x| ≤ C + C * Real.log (R.r x)) → (∀ i, ∀ x ∈ R.Yo, f i x ≤ C) → GroundTheory.Heights₂.Heights.AnalyticLimit.TailLogBound A R.Yo R.r (fun i => P i + LocPot.ofFun (f i)) CE := by
   intro e X _ _ _ A R Θ hΘ hΘp P C hP
@@ -837,9 +826,9 @@ theorem position_tail (e : ℕ) (X : Type) [TopologicalSpace X] [CompactSpace X]
       LocPot.ofFun (if i ∈ T then u i else 0) + Θ) := by
     intro i
     by_cases hi : i ∈ T
-    · simp only [hi, if_true]
+    · simp only [hi, ite_true]
       exact hpsh i
-    · simp only [hi, if_false]
+    · simp only [hi, ite_false]
       intro x j y hy w
       have h3 := ReciprocityTheory.AnForm.P.TailBoundAlt.isPsh_of_isPosPot A Θ hΘp x j y ⟨hy.1, hy.2.2⟩ w
       have h2 : (LocPot.ofFun (0 : X → ℝ) + LocPot.ofFun 0 + Θ).φ x = Θ.φ x := by
@@ -1009,9 +998,9 @@ theorem mixed_integral_tendsto_of_C2_off_divisor : ∀ (e : ℕ) (X : Type) [Top
         (fderiv ℝ (fderiv ℝ ((if i ∈ T then f i else 0) ∘ (A.chart j).symm))) (𝓝[>] 0) K' := by
     intro T i j K' hK' hKc
     by_cases hi : i ∈ T
-    · simp only [hi, if_true]
+    · simp only [hi, ite_true]
       exact (hC i j K' hK' hKc).2.2
-    · simp only [hi, if_false]
+    · simp only [hi, ite_false]
       exact Metric.tendstoUniformlyOn_iff.2 fun ε hε =>
         Eventually.of_forall fun t y _ => by simpa using hε
   have term := fun T : Finset (Fin e) => _root_.GlobalTheory.CompanionTheory.Ar.Giv.conv_chart_integral e X A R Θ
@@ -1057,7 +1046,7 @@ theorem mixed_integral_tendsto_of_C2_off_divisor : ∀ (e : ℕ) (X : Type) [Top
       (fun k y hy _ => locDens_nonneg_of_psh A _ hpot (hevt T).2.1 k hy) (hevt T).2.2 hg.1 hg.2
       j K hK hKc
   · have hne : Nonempty (ChartPartition A) := existsPartition A
-    simp_rw [mInt, dif_pos hne]
+    simp_rw [mInt, dite_eq_left hne]
     unfold integralWith
     refine tendsto_finsetSum _ fun j _ => ?_
     letI : MeasurableSpace X := borel X

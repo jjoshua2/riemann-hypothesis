@@ -161,7 +161,7 @@ theorem UpperTheory.ConvolutionTheory.R2.H.stdAe :
       rw [cosetIndicator_apply] at hi
       have hm : (x i).2 - b i ∈ idealFiniteAdeles J := by
         by_contra hc
-        exact hi (if_neg hc)
+        exact hi (ite_eq_right hc)
       have hv := (mem_idealFiniteAdeles J).1 hm v
       rw [hJ, neg_zero, WithZero.exp_zero] at hv
       have e : (x i).2 v = ((x i).2 - b i) v + (b i) v := by
@@ -275,8 +275,7 @@ theorem UpperTheory.ConvolutionTheory.R2.H.stdHat :
       rw [mul_comm (sg v c), hmul, mul_comm] at h3
       exact h3
     · have ex : ∃ s, φ (Function.update x 1 s) ≠ 0 := by
-        by_contra h
-        push_neg at h
+        by_contra! h
         exact hx (by simp [hat, h])
       obtain ⟨s, hs⟩ := ex
       have := hφ.1 _ hs i
@@ -1119,12 +1118,10 @@ theorem UpperTheory.ConvolutionTheory.R2.H.unrInert :
   obtain ⟨hcont, hleft⟩ := spanCont F E D W M π y hsp
   obtain ⟨-, hwh⟩ := UpperTheory.ConvolutionTheory.R2.cusp F E D W M π hN y hsp
   obtain ⟨h₀, hh₀⟩ : ∃ h₀, WE D y.1 h₀ ≠ 0 := by
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     exact h0 (hwh hc)
   obtain ⟨h₁, hh₁⟩ : ∃ h₁, y.1 h₁ ≠ 0 := by
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     exact h0 (Subtype.ext (funext hc))
   have hδ : D.δ ≠ 0 := fun e => by
     have h1 : D.θ = 0 := pow_eq_zero_iff two_ne_zero |>.1 (by rw [D.sq, e, map_zero])
@@ -1140,7 +1137,7 @@ theorem UpperTheory.ConvolutionTheory.R2.H.unrInert :
     have h3 := hin.norm
     rw [e] at h3
     nlinarith
-  rw [if_neg hn] at hval
+  rw [ite_eq_right hn] at hval
   obtain ⟨α, β, rfl⟩ := Multiset.card_eq_two.1 (GlobalTheory.LFun.HasSatGL.card hB)
   obtain ⟨α', β', rfl⟩ := Multiset.card_eq_two.1 (GlobalTheory.LFun.HasSatGL.card hB')
   obtain ⟨p, hp⟩ : ∃ p, Formalism.UG.IsUnifV F v p := v.valuedAdicCompletion_surjective F _

@@ -926,7 +926,7 @@ theorem sum_abs_log_eq_zero_or_ge {n : ℕ} (S : Finset (Fin n)) (v : Reciprocit
     ∑ a ∈ S, |Real.log ‖v a‖| = 0 ∨ Real.log 2 ≤ ∑ a ∈ S, |Real.log ‖v a‖| := by
   by_cases h : ∀ a ∈ S, |Real.log ‖v a‖| = 0
   · exact Or.inl (Finset.sum_eq_zero h)
-  · push_neg at h
+  · push Not at h
     obtain ⟨a, ha, hne⟩ := h
     right
     have hv : ‖v a‖ ≠ 0 := fun h0 => hne (by rw [h0]; simp)
@@ -1253,8 +1253,7 @@ theorem goodBound_changeFrame : ∀ (n : ℕ) (K : Type) [Fintype K] [DecidableE
   have hcpos : 0 < c := by
     have h1 := hgb.det
     have h2 : 0 < ‖(G₀ v).det‖⁻¹ := inv_pos.2 (norm_pos_iff.2 hdet)
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     nlinarith [mul_nonpos_of_nonpos_of_nonneg hc hs0]
   have hc0 := hcpos.le
 

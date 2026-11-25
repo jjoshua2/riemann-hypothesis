@@ -78,7 +78,6 @@ section -- clump:auto
 @[expose] public section
 
 open NumberField IsDedekindDomain Matrix Formalism.BasicNotions Formalism.UG Formalism.L2.Col Formalism.L2.PairingIndexBounds.F Formalism.MainNotions.G.KAat Formalism.L2.Forms Formalism.L2.Ker Formalism.MainNotions Formalism.L2.DIV Formalism.MainNotions.G GlobalTheory.TwU GlobalTheory.TwV
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 noncomputable section
 
@@ -297,10 +296,6 @@ theorem intAt_of_seamP (P : HeightOneSpectrum (𝓞 X.E)) (z : X.E) (h : IntAt (
 
 end Seam
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
-
-
 theorem frames_lev : ∀ {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : G.Inst D L} {Gl : G.LatInst D} {Kc : G.Consts} {Y : DivX D}
     {cX : ExtraC} {ex : Extra D L hT Gi Gl Kc Y cX} {t : KerEntTied ex} {u : D.what₂.Word} {μ : D.what₂.Tup} {St : ChainCharts D u μ}
     (A : AdData t u μ St) (a : 𝓞 D.host.E) (j : ℕ) (hj : j ≤ D.R.m) (β : (St j hj).Ch) (x x₁ : UA D j hj)
@@ -498,7 +493,7 @@ theorem cong_mem_prCat_twist : ∀ {X : Fields} {Pr : Primes X} {R : Ranks} {Ch 
   have hq := qOf_ne_zero (P := P.1)
   have hstd : lamYat (Pr := Pr) (R := R) j P.1 = stdAt X.E (R.N j + cOf R j) P.1 := by
     unfold lamYat
-    rw [if_neg hP]
+    rw [ite_eq_right hP]
     exact lamY_zero _ _ _
   have hD : j + 1 ≤ cst.D P := by
     have h1 := hL.depthQ' P hP
@@ -531,7 +526,7 @@ theorem cong_mem_prCat_twist : ∀ {X : Fields} {Pr : Primes X} {R : Ranks} {Ch 
     show (MulAut.conj (L.h j b P)⁻¹).toMonoidHom (CongLevel.extE (cOf R j) C.1) ∈ Jat (Pr := Pr) cst.sharp j P.1
     rw [e]
     unfold Jat
-    rw [if_neg hP]
+    rw [ite_eq_right hP]
     refine ⟨hs, ?_⟩
     have ep : LocE.parL P.1 (qOf P.1) (R.k + j) (R.N j) (cOf R j) =
         LocE.sclLat P.1 (qOf P.1) (R.N j + cOf R j)
@@ -565,7 +560,7 @@ theorem cong_mem_prCat_twist : ∀ {X : Fields} {Pr : Primes X} {R : Ranks} {Ch 
       · rfl
     rw [hn, hL.cst_ok.psi_int P 0 intAt_zero, inv_one, one_mul]
     unfold lamRow
-    rw [if_neg hP]
+    rw [ite_eq_right hP]
     unfold LocE.lamQB
     rw [GlobalTheory.LamRowCong.unitV_det_eq_one, inv_one]
     · intro s t
@@ -582,7 +577,7 @@ theorem cong_mem_prCat_twist : ∀ {X : Fields} {Pr : Primes X} {R : Ranks} {Ch 
       by_cases hst : s = t
       · subst hst
         simp
-      · rw [if_neg (fun e => hst (Fin.ext (by omega))), if_neg hst]
+      · rw [ite_eq_right (fun e => hst (Fin.ext (by omega))), ite_eq_right hst]
 
 end GlobalTheory.TwistCong
 end -- clump:auto
@@ -695,8 +690,6 @@ section -- clump:auto
 open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions Formalism.L2.Col Formalism.L2.Ker Formalism.L2.DIV GlobalTheory.TwU GlobalTheory.TwV
 
 noncomputable section
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.TwV
 

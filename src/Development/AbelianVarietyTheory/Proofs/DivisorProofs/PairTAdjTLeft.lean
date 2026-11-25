@@ -88,7 +88,6 @@ open scoped CategoryTheory.Obj CategoryTheory.MonObj TensorProduct NNReal
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Pdiv ReciprocityTheory.ChartRestriction.G.Geo.Tor
 open Formalism.L2.Pj GlobalTheory.HTLat GlobalTheory.HTLat.OmegaRank GlobalTheory.EigenSplit GlobalTheory.Frames GlobalTheory.AllWt GlobalTheory.CompHt
 open GlobalTheory.KernelNoTorsion
-attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace GlobalTheory.CompHt.IndepPoint
 
@@ -156,7 +155,6 @@ open CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj Alg
 open scoped CategoryTheory.Obj CategoryTheory.MonObj TensorProduct NNReal
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Pdiv ReciprocityTheory.ChartRestriction.G.Geo.Tor
 open GlobalTheory.ChTor GlobalTheory.HTLat GlobalTheory.KernelNoTorsion GlobalTheory.HodgeTateTest GlobalTheory.PDiv GlobalTheory.SplitTorusPow
-attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace GlobalTheory.TorusTateLie
 
@@ -176,21 +174,6 @@ variable {C} {p : ℕ} [Fact p.Prime]
 
 end Torus
 
-section AtPoint
-
-variable {p : ℕ} [Fact p.Prime] {C : Type} [Field C] [IsAlgClosed C] [CharZero C] {v : Valuation C ℝ≥0}
-  {O : Type} [CommRing O] [Algebra O C] [Fact ¬IsUnit (p : O)] [IsAdicComplete (Ideal.span {(p : O)}) O]
-  {Λ : Type} [CommRing Λ] [StarRing Λ] (P : Point p v O Λ) (φ : GmO O ⟶ P.Gt) [IsMonHom φ]
-  (ζ : Tate p (specO O O ⟶ GmO O)) (hζ : Tate.map p (evalChar C (ULift.up (1 : ℤ))) ζ = P.eps.1)
-
-include hζ
-
-variable [Algebra ℤ_[p] O]
-
-variable [Algebra ℤ_[p] C] [IsScalarTower ℤ_[p] O C]
-
-end AtPoint
-
 end GlobalTheory.TorusTateLie
 end -- clump:auto
 end -- clump:auto
@@ -208,7 +191,6 @@ open CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj Alg
 open scoped CategoryTheory.Obj CategoryTheory.MonObj TensorProduct NNReal
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Pdiv ReciprocityTheory.ChartRestriction.G.Geo.Tor
 open GlobalTheory.HTLat GlobalTheory.EigenSplit GlobalTheory.CompHt GlobalTheory.CM
-attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace GlobalTheory.PointMap
 

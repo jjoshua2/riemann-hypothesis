@@ -188,7 +188,7 @@ theorem GlobalTheory.HermLocDualBasis.exists_locDualBasis : ∀ (F E : Type) [Fi
     rw [← e1]
     exact hc
   rw [form_smul_left, ← AlgHom.commutes σ, ← form_smul_right, ← hc', form_sum_right]
-  simp only [hdual, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq, Finset.mem_univ, if_true]
+  simp only [hdual, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq, Finset.mem_univ, ite_true]
   exact (c k).2.map (σ.toRingHom.toIntAlgHom)
 
 end
@@ -342,7 +342,7 @@ theorem core {n d : ℕ} (X : Spc F E n) (Y : Spc F E d) (hX : X.L.IsFullLattice
       simp only [Matrix.vecMulVec_apply, Pi.smul_apply, Pi.single_apply, Matrix.single_apply]
       by_cases h1 : a = i <;> by_cases h2 : b = j
       · subst h1 h2
-        simp only [if_true, and_self]
+        simp only [ite_true, and_self]
         rw [Algebra.smul_def (A := E) ((N * N' : ℤ) : F), map_intCast]
         simp only [zsmul_eq_mul, mul_one]; push_cast; ring
       all_goals simp [h1, h2, eq_comm (a := i), eq_comm (a := j)]
@@ -460,7 +460,7 @@ theorem GlobalTheory.SkewLocDual.exists_smul_mem_of_integral : ∀ (F E : Type) 
   choose! T hT using fun y (hy : y ∈ S) => hu y (hgen y hy)
   have ht : (∏ y ∈ S, T y) ∉ v.asIdeal := by
     rw [Ideal.IsPrime.prod_mem_iff]
-    push_neg
+    push Not
     exact fun y hy => (hT y hy).1
   have key : ∀ y ∈ Y.L,
       IsIntegral ℤ (algebraMap F E ((∏ y ∈ S, T y : 𝓞 F) : F) * form σ Y.J u y) := by
@@ -758,7 +758,7 @@ theorem exists_nhds_translate_eq {V : Type} [AddCommGroup V] [TopologicalSpace V
     rw [show x + (z - x) = z by abel] at e1
     rw [show x + (z + u - x) = z + u by abel] at e2
     rw [e1, e2]
-  · push_neg at hz
+  · push Not at hz
     have h1 : z ∉ tsupport f := fun h => by
       obtain ⟨x, hx, hzx⟩ := Set.mem_iUnion₂.mp (ht h)
       exact hz x hx hzx
@@ -836,8 +836,7 @@ theorem support_compact : ∀ {F : Type} [Field F] [NumberField F] (v : Pl (F :=
       exact sub_eq_zero.1 ((mul_eq_zero.1 h0).resolve_right hne)
     refine ⟨?_, ?_⟩
     · have hex : ∃ y, schr ψ₀ (a, b) φ y * (starRingEnd ℂ) (g y) ≠ 0 := by
-        by_contra h
-        push_neg at h
+        by_contra! h
         exact hne (by simp [h])
       obtain ⟨y, hy⟩ := hex
       have h1 : φ (y + a) ≠ 0 := fun h => hy (by simp [schr, h])
@@ -865,7 +864,6 @@ open NumberField IsDedekindDomain Formalism.MainNotions.GlobalTheoryTheory.Genus
 open scoped TensorProduct Matrix GlobalTheory.VacAny
 
 open MeasureTheory ComplexConjugate
-attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 noncomputable section
 namespace GlobalTheory.LagLocForm
@@ -1362,7 +1360,7 @@ theorem inv_of_heisInv : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [N
   obtain ⟨φ₀, hφ₀, hline⟩ := _root_.GlobalTheory.InertLagUniq.exists_test F E σ a' (a + a') G.V' G.W G.M' B.ψ v (hT.base.inert v w hin).2.2 m C hC
   by_cases hz : ∀ f ∈ SB (Fin a' × Fin (a + a') → Fv F v), l f = 0
   · rw [hz φ₁ hφ₁, hz φ hφ]
-  push_neg at hz
+  push Not at hz
   have hl0 : l φ₀ ≠ 0 := fun h => by
     obtain ⟨f, hf, hne⟩ := hz; exact hne (hline l hl h f hf)
   let c : UA σ G.V'.J → ℂ := fun g => l (Sop g φ₀) / l φ₀

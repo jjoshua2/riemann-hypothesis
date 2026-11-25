@@ -129,13 +129,6 @@ namespace GlobalTheory.HeightCounting.Up
 
 namespace PointStatements
 
-section Loc
-
-variable {D : D7} {cf : CharFrame D} {jE : D.host.E →+* Qb} {A : SideA D cf jE} {M : MtFam D} {C : NChoice D}
-  {tup : D.what₂.Tup → Fin D.R.m → HChar D.host.E}
-
-end Loc
-
 theorem allSt_mono {p q : ∀ (K : Ctx) (B : Base) (f : Fr B.toPre) (T : TwDat B) (w : ColW B f T) (P : Pre2 K w), St P → Prop}
     (h : ∀ K B f T w P x, p K B f T w P x → q K B f T w P x) (hp : AllSt p) : AllSt q :=
   hp.trans (StepW.of_all fun _ _ _ _ _ _ _ H P x => h _ _ _ _ _ P x (H P x))
@@ -345,9 +338,6 @@ theorem ordinary_idempotent_third_component_alt : OrdinaryIdempotentThirdCompone
 
 end GlobalTheory.HeightCounting.Up.ThirdTied
 
-theorem _root_.GlobalTheory.T.ordinary_idempotent_third_component_of_cmDatum_alt :
-    GlobalTheory.HeightCounting.Up.ThirdTied.OrdinaryIdempotentThirdComponent :=
-  GlobalTheory.HeightCounting.Up.ThirdTied.ordinary_idempotent_third_component_alt
 
 end
 end -- clump:auto
@@ -527,14 +517,6 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 noncomputable section
 namespace GlobalTheory.HeightCounting.Up.ThirdAgree
 open Formalism.BasicNotions.TH Formalism.L2.Theta Formalism.L2.DIV Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.RecTie GlobalTheory.Mem.R3.Tr GlobalTheory.HeightCounting.Up.RealOfReading
-section Gen
-variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 I0 T : Type} {A3 : FamIn3 D.what₂.LL G Pl0 I0 (List ℕ) T D.R.m} {Ks : Type}
-  [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] {R : RealDat3 D A3 Ks} {F : Face3 D A3} {X0 : BaseLevelRowSide D}
-end Gen
-section Copy
-variable {B : Base} {C : Cols B} {a : Late B C} (b : Late B C) {px : PreX B.toPre} {I : ColIn B px} {hX : B.fields.Ok} {T : TwDat B}
-  {Wt : Set B.places.Pl}
-end Copy
 section Main
 open GlobalTheory.HeightCounting.Fin3
 
@@ -762,7 +744,7 @@ theorem third_place_linked_data_exists : ∀ hL : _root_.UpperTheory.Zero.LLC.Re
   intro hL hP hX
   have agreement := StepW.and
     (ThirdAgree.third_components_agree_alt hL hP hX)
-    (GlobalTheory.T.ordinary_idempotent_third_component_of_cmDatum_alt hL hP hX)
+    (_root_.GlobalTheory.HeightCounting.Up.ThirdTied.ordinary_idempotent_third_component_alt hL hP hX)
   have readingInputs := StepW.and
     (ThirdTied.third_component_hecke_character_tuple_alt hL hP hX)
     (StepW.and (GlobalTheory.HeightCounting.Fin.finite_types_with_local_conditions_alt hL hP hX)
@@ -1265,10 +1247,6 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 noncomputable section
 namespace GlobalTheory.HeightCounting.Up
 namespace PointStatements
-section Loc
-variable {D : D7} {cf : CharFrame D} {jE : D.host.E →+* Qb} {A : _root_.GlobalTheory.HeightCounting.CharFrameHostEmbedding D cf jE} {M : MtFam D} {C : NChoice D}
-  {tup : D.what₂.Tup → Fin D.R.m → HChar D.host.E}
-end Loc
 theorem aux_residual_aux42_prvZ_of_inputs {hL : _root_.UpperTheory.Zero.LLC.RecTExists} {D : D7} (hPr : _root_.GlobalTheory.NRows.ThetaLocalInputsAlt) (hc : GlobalTheory.Published.HarishChandraFinite)
     (dec : GlobalTheory.Published.CuspRapidDecay) (I : _root_.GlobalTheory.NRows.LinkedInputs hL D) (hJ : JumpsCard D.nd D.naut) :
     _root_.Formalism.MainNotions.SumRepresentations.provisionFortyOne D ∧ AutomorphicSideWildInertia.ResidualIrreducibleGood D ∧ SumRepresentations.Conclusion42 D ∧ SumRepresentations.ConclusionZ D := by

@@ -83,13 +83,12 @@ theorem expD : ∀ (Ω : Type) [Field Ω] (ε : Ω →+* ℂ), ∃ h : HahnSerie
       subst hk0
       rw [hk 0]
       simp [ReciprocityTheory.ChartRestriction.L1.dZ_coeff_zero]
-    · push_neg at hr'
+    · push Not at hr'
       exact hz r hr'
   have hne : h ≠ 0 := HahnSeries.ne_zero_of_coeff_ne_zero (h1 ▸ one_ne_zero)
   have hord : h.order = 1 := by
     refine le_antisymm (HahnSeries.order_le_of_coeff_ne_zero (h1 ▸ one_ne_zero)) ?_
-    by_contra hlt
-    push_neg at hlt
+    by_contra! hlt
     exact (HahnSeries.coeff_order_eq_zero.not.mpr hne) (hlow _ hlt)
   refine ⟨h, hexp, hne, ?_, ?_⟩
   · rw [HahnSeries.leadingCoeff_eq, hord, h1]
@@ -97,7 +96,7 @@ theorem expD : ∀ (Ω : Type) [Field Ω] (ε : Ω →+* ℂ), ∃ h : HahnSerie
     by_cases hr : ∃ k : ℕ, r = (k : ℚ) / ((1 : ℕ) : ℚ)
     · obtain ⟨k, rfl⟩ := hr
       exact ⟨_, hk k⟩
-    · push_neg at hr
+    · push Not at hr
       exact ⟨0, by simpa using hz r hr⟩
 
 end GlobalTheory.FNExpD

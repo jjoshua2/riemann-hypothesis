@@ -702,8 +702,6 @@ namespace PositivityTheory.RgBcC.LfSt.Kchain.KcDual
 open PositivityTheory.RgBcC PositivityTheory.RgBcC.LfSt PositivityTheory.RgBcC.LfSt.Kchain
 open PositivityTheory.RgTw (Mat hb)
 
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
 variable {n : ℕ}
 
 theorem trace_hOf_mul (hH : HbFacts) (u u' : Fin n × Fin n → ℝ) :
@@ -713,7 +711,7 @@ theorem trace_hOf_mul (hH : HbFacts) (u u' : Fin n × Fin n → ℝ) :
     Matrix.trace_smul, horth, smul_eq_mul, mul_ite, mul_one, mul_zero]
   refine Finset.sum_congr rfl fun p _ => ?_
   rw [Finset.sum_ite_eq']
-  simp only [Finset.mem_univ, if_true]
+  simp only [Finset.mem_univ, ite_true]
   push_cast
   ring
 
@@ -790,8 +788,6 @@ namespace PositivityTheory.RgBcC.LfSt.Kchain
 
 open PositivityTheory.RgBcC PositivityTheory.RgBcC.LfSt
 open PositivityTheory.RgTw (Mat hb)
-
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 variable {n : ℕ}
 

@@ -1,5 +1,8 @@
 module
 
+import Development.AutomorphicSpectrum.Proofs.GeometryProofs.GenOfUnit
+import Development.AbelianVarietyTheory.Proofs.CubicalLineBundles.CmPointObjectExistsOfLaws
+import GroundTheory.HeightsAndTheta.Heights.WeightedHomogeneous.PConeTrdeg
 public import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.IsFFCurve
 public import GroundTheory.FunctionField.DivisorDegree
 public import GroundTheory.FunctionField.Divisor
@@ -235,15 +238,8 @@ namespace PositivityTheory.HtPt.Ch
 theorem unitAt_div {X : Scheme.{0}} {Ω : Type} [Field Ω] {ξ : Spec (CommRingCat.of Ω) ⟶ X}
     {Λ : Lat ξ Ω} {p : Cpt ξ} {s t : Ω} (hs : Λ.IsGenAt p s) (ht : Λ.IsGenAt p t) :
     unitAt ξ p (s / t) := by
-  have key : ∀ {s t : Ω}, Λ.IsGenAt p s → Λ.IsGenAt p t → s / t ∈ regAt ξ p := by
-    intro s t hs ht
-    have : s ∈ Submodule.span (regAt ξ p) {t} := by
-      rw [← ht.2, hs.2]; exact Submodule.mem_span_singleton_self s
-    obtain ⟨a, ha⟩ := Submodule.mem_span_singleton.1 this
-    have ha' : (a : Ω) * t = s := ha
-    rw [← ha', mul_div_cancel_right₀ _ ht.1]
-    exact a.2
-  exact ⟨div_ne_zero hs.1 ht.1, key hs ht, by rw [inv_div]; exact key ht hs⟩
+  intros
+  apply _root_.GlobalTheory.CompanionTheory.Ar.Cusp.DetNef.gen_unit <;> assumption
 
 theorem isdeg_unique : ∀ (X : Scheme.{0}) (Ω : Type) [Field Ω] (ξ : Spec (CommRingCat.of Ω) ⟶ X) (K : Type) [Field K] (C : ACurve K) (z : Spec (CommRingCat.of K) ⟶ X) (Y : CurveIn C z) (Λ : Lat ξ Ω) (n n' : ℤ), IsCptGen ξ → Y.IsDeg Λ n → Y.IsDeg Λ n' → n = n' := by
   intro X Ω _ ξ K _ C z Y Λ n n' hξ ⟨h₀, h, s₀, s, r, g₀, g, hr, hf, e⟩
@@ -1275,7 +1271,7 @@ theorem exists_homog_val {w : (Σ k, J k) → K} {c : ∀ k, J k} (hc : ∀ k, w
     refine ⟨0, C a, fun m hm k => ?_, rfl⟩
     have : m = 0 := by
       by_contra h
-      exact mem_support_iff.1 hm (by rw [coeff_C, if_neg (Ne.symm h)])
+      exact mem_support_iff.1 hm (by rw [coeff_C, ite_eq_right (Ne.symm h)])
     simp [this]
   | add f g hf hg =>
     obtain ⟨N, f', h1, h2⟩ := hf
@@ -1452,7 +1448,7 @@ namespace GlobalTheory.CompanionTheory.Ar.Conj.GapThreshold
 theorem ent_of_lt {T : Type} [Fintype T] {N : ℕ} (mu : GlobalTheory.CompanionTheory.Ar.Top.Wt T N) (τ : T) {i : ℕ} (h : i < N) :
     GlobalTheory.CompanionTheory.Ar.Top.ent mu τ i = mu τ ⟨i, h⟩ := by
   unfold GlobalTheory.CompanionTheory.Ar.Top.ent
-  rw [dif_pos h]
+  rw [dite_eq_left h]
 
 theorem abs_le_norm {T : Type} [Fintype T] {N : ℕ} (mu : GlobalTheory.CompanionTheory.Ar.Top.Wt T N) (τ : T) (i : Fin N) :
     |mu τ i| ≤ ‖mu‖ := by
@@ -1504,7 +1500,7 @@ theorem lmuNum_eq_sum {T : Type} [Fintype T] {N j : ℕ} (mu : GlobalTheory.Comp
     intro τ
     rw [← Fin.sum_univ_eq_sum_range (fun i => -GlobalTheory.CompanionTheory.Ar.Top.ent mu τ i * xx τ i) N]
     refine Finset.sum_congr rfl fun i _ => ?_
-    simp only [hxx, dif_pos i.isLt, ent_of_lt mu τ i.isLt]
+    simp only [hxx, dite_eq_left i.isLt, ent_of_lt mu τ i.isLt]
   rw [Fintype.sum_prod_type, ← Finset.sum_neg_distrib]
   refine Finset.sum_congr rfl fun τ _ => ?_
   rw [hrow τ, ← Finset.sum_range_add_sum_Ico _ hjN.le, Finset.sum_Ico_eq_sum_range, neg_add]
@@ -1514,7 +1510,7 @@ theorem lmuNum_eq_sum {T : Type} [Fintype T] {N j : ℕ} (mu : GlobalTheory.Comp
     have hij : i < j := Finset.mem_range.1 hi
     have hiN : i < N := by omega
     have hx' := hx τ ⟨i, hiN⟩ hij
-    simp only [hxx, dif_pos hiN, Nat.add_sub_cancel, hx']
+    simp only [hxx, dite_eq_left hiN, Nat.add_sub_cancel, hx']
     ring
   · rw [← Finset.sum_neg_distrib]
     refine Finset.sum_congr rfl fun m hm => ?_
@@ -1523,7 +1519,7 @@ theorem lmuNum_eq_sum {T : Type} [Fintype T] {N j : ℕ} (mu : GlobalTheory.Comp
     have hy' := hy τ ⟨j + m, hiN⟩ (by simp)
     have e1 : N - 1 - (j + m) + 1 = N - j - m := by omega
     have e2 : N - 1 - (j + m) = N - j - m - 1 := by omega
-    simp only [hxx, dif_pos hiN, Nat.add_sub_cancel, hy']
+    simp only [hxx, dite_eq_left hiN, Nat.add_sub_cancel, hy']
     rw [e1, e2]
     ring
 

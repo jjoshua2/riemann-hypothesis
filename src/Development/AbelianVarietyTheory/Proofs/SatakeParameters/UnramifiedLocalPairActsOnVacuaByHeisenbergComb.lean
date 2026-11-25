@@ -60,7 +60,6 @@ open Formalism.L2.Theta Formalism.L2.DIV Formalism.L2.Indef Formalism.DivisionVa
 open Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.IndefR.Mult Formalism.IndefR.Datum Formalism.IndefR.Cx
 open scoped TensorProduct InnerProductSpace
 open GlobalTheory.Hk3
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.Hk3
 
@@ -182,7 +181,6 @@ open Formalism.L2.Theta Formalism.L2.DIV Formalism.L2.Indef Formalism.DivisionVa
 open Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.IndefR.Mult Formalism.IndefR.Datum Formalism.IndefR.Cx
 open scoped TensorProduct InnerProductSpace
 open GlobalTheory.Hk3
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.Hk3
 
@@ -336,7 +334,7 @@ theorem locPair_act_vac_comb : ∀ (L : Type) [Field L] [CharZero L] [Valued L (
 
   obtain ⟨f, hf⟩ : ∃ f : Module.Dual ℂ M, f s0 = 1 := by
     have := (Module.forall_dual_apply_eq_zero_iff ℂ s0).not.mpr hs0ne
-    push_neg at this
+    push Not at this
     obtain ⟨f, hf⟩ := this
     exact ⟨(f s0)⁻¹ • f, by simp [hf]⟩
   have hline : ∀ t, LocVac ρ t → ∀ m, LocVac ρ (f.smulRight t m) := by

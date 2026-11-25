@@ -49,7 +49,6 @@ open CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj Alg
 open scoped CategoryTheory.Obj CategoryTheory.MonObj TensorProduct
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor
 open GlobalTheory GlobalTheory.HTLat GlobalTheory.Published.AbVarRed GlobalTheory.CechPic GlobalTheory.AV GlobalTheory.AV.AbVar
-attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace GlobalTheory.AV.DegSep
 
@@ -135,7 +134,7 @@ theorem deg_eq_card_ker (K : Type) [Field K] (A B : AbVar K) (f : A ⟶ B) (n : 
     congr 1
     exact Subsingleton.elim _ _
   rw [horig] at hcard
-  rw [deg, if_pos hiso, ← hcard]
+  rw [deg, ite_eq_left hiso, ← hcard]
   symm
   refine Nat.card_congr ?_
   exact

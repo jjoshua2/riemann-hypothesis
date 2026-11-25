@@ -6,6 +6,7 @@ public import Formalism.SharpRestriction.GrowthBounds.RootWeights.BinomialPreser
 public import Formalism.SharpRestriction.GrowthBounds.RootWeights.IsotypicComponentLeLowerWeights
 public import Formalism.SharpRestriction.GrowthBounds.RootWeights.WeightConditionFromIntegralForm
 import Mathlib.Tactic.TypeStar
+import Formalism.SharpRestriction.GrowthBounds.RootWeights.ExtremalProjectorLatticeScaledMem
 
 @[expose] public section
 
@@ -24,14 +25,7 @@ variable {n : ℕ} {K V : Type*} [Field K] [AddCommGroup V] [Module K V]
 private theorem pow_apply_mem_weightSp_add_smul_rootW {E : GLOps n K V} (hs : OperatorsShiftWeightsByRoots E) (a b : Fin n) (k : ℕ)
     (ν : Fin n → ℤ) (x : V) (hx : x ∈ weightSp E ν) :
     ((E a b) ^ k) x ∈ weightSp E (ν + (k : ℤ) • rootW a b) := by
-  induction k with
-  | zero => simpa using hx
-  | succ k ih =>
-    have e : ν + ((k + 1 : ℕ) : ℤ) • rootW a b = (ν + (k : ℤ) • rootW a b) + rootW a b := by
-      push_cast
-      rw [add_smul, one_smul, add_assoc]
-    rw [e, pow_succ']
-    exact hs a b _ _ ih
+  apply _root_.Formalism.MainNotions.G.GLWeightTheory.operator_pow_shifts_weight <;> assumption
 
 theorem projector_factor_preserves_weight {E : GLOps n K V} (hs : OperatorsShiftWeightsByRoots E) (mu ν : Fin n → ℤ) (a b : Fin n) (T : ℕ) (x : V)
     (hx : x ∈ weightSp E ν) : ppFac E mu a b T x ∈ weightSp E ν := by
@@ -149,7 +143,7 @@ theorem simple_raising_kill_all_raising {E : GLOps n K V} (hE : IsGLRep E) (y : 
     have hcomm : E a c (E c b y) - E c b (E a c y) =
         ((if c = c then E a b else 0) - (if b = a then E c c else 0)) y :=
       LinearMap.congr_fun (hE.1 a c c b) y
-    rw [h1, h2, map_zero, map_zero, sub_zero, if_pos rfl, if_neg hba, sub_zero] at hcomm
+    rw [h1, h2, map_zero, map_zero, sub_zero, ite_eq_left rfl, ite_eq_right hba, sub_zero] at hcomm
     exact hcomm.symm
 
 end
@@ -226,7 +220,6 @@ theorem sizes_bound_of_log_estimates (D : Formalism.BasicNotions.D7) (h : Simple
       h K V n E hE mu hmu ord hord T hT x hx
     have hall : ∀ a b : Fin n, a < b → E a b (pp E mu ord T x) = 0 := by
       intro a b hab
-      have hab' : a.val < b.val := hab
       exact simple_raising_kill_all_raising hE _ hsimple (b.val - a.val - 1) a b (by omega)
     have hyn : pp E mu ord T x ∈ nMinus E := by
       have h2 := Submodule.add_mem _ (extremal_projector_sub_mem_nMinus E mu ord T x hlt) hn

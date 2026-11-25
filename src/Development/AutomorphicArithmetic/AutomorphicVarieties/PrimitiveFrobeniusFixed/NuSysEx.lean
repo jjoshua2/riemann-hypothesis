@@ -3,6 +3,7 @@ module
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.PrimitiveFrobeniusFixed.IsAdmissiblePrimeListNil
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.PrimitiveFrobeniusFixed.AdmProd
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.PrimitiveFrobeniusFixed.DerBasic
+import all Development.AutomorphicArithmetic.AutomorphicVarieties.PrimitiveFrobeniusFixed.DerBasic
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.PrimitiveFrobeniusFixed.GalBasic
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.GaloisLibrary.KummerTheory.DvdOfIne
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.PrimitiveFrobeniusFixed.PlaceBasic
@@ -26,20 +27,10 @@ private theorem di_mem {N : ℕ} {g : G ℚ Ω} : g ∈ fixMu ℚ Ω N ↔ ∀ x
 
 private theorem di_der_mul (τ : ℕ → G ℚ Ω) (L : List ℕ) (u v : Ω) :
     der τ L (u * v) = der τ L u * der τ L v := by
-  induction L with
-  | nil => rfl
-  | cons q L ih =>
-    show der1 q (τ q) (der τ L (u * v)) = der1 q (τ q) (der τ L u) * der1 q (τ q) (der τ L v)
-    rw [ih]
-    simp only [der1, map_mul, mul_pow, Finset.prod_mul_distrib]
+  apply _root_.der_mul <;> assumption
 
 private theorem di_der_one (τ : ℕ → G ℚ Ω) (L : List ℕ) : der τ L (1 : Ω) = 1 := by
-  induction L with
-  | nil => rfl
-  | cons q L ih =>
-    show der1 q (τ q) (der τ L 1) = 1
-    rw [ih]
-    simp [der1]
+  apply _root_.der_one <;> assumption
 
 private theorem di_der_inv (τ : ℕ → G ℚ Ω) (L : List ℕ) (u : Ω) :
     der τ L u⁻¹ = (der τ L u)⁻¹ := by
@@ -1307,7 +1298,7 @@ theorem UpperTheory.V.ML.nuSysEx :
   let τ : ℕ → G ℚ Ω := fun q => if h : q.Prime then Classical.choose (ineTau Ω q h).2 else 1
   have hτ : ∀ q, q.Prime → IsTau q (τ q) := by
     intro q hq
-    simp only [τ, dif_pos hq]
+    simp only [τ, dite_eq_left hq]
     exact Classical.choose_spec (ineTau Ω q hq).2
   have hkol : ∀ L, AdmL l F r L → ∃ κ : G ℚ Ω → ZMod (l ^ m), IsKol (l ^ m) F L.prod ζ g0 (a0 : ZMod (l ^ m)).val (der τ L ((fun d => opP g0 (a0 : ZMod (l ^ m)).val (X d) ^ (2 * N₀ * d)) L.prod)) κ := by
     intro L hL
@@ -1318,7 +1309,7 @@ theorem UpperTheory.V.ML.nuSysEx :
   let κ : List ℕ → G ℚ Ω → ZMod (l ^ m) := fun L => if h : AdmL l F r L then Classical.choose (hkol L h) else 0
   have hκ : ∀ L (h : AdmL l F r L), IsKol (l ^ m) F L.prod ζ g0 (a0 : ZMod (l ^ m)).val (der τ L ((fun d => opP g0 (a0 : ZMod (l ^ m)).val (X d) ^ (2 * N₀ * d)) L.prod)) (κ L) := by
     intro L h
-    simp only [κ, dif_pos h]
+    simp only [κ, dite_eq_left h]
     exact Classical.choose_spec (hkol L h)
   have hchiO : ∀ (g : G ℚ Ω) (k : ℕ), Pows (l ^ m) k g → ∃ e : O, ((chiO ℚ Ω l O g : Oˣ) : O) = k + (l : O) ^ m * e := by
     intro g k hg

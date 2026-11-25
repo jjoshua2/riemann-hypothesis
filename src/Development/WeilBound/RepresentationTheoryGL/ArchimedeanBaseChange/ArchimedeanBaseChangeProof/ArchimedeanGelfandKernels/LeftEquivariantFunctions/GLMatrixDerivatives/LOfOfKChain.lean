@@ -30,8 +30,6 @@ namespace PositivityTheory.RgBcC.LfSt.UnitaryConjTransposeTrace
 open PositivityTheory.RgBcC PositivityTheory.RgBcC.LfSt
 open PositivityTheory.RgTw (Mat G th tw hb)
 
-attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
 variable {n : ℕ}
 
 theorem contOn_inv : ContinuousOn (fun y : Mat n => y⁻¹) (GLs n) := by
@@ -408,18 +406,18 @@ theorem lAsm : LAsm := by
     if y ∈ cone n ×ˢ cone n then Kc σ c Fr k Γ T d.val y else 0 with hK'def
   have hUU : IsOpen (cone n ×ˢ cone n) := hopen.prod hopen
   have hKK' : ∀ y ∈ cone n ×ˢ cone n, K' =ᶠ[𝓝 y] Kc σ c Fr k Γ T d.val := fun y hy =>
-    Filter.eventually_of_mem (hUU.mem_nhds hy) fun y' hy' => by simp only [hK'def, if_pos hy']
+    Filter.eventually_of_mem (hUU.mem_nhds hy) fun y' hy' => by simp only [hK'def, ite_eq_left hy']
   obtain ⟨hherm, htr, -, -, -, -, -, hoPt⟩ := hHb n
   have hH := hHom (Fin n × Fin n) E.V (fun i => ε (hb i)) (fun i => ι (hb i)) S Γ (cone n) (oPt n) K' hopen hconv hoPt
     (fun i j => by
       rw [hCx.car (hb i) (hb j) (hherm i) (hherm j), htr i j]
       split_ifs <;> simp)
     (fun i => hCx.Γε _) (fun i => hCx.Γι _) hCx.SΓ hCx.Ssmooth (fun s i => hCx.Sε s _) hCx.Sder
-    (hKsm.congr fun y hy => by simp only [hK'def, if_pos hy])
+    (hKsm.congr fun y hy => by simp only [hK'def, ite_eq_left hy])
     (fun y => by
       by_cases hy : y ∈ cone n ×ˢ cone n
-      · simp only [hK'def, if_pos hy]; exact hKΓ y hy
-      · simp only [hK'def, if_neg hy, mul_zero, zero_mul])
+      · simp only [hK'def, ite_eq_left hy]; exact hKΓ y hy
+      · simp only [hK'def, ite_eq_right hy, mul_zero, zero_mul])
     (fun y hy => by
       rw [(hKK' y hy).fderiv_eq]
       exact hKch y hy)
@@ -435,8 +433,7 @@ theorem lAsm : LAsm := by
     intro x hx hlt
     by_contra hne
     have hle : lg (x⁻¹ * diagonal z * xᴴ⁻¹) ≤ R := by
-      by_contra hgt
-      push_neg at hgt
+      by_contra! hgt
       exact hne (hd ▸ hsuppk _ (hd ▸ tw_mem_GLs hx hdG) hgt)
     have := hR' 1 ⟨zero_le_one, le_refl _⟩ x hx x hx (by simp) hle
     linarith
@@ -448,11 +445,11 @@ theorem lAsm : LAsm := by
   rw [← heq1, ← heq0]
   have e1 : ∫ v in cone n, LinearMap.trace ℂ E.V ((Γ * S 1 * K' (v, v) : E.V →L[ℂ] E.V) : E.V →ₗ[ℂ] E.V) =
       ∫ v in cone n, LinearMap.trace ℂ E.V ((Γ * S 1 * Kc σ c Fr k Γ T d.val (v, v) : E.V →L[ℂ] E.V) : E.V →ₗ[ℂ] E.V) :=
-    setIntegral_congr_fun hopen.measurableSet fun v hv => by simp only [hK'def, if_pos (show (v, v) ∈ cone n ×ˢ cone n from ⟨hv, hv⟩)]
+    setIntegral_congr_fun hopen.measurableSet fun v hv => by simp only [hK'def, ite_eq_left (show (v, v) ∈ cone n ×ˢ cone n from ⟨hv, hv⟩)]
   have e0 : ∫ v in cone n, LinearMap.trace ℂ E.V ((Γ * S 0 * K' (oPt n, v) : E.V →L[ℂ] E.V) : E.V →ₗ[ℂ] E.V) =
       ∫ v in cone n, LinearMap.trace ℂ E.V ((Γ * S 0 * Kc σ c Fr k Γ T d.val (oPt n, v) : E.V →L[ℂ] E.V) : E.V →ₗ[ℂ] E.V) :=
     setIntegral_congr_fun hopen.measurableSet fun v hv => by
-      simp only [hK'def, if_pos (show (oPt n, v) ∈ cone n ×ˢ cone n from ⟨hoPt, hv⟩)]
+      simp only [hK'def, ite_eq_left (show (oPt n, v) ∈ cone n ×ˢ cone n from ⟨hoPt, hv⟩)]
   rw [← e1, ← e0]
   exact hH
 

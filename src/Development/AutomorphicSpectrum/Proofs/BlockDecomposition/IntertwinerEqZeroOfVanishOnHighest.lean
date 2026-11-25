@@ -77,7 +77,7 @@ theorem diag_commute (hg : Formalism.REAL.GlRel G) (i j : Fin n) : Commute (G i 
   · subst hij
     exact Commute.refl _
   · have h' : ¬ j = i := fun h => hij h.symm
-    rw [if_neg hij, if_neg h', sub_zero] at h
+    rw [ite_eq_right hij, ite_eq_right h', sub_zero] at h
     exact sub_eq_zero.1 h
 
 theorem diagOn_commute (hg : Formalism.REAL.GlRel G) (hst : ∀ a b, ∀ w ∈ N, G a b w ∈ N) (i j : Fin n) :
@@ -97,8 +97,7 @@ theorem wts_nonempty (hg : Formalism.REAL.GlRel G) (hs : ∀ a b (x y : H), ⟪G
     (fun i j _ => diagOn_commute hg hst i j)
   haveI : Nontrivial N := Submodule.nontrivial_iff_ne_bot.2 hN
   obtain ⟨χ, hχ⟩ : ∃ χ : Fin n → ℂ, (⨅ c, Module.End.eigenspace (diagOn G N hst c) (χ c)) ≠ ⊥ := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     rw [iSup_congr hcon, iSup_bot] at htop
     exact bot_ne_top htop
   obtain ⟨x, hx, hx0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hχ

@@ -1,5 +1,6 @@
 module
 
+import Development.AutomorphicSpectrum.Proofs.MetricProofs.HodgePotentialSmoothOffBoundary
 public import Development.AutomorphicSpectrum.Proofs.MetricProofs.OmHeightslockG
 public import Development.WeilBound.CoreStatements.PluriharmonicCharts.XCBmExistsBlockpos
 public import Development.AutomorphicSpectrum.Definitions.MetricPeriods.GenericBlockMatrixIsBlockDiag
@@ -141,68 +142,8 @@ theorem psd_blocks {X : Matrix m m ℂ} {Y : Matrix m' m' ℂ} (hX : X.PosSemide
 
 theorem norm_entry_le {b : ℝ} {X : Matrix m m ℂ} (hX : X.PosSemidef)
     (h : ((b : ℂ) • (1 : Matrix m m ℂ) - X).PosSemidef) (i j : m) : ‖X i j‖ ≤ b := by
-  have dX : ∀ k, 0 ≤ (X k k).re ∧ (X k k).im = 0 := by
-    intro k
-    have := hX.diag_nonneg (i := k)
-    rw [Complex.nonneg_iff] at this
-    exact ⟨this.1, this.2.symm⟩
-  have dN : ∀ k, (X k k).re ≤ b := by
-    intro k
-    have := h.diag_nonneg (i := k)
-    simp [Matrix.sub_apply, Matrix.smul_apply] at this
-    simpa using (Complex.le_def.mp this).1
-  by_cases hij : i = j
-  · subst hij
-    have e : X i i = ((X i i).re : ℂ) := Complex.ext (by simp) (by simp [(dX i).2])
-    rw [e, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (dX i).1]
-    exact dN i
-  · obtain ⟨s, hs⟩ : ∃ s, s = X i j := ⟨_, rfl⟩
-    rw [← hs]
-    by_cases h0 : s = 0
-    · rw [h0, norm_zero]
-      exact (dX i).1.trans (dN i)
-    have hr : 0 < ‖s‖ := norm_pos_iff.mpr h0
-    have hrc : (‖s‖ : ℂ) ≠ 0 := by exact_mod_cast hr.ne'
-    have hss : s * star s = ((‖s‖ : ℂ)) ^ 2 := by
-      show s * (starRingEnd ℂ) s = _
-      rw [Complex.mul_conj']
-    obtain ⟨w, hw⟩ : ∃ w : ℂ, w = star s / (‖s‖ : ℂ) := ⟨_, rfl⟩
-    have hsw : s * w = (‖s‖ : ℂ) := by
-      rw [hw, mul_div_assoc', hss]
-      field_simp
-    have hji : X j i = star s := by
-      rw [hs]
-      exact (hX.1.apply j i).symm
-    have hws : star w = s / (‖s‖ : ℂ) := by
-      rw [hw, star_div₀, star_star]
-      congr 1
-      simp
-    have hww : star w * w = 1 := by
-      rw [hws, hw, div_mul_div_comm, hss]
-      field_simp
-    have e2 : star w * star s = (‖s‖ : ℂ) := by
-      rw [← star_mul, hsw]
-      simp
-    have key : ∀ (N : Matrix m m ℂ), star (Pi.single i 1 + Pi.single j w : m → ℂ) ⬝ᵥ (N *ᵥ (Pi.single i 1 + Pi.single j w)) =
-        N i i + N i j * w + star w * N j i + star w * N j j * w := by
-      intro N
-      simp [Matrix.mulVec_add, dotProduct_add, add_dotProduct, Matrix.mulVec_single, Pi.star_single, single_dotProduct]
-      ring
-    have Q := h.dotProduct_mulVec_nonneg (Pi.single i 1 + Pi.single j w)
-    rw [key] at Q
-    have n1 : ((b : ℂ) • (1 : Matrix m m ℂ) - X) i i = b - X i i := by simp [Matrix.sub_apply]
-    have n2 : ((b : ℂ) • (1 : Matrix m m ℂ) - X) j j = b - X j j := by simp [Matrix.sub_apply]
-    have n3 : ((b : ℂ) • (1 : Matrix m m ℂ) - X) i j = - s := by simp [Matrix.sub_apply, hij, hs]
-    have n4 : ((b : ℂ) • (1 : Matrix m m ℂ) - X) j i = - star s := by
-      simp [Matrix.sub_apply, Ne.symm hij, hji]
-    rw [n1, n2, n3, n4] at Q
-    have eQ : (b : ℂ) - X i i + -s * w + star w * -star s + star w * ((b : ℂ) - X j j) * w =
-        2 * (b : ℂ) - X i i - X j j - 2 * (‖s‖ : ℂ) := by
-      linear_combination ((b : ℂ) - X j j) * hww - hsw - e2
-    rw [eQ, Complex.nonneg_iff] at Q
-    have := Q.1
-    simp at this
-    linarith [(dX i).1, (dX j).1]
+  intros
+  apply _root_.LevelTowerAlt.MuBd.norm_entry_le <;> assumption
 
 end LA
 
@@ -851,7 +792,7 @@ theorem change_gen {F F' : FrameData ι Ψ N M.Ω M.blk} (hF : M.IsFrame F) (hF'
     rw [minorIJ_mul]; simp [hh]
   simp only [e3] at e1
   rw [eT, detFac_mul _ bR, Matrix.mul_assoc] at e2
-  simp only [hh, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, if_true] at e2
+  simp only [hh, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true] at e2
   linear_combination e2 - detFac j p.2 R * e1
 
 theorem change_base {F F' : FrameData ι Ψ N M.Ω M.blk} (hF : M.IsFrame F) (hF' : M.IsFrame F') {p : Ψ × Fin N}
@@ -891,10 +832,10 @@ theorem left_inv_val {F : FrameData ι Ψ N M.Ω M.blk} (hF : M.IsFrame F) {w : 
   rw [Finset.sum_comm]
   simp only [← Finset.sum_mul]
   rw [Finset.sum_eq_single I]
-  · rw [rel I hI, if_pos rfl, one_mul]
+  · rw [rel I hI, ite_eq_left rfl, one_mul]
   · intro I' _ hne
     by_cases h : IsStepRows N j p.2 I'
-    · rw [rel I' h, if_neg hne.symm, zero_mul]
+    · rw [rel I' h, ite_eq_right hne.symm, zero_mul]
     · rw [minor_stepCols_eq_zero M.j_le f I' bf h, mul_zero]
   · simp
 
@@ -1041,7 +982,7 @@ theorem sum_dy (p : Ψ × Fin N) (L : K → ℝ) :
   have e1 : ∑ k' : NonPluckerBlocks M.blk, (M.b p k' : ℝ) * L k'.1 =
       ∑ k, if h : ∀ p', M.blk p' ≠ some k then (M.b p ⟨k, h⟩ : ℝ) * L k else 0 :=
     Fintype.sum_of_injective Subtype.val Subtype.val_injective _ _
-      (fun k hk => dif_neg fun h => hk ⟨⟨k, h⟩, rfl⟩) (fun k => by rw [dif_pos k.2])
+      (fun k hk => dite_eq_right fun h => hk ⟨⟨k, h⟩, rfl⟩) (fun k => by rw [dite_eq_left k.2])
   have e2 : (M.blk p).elim 0 L = ∑ k, if M.blk p = some k then L k else 0 := by
     cases M.blk p with
     | none => simp
@@ -1050,8 +991,8 @@ theorem sum_dy (p : Ψ × Fin N) (L : K → ℝ) :
   refine Finset.sum_congr rfl fun k _ => ?_
   unfold FlagModel.dy
   by_cases h : ∀ p', M.blk p' ≠ some k
-  · rw [dif_pos h, dif_pos h, if_neg (h p)]; simp
-  · rw [dif_neg h, dif_neg h]; split_ifs <;> simp
+  · rw [dite_eq_left h, dite_eq_left h, ite_eq_right (h p)]; simp
+  · rw [dite_eq_right h, dite_eq_right h]; split_ifs <;> simp
 
 theorem Rel.smul
     (hgood : ∀ F τ w G, Gr F τ w G → M.IsFrame F ∧ w ∈ mcPts (mCoordIdeal M.x) ∧ M.GoodAt F (mCoordIdeal w) ∧
@@ -1122,7 +1063,7 @@ theorem exists_hom
     if h : ∃ r, Rel M Gr p z r then Real.exp h.choose else refNorm (M.dy p) z
   have fr : ∀ z r, Rel M Gr p z r → f z = Real.exp r := fun z r h => by
     have hex : ∃ r, Rel M Gr p z r := ⟨r, h⟩
-    simp only [f, dif_pos hex]
+    simp only [f, dite_eq_left hex]
     rw [Rel.unique hgood hcomp hex.choose_spec h]
   refine ⟨⟨M.dy p, f, fun z hz => ?_, fun c z hc => ?_⟩, rfl, fun F w G hG z hz ho hn h bh dh => ?_, fun z => ?_⟩
   · simp only [f]
@@ -1142,7 +1083,7 @@ theorem exists_hom
           funext q; simp [torusSmul, hc]
         rw [e] at this
         exact h ⟨_, this⟩
-      simp only [f, dif_neg h, dif_neg h']
+      simp only [f, dite_eq_right h, dite_eq_right h']
       exact refNorm_smul _ _ _
   · obtain ⟨c, hc, e⟩ := ho
     have hG' : Gr F p.1 (basePart M.blk z) G := by
@@ -1167,7 +1108,7 @@ theorem exists_hom
           funext q; simp [conjVec]
         rw [e] at this
         exact h ⟨_, this⟩
-      simp only [f, dif_neg h, dif_neg h']
+      simp only [f, dite_eq_right h, dite_eq_right h']
       simp [refNorm, conjVec]
 
 end PositivityTheory.Xgp.c_bm_exists_hom

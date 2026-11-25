@@ -53,7 +53,6 @@ noncomputable section
 
 open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj NumberField
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Out ReciprocityTheory.ChartRestriction.G.Geo.Tor Formalism.L2.Pj Formalism.MainNotions.ModuliIntegralCharts.H1
-attribute [local instance] Over.cartesianMonoidalCategory
 open ReciprocityTheory.ChartRestriction.G.Geo.Tor.Germ (PS Pt ev pt comp1 FGLaw)
 open MvPolynomial (X)
 
@@ -169,7 +168,7 @@ theorem exists_ad_one (hch : IsChartG t x0 d F act tg uvec x) (e : ∀ m, FrTyG 
     have h0 := hu.symm.trans hu1
     rw [psJet, ← map_one (Ideal.Quotient.mk _), Ideal.Quotient.eq] at h0
     have h1 := coeff_eq_zero_of_mem h0 (e := 0) (by simp)
-    rw [MvPolynomial.coeff_sub, sub_eq_zero, MvPolynomial.coeff_one, if_pos rfl] at h1
+    rw [MvPolynomial.coeff_sub, sub_eq_zero, MvPolynomial.coeff_one, ite_eq_left rfl] at h1
     exact h1
   exact ⟨ad, hadc, had⟩
 

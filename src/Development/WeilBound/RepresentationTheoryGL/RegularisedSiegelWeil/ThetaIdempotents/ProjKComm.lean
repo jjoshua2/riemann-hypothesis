@@ -102,7 +102,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.ModerateGrowthSchwartz (schwartzA)
 open GlobalTheory.IndefiniteRowSideFullHecke.SphericalZero (swSec sZero IsKFinVec)
 open GlobalTheory.Core.Rk.SW (sch)
 open GlobalTheory.Mem.AutSpace (SmFun)
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 noncomputable section
 
@@ -346,10 +345,10 @@ theorem tsum_reindex (G : Matrix (Fin T.rank) (Fin ρ) D.host.E → ℂ) :
   · refine tsum_congr fun γ => ?_
     have a1 : d.eᴴ * T.gram * (d.e * γ) = 0 := by rw [← Matrix.mul_assoc, d.ee, Matrix.zero_mul]
     have a2 : d.i₀ᴴ * T.gram * (d.e * γ) = 0 := by rw [← Matrix.mul_assoc, d.i₀e, Matrix.zero_mul]
-    exact (if_pos a1).trans (if_pos a2)
+    exact (ite_eq_left a1).trans (ite_eq_left a2)
   · intro η hη
-    have hY : d.eᴴ * T.gram * η = 0 := by by_contra h; exact hη (if_neg h)
-    have h0 : d.i₀ᴴ * T.gram * η = 0 := by by_contra h; exact hη (by simp only [if_neg h, ite_self])
+    have hY : d.eᴴ * T.gram * η = 0 := by by_contra h; exact hη (ite_eq_right h)
+    have h0 : d.i₀ᴴ * T.gram * η = 0 := by by_contra h; exact hη (by simp only [ite_eq_right h, ite_self])
     refine ⟨d.qX * η, ?_⟩
     have := congrArg (· * η) d.sum_eq_one_rat
     simpa only [Matrix.add_mul, HypDec.q0, HypDec.qY, Matrix.mul_assoc d.e, Matrix.mul_assoc d.i₀, Matrix.mul_assoc d.e',
@@ -466,7 +465,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.SphericalVolumeLift (FinPl RealMat 
 open GlobalTheory.IndefiniteRowSideFullHecke.SphericalZero (ip delta swSec sZero IsKFinVec)
 open GlobalTheory.Mem.Th (CptF)
 open GlobalTheory.Core.Rk.IP
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Core.Rk.Exh GlobalTheory.RegSW
 
 noncomputable section
@@ -523,7 +521,6 @@ open GlobalTheory.AutomorphicL2Unitary GlobalTheory.AdelicU GlobalTheory.Doublin
 open GlobalTheory.IndefiniteRowSideFullHecke.ModerateGrowthSchwartz (schwartzA)
 open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory.GramSchwartzFunctions.BC PositivityTheory.PfSWUS GlobalTheory.RegSW GlobalTheory.IkedaK
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.RegSch (ikS projS Lvl)
 
 namespace PositivityTheory.Rg.Rsw.L.LIkEq2

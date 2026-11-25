@@ -484,15 +484,15 @@ theorem gapGe_of_wtBig {P : WtPar Dw} (h : WtBig P) : GapGe 1 P.u₁ ∧ GapGe 1
   have h2 : ∀ τ k, k + 1 < Dw.p + Dw.q → 3 ≤ gap (P.u₂ τ) k := fun τ k hk => by
     have a := h3 τ k hk
     have b := (P.gap_rem τ k).1
-    simp only [gap, dif_pos hk, WtPar.u₂, Pi.add_apply] at a b ⊢
+    simp only [gap, dite_eq_left hk, WtPar.u₂, Pi.add_apply] at a b ⊢
     omega
   refine ⟨h3.mono (by norm_num), fun τ k hk => le_trans (by norm_num) (h2 τ k hk), fun j τ k hk => ?_⟩
   have a := h3 τ k hk
   have b := h2 τ k hk
   have c : -2 ≤ gap (FlagTan.kap Dw τ) k := by
-    simp only [gap, dif_pos hk, FlagTan.kap]
+    simp only [gap, dite_eq_left hk, FlagTan.kap]
     split_ifs <;> push_cast <;> omega
-  simp only [gap, dif_pos hk, WtPar.wt, WtPar.uc, Pi.add_apply, Pi.smul_apply] at a b c ⊢
+  simp only [gap, dite_eq_left hk, WtPar.wt, WtPar.uc, Pi.add_apply, Pi.smul_apply] at a b c ⊢
   simp only [nsmul_eq_mul]
   have e1 := mul_nonneg (Int.natCast_nonneg (FlagTan.dimFlag Dw)) (le_trans (by norm_num) a)
   have e2 := mul_nonneg (Int.natCast_nonneg j) (le_trans (by norm_num) a)
@@ -1193,8 +1193,7 @@ theorem log_sum_le {S k fr L : ℝ} (hS0 : 0 ≤ S) (hSk : S ≤ (fr * L) ^ 2 * 
   · rw [← h, Real.log_zero]; linarith
   have hZ : 0 < fr * L := by positivity
   have hk0 : 0 < k := by
-    by_contra hk0
-    push_neg at hk0
+    by_contra! hk0
     have : (fr * L) ^ 2 * k ≤ 0 := mul_nonpos_of_nonneg_of_nonpos (by positivity) hk0
     linarith
   have hlogL : Real.log L ≤ L := (Real.log_le_sub_one_of_pos (by linarith)).trans (by linarith)

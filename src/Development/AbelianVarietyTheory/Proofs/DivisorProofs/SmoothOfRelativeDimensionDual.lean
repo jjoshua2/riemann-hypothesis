@@ -115,12 +115,6 @@ theorem dual_unique {B' : Over S} [GrpObj B'] {P' : LB (A ⊗ B').left} (h : IsD
 
 end Dual
 
-section Crystal
-
-variable {R R₀ : Type} [CommRing R] [CommRing R₀] {I : Ideal R} {κ : DividedPowers I} {π : R →+* R₀}
-
-end Crystal
-
 end GlobalTheory.Published.AbelianDualCrystal.Test
 end -- clump:auto
 end -- clump:auto
@@ -158,8 +152,6 @@ noncomputable section
 open CategoryTheory AlgebraicGeometry Limits MonoidalCategory CartesianMonoidalCategory MonObj TensorProduct
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor
 open GlobalTheory.DeRham GlobalTheory.AbDual GlobalTheory.PDiv GlobalTheory.PDivGroup GlobalTheory.BadPt GlobalTheory.CartierDual WithConv
-
-attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace GlobalTheory.WeilHom
 
@@ -332,8 +324,6 @@ open GlobalTheory.BadPt (IsWeilHom)
 open GlobalTheory.PerfdLat (dualBaseChange)
 open GlobalTheory.CompanionTheory.Hypotheses₂.Zarhin (IsPolarisation)
 
-attribute [local instance] Over.cartesianMonoidalCategory
-
 namespace GlobalTheory.SerreTateDef
 
 section Notions
@@ -385,16 +375,6 @@ theorem IsPairRed.polBundle {P : LB (A ⊗ B).left} {P₀ : LB (A₀ ⊗ B₀).l
 
 end Functor
 
-section Consequences
-
-variable {p : ℕ} [Fact p.Prime] {R R₀ : Type} [CommRing R] [CommRing R₀] [Algebra R R₀]
-
-end Consequences
-
-section Base
-
-end Base
-
 section Elliptic
 
 open GlobalTheory.WeierstrassCurve (ellPolAV)
@@ -436,7 +416,6 @@ open GlobalTheory.CompanionTheory.Hypotheses₂.Zarhin (IsPolarisation)
 open GlobalTheory.BadPt (IsWeilHom)
 open GlobalTheory.PerfdLat (dualBaseChange)
 
-attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory
 
 namespace GlobalTheory.DualTower

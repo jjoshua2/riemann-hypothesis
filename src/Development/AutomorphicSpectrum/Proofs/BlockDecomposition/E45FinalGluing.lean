@@ -1464,13 +1464,13 @@ theorem pairSlices : PairSlices := by
   refine ⟨fun m₂ => ?_, fun m₁ => ?_⟩
   · obtain ⟨φ, hφ, e⟩ := h₁ m₂
     have hex : ∃ φ : Sm E a, φ.1 = fun x => F (x, m₂) := ⟨φ, e⟩
-    have hs : sl₁ F m₂ = hex.choose := by simp only [sl₁, dif_pos hex]
+    have hs : sl₁ F m₂ = hex.choose := by simp only [sl₁, dite_eq_left hex]
     have hc : hex.choose = φ := Subtype.ext (hex.choose_spec.trans e.symm)
     rw [hs, hc]
     exact ⟨hφ, e⟩
   · obtain ⟨φ, hφ, e⟩ := h₂ m₁
     have hex : ∃ φ : Sm E b, φ.1 = fun x => F (m₁, x) := ⟨φ, e⟩
-    have hs : sl₂ F m₁ = hex.choose := by simp only [sl₂, dif_pos hex]
+    have hs : sl₂ F m₁ = hex.choose := by simp only [sl₂, dite_eq_left hex]
     have hc : hex.choose = φ := Subtype.ext (hex.choose_spec.trans e.symm)
     rw [hs, hc]
     exact ⟨hφ, e⟩
@@ -1859,12 +1859,10 @@ theorem eFinalGlue_of (hCS : ConvStrip) (hCC : ConvComp) (hFS : FactorStep) (hLL
     hG'0 hG'm hG't (fun k h hh => hG'e k h _ (hGe _ h _ (heig _ h hh)))
     (fun h hh => (hlam h hh).comp ((tendsto_add_atTop_nat k₀).comp (hφ₁.comp hφ₂).tendsto_atTop))
   obtain ⟨i, hi⟩ : ∃ i, F i ≠ 0 := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     exact hF0 (funext hcon)
   obtain ⟨x, hx⟩ : ∃ x, F i x ≠ 0 := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     exact hi (funext hcon)
   have hsl := hPS E a b _ _ (F i) (hFm i)
   have hn₁ : sl₁ (F i) x.2 ≠ 0 := fun h => hx (by

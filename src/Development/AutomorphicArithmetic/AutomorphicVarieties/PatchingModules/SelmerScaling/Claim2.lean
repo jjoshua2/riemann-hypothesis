@@ -1,5 +1,6 @@
 module
 
+import all Development.AutomorphicArithmetic.AutomorphicVarieties.PatchingModules.DeterminantPadicFree.SubMulAddEpM
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.PatchingModules.SelmerScaling.EpC
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.PatchingModules.SelmerScaling.BndOps
 public import Development.AutomorphicArithmetic.AutomorphicVarieties.PatchingModules.SelmerScaling.BndRho
@@ -105,16 +106,7 @@ private theorem P_ep' (Y : Fin e → Matrix (Fin n) (Fin n) X) (k : Fin e) :
   · simp [DD.epM, hij]
 
 private theorem epM_mul (Y Z : Fin e → Matrix (Fin n) (Fin n) X) : DD.epM Y * DD.epM Z = 0 := by
-  refine Matrix.ext fun i j => ?_
-  simp only [Matrix.mul_apply, Matrix.zero_apply]
-  refine Finset.sum_eq_zero fun k _ => ?_
-  apply DD.ext
-  · simp [DD.mul_a, DD.epM]
-  · funext m
-    simp [DD.mul_ep, DD.epM]
-  · funext m
-    simp [DD.mul_ep', DD.epM]
-  · simp [DD.mul_eta, DD.epM]
+  apply _root_.UpperTheory.V.Pa.Det.epM_mul_epM <;> assumption
 
 private theorem epM_add (Y Z : Fin e → Matrix (Fin n) (Fin n) X) : DD.epM Y + DD.epM Z = DD.epM (Y + Z) := by
   ext i j <;> simp [DD.epM]
@@ -567,7 +559,7 @@ private def EE (X : Type) [CommRing X] (g n a : ℕ) : Subalgebra X (Matrix (Fin
     · split_ifs
       · exact ⟨fun _ => rfl, rfl⟩
       · exact ⟨fun _ => rfl, rfl⟩
-    · rw [if_neg (by rintro rfl; exact e Iff.rfl)]
+    · rw [ite_eq_right (by rintro rfl; exact e Iff.rfl)]
       exact ⟨rfl, fun _ => rfl⟩
 
 private theorem EE_scal {a : ℕ} {c : DD X g} (hc : P0 c) :
@@ -578,7 +570,7 @@ private theorem EE_scal {a : ℕ} {c : DD X g} (hc : P0 c) :
   · split_ifs
     · exact hc
     · exact ⟨fun _ => rfl, rfl⟩
-  · rw [if_neg (by rintro rfl; exact e Iff.rfl)]
+  · rw [ite_eq_right (by rintro rfl; exact e Iff.rfl)]
     exact ⟨rfl, fun _ => rfl⟩
 
 variable {A : Type} [CommRing A] [Algebra A X] {a : ℕ}
@@ -785,9 +777,9 @@ theorem UpperTheory.V.Pa.defULift :
       have hA : Infinite x.A := by
         refine Infinite.of_injective (fun m : ℕ => (PowerSeries.X : PowerSeries x.K) ^ m) fun m m' e => ?_
         have e' := congrArg (PowerSeries.coeff m) e
-        simp only [PowerSeries.coeff_X_pow, if_true] at e'
+        simp only [PowerSeries.coeff_X_pow, ite_true] at e'
         by_contra hne
-        rw [if_neg hne] at e'
+        rw [ite_eq_right hne] at e'
         exact one_ne_zero e'
       exact Infinite.of_injective _ (IsFractionRing.injective x.A x.Fr)
     obtain ⟨w1w, ww1, tri⟩ := Tloc v

@@ -169,7 +169,7 @@ theorem pureL_phi (σ : E →ₐ[F] E) {M d : ℕ} (J : Matrix (Fin M) (Fin M) E
         (h2 v (Finset.mem_sdiff.1 hv).1 (Finset.mem_sdiff.1 hv).2) _
     · have hy : y ∉ cut σ J b S T := fun h => h2 h.2
       rw [Set.indicator_of_notMem hy]
-      push_neg at h2
+      push Not at h2
       obtain ⟨v, hvT, hvS, hv⟩ := h2
       rw [Finset.prod_eq_zero (Finset.mem_sdiff.2 ⟨hvT, hvS⟩) (Set.indicator_of_notMem hv _)]
       simp
@@ -253,7 +253,7 @@ theorem finite_case (σ : E →ₐ[F] E) (hσ : IsCMExt F E σ) {M d : ℕ} (J :
       exact iInf_const
     · rw [Set.indicator_of_notMem (show y ∉ {y : Fin 1 → Fin (M + 2) → AF F ⊗[F] E |
         ∀ v, v ∉ S → projV v (projFin y) ∈ primV σ J b v} from hy)]
-      push_neg at hy
+      push Not at hy
       obtain ⟨v, hvS, hv⟩ := hy
       obtain ⟨k, hk⟩ := (hut.eventually_ge_atTop ({v} : Finset _)).exists
       have hvk : v ∈ T k := Finset.mem_union_right _ (hk (Finset.mem_singleton_self v))
@@ -545,7 +545,7 @@ theorem exists_gens (hδ : δ * δ = ι D) (hsp : ∀ y : O, ∃ p q : R, y = ι
     rcases hP.isPrime.mem_or_mem hprod with h | h
     · exact Or.inl (eq_span_of_factor ι δ D hδ hsp e _ _ hm f1 hP h)
     · exact Or.inr (eq_span_of_factor ι δ D hδ hsp (-e) _ _ hm f2 hP h)
-  · push_neg at hsq
+  · push Not at hsq
     exact ⟨ι ϖ, ι ϖ, ϖ, hϖ0, dvd_rfl, dvd_rfl, fun P hP =>
       Or.inl (eq_span_of_nonsquare ι δ D hδ hsp ϖ hϖ hsq hP)⟩
 
@@ -647,8 +647,7 @@ theorem maximal_ideals : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [N
     apply τ.injective
     rw [h.2.2.2, h.2.2.2, star_star]
   have hne : ∃ x, σ x ≠ x := by
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     obtain ⟨w⟩ := (inferInstance : Nonempty (NumberField.InfinitePlace E))
     have hreal : w.IsReal := by
       rw [← NumberField.InfinitePlace.mk_embedding w, NumberField.InfinitePlace.isReal_mk_iff,
@@ -892,8 +891,7 @@ theorem norm_le_of_nonunit (F E : Type) [Field F] [NumberField F] [Field E] [Num
     intro h
     exact one_ne_zero (b.repr.map_eq_zero_iff.1 h)
   obtain ⟨k0, hk0⟩ : ∃ k, b.repr 1 k ≠ 0 := by
-    by_contra hcon
-    push_neg at hcon
+    by_contra! hcon
     exact hb1 (Finsupp.ext hcon)
   filter_upwards [GlobalTheory.CompanionTheory.SW.GoodRing.good_ring F E σ hσ d b, val_eq_one_eventually _ hk0]
     with v hgood hv O hO c hc hcu
@@ -1045,8 +1043,7 @@ theorem exists_u_local {A : Type} [CommRing A] (σ : A →+* A) {M : ℕ}
       | succ j => exact ⟨j, rfl⟩
   set w : Fin M → A := fun i => x i.succ.succ with hw
   have hex : ∃ k, (J *ᵥ w) k ∉ P := by
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     have e : w = Ji *ᵥ (J *ᵥ w) := by
       rw [Matrix.mulVec_mulVec, mul_eq_one_comm.1 hJi, one_mulVec]
     apply hi
@@ -1111,7 +1108,7 @@ theorem exists_u {A : Type} [CommRing A] (σ : A →+* A) (hσ : ∀ a, σ (σ a
         rcases hQ.isPrime.mem_or_mem h3 with h4 | h4
         · exact hp1 h4
         · exact h h4
-  · push_neg at hdist
+  · push Not at hdist
     by_cases hex : ∃ P : Ideal A, P.IsMaximal
     · obtain ⟨P, hP⟩ := hex
       obtain ⟨u, hu⟩ := hloc P hP
@@ -1121,8 +1118,7 @@ theorem exists_u {A : Type} [CommRing A] (σ : A →+* A) (hσ : ∀ a, σ (σ a
 theorem exists_mu {A : Type} [CommRing A] (P₁ P₂ : Ideal A)
     (hmax : ∀ P : Ideal A, P.IsMaximal → P = P₁ ∨ P = P₂) (h2 : IsUnit (2 : A)) (a b : A)
     (hab : ∀ P : Ideal A, P.IsMaximal → b ∉ P ∨ a ∉ P) : ∃ μ : ℤ, IsUnit (a - (μ : A) * b) := by
-  by_contra hc
-  push_neg at hc
+  by_contra! hc
   have pair : ∀ P : Ideal A, P.IsMaximal → ∀ m n : ℤ, IsUnit ((n : A) - m) →
       a - (m : A) * b ∈ P → a - (n : A) * b ∈ P → False := by
     intro P hP m n hu h1 h3
@@ -1458,7 +1454,7 @@ theorem cover_pt (σ : E →ₐ[F] E) {M d : ℕ} (J Ji : Matrix (Fin M) (Fin M)
     rw [Fin.fin_one_eq_zero a]
     exact hgx
   · right
-    push_neg at hp
+    push Not at hp
     obtain ⟨P, hPm, hP⟩ := hp
     have aux : ∀ c : O, P = Ideal.span {c} → ¬ IsUnit c ∧
         X ∈ (fun (Y : Fin 1 → Fin (M + 2) → Fv F v ⊗[F] E) a i => (c : Fv F v ⊗[F] E) * Y a i) ''

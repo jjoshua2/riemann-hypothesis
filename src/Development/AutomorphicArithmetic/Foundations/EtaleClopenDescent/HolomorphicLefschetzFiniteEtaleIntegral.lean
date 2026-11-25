@@ -304,16 +304,16 @@ theorem UpperTheory.isAffCover_prod_cechOpen :
       have e1 : (w' : Finset κ → DR ℂ Z'.functionField) t.1 =
           sortSign τ t.1 • φ ((w : Finset ι → DR ℂ Z.functionField) (Finset.image τ t.1)) := by
         show pullC τ φ (w : Finset ι → DR ℂ Z.functionField) t.1 = _
-        simp only [pullC, LinearMap.coe_mk, AddHom.coe_mk, if_pos hinj]
-      rw [e1, show x' t = _ from dif_pos hinj]
+        simp only [pullC, LinearMap.coe_mk, AddHom.coe_mk, ite_eq_left hinj]
+      rw [e1, show x' t = _ from dite_eq_left hinj]
       refine Eq.trans ?_ (map_zsmul (formGermI p' a _ _ hinst') (sortSign τ t.1) _).symm
       rw [hw ⟨_, hcard t hinj⟩, gm_pos hinst hU a hne]
       congr 1
       exact (T.genericGerm_differentialForm_pullback_dominant Z Z' p p' hinst hinst' f hf ψ φ hDR hψ a _ _ _ _ _ _ (hle t.1) _).symm
     · have e1 : (w' : Finset κ → DR ℂ Z'.functionField) t.1 = 0 := by
         show pullC τ φ (w : Finset ι → DR ℂ Z.functionField) t.1 = _
-        simp only [pullC, LinearMap.coe_mk, AddHom.coe_mk, if_neg hinj]
-      rw [e1, show x' t = 0 from dif_neg hinj]
+        simp only [pullC, LinearMap.coe_mk, AddHom.coe_mk, ite_eq_right hinj]
+      rw [e1, show x' t = 0 from dite_eq_right hinj]
       exact (map_zero (formGermI p' a _ _ hinst')).symm
   obtain ⟨eY, -, -, hdY⟩ := cube_exists d' p' hinst' hU' a b
   have hker : x' ∈ ((cechCube ℂ (Omega p' a) ⊤ U').d (b + 1)).ker := hdY x' w' hgm
@@ -325,9 +325,9 @@ theorem UpperTheory.isAffCover_prod_cechOpen :
       obtain ⟨s, hsc⟩ := s
       simp only at hs
       subst hs
-      exact dif_pos hinj
+      exact dite_eq_left hinj
     · intro t hinj
-      exact dif_neg hinj
+      exact dite_eq_right hinj
     · rw [hz]
       rfl
   rw [← hR, cmp_class d' p' hinst' hU' a b ⟨x', hker⟩ w' hgm, ← hz, cmp_class d p hinst hU a b x w hw]
@@ -678,7 +678,7 @@ theorem gp_pos (hc : c ≫ p = p') (hinst' : inst' = ffAlg p')
     gp p' hc hinst' hU' a s =
       (formGermI p' a (pre_affine hU' h) (pre_generic hU' s) hinst') ∘ₗ
         up hc a (cechOpen ⊤ U s) :=
-  dif_pos h
+  dite_eq_left h
 
 theorem germ_inj_range_pre (d : ℕ) [SmoothOfRelativeDimension d p'] (hinst' : inst' = ffAlg p')
     (hU' : IsAffCover p' (fun i => c ⁻¹ᵁ U i) B') (a : ℕ) (s : Finset ι) (hs : s.Nonempty)
@@ -758,7 +758,7 @@ theorem cmp_trace (d : ℕ) (Z : Scheme.{0}) [IsIntegral Z] (p : Z ⟶ Sp ℂ) [
       obtain rfl : s = t := Subtype.ext (by simpa using e)
       have h1 : sortSign (id : ι → ι) s.1 = 1 := by
         refine Finset.prod_eq_one fun x _ => Finset.prod_eq_one fun y _ => ?_
-        exact if_neg fun h => lt_asymm h.1 h.2
+        exact ite_eq_right fun h => lt_asymm h.1 h.2
       rw [h1, one_smul]
       rfl) (fun t h => absurd Function.injective_id.injOn h)
   have hback : cechHEquivCoh ℂ hU.cover (cover_biInf hU)
@@ -1182,90 +1182,6 @@ private theorem red_of_fu {A B : Type} [CommRing A] [CommRing B] [Algebra ℂ A]
   have h4 : Algebra.FormallyUnramified ℂ (B ⧸ I.map (algebraMap A B)) := .comp ℂ (A ⧸ I) _
   exact Algebra.FormallyUnramified.isReduced_of_field ℂ _
 
-private theorem fin_of_const {R E Q : Type} [CommRing R] [CommRing E] [Algebra R E] [Module.Finite R E] [CommRing Q]
-    [Algebra ℂ Q] (φ : R →+* Q) (π : E →+* Q) (hs : Function.Surjective π) (hπ : ∀ r e, π (r • e) = φ r * π e)
-    (hc : ∀ r, ∃ c : ℂ, φ r = algebraMap ℂ Q c) : Module.Finite ℂ Q := by
-  obtain ⟨n, s, hs'⟩ := Module.Finite.exists_fin (R := R) (M := E)
-  have key : ∀ e, π e ∈ Submodule.span ℂ (Set.range (π ∘ s)) := by
-    intro e
-    have he : e ∈ Submodule.span R (Set.range s) := hs' ▸ Submodule.mem_top
-    induction he using Submodule.span_induction with
-    | mem y hy =>
-      obtain ⟨i, rfl⟩ := hy
-      exact Submodule.subset_span ⟨i, rfl⟩
-    | zero => rw [map_zero]; exact Submodule.zero_mem _
-    | add a b _ _ iha ihb => rw [map_add (f := _)]; exact Submodule.add_mem _ iha ihb
-    | smul r y _ ih =>
-      obtain ⟨c, hc'⟩ := hc r
-      rw [hπ, hc', ← Algebra.smul_def]
-      exact Submodule.smul_mem _ _ ih
-  have htop : Submodule.span ℂ (Set.range (π ∘ s)) = ⊤ := by
-    refine top_le_iff.1 fun a _ => ?_
-    obtain ⟨b, rfl⟩ := hs a
-    exact key b
-  exact ⟨htop ▸ Submodule.fg_span (Set.finite_range _)⟩
-
-private theorem rA_const {F Q : Type} [Field F] [Algebra ℂ F] [CommRing Q] [Algebra ℂ Q] {d : ℕ} (x : Fin (d + 1) → F)
-    (h0 : x 0 ≠ 0) (ψ : rA ℂ x {0} →ₐ[ℂ] Q) (ht : ∀ (j : Fin d) (h : x j.succ / x 0 ∈ rA ℂ x {0}), ψ ⟨_, h⟩ = 0)
-    (r : rA ℂ x {0}) : ∃ c : ℂ, ψ r = algebraMap ℂ Q c := by
-  obtain ⟨r, hr⟩ := r
-  induction hr using Algebra.adjoin_induction with
-  | mem y hy =>
-    obtain ⟨i, hi, j, rfl⟩ := hy
-    rw [Finset.mem_singleton] at hi
-    subst hi
-    induction j using Fin.cases with
-    | zero =>
-      refine ⟨1, ?_⟩
-      rw [map_one, ← map_one ψ]
-      congr 1
-      exact Subtype.ext (div_self h0)
-    | succ j => exact ⟨0, by rw [map_zero]; exact ht j _⟩
-  | algebraMap c => exact ⟨c, ψ.commutes c⟩
-  | add a b ha hb iha ihb =>
-    obtain ⟨c₁, e₁⟩ := iha
-    obtain ⟨c₂, e₂⟩ := ihb
-    exact ⟨c₁ + c₂, by rw [map_add (f := _), ← e₁, ← e₂]; exact map_add ψ ⟨a, ha⟩ ⟨b, hb⟩⟩
-  | mul a b ha hb iha ihb =>
-    obtain ⟨c₁, e₁⟩ := iha
-    obtain ⟨c₂, e₂⟩ := ihb
-    exact ⟨c₁ * c₂, by rw [map_mul, ← e₁, ← e₂]; exact map_mul ψ ⟨a, ha⟩ ⟨b, hb⟩⟩
-
-
-set_option synthInstance.maxHeartbeats 400000 in
-set_option maxHeartbeats 1000000 in
-private theorem fin_quot {K F : Type} [Field K] [Field F] [Algebra ℂ K] [Algebra ℂ F] [Algebra F K]
-    [IsScalarTower ℂ F K] {d : ℕ} (x : Fin (d + 1) → F) (hx : IsFinCover ℂ K x) :
-    Module.Finite ℂ ((rB ℂ K x {0}) ⧸ (Ideal.span (Set.range fun j : Fin d => (⟨_, tco_mem ℂ K x j⟩ : rB ℂ K x {0})))) := by
-  set J := Ideal.span (Set.range fun j : Fin d => (⟨_, tco_mem ℂ K x j⟩ : rB ℂ K x {0})) with hJ
-  let φ : rA ℂ x {0} →ₐ[ℂ] rB ℂ K x {0} :=
-    { toFun := fun a => ⟨algebraMap F K a, (integralClosure (rA ℂ x {0}) K).algebraMap_mem a⟩
-      map_one' := Subtype.ext (map_one _)
-      map_mul' := fun a b => Subtype.ext (map_mul _ _ _)
-      map_zero' := Subtype.ext (map_zero _)
-      map_add' := fun a b => Subtype.ext (map_add _ _ _)
-      commutes' := fun c => Subtype.ext (IsScalarTower.algebraMap_apply ℂ F K c).symm }
-  let ψ : rA ℂ x {0} →ₐ[ℂ] (rB ℂ K x {0} ⧸ J) := (Ideal.Quotient.mkₐ ℂ J).comp φ
-  have hψ := rA_const x (hx.pd.ne 0) ψ fun j h =>
-    Ideal.Quotient.eq_zero_iff_mem.2 (Ideal.subset_span ⟨j, rfl⟩)
-  let ι : integralClosure (rA ℂ x {0}) K →+* rB ℂ K x {0} :=
-    { toFun := fun e => ⟨e.1, e.2⟩
-      map_one' := rfl
-      map_mul' := fun _ _ => rfl
-      map_zero' := rfl
-      map_add' := fun _ _ => rfl }
-  haveI hfin : Module.Finite (rA ℂ x {0}) (integralClosure (rA ℂ x {0}) K) :=
-    rA_finite hx (Finset.mem_singleton_self 0)
-  refine fin_of_const (R := rA ℂ x {0}) (E := integralClosure (rA ℂ x {0}) K) ψ.toRingHom
-    ((Ideal.Quotient.mk J).comp ι) ?_ ?_ hψ
-  · intro a
-    obtain ⟨b, rfl⟩ := Ideal.Quotient.mk_surjective a
-    exact ⟨⟨b.1, b.2⟩, rfl⟩
-  · intro r e
-    have e0 : ι (r • e) = φ r * ι e := Subtype.ext (Algebra.smul_def r (e : K))
-    change Ideal.Quotient.mk J (ι (r • e)) = Ideal.Quotient.mk J (φ r) * Ideal.Quotient.mk J (ι e)
-    rw [e0, map_mul]
-
 private noncomputable def upB (K L : Type) {F : Type} [Field K] [Field L] [Field F] [Algebra ℂ K] [Algebra ℂ L] [Algebra ℂ F]
     [Algebra F K] [Algebra F L] [Algebra K L] [IsScalarTower ℂ F K] [IsScalarTower ℂ F L] [IsScalarTower ℂ K L]
     [IsScalarTower F K L] {d : ℕ} (x : Fin (d + 1) → F) : rB ℂ K x {0} →ₐ[ℂ] rB ℂ L x {0} :=
@@ -1359,8 +1275,8 @@ theorem UpperTheory.etaleCorrespondence_fieldExtension_statement :
   haveI : IsScalarTower ℂ (rB ℂ Z.functionField x {0}) (rB ℂ Y.functionField x {0}) :=
     .of_algebraMap_eq fun c => ((upB Z.functionField Y.functionField x).commutes c).symm
   have hI := map_upB_span_tco Z.functionField Y.functionField x
-  haveI := fin_quot x hx
-  have hfinL := fin_quot x hxL
+  haveI := GlobalTheory.PD.moduleFinite_fib_quot ℂ Z.functionField F d x hx
+  have hfinL := GlobalTheory.PD.moduleFinite_fib_quot ℂ Y.functionField F d x hxL
   rw [← hI] at hfinL ⊢
   exact red_of_fu _
 end -- clump:auto

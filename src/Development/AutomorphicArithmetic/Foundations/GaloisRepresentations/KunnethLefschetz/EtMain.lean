@@ -245,7 +245,7 @@ theorem UpperTheory.Gal.KunnethLefschetz.kunL_holds :
       obtain rfl : b = n - a := by omega
       have ha : a ≠ 2 * (d : ℤ) := by omega
       simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply, he,
-        DirectSum.toModule_lof, dif_neg ha, LinearMap.zero_apply]
+        DirectSum.toModule_lof, dite_eq_right ha, LinearMap.zero_apply]
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -437,8 +437,7 @@ theorem basisOne_holds : BasisOne := by
   · haveI := hlam h0
     exact ⟨0, Module.Basis.empty M, fun t => t.elim0⟩
   obtain ⟨x, hx⟩ : ∃ x, lam x ≠ 0 := by
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     exact h0 (LinearMap.ext hc)
   set v : M := (lam x)⁻¹ • x with hvdef
   have hv : lam v = 1 := by
@@ -730,8 +729,7 @@ theorem UpperTheory.Gal.KunnethLefschetz.dualL_holds :
       haveI : Subsingleton (V l X 0) := ⟨fun x y => by rw [hz x, hz y]⟩
       simp [Module.finrank_zero_of_subsingleton]
   obtain ⟨x0, hx0⟩ : ∃ x, lam x ≠ 0 := by
-    by_contra hc
-    push_neg at hc
+    by_contra! hc
     exact hlam (LinearMap.ext hc)
   have surj : Function.Surjective lam := fun r => ⟨(r / lam x0) • x0, by
     rw [map_smul, smul_eq_mul, div_mul_cancel₀ _ hx0]⟩
@@ -1469,7 +1467,7 @@ theorem slice_holds : Slice := by
     simpa [map_natCast] using h2
   have hunit : IsUnit ((l : Γ(S k, ⊤))) := by
     simpa [map_natCast] using hunitX.map (y.1.appTop).hom
-  simp only [GysQ.diag, GysQ.pt, GysQ.cls, dif_pos hdiag, dif_pos hy]
+  simp only [GysQ.diag, GysQ.pt, GysQ.cls, dite_eq_left hdiag, dite_eq_left hy]
   rw [G.nat hy hdiag (slice y) y.1
     (by rw [slice, ← Category.assoc, pullback.lift_fst, Category.id_comp]) hpb]
   congr 1
@@ -1863,7 +1861,7 @@ theorem UpperTheory.Gal.KunnethLefschetz.swap_holds :
       cupV l (pullback p p) h (pb l f n x) (G.diag d p) = G.g hpair h x := by
     intro f hf
     have hd : G.diag d p = G.g hpair (show (0 : ℤ) + 2 * d = 2 * d by simp) (oneV l X) := by
-      simp only [GysQ.diag, GysQ.cls, dif_pos hpair]
+      simp only [GysQ.diag, GysQ.cls, dite_eq_left hpair]
     rw [hd, ← G.proj hpair (show n + 0 = n by simp) h (show (0 : ℤ) + 2 * d = 2 * d by simp) h,
       ← pb_comp_apply, hf, pb_self, hu]
   rw [key _ (by simp), hR.comm (pullback p p) (2 * d) n w h' h,

@@ -107,7 +107,7 @@ theorem atMostOnce (X : Data E r) {x0 : Frame X.Ψ r} (ho : IsOrth X x0) {FF : S
       simp
     · intro γ hne
       exact Set.indicator_apply_eq_zero.mpr fun hm => absurd (huniq γ γ0 hm hγ0) hne
-  · push_neg at hex
+  · push Not at hex
     have h0 : ∀ γ : X.Γ, (KU.Sset X x0 FF).indicator (1 : Frame X.Ψ r → ℝ≥0∞) (lact γ.1 y) = 0 :=
       fun γ => Set.indicator_apply_eq_zero.mpr fun hm => absurd hm (hex γ)
     rw [tsum_congr h0, tsum_zero]
@@ -175,8 +175,7 @@ theorem fundSetMeasStatement_of_isCMField {E : Type} [Field E] [NumberField E] [
     refine lintegral_mono_ae (hcov.mono fun z hz => ?_)
     by_cases hS0 : cpt X x0 z ∈ KU.Sset X x0 FF
     · have : ∃ γ : X.Γ, cpt X x0 z ∈ lact γ.1⁻¹ ⁻¹' KU.Sset X x1 CechHodgeFiltration := by
-        by_contra hn
-        push_neg at hn
+        by_contra! hn
         exact hz (Set.mem_iInter.mpr fun γ => hn γ)
       obtain ⟨γ, hγ⟩ := this
       refine le_trans (le_of_eq ?_) (ENNReal.le_tsum γ)

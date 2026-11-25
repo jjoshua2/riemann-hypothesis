@@ -119,8 +119,7 @@ theorem beK_posDef (k : ℕ) (c : (Σ _ : Fin k, Module.Free.ChooseBasisIndex �
   obtain ⟨⟨m0, t0⟩, h0⟩ := Function.ne_iff.mp hc
   have key : ∃ σ : D.host.E →ₐ[ℚ] ℂ,
       ∑ i, (c i : ℂ) * σ ((bK D k i m0 : 𝓞 D.host.E) : D.host.E) ≠ 0 := by
-    by_contra hne
-    push_neg at hne
+    by_contra! hne
     let B := NumberField.integralBasis D.host.E
     have hred : ∀ σ : D.host.E →ₐ[ℚ] ℂ, ∑ t, (c ⟨m0, t⟩ : ℂ) * σ (B t) = 0 := by
       intro σ
@@ -172,9 +171,9 @@ theorem finrank_copies (k : ℕ) : Module.finrank ℤ (Fin k → 𝓞 D.host.E) 
 theorem subsingleton_rank_indicator_iff (P : Prop) : Subsingleton (Fin (rk01 P) → 𝓞 D.host.E) ↔ P := by
   unfold rk01
   by_cases h : P
-  · rw [if_pos h]
+  · rw [ite_eq_left h]
     exact ⟨fun _ => h, fun _ => inferInstance⟩
-  · rw [if_neg h]
+  · rw [ite_eq_right h]
     refine ⟨fun hs => ?_, fun hp => absurd hp h⟩
     have h1 := congrFun (hs.elim (fun _ => (0 : 𝓞 D.host.E)) (fun _ => 1)) 0
     exact absurd h1 zero_ne_one
@@ -209,12 +208,12 @@ theorem atM_tors (k n : ℕ) (x : AtM k n) : n • x = 0 := by
   simp only [Pi.smul_apply, Pi.zero_apply, nsmul_eq_mul]
   by_cases h : n = 0
   · simp [h]
-  · have hn : nn n = n := if_neg h
+  · have hn : nn n = n := ite_eq_right h
     have : (n : ZMod (nn n)) = 0 := (CharP.cast_eq_zero_iff (ZMod (nn n)) (nn n) n).mpr (by rw [hn])
     rw [this, zero_mul]
 
 theorem atM_card (k n : ℕ) (h : 0 < n) : Fintype.card (AtM k n) = n ^ k := by
-  rw [Fintype.card_fun, ZMod.card, Fintype.card_fin, (show nn n = n from if_neg (by omega))]
+  rw [Fintype.card_fun, ZMod.card, Fintype.card_fin, (show nn n = n from ite_eq_right (by omega))]
 
 structure MP (D : D7) (p : ℕ) where
   K : CF p

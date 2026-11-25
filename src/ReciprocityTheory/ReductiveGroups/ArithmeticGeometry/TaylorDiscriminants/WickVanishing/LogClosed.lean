@@ -3,6 +3,7 @@ module
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.TaylorDiscriminants.WickVanishing.LogInv
 public import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.TaylorDiscriminants.WickVanishing.LogChain
+import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.TaylorDiscriminants.WickVanishing.DofComm
 
 @[expose] public section
 
@@ -26,20 +27,7 @@ theorem formalFamilyConstantCoeffZero_zero_secondVar : CZ (![0, pt k (n := 1) d 
   fin_cases j <;> simp [pt]
 
 theorem cc_jac (i b : Fin d) : constantCoeff (Jac G i b) = if i = b then 1 else 0 := by
-  have hE : CZ (![pt k (n := 1) d 0, 0] : Fin 2 → Pt k 1 d) := by
-    intro j i
-    fin_cases j <;> simp [pt]
-  have h := congrArg (pderiv (R := k) ((0 : Fin 1), b)) (G.unit i)
-  rw [pderiv_ev formalFamilyConstantCoeffZero_zero_secondVar, Fintype.sum_prod_type, Fin.sum_univ_two] at h
-  simp [pt, MvPowerSeries.pderiv_X, Pi.single_apply] at h
-  have h2 := congrArg constantCoeff h
-  rw [cc_ev formalFamilyConstantCoeffZero_zero_secondVar] at h2
-  show constantCoeff (ev (n := 1) ![pt k d 0, 0] (pderiv (R := k) ((1 : Fin 2), b) (G.F i))) = _
-  rw [cc_ev hE, h2]
-  by_cases hib : i = b
-  · subst hib
-    simp
-  · simp [hib]
+  apply _root_.ReciprocityTheory.ChartRestriction.G.TB.WickVanishing.Nab.cc_jac' <;> assumption
 
 def JM : Matrix (Fin d) (Fin d) (PS k 1 d) := Matrix.of (Jac G)
 
@@ -227,7 +215,7 @@ theorem om_key (i a b : Fin d) :
   simp only [hsE, hz0, ev_mul hE, ev_add hE, ez_F, ez_dx, ez_dy,
     _root_.ReciprocityTheory.ChartRestriction.G.TB.LogPf.pderiv_comm ((1 : Fin 2), b) ((0 : Fin 2), a), ← hdJ] at hP2
   rw [Finset.sum_add_distrib] at hP2
-  simp only [ite_mul, one_mul, zero_mul, Finset.sum_ite_eq', Finset.mem_univ, if_true] at hP2
+  simp only [ite_mul, one_mul, zero_mul, Finset.sum_ite_eq', Finset.mem_univ, ite_true] at hP2
   have hM := congrFun (congrFun (om_mul G) i) b
   rw [Matrix.mul_apply] at hM
   simp only [JM, Matrix.of_apply] at hM

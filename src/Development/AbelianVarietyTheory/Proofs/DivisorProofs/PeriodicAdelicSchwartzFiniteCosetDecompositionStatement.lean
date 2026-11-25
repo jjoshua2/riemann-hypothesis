@@ -58,7 +58,6 @@ open IsDedekindDomain NumberField
 open scoped TensorProduct GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels Matrix
 open GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels (Base Spc Model Chr incM)
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open scoped Classical
 
 theorem GlobalTheory.WeilCont.schA_periodic_finite_cosets : ∀ (F : Type) [Field F] [NumberField F] (κ : Type) [Fintype κ]
@@ -101,14 +100,14 @@ theorem GlobalTheory.WeilCont.schA_periodic_finite_cosets : ∀ (F : Type) [Fiel
     · dsimp only
       rw [(hmk x' x).2 hx']
     · dsimp only
-      rw [if_neg]
+      rw [ite_eq_right]
       intro h
       exact hw ((hmk w (y i)).1 (h.trans (hy i).symm))
   · dsimp only
     rw [hy j]
     by_cases h : i = j
     · subst h; simp
-    · rw [if_neg (fun h' => h (he h').symm), if_neg h]
+    · rw [ite_eq_right (fun h' => h (he h').symm), ite_eq_right h]
   · intro Ψ hΨ hper hsupp
     choose f hf using fun i => GlobalTheory.WeilCont.exists_slice F hΨ (y i)
     refine ⟨f, funext fun z => ?_⟩
@@ -119,7 +118,7 @@ theorem GlobalTheory.WeilCont.schA_periodic_finite_cosets : ∀ (F : Type) [Fiel
     by_cases hw : (QuotientAddGroup.mk w : (κ → FiniteAdeleRing (𝓞 F) F) ⧸ L) ∈ QuotientAddGroup.mk '' K
     · obtain ⟨i0, hi0⟩ := (hS _).1 hw
       rw [Finset.sum_eq_single i0]
-      · rw [if_pos hi0.symm, mul_one, hf]
+      · rw [ite_eq_left hi0.symm, mul_one, hf]
         have hL : w - y i0 ∈ L := (hmk w (y i0)).1 (hi0.symm.trans (hy i0).symm)
         rw [← hper _ hL (GlobalTheory.WeilCont.adeleJoin F x (y i0))]
         congr 1
@@ -132,7 +131,7 @@ theorem GlobalTheory.WeilCont.schA_periodic_finite_cosets : ∀ (F : Type) [Fiel
         · change w i = y i0 i + (w i - y i0 i)
           exact (add_sub_cancel _ _).symm
       · intro j _ hj
-        rw [if_neg (fun h => hj (he (h.symm.trans hi0.symm))), mul_zero]
+        rw [ite_eq_right (fun h => hj (he (h.symm.trans hi0.symm))), mul_zero]
       · intro h
         exact absurd (Finset.mem_univ _) h
     · have h0 : Ψ (GlobalTheory.WeilCont.adeleJoin F x w) = 0 := by
@@ -140,7 +139,7 @@ theorem GlobalTheory.WeilCont.schA_periodic_finite_cosets : ∀ (F : Type) [Fiel
         exact hw ⟨w, hsupp _ h, rfl⟩
       rw [h0]
       refine (Finset.sum_eq_zero fun i _ => ?_).symm
-      rw [if_neg, mul_zero]
+      rw [ite_eq_right, mul_zero]
       intro h
       exact hw (h ▸ (hS _).2 ⟨i, rfl⟩)
 end -- clump:auto
@@ -157,7 +156,6 @@ open IsDedekindDomain NumberField
 open scoped TensorProduct GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels Matrix
 open GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels (Base Spc Model Chr incM)
 
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open scoped Classical
 
 

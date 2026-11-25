@@ -44,7 +44,7 @@ theorem exists_row {ι : Type} [Fintype ι] [DecidableEq ι] (s : ι → Prop) (
         intro e
         exact hrj (by simpa using congrArg (Equiv.swap c j) e)
       simp only [T, Matrix.updateRow_ne hne, Matrix.one_apply]
-      rw [if_neg]
+      rw [ite_eq_right]
       intro e
       by_cases hrc : r = c
       · subst hrc
@@ -200,8 +200,7 @@ theorem core (i t : ℕ) (p : Mir k ((i + 1) + t + 1)) (X B : GL (Fin ((i + 1) +
         rw [← e3, ← e1, map_inv]; simp only [mul_assoc]
 
 theorem row_ne_zero {ι : Type} [Fintype ι] [DecidableEq ι] (g : GL ι k) (r : ι) : ∃ c, g.val r c ≠ 0 := by
-  by_contra hc
-  push_neg at hc
+  by_contra! hc
   have h0 := Matrix.det_eq_zero_of_row_eq_zero r hc
   exact (Matrix.GeneralLinearGroup.det g).ne_zero (by simpa using h0)
 
@@ -246,7 +245,7 @@ theorem cells :
     exact ⟨h, hh, d, m, by simpa using e⟩
   · intro p hp
     have hp' : ¬ _ := fun h => hp ((Cl_iff i t p).2 h)
-    push_neg at hp'
+    push Not at hp'
     obtain ⟨c, hcs, hc⟩ := hp'
     have hj : (piPerm i t (Fin.last ((i + 1) + t))).val < i + 1 := by rw [piPerm_last_val]; omega
     obtain ⟨B, hBj, hB⟩ := exists_row (fun x : Fin ((i + 1) + t + 1) => x.val < i + 1) _ c (piPerm i t (Fin.last ((i + 1) + t))) hc

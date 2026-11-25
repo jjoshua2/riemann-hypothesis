@@ -1,5 +1,7 @@
 module
 
+import Development.AbelianVarietyTheory.Proofs.DivisorProofs.EvRFrMapOfIsReduced
+import Development.AbelianVarietyTheory.Proofs.GenericRegularity.ExistsBijectiveKappa
 public import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.CInfGood
 public import Formalism.LocalToGlobal.ProjectiveLattices.CompHt
 public import Development.AbelianVarietyTheory.BlockTheory.ExistenceTori.DeltaDatumCombinedCoefficient
@@ -126,24 +128,7 @@ theorem rdU_eq_of_reads' {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (h : GenFrEx X
     (Z : Comp Xo c) (x : (U.X k).dom) (φ : Om Z →ₐ[c.F] CAt σ) (y' : FrPt Xo c (CAt σ)) (t : Ix Dw → (CAt σ)ˣ)
     (hm : FrMap φ (genFr h Z) y') (hb : FrBor t (U.un k x) y') (u : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) :
     ∃ w : ℂ, w ≠ 0 ∧ ∀ f ∈ Formalism.L2.Pj.sec Xo c u n, w * rdU U f k x = toC (φ (evC h Z f)) := by
-  letI : Field (CAt σ) := inferInstanceAs (Field ℂ)
-  obtain ⟨hL, -, -, -⟩ := GlobalTheory.Reg.evLaws_genFr_atlas E H Dw l Xo c
-  have h3 : wchar (ex Dw u n) t ≠ 0 :=
-    Finset.prod_ne_zero_iff.2 fun i _ => pow_ne_zero _ (t i).ne_zero
-  refine ⟨toC (wchar (ex Dw u n) t), h3, fun f hf => ?_⟩
-  have h1 : evR Xo c f y' = φ (evC h Z f) := by
-    obtain ⟨q, χ, y₀, hy₀⟩ := hL.test (Om Z) (genFr h Z)
-    unfold evC
-    rw [GlobalTheory.Reg.evR_eq_map_of_test_point hL hf q χ y₀ _ hy₀,
-      GlobalTheory.Reg.evR_eq_map_of_test_point hL hf q (φ.comp χ) y₀ y' (ReciprocityTheory.ChartRestriction.G.PullbackSections.frMap_trans χ φ hy₀ hm)]
-    rfl
-  have h2 : evR Xo c f y' = wchar (ex Dw u n) t * evR Xo c f (U.un k x) :=
-    hL.wt u n f hf (CAt σ) t _ _ (hL.test _ _) (hL.test _ _) hb
-  have h4 : rdU U f k x = toC (evR Xo c f (U.un k x)) := by
-    simp only [rdU, LinearMap.coe_mk, AddHom.coe_mk]
-    rw [dite_eq_left x.2]
-  rw [h4, ← h1, h2]
-  rfl
+  apply _root_.GlobalTheory.CompBij.rdU_eq_of_reads <;> assumption
 
 theorem fnAlgClosed_of_card {σ : c.F →+* ℂ} (V : Unf Xo c σ r) (hσ : GoodEmb c σ) (hV : IsUnf V) (h : GenFrEx Xo c)
     (hone : ∀ k x, FromTest (K := c.F) (fun S _ _ => FrPt Xo c S) (fun φ y z => FrMap φ y z) (V.un k x))
@@ -263,16 +248,8 @@ theorem evR_map (hL : GlobalTheory.Reg.EvLaws Xo c) {f : Rul Xo c}
     (hf : IsNatural (K := c.F) (fun S _ _ => FrPt Xo c S) (fun φ y z => FrMap φ y z) f)
     {S T : Type} [CommRing S] [IsReduced S] [Algebra c.F S] [CommRing T] [Algebra c.F T] (φ : S →ₐ[c.F] T)
     {y : FrPt Xo c S} {z : FrPt Xo c T} (hyz : FrMap φ y z) : evR Xo c f z = φ (evR Xo c f y) := by
-  have key : ∀ {S' : Type} [CommRing S'] [Algebra c.F S'] (p : TRing c.F) (χ : p.R →ₐ[c.F] S') (y₀ : FrPt Xo c p.R)
-      (w : FrPt Xo c S'), FrMap χ y₀ w → evR Xo c f w = χ (f p y₀) := by
-    intro S' _ _ p χ y₀ w hw
-    have h : FromTest (K := c.F) (fun S _ _ => FrPt Xo c S) (fun φ y z => FrMap φ y z) w := ⟨p, χ, y₀, hw⟩
-    unfold evR evalAt
-    rw [dite_eq_left h]
-    exact hL.wd f hf S' _ p _ χ _ y₀ w h.choose_spec.choose_spec.choose_spec hw
-  obtain ⟨q, χ, y₀, hy₀⟩ := hL.test S y
-  rw [key q χ y₀ y hy₀, key q (φ.comp χ) y₀ z (PullbackSections.frMap_trans χ φ hy₀ hyz)]
-  rfl
+  intros
+  apply _root_.GlobalTheory.FlagMod.FlagCover.evR_frMap_of_isReduced <;> assumption
 
 end Main
 
@@ -520,7 +497,7 @@ theorem homN_eq_of_frBor {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (hσ : GoodEmb
       simp only [a]
       by_cases hj : j < Dw.mult τ
       · have hi : i < Dw.mult τ := lt_of_le_of_lt hij hj
-        rw [dif_pos hj, dif_pos hi]
+        rw [dite_eq_left hj, dite_eq_left hi]
         exact Int.toNat_le_toNat (by linarith [hanti τ ⟨i, hi⟩ ⟨j, hj⟩ hij])
       · rw [dite_eq_right hj]; exact Nat.zero_le _
     have hgp := GlobalTheory.ReadCont.pow_succ_mem_secZ (Xo := Xo) (c := c) (by rw [GlobalTheory.AllWt.secZ_nat]; exact hg) M
@@ -531,7 +508,7 @@ theorem homN_eq_of_frBor {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (hσ : GoodEmb
       · simp [ex, hnone]
       · have hi := i.2
         rw [Pi.add_apply, Pi.smul_apply]
-        simp only [ex, a, dif_pos hi, nsmul_eq_mul]
+        simp only [ex, a, dite_eq_left hi, nsmul_eq_mul]
         rw [Int.toNat_of_nonneg (by linarith [hM (some ⟨τ, i⟩)])]
         push_cast
         ring
@@ -554,13 +531,13 @@ theorem homN_eq_of_frBor {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (hσ : GoodEmb
       homN_pow_mul' U x hEg hEG g f (z := ⟨k, x₁.1⟩) x₁.2, h2] at h1
     have hA : 0 < GlobalTheory.AllWt.homN U x Gg g ⟨k, x₁.1⟩ := by
       have hr : rdU U g k x₁.1 ≠ 0 := by
-        have : rdU U g k x₁.1 = toC (evR Xo c g (U.un k x₁)) := dif_pos x₁.2
+        have : rdU U g k x₁.1 = toC (evR Xo c g (U.un k x₁)) := dite_eq_left x₁.2
         rwa [this]
       show 0 < _ * (‖rdU U g k x₁.1‖ * _)
       exact mul_pos (GlobalTheory.AllWt.lieFacZ_pos _ _) (mul_pos (norm_pos_iff.2 hr) (ReciprocityTheory.ChartRestriction.G.FD.BoundedSectionAlgebra.nfac_pos _ x₁.2 _))
     rw [e']
     exact mul_left_cancel₀ (pow_pos hA _).ne' h1
-  · push_neg at hanti
+  · push Not at hanti
     obtain ⟨τ, i, j, hij, hlt⟩ := hanti
     have hij' : i < j := lt_of_le_of_ne hij (by rintro rfl; exact lt_irrefl _ hlt)
     have h0 := _root_.GlobalTheory.IncrZero.secZ_eq_zero_of_lt E H Dw l Xo c _ τ i j hij' hlt f hf
@@ -578,7 +555,7 @@ theorem continuousOn_homN {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (hU : IsUnf U
     by_cases hanti : ∀ τ (i j : Fin (Dw.mult τ)), i ≤ j →
         GlobalTheory.AllWt.exOf Dw u 0 (some ⟨τ, j⟩) ≤ GlobalTheory.AllWt.exOf Dw u 0 (some ⟨τ, i⟩)
     · exact (GlobalTheory.ReadCont.differentiableOn_rdU_of_antitone hU hpq hnone hanti hf k).continuousOn
-    · push_neg at hanti
+    · push Not at hanti
       obtain ⟨τ, i, j, hij, hlt⟩ := hanti
       have hij' : i < j := lt_of_le_of_ne hij (by rintro rfl; exact lt_irrefl _ hlt)
       rw [_root_.GlobalTheory.IncrZero.secZ_eq_zero_of_lt E H Dw l Xo c _ τ i j hij' hlt f hf, map_zero]
@@ -636,7 +613,7 @@ theorem exists_frame_of_hom [DecidableEq (CMType H)] (hG : Top.Given) (hL : Comp
     rw [← hψ]
     exact hasVal_hom RM.y RM.birational RM.arith.2.1.2.2 0 _ ψ
   have h0 := hread σ _ hz hv (aeval_ne_zero RM.y huu ψ)
-  rw [show goodOf c σ = σ from if_pos hσ] at h0
+  rw [show goodOf c σ = σ from ite_eq_left hσ] at h0
   obtain ⟨k', hk', y', hy', hall⟩ := h0
   obtain rfl : k' = k := GlobalTheory.CompanionTheory.Ar.Plug.ArchimedeanSections.over_unique hL hσ hk' hk
   have hpos : ∀ n' : Option (RootIx Dw) → ℤ, 0 < ∏ ρ, (Or.sing ρ).h (fun p => ψ (RM.y p)) ^ n' (some ρ) := fun n' =>
