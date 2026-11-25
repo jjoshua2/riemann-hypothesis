@@ -1241,25 +1241,17 @@ theorem res_ext (z : Dat (w.st Z) w.I hX T Wt) (e : z.R.toRealDat.ExAt) {Wt' : S
     Dw := HEq.rfl
     Xo := HEq.rfl
     U := HEq.rfl
-    V := HEq.rfl
-    dict := HEq.rfl
-    mu := HEq.rfl
-    Kf := HEq.rfl
-    cE := HEq.rfl
     chiW := HEq.rfl
-    x₀ := HEq.rfl
     iota := HEq.rfl
     ψ := HEq.rfl
     θ := HEq.rfl
     βW := HEq.rfl
-    βY := HEq.rfl
     nW := HEq.rfl
     βV := HEq.rfl
     ΛV := HEq.rfl
     ΛW := HEq.rfl
     Pg := HEq.rfl
     eG := HEq.rfl
-    Sb := HEq.rfl
     BV := of_diag fun _ => ⟨HEq.rfl, HEq.rfl, HEq.rfl, HEq.rfl, HEq.rfl, HEq.rfl⟩
     MW := by
       refine of_diag fun i => ?_
@@ -1284,8 +1276,6 @@ theorem res_ext (z : Dat (w.st Z) w.I hX T Wt) (e : z.R.toRealDat.ExAt) {Wt' : S
       exact e' ▸ (Set.ext_iff.mp
         (restrictAdelicDataTwistedPlaces_nonzeroIndexPlaces z e h hc (fun _ _ => 0)).symm v)
     cV := of_diag fun _ => ⟨HEq.rfl, HEq.rfl⟩
-    pb := HEq.rfl
-    ΛY := (HEq.refl z.R.ΛY)
     κ := by
       refine of_diag fun i => ⟨?_, ?_, ?_⟩
       · exact (HEq.refl (z.geo.κ i).aP)
