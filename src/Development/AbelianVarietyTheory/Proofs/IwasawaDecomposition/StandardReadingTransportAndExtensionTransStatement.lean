@@ -233,32 +233,24 @@ theorem ext_trans {B₁ B₂ B₃ : Base} {f₁ f₂ f₃ T₁ T₂ T₃} {w₁ 
   have hmm : (w₂.st Z₂).toD7.R.m = (w₁.st Z₁).toD7.R.m := congrArg (fun P : Pre => P.R.m) e₁₂.1
   have hm : ∀ i : Fin (w₁.st Z₁).toD7.R.m, ∃ i' : Fin (w₂.st Z₂).toD7.R.m, (i : ℕ) = i' :=
     fun i => ⟨⟨i, lt_of_lt_of_eq i.2 hmm.symm⟩, rfl⟩
-  refine @Ext.mk B₁ B₃ f₁ f₃ T₁ T₃ w₁ w₃ Z₁ Z₃ h₁ h₃ W₁ W₃ z₁ z₃ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_
+  refine @Ext.mk B₁ B₃ f₁ f₃ T₁ T₃ w₁ w₃ Z₁ Z₃ h₁ h₃ W₁ W₃ z₁ z₃ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_
   · exact HEq.trans y.H x.H
   · exact HEq.trans y.l x.l
   · exact HEq.trans y.c x.c
   · exact HEq.trans y.Dw x.Dw
   · exact HEq.trans y.Xo x.Xo
   · exact HEq.trans y.U x.U
-  · exact HEq.trans y.V x.V
-  · exact HEq.trans y.dict x.dict
-  · exact HEq.trans y.mu x.mu
-  · exact HEq.trans y.Kf x.Kf
-  · exact HEq.trans y.cE x.cE
   · exact HEq.trans y.chiW x.chiW
-  · exact HEq.trans y.x₀ x.x₀
   · exact HEq.trans y.iota x.iota
   · exact HEq.trans y.ψ x.ψ
   · exact HEq.trans y.θ x.θ
   · exact HEq.trans y.βW x.βW
-  · exact HEq.trans y.βY x.βY
   · exact HEq.trans y.nW x.nW
   · exact HEq.trans y.βV x.βV
   · exact HEq.trans y.ΛV x.ΛV
   · exact HEq.trans y.ΛW x.ΛW
   · exact HEq.trans y.Pg x.Pg
   · exact HEq.trans y.eG x.eG
-  · exact HEq.trans y.Sb x.Sb
   · intro i i'' h
     refine Exists.elim (hm i) fun i' hi' => ?_
     have a := x.BV i i' hi'
@@ -316,8 +308,6 @@ theorem ext_trans {B₁ B₂ B₃ : Base} {f₁ f₂ f₃ T₁ T₂ T₃} {w₁ 
     refine And.intro ?_ ?_
     · exact HEq.trans b.1 a.1
     exact HEq.trans b.2 a.2
-  · exact HEq.trans y.pb x.pb
-  · exact HEq.trans y.ΛY x.ΛY
   · intro i i'' h
     refine Exists.elim (hm i) fun i' hi' => ?_
     have a := x.κ i i' hi'

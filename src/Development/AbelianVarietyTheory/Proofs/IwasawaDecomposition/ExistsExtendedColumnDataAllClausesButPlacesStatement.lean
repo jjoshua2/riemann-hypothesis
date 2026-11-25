@@ -103,10 +103,6 @@ open scoped TensorProduct InnerProductSpace ComplexOrder
 attribute [local instance] Formalism.BasicNotions.Host.cmStar Formalism.IndefR.principalLevelFrame.instCMHostI
 open GlobalTheory.Mem GlobalTheory.Mem.Col2 GlobalTheory.Mem.Top GlobalTheory.Mem.Top.GroupRetwisting GlobalTheory.Mem.Top.Bl GlobalTheory.Mem.R3 GlobalTheory.Mem.R3.Rw GlobalTheory.Mem.R3.Tr
 
-theorem GlobalTheory.Mem.R3.Rw.frame_pb_heq {P P' : Pre} (e : P' = P) {g' : Fr P'} {g : Fr P} (h : HEq g' g) : HEq g'.P.pb g.P.pb := by
-  subst e; cases h; rfl
-
-
 set_option maxHeartbeats 8000000 in
 theorem GlobalTheory.Mem.R3.Rw.datExt_rest_of_parts :
     (GlobalTheory.Published.DiscreteSeriesCover → GlobalTheory.Published.HarishChandraModules → GlobalTheory.Published.CuspRapidDecay → GlobalTheory.Published.CasselmanWallach → GlobalTheory.Published.WeilRepresentationUnitaryPair → GlobalTheory.Published.DiscreteSeriesExists → GlobalTheory.Published.HarishChandraFinite → (StepW Pinned fun K B' f' T' w' => ∀ (B : Base) (f : Fr B.toPre) (T : TwDat B) (w : ColW B f T), Enl0 B B' →
@@ -233,11 +229,11 @@ theorem GlobalTheory.Mem.R3.Rw.datExt_rest_of_parts :
   have geoAt := hg.2.1
   exact
     { H := hc.1, l := hc.2.1, c := hc.2.2.1, Dw := hc.2.2.2.1, Xo := hc.2.2.2.2.1
-      U := hcRest.1, V := hcRest.2.1, dict := hcRest.2.2.1, mu := hcRest.2.2.2.1, Kf := hcRest.2.2.2.2.1
-      cE := hcLast.1, chiW := hcLast.2.1, x₀ := hcLast.2.2.1, iota := hcLast.2.2.2
-      ψ := rW.1, θ := rW.2.1, βW := rW.2.2.1, βY := rW.2.2.2.1, nW := rW.2.2.2.2.2.1
+      U := hcRest.1
+      chiW := hcLast.2.1, iota := hcLast.2.2.2
+      ψ := rW.1, θ := rW.2.1, βW := rW.2.2.1, nW := rW.2.2.2.2.2.1
       βV := rGroups.1, ΛV := rGroups.2.1, ΛW := rGroups.2.2.1
-      Pg := rGroups.2.2.2.1, eG := rGroups.2.2.2.2.1, Sb := rGroups.2.2.2.2.2.1
+      Pg := rGroups.2.2.2.1, eG := rGroups.2.2.2.2.1
       BV := fun i i' hi =>
         have h := rI i i' hi
         have hv := h.2.2.2.2
@@ -252,8 +248,6 @@ theorem GlobalTheory.Mem.R3.Rw.datExt_rest_of_parts :
       cV := fun i i' hi =>
         have h := (rI i i' hi).2.2
         ⟨h.1, h.2.1⟩
-      pb := (heq_of_eq hpb).trans ((GlobalTheory.Mem.R3.Rw.frame_pb_heq hE.1 hf).trans (heq_of_eq hF.2.2.1.2.2.2.symm))
-      ΛY := rW.2.2.2.2.1
       κ := fun i i' hi => (geoAt i i' hi).2.2
       ref := fun i i' hi =>
         have hT := (rT i i' hi).2

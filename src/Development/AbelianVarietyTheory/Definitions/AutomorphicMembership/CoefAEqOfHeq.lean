@@ -57,25 +57,17 @@ structure Ext (z : Dat (w.st Z) w.I hX T Wt) (z' : Dat (w'.st Z') w'.I hX' T' Wt
   Dw : HEq z'.core.Q.Dw z.core.Q.Dw
   Xo : HEq z'.core.Q.Xo z.core.Q.Xo
   U : HEq z'.core.U z.core.U
-  V : HEq z'.core.V z.core.V
-  dict : HEq z'.core.dict z.core.dict
-  mu : HEq z'.core.mu z.core.mu
-  Kf : HEq z'.core.Kf z.core.Kf
-  cE : HEq z'.core.cE z.core.cE
   chiW : HEq z'.core.chiW z.core.chiW
-  x₀ : HEq z'.core.x₀ z.core.x₀
   iota : HEq z'.core.iota z.core.iota
   ψ : HEq z'.R.ψ z.R.ψ
   θ : HEq z'.R.θ z.R.θ
   βW : HEq z'.R.βW z.R.βW
-  βY : HEq z'.R.βY z.R.βY
   nW : HEq z'.R.nW z.R.nW
   βV : HEq z'.R.βV z.R.βV
   ΛV : HEq z'.R.ΛV z.R.ΛV
   ΛW : HEq z'.R.ΛW z.R.ΛW
   Pg : HEq z'.R.Pg z.R.Pg
   eG : HEq z'.R.eG z.R.eG
-  Sb : HEq z'.R.Sb z.R.Sb
   BV : ∀ (i : Fin (w.st Z).toD7.R.m) (i' : Fin (w'.st Z').toD7.R.m), (i : ℕ) = i' →
     HEq (z'.R.cV i').W (z.R.cV i).W ∧ HEq (z'.R.cV i').ρ (z.R.cV i).ρ ∧ HEq (z'.R.vacP i') (z.R.vacP i) ∧
     HEq (z'.R.ioP i') (z.R.ioP i) ∧ HEq (z'.R.ωP i' (mu0F (X := B'.fields) (tuOf w'.I (usedOf w'.I T' Wt')))) (z.R.ωP i (mu0F (X := B.fields) (tuOf w.I (usedOf w.I T Wt)))) ∧ HEq (z'.R.BV i') (z.R.BV i)
@@ -95,8 +87,6 @@ structure Ext (z : Dat (w.st Z) w.I hX T Wt) (z' : Dat (w'.st Z') w'.I hX' T' Wt
   W1 : ∀ v v', Below (w.D Z) (w'.D Z') v v' → (v ∈ z.W1 (fun _ _ => 0) ↔ v' ∈ z'.W1 fun _ _ => 0)
   cV : ∀ (i : Fin (w.st Z).toD7.R.m) (i' : Fin (w'.st Z').toD7.R.m), (i : ℕ) = i' →
     HEq (z'.R.cV i').nW (z.R.cV i).nW ∧ HEq (z'.R.cV i').iW (z.R.cV i).iW
-  pb : HEq z'.core.pb z.core.pb
-  ΛY : HEq z'.R.ΛY z.R.ΛY
   κ : ∀ (i : Fin (w.st Z).toD7.R.m) (i' : Fin (w'.st Z').toD7.R.m), (i : ℕ) = i' →
     HEq (z'.geo.κ i').aP (z.geo.κ i).aP ∧ HEq (z'.geo.κ i').aM (z.geo.κ i).aM ∧ (z'.geo.κ i').n = (z.geo.κ i).n
   ref : ∀ (i : Fin (w.st Z).toD7.R.m) (i' : Fin (w'.st Z').toD7.R.m), (i : ℕ) = i' →
