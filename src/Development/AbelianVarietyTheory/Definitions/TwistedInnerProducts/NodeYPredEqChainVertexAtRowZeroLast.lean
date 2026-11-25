@@ -148,30 +148,13 @@ structure Is {T : Type} (Q : T → Finset (Pl D.host.E)) (e : AE D) : Prop where
 
   prime : Z.q0.Prime
 
-  five_le : 5 ≤ Z.q0
-
   referencePlaceOverPrime : Formalism.L2.Host.OverP D.host Z.q0 Z.w0
 
   split : Formalism.L2.Host.SplitsCompletely {Z.w0}
 
-  ne_g : ∀ k, Z.q0 ≠ D.host.g k
-
-  ne_pde : Z.q0 ≠ D.host.pde ∧ Z.q0 ≠ D.host.pde'
-
-  referencePrimeNeTwist : Z.q0 ≠ D.sp.T ∧ ∀ u : D.what₂.Word, Z.q0 ≠ (D.mem u).A.T
-
   coprime : Nat.Coprime (Ideal.absNorm D.host.ccK) Z.q0
 
-  offQ : ∀ t, ∀ w ∈ Q t, w.under (𝓞 D.host.F) ≠ Z.w0.under (𝓞 D.host.F)
-
-  depth_pos : 1 ≤ Z.e0
-
   Wd_over : ∀ w ∈ Z.Wd, Formalism.L2.Host.OverP D.host D.host.pde w ∨ Formalism.L2.Host.OverP D.host D.host.pde' w
-
-  Wd_all : ∀ p ∈ ({D.host.pde, D.host.pde'} : Set ℕ),
-    (∀ w, Formalism.L2.Host.OverP D.host p w → ∃ w' ∈ Z.Wd, w'.under (𝓞 D.host.F) = w.under (𝓞 D.host.F)) ∧
-    (∃ 𝔭 : HeightOneSpectrum (𝓞 D.host.K), ∀ w ∈ Z.Wd, Formalism.L2.Host.OverP D.host p w → w.under (𝓞 D.host.K) = 𝔭) ∧
-    ∀ t, ∀ w ∈ Q t, Formalism.L2.Host.OverP D.host p w → w ∈ Z.Wd
 
   idem : IsIdemSum e (Z.W Pg)
 
