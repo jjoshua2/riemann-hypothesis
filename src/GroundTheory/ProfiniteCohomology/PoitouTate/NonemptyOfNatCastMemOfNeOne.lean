@@ -836,9 +836,7 @@ theorem gsEvenTatePoitouTateHypotheses :
         finite_cohomology_gs K S M (fun v hv => hS v (natCast_mem_of_natCard_mem v.isPrime hM hv)) r hr
       localToCompact_two := gsTrace_localToCompact S ιr ιs N
       injective_res_zero := fun M _ => injective_ptRes_zero_gs S ιs M
-      surjective_localPairing_zero := fun M _ _ hM v => (bijective_gsLocalPairing S ιs N hD M hM v _).2
       surjective_localPairing_two := fun M _ _ hM v => (bijective_gsLocalPairing S ιs N hD M hM v _).2
-      surjective_realPairing_zero := fun M _ _ hM w => surjective_gsRealPairing_zero S ιr N M hD hM w
       surjective_realPairing_two := fun M _ _ hM w χ hχ => exists_gsRealPairing_two S ιr N M hD hM w χ hχ }
 
 end Hypotheses

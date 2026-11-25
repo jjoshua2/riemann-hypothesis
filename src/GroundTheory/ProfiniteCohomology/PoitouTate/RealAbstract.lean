@@ -57,17 +57,9 @@ structure TatePoitouTateHypotheses : Prop where
   injective_res_zero : ∀ (M : Rep (ULift.{0} ℤ) G) [IsDiscreteRep M],
     Function.Injective fun (x : cohomology M 0) v => ptRes φ M v 0 x
 
-  surjective_localPairing_zero : ∀ (M : Rep (ULift.{0} ℤ) G) [IsDiscreteRep M] [Finite M],
-    (∀ m : M, n • m = 0) → ∀ v,
-      Function.Surjective (ptLocalPairing φ D M inv v (show 0 + 2 = 2 from rfl))
-
   surjective_localPairing_two : ∀ (M : Rep (ULift.{0} ℤ) G) [IsDiscreteRep M] [Finite M],
     (∀ m : M, n • m = 0) → ∀ v,
       Function.Surjective (ptLocalPairing φ D M inv v (show 2 + 0 = 2 from rfl))
-
-  surjective_realPairing_zero : ∀ (M : Rep (ULift.{0} ℤ) G) [IsDiscreteRep M] [Finite M],
-    (∀ m : M, n • m = 0) → ∀ w,
-      Function.Surjective (ptLocalPairing ψ D M invr w (show 0 + 2 = 2 from rfl))
 
   surjective_realPairing_two : ∀ (M : Rep (ULift.{0} ℤ) G) [IsDiscreteRep M] [Finite M],
     (∀ m : M, n • m = 0) → ∀ w
