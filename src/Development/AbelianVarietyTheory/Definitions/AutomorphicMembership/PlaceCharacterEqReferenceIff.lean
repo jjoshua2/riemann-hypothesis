@@ -32,24 +32,7 @@ structure SideTie (R : RealDat D A Ks) (F : Face D A) (tup : T → D.what₂.Tup
 
   eE : EE →ₗ[ℂ] R.HE.H
 
-  eE_range : LinearMap.range eE = (R.EEat (R.levR F b)).comap R.HE.e
-
-  eE_norm : ∀ x, ‖eE x‖ ^ 2 = RealDat.nP F b * ‖x‖ ^ 2
-
   eA : ∀ t, S.Amb (tup t) →ₗ[ℂ] (R.HX t).H
-
-  eA_range : ∀ t, LinearMap.range (eA t) =
-    Submodule.span ℂ (R.jX t '' lvlForms (A.MtildeCSD t) (A.leftGroupActionRight t) (F.lvl b).P (F.lvl b).ψ)
-
-  eA_norm : ∀ t x, ‖eA t x‖ ^ 2 = RealDat.nP F b * ‖x‖ ^ 2
-
-  eOp_tie : ∀ t x (f : (A.MtildeCSD t).Forms), eA t x = R.jX t f →
-    eA t (S.eOp (tup t) x) = R.jX t ((A.MtildeCSD t).gaOp (A.leftGroupActionRight t) (idemOf A.X) f)
-
-  iota_tie : ∀ t x, eE (S.iota (tup t) x) = R.Th t (eA t x)
-
-  lat_tie : ∀ t, eA t '' (S.Mtilde (tup t)).carrier =
-    R.jX t '' (lvlForms (A.MtildeCSD t) (A.leftGroupActionRight t) (F.lvl b).P (F.lvl b).ψ ∩ intForms (A.MtildeCSD t))
 
 
 set_option genInjectivity false in
