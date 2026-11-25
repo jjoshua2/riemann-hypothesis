@@ -51,11 +51,7 @@ section Any
 
 variable {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL]
 
-def scalOf (R : RealDat D A Ks) (F : Face D A) : (type_of% R.lam) × ℝ :=
-  haveI : Nonempty ((type_of% R.lam) × ℝ) := ⟨(R.lam, 0)⟩
-  Classical.epsilon fun q => (reScal R q.1 q.2).Char F
-
-def charOf (R : RealDat D A Ks) (F : Face D A) : RealDat D A Ks := reScal R (scalOf R F).1 (scalOf R F).2
+def charOf (R : RealDat D A Ks) (_F : Face D A) : RealDat D A Ks := R
 
 end Any
 

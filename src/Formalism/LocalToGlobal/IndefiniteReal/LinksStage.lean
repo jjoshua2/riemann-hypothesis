@@ -59,7 +59,6 @@ variable {K : Type} [Field K] [NumberField K] [StarRing K] {Bs : DefBase K} {Am 
 
 def reScal (X : CxData Am) (κ : InfinitePlace K → ℝ) (lam : type_of% X.lam) : CxData Am := { X with κ := κ, lam := lam }
 
-theorem zs_reScal (X : CxData Am) (κ lam) : (reScal X κ lam).zs = X.zs := rfl
 
 def PartX (cr : Crd Am fc) (X : CxData Am) (b : Bool) (i : Bs.J) (p : Bs.Ix) (v : InfinitePlace K) : Prop :=
   ∃ x, X.tC cr b i Bs.μ0 (cpt Bs.v0.embedding x) ∈ X.Wp i p ∧
@@ -71,10 +70,7 @@ def SimX (cr : Crd Am fc) (X : CxData Am) (b : Bool) (i : Bs.J) (p : Bs.Ix) (v :
         (X.wC b i v (cpt v.embedding ((X.liftMat cr b i Bs.μ0).mulVec y))) =
       ((l : ℝ) : ℂ) * Formalism.HermitianLatticesTheory.majAt (Pi.basisFun K _) ((lv (fc X.zs) b).XT i Bs.μ0) v x y
 
-theorem partX_reScal (cr : Crd Am fc) (X : CxData Am) (κ lam b i p v) : PartX cr (reScal X κ lam) b i p v ↔ PartX cr X b i p v := Iff.rfl
 
-theorem simX_reScal (cr : Crd Am fc) (X : CxData Am) (κ lam b i p v l) :
-    SimX cr (reScal X κ lam) b i p v l ↔ SimX cr X b i p v l := Iff.rfl
 
 end Generic
 
