@@ -471,7 +471,6 @@ def Mv.sideB_alt {cf : CharFrame D} {jE : D.host.E →+* Qb} {A : _root_.GlobalT
       (psiU_side := (x.exp.psiU_side))
       (psiU_xi := (x.exp.psiU_xi))
       (delU_cont := (x.exp.delU_cont))
-      (delU_ine := (x.exp.delU_ine))
       (thU_empty := (x.exp.thU_empty))
       (sgnT := (x.exp.sgnT))
       (sgnT_one := (x.exp.sgnT_one))

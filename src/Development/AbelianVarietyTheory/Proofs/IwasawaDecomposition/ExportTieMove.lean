@@ -1273,7 +1273,6 @@ theorem core (D : D7) (r : Rest D) (X : NExpTied D) (hpl : HEq D.naut.plGw (over
       (psiU_xi := fun i b => (X.psiU_xi i b).imp fun θ ⟨h1, h2⟩ =>
         ⟨h1, fun u => (h2 u).trans (Finset.prod_congr rfl fun kv _ => by rw [hxi kv]; rfl)⟩)
       (delU_cont := X.delU_cont)
-      (delU_ine := X.delU_ine)
       (thU_empty := X.thU_empty)
       (sgnT := X.sgnT)
       (sgnT_one := X.sgnT_one)

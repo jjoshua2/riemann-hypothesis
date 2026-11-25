@@ -219,7 +219,6 @@ def Mv.all {C : NChoice D} (a : NAllC D C) : NAllC m.D (m.ch C) := @_root_.Globa
       (psiU_side := (by with_unfolding_all exact (a.exp.psiU_side :)))
       (psiU_xi := (by with_unfolding_all exact (a.exp.psiU_xi :)))
       (delU_cont := (by with_unfolding_all exact (a.exp.delU_cont :)))
-      (delU_ine := (by with_unfolding_all exact (a.exp.delU_ine :)))
       (thU_empty := (by with_unfolding_all exact (a.exp.thU_empty :)))
       (sgnT := (by with_unfolding_all exact (a.exp.sgnT :)))
       (sgnT_one := (by with_unfolding_all exact (a.exp.sgnT_one :)))

@@ -23,9 +23,6 @@ def badV (D : D7) (i : D.ntw.Tw) (Q : Finset (PlE D.host)) :
 abbrev TWSet (D : D7) (i : D.ntw.Tw) (Q : Finset (PlE D.host)) : Prop :=
   Formalism.MainNotions.NAdm.TWSet D.ntw i Q
 
-abbrev AdmQ (D : D7) (i : D.ntw.Tw) (Q : Finset (PlE D.host)) (M : ℕ) : Prop :=
-  Formalism.MainNotions.NAdm.AdmQ D.ntw i Q M
-
 def AdmTw (D : D7) (i : D.ntw.Tw) (k : ℕ) (Q : Finset (PlE D.host))
     (ψ : G D.host.E D.nd.Om →* (D.ntw.Ok i k)ˣ) : Prop :=
   TWSet D i Q ∧ (∀ P ∈ Q, P ∉ D.ntw.pD i ∧ ∀ k' : Fin 2, P ∉ placesOver D.host.E (D.host.g k')) ∧
@@ -218,12 +215,6 @@ structure NExpTied (D : D7) where
           Matrix (Fin D.R.r) (Fin D.R.r) (ZMod (D.host.g kv.1)))))
 
   delU_cont : ∀ i (Q : Finset (PlE D.host)) (M : ℕ), IsOpen ((D.nexp.delU i Q M).ker : Set (G D.host.E D.nd.Om))
-
-  delU_ine : ∀ i (Q : Finset (PlE D.host)) (M : ℕ), AdmQ D i Q M → ∀ P (hP : P ∈ Q),
-    (∀ A : ValuationSubring D.nd.Om, IsPlaceOver A P →
-      Function.Surjective fun σ : Ine (F := D.host.E) A => Multiplicative.toAdd (D.nexp.delU i Q M σ) ⟨P, hP⟩) ∧
-    ∀ P' ∈ Q, P' ≠ P → ¬ IsConjPl D.host P P' → ∀ A : ValuationSubring D.nd.Om, IsPlaceOver A P' →
-      ∀ σ ∈ Ine (F := D.host.E) A, Multiplicative.toAdd (D.nexp.delU i Q M σ) ⟨P, hP⟩ = 0
 
   thU_empty : ∀ i j b M (d : D.nexp.Dat i j b), 1 ≤ j → j ≤ D.R.m →
     D.nexp.thU i j b ∅ M d = D.nexp.th i j b d ⊗ₜ[D.ntw.O i] (1 : AddMonoidAlgebra (D.ntw.O i) (DelQM D.host (D.ntw.l i) ∅ M))
