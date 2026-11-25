@@ -104,22 +104,14 @@ structure SizeData₂ (D : D7) where
   gain_supp : ∀ j w, w ∉ supp → gain j w = 0
   F_supp : ∀ j w, w ∉ supp → F j w = 0
   E_supp : ∀ u j w, w ∉ supp → E u j w = 0
-  tau_supp : ∀ w, w ∉ supp → tau w = 0
-  io_supp : ∀ w, w ∉ supp → io w = 0
-
   gain_g : ∀ j w, D.what₂.places.resChar w ∈ ({D.host.g 0, D.host.g 1} : Finset ℕ) → gain j w = 0
 
   b_le : ∀ τ j, (((D.hc τ).b j : ℚ) : ℝ) ≤ sc.b ^ 2
-
-  untwisted : ∀ w, D.what₂.muAt w = D.what₂.mu0 → ∀ j, 1 ≤ j → j ≤ D.R.m → D.what₂.Aj j w = 0 ∧ F j w = 0
 
   not_inert : ∀ w, D.host.cls (D.what₂.places.resChar w) ≠ .signal →
     D.host.cls (D.what₂.places.resChar w) ≠ .inertClass → (∀ j, gain j w = 0) ∧ tau w = 0 ∧ io w = 0
 
   drop : Set ℕ
-  drop_alt : ∀ u, (D.mem u).A.T ∉ drop
-
-  F_conj : ∀ j w, F j (D.what₂.places.conj w) = F j w
 
   F_above : ∀ j w, sc.X'' D.R.n < (D.what₂.places.resChar w : ℝ) →
     D.what₂.places.resChar w ∉ ({D.host.g 0, D.host.g 1} : Finset ℕ) →
@@ -170,9 +162,6 @@ structure SizeData₂ (D : D7) where
   etaSz_pos : 0 < etaSz
 
   TTw : D.what₂.places.Pl → Finset D.host.TT
-
-  TTw_full : ∀ w, (D.host.cls (D.what₂.places.resChar w) = .signal ∨ sc.X' ≤ (D.what₂.places.resChar w : ℝ)) →
-    TTw w = Finset.univ
 
   Ct : ℝ
   t_win : 1 ≤ (D.R.t : ℝ) ∧ (D.R.t : ℝ) ≤ sc.x ^ Ct

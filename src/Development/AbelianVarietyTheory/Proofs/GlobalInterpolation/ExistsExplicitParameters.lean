@@ -418,7 +418,7 @@ theorem exists_sizeData_explicit : ∀ (eps : ℝ) (C : FC) (cD ch : ℝ), 0 < e
   obtain ⟨x1, hx1⟩ := bottom_window_le eps C.GK h0 h1 hLa
   obtain ⟨x2, hx2⟩ := _root_.GlobalTheory.EX.windows_of_large_scale eps cD ch C.P.Cpde h0 h1 hcD hch
   refine ⟨max (max x1 x2) ((max C.P.Cpde 1) ^ (100 / eps)), ?_⟩
-  intro s D aT bT he hx0 hR hH hHC hdl hDel hCT2 hW heta hG hwin htop hA
+  intro s D aT bT he hx0 hR hH hHC hdl hDel hCT2 hW heta hG hwin htop _
   have hx : max x1 x2 ≤ s.x := le_trans (le_max_left _ _) hx0
   have hCo : C.P.Cpde ≤ s.x ^ (s.eps / 100) := by
     have hM : (0 : ℝ) ≤ max C.P.Cpde 1 := le_trans zero_le_one (le_max_right _ _)
@@ -469,15 +469,10 @@ theorem exists_sizeData_explicit : ∀ (eps : ℝ) (C : FC) (cD ch : ℝ), 0 < e
       gain_supp := fun _ _ _ => rfl
       F_supp := fun _ _ _ => rfl
       E_supp := fun _ _ _ _ => rfl
-      tau_supp := fun _ _ => rfl
-      io_supp := fun _ _ => rfl
       gain_g := fun _ _ _ => rfl
       b_le := w2
-      untwisted := fun w h j j1 j2 => ⟨hA w h j j1 j2, rfl⟩
       not_inert := fun _ _ _ => ⟨fun _ => rfl, rfl, rfl⟩
       drop := ∅
-      drop_alt := fun _ => Set.notMem_empty _
-      F_conj := fun _ _ => rfl
       F_above := fun _ _ _ _ _ => rfl
       j0 := ⌈Real.logb 5 ((D.R.n : ℝ) * D.R.N D.R.m / D.R.m)⌉₊
       logFiveDepth_le := Nat.le_ceil _
@@ -513,7 +508,6 @@ theorem exists_sizeData_explicit : ∀ (eps : ℝ) (C : FC) (cD ch : ℝ), 0 < e
       be_close := w8
       etaSz_pos := by positivity
       TTw := fun _ => Finset.univ
-      TTw_full := fun _ _ => rfl
       Ct := C.Ct
       t_win := ⟨w9, by rw [hCt]; exact w10⟩
       CGam := C.CGam

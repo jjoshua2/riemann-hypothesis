@@ -414,8 +414,7 @@ theorem exists_big (L : SizeData₂ D) (hf : {w | D.what₂.muAt w ≠ D.what₂
 
 open Classical in
 def refill (L : SizeData₂ D) (X : Inst D L) (K : Consts) (Cr : ℝ) (EX : ErrX D) (c : ErrC) (S : Finset D.what₂.places.Pl)
-    (hS : Big L S) (hA : HostArith D.host) (hw : 1 ≤ L.sc.w'' D.R.n) (hX : L.sc.X' ≤ L.sc.X'' D.R.n)
-    (hu : ∀ w, D.what₂.muAt w = D.what₂.mu0 → ∀ j ∈ SizeData₂.lifts D, Fval L j w = 0) : SizeData₂ D :=
+    (hS : Big L S) (hA : HostArith D.host) (hw : 1 ≤ L.sc.w'' D.R.n) (hX : L.sc.X' ≤ L.sc.X'' D.R.n) : SizeData₂ D :=
   { L with
     supp := S
     gain := fun j w => if IsResidueClassZero D (D.what₂.places.resChar w) ∨ IsSg D (D.what₂.places.resChar w) then
@@ -430,8 +429,6 @@ def refill (L : SizeData₂ D) (X : Inst D L) (K : Consts) (Cr : ℝ) (EX : ErrX
     F_supp := fun j w h => FvalP_above L j (hS w h).1 (hS w h).2.1 (hS w h).2.2.1
     E_supp := fun u j w h => Eval_above L EX K c u j w (hS w h).1 ((hS w h).2.2.2.1 u).1 (hS w h).2.1 (hS w h).2.2.1
       ((hS w h).2.2.2.1 u).2
-    tau_supp := fun w h => tau_eq_zero_of_not_candidate X K _ _ _ (fun hc => by linarith [hc.2.1, (hS w h).1])
-    io_supp := fun w h => ioP_eq_zero_of_not_cand X K _ _ _ (fun hc => by linarith [hc.2.1, (hS w h).1])
     gain_g := fun j w h => by
       have h1 : D.host.cls (D.what₂.places.resChar w) = .splitK := by
         refine hA.2.2.2 _ ?_
@@ -440,26 +437,18 @@ def refill (L : SizeData₂ D) (X : Inst D L) (K : Consts) (Cr : ℝ) (EX : ErrX
         · rw [Finset.mem_singleton.1 h]; exact D.host.g_level 1
       refine if_neg ?_
       rintro (h2 | h2) <;> exact absurd (h1.symm.trans h2) (by decide)
-    untwisted := fun w h j h1 h2 => ⟨(L.untwisted w h j h1 h2).1, hu w h j (Finset.mem_Icc.2 ⟨h1, h2⟩)⟩
     not_inert := fun w h1 h2 => ⟨fun j => if_neg (fun h => h.elim h2 h1), tau_eq_zero_of_not_candidate X K _ _ _ (fun hc => h2 hc.2.2.1),
       ioP_eq_zero_of_not_cand X K _ _ _ (fun hc => h2 hc.2.2.1)⟩
     drop := {p | NoGain X K Cr p ∧ ∀ u, p ≠ (D.mem u).A.T}
-    drop_alt := fun u h => h.2 u rfl
-    F_conj := fun j w => Fval_conj L j w
     F_above := fun j _ h1 h2 h3 => FvalP_above L j h1 h2 h3
     TTw := fun w => Finset.univ.filter (fun t => (t : HH D) ∈ TTP X K (aL L) (bL L) (D.what₂.places.resChar w))
-    TTw_full := fun w h => by
-      refine Finset.filter_true_of_mem (fun t _ => ?_)
-      unfold TTP
-      rw [if_pos h]
-      exact t.2
     wPart := fun j t p e => fill X (bL L) j (partner D p t e)
     wPart_ge := fun j t p e => one_le_fill X hw j _ }
 
-theorem exists_refill : ∀ (C : FC) (cD ch : ℝ) (D : D7) (L0 : SizeData₂ D) (EX : ErrX D), Std C → Val C cD ch L0 → HostArith D.host → 1 ≤ L0.sc.w'' D.R.n → L0.sc.X' ≤ L0.sc.X'' D.R.n → {w | D.what₂.muAt w ≠ D.what₂.mu0}.Finite → (∀ u, 0 < (D.mem u).C.DGam) → (∀ w, D.what₂.muAt w = D.what₂.mu0 → ∀ j ∈ SizeData₂.lifts D, Fval L0 j w = 0) → ∃ (L : SizeData₂ D) (X : G.Inst D L), L.sc = L0.sc ∧ L.aT = L0.aT ∧ L.bT = L0.bT ∧ Val C cD ch L ∧ CanonInst X ∧ G.EpDef X C.cX.Ce ∧ G.KapIDef X C.GK ∧ L.FDef ∧ L.EDef EX C.GK C.cX.err ∧ (∀ w, ((D.what₂.places.resChar w : ℕ) : ℝ) ≤ L.sc.X'' D.R.n → w ∈ L.supp) ∧ (∀ w, D.what₂.muAt w ≠ D.what₂.mu0 → w ∈ L.supp) ∧ (∀ w, G.ParametersFill X C.GK w) ∧ ∀ p : ℕ, p.Prime → (p ∈ L.drop ↔ NoGain X C.GK C.Cr p ∧ ∀ u, p ≠ (D.mem u).A.T) := by
-  intro C cD ch D L0 EX _ hV hA hw hX hf hG hu
+theorem exists_refill : ∀ (C : FC) (cD ch : ℝ) (D : D7) (L0 : SizeData₂ D) (EX : ErrX D), Std C → Val C cD ch L0 → HostArith D.host → 1 ≤ L0.sc.w'' D.R.n → L0.sc.X' ≤ L0.sc.X'' D.R.n → {w | D.what₂.muAt w ≠ D.what₂.mu0}.Finite → (∀ u, 0 < (D.mem u).C.DGam) → ∃ (L : SizeData₂ D) (X : G.Inst D L), L.sc = L0.sc ∧ L.aT = L0.aT ∧ L.bT = L0.bT ∧ Val C cD ch L ∧ CanonInst X ∧ G.EpDef X C.cX.Ce ∧ G.KapIDef X C.GK ∧ L.FDef ∧ L.EDef EX C.GK C.cX.err ∧ (∀ w, ((D.what₂.places.resChar w : ℕ) : ℝ) ≤ L.sc.X'' D.R.n → w ∈ L.supp) ∧ (∀ w, D.what₂.muAt w ≠ D.what₂.mu0 → w ∈ L.supp) ∧ (∀ w, G.ParametersFill X C.GK w) ∧ ∀ p : ℕ, p.Prime → (p ∈ L.drop ↔ NoGain X C.GK C.Cr p ∧ ∀ u, p ≠ (D.mem u).A.T) := by
+  intro C cD ch D L0 EX _ hV hA hw hX hf hG
   obtain ⟨S, hS⟩ := exists_big L0 hf hG
-  refine ⟨refill L0 (inst L0 C.GK C.cX.Ce) C.GK C.Cr EX C.cX.err S hS hA hw hX hu, inst _ C.GK C.cX.Ce, rfl, rfl, rfl,
+  refine ⟨refill L0 (inst L0 C.GK C.cX.Ce) C.GK C.Cr EX C.cX.err S hS hA hw hX, inst _ C.GK C.cX.Ce, rfl, rfl, rfl,
     ⟨hV.ranks, hV.host, hV.hc, hV.dlog, hV.Del_eq, hV.eta_eq, hV.La_eq, hV.bT_le, hV.logFiveDepth_eq, hV.Ct_eq, hV.Cc_eq,
       hV.CGam_eq, hV.secondConstant_eq, hV.words, hV.etaF_eq⟩, inst_canon _ _ _, fun _ => rfl, fun _ _ _ _ _ => rfl,
     fun _ _ _ => rfl, fun _ _ _ _ => rfl, fun w h => ?_, fun w h => ?_, fun w => ?_, fun p _ => Iff.rfl⟩
@@ -797,7 +786,7 @@ def setInst {L : SizeData₂ D} (X : Inst D L) (N : ∀ u, Submodule (𝓞 D.wha
 theorem exists_ledPart : ∀ (C : FC) (cD ch : ℝ) (s : Scale) (D : D7) (Y : Lay D) (e : Formalism.HC.Frame) (a b : e.A → ℤ) (L0 : SizeData₂ D), Std C → 10 ≤ C.cX.err.g → e = D.R.toFrame → L0.sc = s → WtEq L0 a b → Val C cD ch L0 → HostArith D.host → 1 ≤ s.w'' D.R.n → (∀ u, s.X' ≤ ((D.mem u).A.T : ℝ)) → RecOK s C cD D → LedOK s C cD ch Y a b → ∃ p : LedPart C Y, p.L.sc = s ∧ WtEq p.L a b ∧ Val C cD ch p.L ∧ CanonInst p.ta.Gx := by
   intro C cD ch s D Y e a b L0 hC hg _ hs hW hV0 hA hw _ hR hL
   obtain ⟨L, X, e1, e2, e3, hV, hcan, hep, hkap, hF, hE, hs1, hs2, hfill, hdrop⟩ :=
-    GlobalTheory.Refill.exists_refill C cD ch D L0 Y.errX hC hV0 hA (hs ▸ hw) (X'_le_X'' _ _) hR.fin hR.dgam (hL L0 hs hW hV0).1
+    GlobalTheory.Refill.exists_refill C cD ch D L0 Y.errX hC hV0 hA (hs ▸ hw) (X'_le_X'' _ _) hR.fin hR.dgam
   have hWL : WtEq L a b := by
     intro t t' h
     rw [e2, e3]

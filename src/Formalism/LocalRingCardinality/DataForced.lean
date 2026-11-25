@@ -245,11 +245,6 @@ theorem resChar_conj (D : D7) (w : D.what₂.places.Pl) :
   rw [h1, v.map_one] at h4
   exact absurd (lt_of_lt_of_le (lt_min h2 h3) h4) (lt_irrefl _)
 
-theorem Fval_conj {D : D7} (L : SizeData₂ D) (j : ℕ) (w : D.what₂.places.Pl) :
-    Fval L j (D.what₂.places.conj w) = Fval L j w := by
-  unfold Fval
-  rw [resChar_conj]
-
 def FInertGe (D : D7) : Prop :=
   ∀ j ∈ SizeData₂.lifts D, ∀ p : ℕ, p.Prime → (IsResidueClassZero D p ∨ IsSg D p) → (∀ τ : D.what₂.Tau, 0 ≤ wj D j τ) →
     ∑ τ : D.what₂.Tau, ((D.R.k : ℝ) - 1) * wj D j τ / ((p : ℝ) ^ 2 - 1) ≤ FInert D j p
