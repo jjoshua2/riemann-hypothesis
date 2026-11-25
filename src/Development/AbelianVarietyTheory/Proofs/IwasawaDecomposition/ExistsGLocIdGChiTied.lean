@@ -62,18 +62,6 @@ noncomputable def transport {k k' : Type} [CommRing k] [CommRing k'] (e : k ≃+
 theorem transport_apply {k k' : Type} [CommRing k] [CommRing k'] (e : k ≃+* k') (χ : MulChar k' ℂ) (a : k) :
     transport e χ a = χ (e a) := rfl
 
-theorem orderOf_ofUnitHom {p : ℕ} (hp : p.Prime) (om : (ZMod p)ˣ →* ℂˣ) (h : Function.Injective om) :
-    orderOf (MulChar.ofUnitHom om) = p - 1 := by
-  have := Fact.mk hp
-  have key : ∀ n : ℕ, MulChar.ofUnitHom om ^ n = 1 ↔ p - 1 ∣ n := by
-    intro n
-    rw [← ZMod.card_units p, ← Nat.card_eq_fintype_card, ← IsCyclic.exponent_eq_card,
-      Monoid.exponent_dvd_iff_forall_pow_eq_one, MulChar.ext_iff]
-    refine forall_congr' fun a => ?_
-    rw [MulChar.pow_apply_coe, MulChar.one_apply_coe, MulChar.ofUnitHom_coe, ← Units.val_pow_eq_pow_val, Units.val_eq_one,
-      ← map_pow, map_eq_one_iff om h]
-  exact Nat.dvd_antisymm (orderOf_dvd_of_pow_eq_one ((key _).2 dvd_rfl)) ((key _).1 (pow_orderOf_eq_one _))
-
 section Orient
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
@@ -147,7 +135,7 @@ theorem exists_gLoc (Ch : Chars X Pr m) (hf : 0 < X.f) (hPr : Pr.Ok) (hCh : Ch.O
         G.psi0 j v h (n : kv X.F v) = σ₀ (Ch.psi0 w (n : 𝓞 X.E ⧸ w.1.asIdeal))) ∧
       (∀ j v h (w : {w // w ∈ Pr.vGs}), w.1.under (𝓞 X.F) = v → ∀ (s : Fin m) (n : ℕ)
         (c : (𝓞 X.E ⧸ w.1.asIdeal)ˣ), (c : 𝓞 X.E ⧸ w.1.asIdeal) = n →
-        G.chiB j v h s.1 (n : kv X.F v) = σ₀ ((Ch.chi s w c : X.Kˣ) : X.K)) ∧ CharacterCompatible G m := by
+        G.chiB j v h s.1 (n : kv X.F v) = σ₀ ((Ch.chi s w c : X.Kˣ) : X.K)) := by
   classical
   have hnorm : ∀ i, (Pr.piG i : X.E) * cm.sig (Pr.piG i : X.E) = (Pr.g i : X.E) := fun i => by
     have := congrArg (algebraMap (𝓞 X.E) X.E) (hPr.piG_norm i)
@@ -162,7 +150,7 @@ theorem exists_gLoc (Ch : Chars X Pr m) (hf : 0 < X.f) (hPr : Pr.Ok) (hCh : Ch.O
   choose w0 hw0 using hw0
   have ew := fun i w (hw : w ∈ Pr.vG i) => (nonempty_equiv_zmod (𝓞 X.E ⧸ w.asIdeal) (hPr.g_prime i) (by
     rw [← hPr.vG_norm i w hw, Ideal.absNorm_apply, Submodule.cardQuot_apply])).some
-  choose om omi hom using hCh.chi_om
+  choose om _omi hom using hCh.chi_om
   let om' : ∀ i, MulChar (ZMod (Pr.g i)) ℂ := fun i => MulChar.ofUnitHom ((Units.map (σ₀ : X.K →* ℂ)).comp (om i))
   have hin : ∀ {j v} (h : ((Pr.g j : ℕ) : 𝓞 X.F) ∈ v.asIdeal) (w : {w // w ∈ Pr.vGs}), w.1.under (𝓞 X.F) = v → w.1 ∈ Pr.vG j := by
     rintro j v h w rfl
@@ -184,7 +172,7 @@ theorem exists_gLoc (Ch : Chars X Pr m) (hf : 0 < X.f) (hPr : Pr.Ok) (hCh : Ch.O
             psi0 := fun i v h => ((σ₀ : X.K →* ℂ).compAddChar (Ch.psi0 ⟨w0 i, mem_vGs (hw0 i)⟩)).compAddMonoidHom
               (((ev i v h).symm.trans (ew i (w0 i) (hw0 i))).toRingHom.toAddMonoidHom)
             psi_zero_nontrivial_character := ?_
-            chiB := fun i v h a => transport (ev i v h).symm (om' i ^ (2 * (a + 1))) }, rfl, ?_, ?_, ?_, ?_, ?_⟩
+            chiB := fun i v h a => transport (ev i v h).symm (om' i ^ (2 * (a + 1))) }, rfl, ?_, ?_⟩
   · intro i v h h1
     apply hCh.psi_zero_nontrivial_character ⟨w0 i, mem_vGs (hw0 i)⟩
     ext x
@@ -203,26 +191,6 @@ theorem exists_gLoc (Ch : Chars X Pr m) (hf : 0 < X.f) (hPr : Pr.Ok) (hCh : Ch.O
     show transport (ev j v h).symm (om' j ^ (2 * (s.1 + 1))) (n : kv X.F v) = _
     rw [transport_apply, map_natCast, ← hval j w (hin h w hw) s c, hc,
       map_natCast (ew j w.1 (hin h w hw)).symm]
-  · intro i v h a b ha hb hab
-    have h1 : om' i ^ (2 * (a + 1)) = om' i ^ (2 * (b + 1)) := by
-      refine MulChar.ext' fun x => ?_
-      have h2 : transport (ev i v h).symm (om' i ^ (2 * (a + 1))) (ev i v h x) =
-        transport (ev i v h).symm (om' i ^ (2 * (b + 1))) (ev i v h x) := DFunLike.congr_fun hab _
-      rwa [transport_apply, transport_apply, RingEquiv.symm_apply_apply] at h2
-    have h3 : (⟨a, ha⟩ : Fin m) = ⟨b, hb⟩ := by
-      apply hCh.chi_inj ⟨w0 i, mem_vGs (hw0 i)⟩
-      refine MonoidHom.ext fun c => Units.ext (σ₀.injective ?_)
-      rw [← hval i ⟨w0 i, mem_vGs (hw0 i)⟩ (hw0 i) ⟨a, ha⟩ c, ← hval i ⟨w0 i, mem_vGs (hw0 i)⟩ (hw0 i) ⟨b, hb⟩ c, h1]
-    exact congrArg Fin.val h3
-  · intro i v h v' h' a n _
-    show transport (ev i v h).symm (om' i ^ (2 * (a + 1))) (n : kv X.F v) =
-      transport (ev i v' h').symm (om' i ^ (2 * (a + 1))) (n : kv X.F v')
-    rw [transport_apply, transport_apply, map_intCast (ev i v h).symm, map_intCast (ev i v' h').symm]
-  · intro i
-    refine ⟨om' i, orderOf_ofUnitHom (hPr.g_prime i) _ ((Units.map_injective σ₀.injective).comp (omi i)), ?_⟩
-    intro v h a n _
-    show transport (ev i v h).symm (om' i ^ (2 * (a + 1))) (n : kv X.F v) = _
-    rw [transport_apply, map_intCast]
 
 end Generic
 
@@ -230,7 +198,7 @@ end Generic
 theorem exists_gLoc_idG_chiTied : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.Pins B X →
     ∀ (l : I.Laws) (Z : TC.Later B (I.cols l)),
     ∃ (G : GLoc (I.rec7 l Z).host.F (I.rec7 l Z).host.E (sigD (I.rec7 l Z)) (I.rec7 l Z).host.g),
-      I.IdG l Z G ∧ CharacterCompatible G B.R.m := by
+      I.IdG l Z G := by
   intro B X I hI _ l Z
   have hf : 0 < B.fields.f := by
     unfold Fields.f
@@ -243,7 +211,7 @@ theorem exists_gLoc_idG_chiTied : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X)
     unfold Ranks.f Ranks.n at h1
     have := B.R.ord_pos
     omega
-  obtain ⟨G, h1, h2, h3, h4⟩ := exists_gLoc I.Ch hf l.pr hI.ch_ok B.sp.cm B.embLL (I.rec7 l Z).nd.g_split
-  exact ⟨G, ⟨h1, h2, h3⟩, h4⟩
+  obtain ⟨G, h1, h2, h3⟩ := exists_gLoc I.Ch hf l.pr hI.ch_ok B.sp.cm B.embLL (I.rec7 l Z).nd.g_split
+  exact ⟨G, ⟨h1, h2, h3⟩⟩
 
 end GlobalTheory.Mem.TypePrimes

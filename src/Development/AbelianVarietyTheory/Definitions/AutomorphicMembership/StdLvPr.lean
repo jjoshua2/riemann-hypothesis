@@ -81,12 +81,8 @@ structure CarT {D : D7} (H : Formalism.L2.Herm.HermColsCh D) (F : ∀ u, FormsTi
     (A u).levP.Uloc (F u).clsP.lev.Uloc (A u).levP.U (F u).clsP.lev.U
     (fun c => ((A u).clsP.y c).1) (fun c => ((F u).clsP.y c).1)
     (fun c s => ((A u).clsP.stabI c s).1) (fun c s => ((F u).clsP.stabI c s).1)
-  lattice₂ : ∀ u c, (F u).clsP.lat c = ((A u).lattice₂ c).map
-    ((crdP D : D.sp.X'.V →ₗ[D.host.E] (Fin (D.R.N D.R.m - 1) → D.host.E)).restrictScalars (𝓞 D.host.E))
   pr : ∀ u (i : ℕ) (hi : i ≤ D.R.m) v c (z : Formalism.L2.Herm.Ld D u i c) (z' : Ld D u i hi c),
     z'.1 = crdN D i hi z.1 → ((F u).lv i hi).pr v c z' = (A u).pr i v c z
-  prk : ∀ u (i : ℕ) (hi : i ≤ D.R.m) v c (z : Formalism.L2.Herm.Lk D u ((A u).Pv v) i c) (z' : Lk (F u).atT i hi v c),
-    z'.1 = crdN D i hi z.1 → ((F u).lv i hi).prk v c z' = (A u).prk i v c z
   prC : ∀ u (i : ℕ) (h1 : 1 ≤ i) (h2 : i + 1 ≤ D.R.m) v c (z : Formalism.L2.Herm.Ld D u i c)
     (z' : LdG D i (le_of_succ_m h2) (clsCrd D u i (le_of_succ_m h2) c)),
     z'.1 = crdN D i (le_of_succ_m h2) z.1 → ((F u).lvC i h1 h2).pr v c z' = (A u).pr i v c z

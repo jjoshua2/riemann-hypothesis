@@ -497,14 +497,6 @@ theorem finrank_modP (P : HeightOneSpectrum (𝓞 E)) {M : Submodule (𝓞 E) (S
     LinearEquiv.extendScalarsOfSurjective (Ideal.Quotient.mk_surjective (I := P.asIdeal)) e
   rw [e'.finrank_eq, Module.finrank_fin_fun]
 
-def gmapEquiv (M : Submodule (𝓞 E) (Sp E n)) (γ : Sp E n ≃ₗ[E] Sp E n) : ↥M ≃ₗ[𝓞 E] ↥(gmap γ M) :=
-  (γ.restrictScalars (𝓞 E)).submoduleMap M
-
-def modP.map (P : HeightOneSpectrum (𝓞 E)) (M : Submodule (𝓞 E) (Sp E n)) (γ : Sp E n ≃ₗ[E] Sp E n) :
-    modP P M ≃ₗ[𝓞 E ⧸ P.asIdeal] modP P (gmap γ M) :=
-  LinearEquiv.extendScalarsOfSurjective (Ideal.Quotient.mk_surjective (I := P.asIdeal))
-    (Submodule.Quotient.equiv _ _ (gmapEquiv M γ) (by
-      rw [Submodule.map_smul'', Submodule.map_top, LinearEquiv.range]))
 
 end ModP
 
@@ -734,28 +726,8 @@ theorem diagonalTwist_injective (P : ST) (a : (𝓞 X.E ⧸ P.1.asIdeal)ˣ) {d d
   rw [← DecoSet.dia_smul_def, ← DecoSet.dia_smul_def] at h
   exact MulAction.injective _ h
 
-theorem functional_diagonalTwist (P : ST) (a : (𝓞 X.E ⧸ P.1.asIdeal)ˣ) (d : DecoSet (E := X.E) (n := n) (ST := ST) (SG := SG)) :
-    (d.dia1 P a).fv P = (a : 𝓞 X.E ⧸ P.1.asIdeal) • d.fv P := by
-  classical
-  apply LinearMap.ext
-  intro z
-  obtain ⟨x, rfl⟩ := Submodule.Quotient.mk_surjective _ z
-  show ((Pi.mulSingle P a : DiaG (E := X.E) (ST := ST)) P).1 * d.1.f P x.1 = (a : 𝓞 X.E ⧸ P.1.asIdeal) * d.1.f P x.1
-  rw [Pi.mulSingle_eq_same]
 
-theorem rec_lv_smul (g : UF X.E n × GLG (E := X.E) (n := n) (SG := SG)) (d : DecoSet (E := X.E) (n := n) (ST := ST) (SG := SG)) (P : ST) :
-    ∃ e : d.lv P ≃ₗ[𝓞 X.E ⧸ P.1.asIdeal] (g • d).lv P, d.fv P = ((g • d).fv P).comp e.toLinearMap := by
-  refine ⟨modP.map P.1 d.1.N g.1.1, ?_⟩
-  apply LinearMap.ext
-  intro z
-  obtain ⟨x, rfl⟩ := Submodule.Quotient.mk_surjective _ z
-  show d.1.f P x.1 = d.1.f P (g.1.1.symm (g.1.1 x.1))
-  rw [LinearEquiv.symm_apply_apply]
 
-theorem rec_lv_of_eq {d₁ d₂ : DecoSet (E := X.E) (n := n) (ST := ST) (SG := SG)} (g : UF X.E n × GLG (E := X.E) (n := n) (SG := SG)) (h : g • d₂ = d₁) (P : ST) :
-    ∃ e : d₂.lv P ≃ₗ[𝓞 X.E ⧸ P.1.asIdeal] d₁.lv P, d₂.fv P = (d₁.fv P).comp e.toLinearMap := by
-  subst h
-  exact rec_lv_smul g d₂ P
 
 variable (C : CoefPk X n (DecoSet (E := X.E) (n := n) (ST := ST) (SG := SG))) (Λ : LevFam X.E X.K n SG)
 
@@ -785,19 +757,6 @@ theorem dilD_mul (P : ST) (a b : (𝓞 X.E ⧸ P.1.asIdeal)ˣ) (c : (formGSD C �
   rw [diagonalTwist_mul]
   exact class_diagonalTwist_congr C Λ P a (clsD_repD C Λ _).symm
 
-theorem dilD_fv (P : ST) (a : (𝓞 X.E ⧸ P.1.asIdeal)ˣ) (c : (formGSD C Λ).Cl) :
-    ∃ e : (repD C Λ (dilD C Λ P a c)).lv P ≃ₗ[𝓞 X.E ⧸ P.1.asIdeal] (repD C Λ c).lv P,
-      (repD C Λ (dilD C Λ P a c)).fv P = (a : 𝓞 X.E ⧸ P.1.asIdeal) • ((repD C Λ c).fv P).comp e.toLinearMap := by
-  obtain ⟨g, hg⟩ := ((formGSD C Λ).cls_eq_iff (repD C Λ (dilD C Λ P a c)) ((repD C Λ c).dia1 P a)).mp
-    (clsD_repD C Λ _)
-  have hg' : (FormG.incl Λ g)⁻¹ • repD C Λ (dilD C Λ P a c) = (repD C Λ c).dia1 P a := by
-    rw [inv_smul_eq_iff]
-    exact hg.symm
-  obtain ⟨e, he⟩ := rec_lv_of_eq _ hg' P
-  refine ⟨e, ?_⟩
-  rw [he, functional_diagonalTwist]
-  first
-  | rfl
 
 theorem stabilizer_diagonalTwist (P : ST) (a : (𝓞 X.E ⧸ P.1.asIdeal)ˣ) (d : DecoSet (E := X.E) (n := n) (ST := ST) (SG := SG)) :
     MulAction.stabilizer (formGSD C Λ).G (d.dia1 P a) = MulAction.stabilizer (formGSD C Λ).G d := by
@@ -1236,21 +1195,17 @@ structure XpArg {hc : X.Tau → HCParam R} (σ₀ : X.K →+* ℂ) (C : ColumnCh
   til : clsP → C.cls R.m
   stabMap : ∀ c, stabilizer₂ c →* C.stab R.m (til c)
   stabMap_inj : ∀ c, Function.Injective (stabMap c)
-  evz_til : ∀ φ ψ : C.cls R.m → C.Y R.m → ℂ, (∀ c, φ (til c) = ψ (til c)) → P.evz φ = P.evz ψ
   ptC : Submodule ℂ P.Wrow
   ipP : P.Wrow →ₗ⋆[ℂ] P.Wrow →ₗ[ℂ] ℂ
   ptLat : HLat X.K
-  ptLat_good : ptLat.Good
   ptEmb : ptLat.V →ₛₗ[σ₀] P.Wrow
   ptEmb_basis : LinearIndependent ℂ (fun a => ptEmb (ptLat.b a)) ∧
     Submodule.span ℂ (Set.range (fun a => ptEmb (ptLat.b a))) = ptC
   ptEmb_norm : ∀ x, (Formalism.HermitianLatticesTheory.majAt ptLat.b ptLat.X (InfinitePlace.mk σ₀) x x).re = (ipP (ptEmb x) (ptEmb x)).re
   beOn : X.Tau → ℝ
-  beOn_nonneg : ∀ τ, 0 ≤ beOn τ
   thN : ∀ i, (X.K →+* ℂ) → C.cls i → C.cls (i + 1) → ℝ
   thN_nonneg : ∀ i s L L', 0 ≤ thN i s L L'
   thFree : ∀ i, (X.K →+* ℂ) → C.cls i → C.cls (i + 1) → ℝ
-  thFree_nonneg : ∀ i s L L', 0 ≤ thFree i s L L'
 
 
 open Classical in
@@ -1284,7 +1239,6 @@ def recForms (hX : X.Ok) (hPr : Pr.Ok) (hf : X.f = R.f) (σ₀ : X.K →+* ℂ) 
   dilT := fun i v a c => (stepEv W Λ σ₀ hσ u i).trPt ((repD (colVal W u i (Pr.vT u) Pr.vGs) (Λ i) c).dia1 v a)
   dil_one := fun i v c => dilD_one _ _ v c
   dil_mul := fun i v a b c => dilD_mul _ _ v a b c
-  dil_fv := fun i v a c => dilD_fv _ _ v a c
   dil_stab := fun i v a c => dilD_stab _ _ v a c
   rhoT_dil := fun _ _ _ _ => rfl
   tauOf := fun w => tauOfR hX hPr u (pw w)
@@ -1315,18 +1269,14 @@ def recForms (hX : X.Ok) (hPr : Pr.Ok) (hf : X.f = R.f) (σ₀ : X.K →+* ℂ) 
   til := Xp.til
   stabMap := Xp.stabMap
   stabMap_inj := Xp.stabMap_inj
-  evz_til := Xp.evz_til
   ptC := Xp.ptC
   ipP := Xp.ipP
   ptLat := Xp.ptLat
-  ptLat_good := Xp.ptLat_good
   ptEmb := Xp.ptEmb
   ptEmb_basis := Xp.ptEmb_basis
   ptEmb_norm := Xp.ptEmb_norm
   beOn := Xp.beOn
-  beOn_nonneg := Xp.beOn_nonneg
   thFree := Xp.thFree
-  thFree_nonneg := Xp.thFree_nonneg
 
 end Mem2
 
@@ -1355,10 +1305,6 @@ def ptEv (σ₀ : X.K →+* ℂ) (hσ : ∀ x : X.K, σ₀ (star x) = starRingEn
 
 @[reducible] def ptH (hX : X.Ok) : HLat X.K := (ptGSD W ΛM).toH (ptOk W ΛM hX) (ptGSD W ΛM).intDel
 
-theorem ptH_good (hX : X.Ok) : (ptH W ΛM hX).Good :=
-  let h := ptOk W ΛM hX
-  have hL := rec_intDel_full (ptGSD W ΛM) h fun d => rec_delAtr_lattice W.sgTrue (rec_deco_full_lattice d)
-  ⟨((ptRat W ΛM hX).posH h).frameOK _, hL.fg, hL.span_eq_top⟩
 
 variable {W ΛM}
 
@@ -1480,13 +1426,11 @@ def recPer (hX : X.Ok) (σ₀ : X.K →+* ℂ) (hσ : ∀ x : X.K, σ₀ (star x
 structure ThArg (W : Wts X Pr.Word R) (Λ : ∀ j, LevFam X.E X.K (R.N j) Pr.vGs) (u : Pr.Word) where
 
   beOn : X.Tau → ℝ
-  beOn_nonneg : ∀ τ, 0 ≤ beOn τ
 
   thN : ∀ i, (X.K →+* ℂ) → StCl W Λ u i → StCl W Λ u (i + 1) → ℝ
   thN_nonneg : ∀ i s L L', 0 ≤ thN i s L L'
 
   thFree : ∀ i, (X.K →+* ℂ) → StCl W Λ u i → StCl W Λ u (i + 1) → ℝ
-  thFree_nonneg : ∀ i s L L', 0 ≤ thFree i s L L'
 
 def recXp (hX : X.Ok) (hPr : Pr.Ok) (σ₀ : X.K →+* ℂ) (hσ : ∀ x : X.K, σ₀ (star x) = starRingEnd ℂ (σ₀ x)) (u : Pr.Word)
     (G : ChainGlob W σ₀) (A : ChainArg W Λ G u) (hM : (rowGSD W ΛM).Ok) (hpi : ∀ w : SG', Pr.piT u ∉ w.1.asIdeal) (hL : LevExt Λ hSG ΛM)
@@ -1499,24 +1443,17 @@ def recXp (hX : X.Ok) (hPr : Pr.Ok) (σ₀ : X.K →+* ℂ) (hσ : ∀ x : X.K, 
   til := tilCl W Λ hSG ΛM u
   stabMap := stabMapR hSG hPr u hpi hL
   stabMap_inj := stabMapR_injective hSG hPr u hpi hL
-  evz_til := fun φ ψ h => by
-    funext c
-    show (stepEv W Λ σ₀ hσ u R.m).trPt _ (φ (tilCl W Λ hSG ΛM u c)) = (stepEv W Λ σ₀ hσ u R.m).trPt _ (ψ (tilCl W Λ hSG ΛM u c))
-    rw [h c]
   ptC := (ptEv W ΛM σ₀ hσ).Fi
   ipP := (ptEv W ΛM σ₀ hσ).ipCl (ptOk W ΛM hX)
   ptLat := ptH W ΛM hX
-  ptLat_good := ptH_good W ΛM hX
   ptEmb := (ptEv W ΛM σ₀ hσ).emb
   ptEmb_basis := ⟨(ptEv W ΛM σ₀ hσ).emb_li (ptOk W ΛM hX) _ ((ptGSD W ΛM).hB (ptOk W ΛM hX)).linearIndependent,
     (ptEv W ΛM σ₀ hσ).span_basis _⟩
   ptEmb_norm := fun x => (ptEv W ΛM σ₀ hσ).norm_ipCl (ptOk W ΛM hX) (ptRat W ΛM hX) hσ x
   beOn := Th.beOn
-  beOn_nonneg := Th.beOn_nonneg
   thN := Th.thN
   thN_nonneg := Th.thN_nonneg
   thFree := Th.thFree
-  thFree_nonneg := Th.thFree_nonneg
 
 end Xp
 
