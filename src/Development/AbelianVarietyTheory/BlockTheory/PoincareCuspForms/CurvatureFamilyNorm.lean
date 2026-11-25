@@ -77,36 +77,8 @@ structure Shape (X : Data E r) : Prop where
   D_ge : 2 ≤ nd X
 
 structure Weights (X : Data E r) where
-  shape : Shape X
-  T : ℕ
-  i : ℕ
-  c : ℝ
-  hW : ℕ
-  hF : ℕ
   aK : Wt X.Ψ r
   aW : Wt X.Ψ r
-  i_pos : 0 < i
-  c_pos : 0 < c
-  T_cols : (nd X + 2) * (2 * hW) + 2 * r ≤ T
-  T_forty : 40 * (nd X + 2) ≤ T
-  T_sq : 11 * nd X ^ 2 ≤ T
-  cols_lo : 8 * X.Ψ.card * r + 4 ≤ 2 * hF
-  cols_hi : 2 * hF ≤ 2 * hW
-  Tcg : (T : ℝ) * c * g0 r ≤ 1
-  cRR : (g0 r : ℝ) * X.Ψ.card * (X.p0 : ℝ) ^ 3 * RR X ^ 2 * c ≤ 1
-  b_cut : bb X < 3.8 * T - 2 * T
-  b_onto : bb X ^ 2 * Crh X + bb X < 1.9 * ((nd X : ℝ) + 2) * T
-  gap_big : ∀ τ a b, IsGap X a b →
-    ((T : ℤ) + nd X + 2) * ((T : ℤ) + nd X + 2 + 2 * r) ≤ aK τ a - aK τ b + 2
-  plus_big : ∀ τ (a : Fin r), (a : ℕ) + 1 = r → 2 * (T : ℤ) ^ 2 ≤ aK τ a
-  minus_big : ∀ τ (a : Fin r), (a : ℕ) = 0 → 2 * (T : ℤ) ^ 2 ≤ -aK τ a
-  gap_div : ∀ τ a b, IsGap X a b →
-    aK τ a - aK τ b + 2 - ((T : ℤ) + nd X + 2) * (aW τ a - aW τ b) ∈ Set.Ico (0 : ℤ) (T + nd X + 2)
-  plus_div : ∀ τ (a : Fin r), (a : ℕ) + 1 = r →
-    aK τ a - ((T : ℤ) + nd X + 2) * aW τ a - ((nd X : ℤ) + 2) * (2 * hW) - 2 * r ∈
-      Set.Ico (0 : ℤ) (T + nd X + 2)
-  minus_div : ∀ τ (a : Fin r), (a : ℕ) = 0 →
-    -aK τ a - ((T : ℤ) + nd X + 2) * (-aW τ a) ∈ Set.Ico (0 : ℤ) (T + nd X + 2)
 
 def lev (X : Data E r) (x0 : Frame X.Ψ r) (u : Frame X.Ψ r → ℝ) (z : V (nd X)) (ξ : Fin (nd X) → ℂ) : ℝ :=
   (leviV (nd X) (fun y => ((u (cpt X x0 y) : ℝ) : ℂ)) z ξ).re
