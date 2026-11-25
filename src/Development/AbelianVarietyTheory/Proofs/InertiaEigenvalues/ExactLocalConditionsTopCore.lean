@@ -695,7 +695,7 @@ theorem count_block (w : ℤ) (t : ℕ) (a : ℤ) :
   · exact Multiset.count_eq_zero.2 fun hm => ha (mem_block.1 hm)
 
 def ofWindow {n r : ℕ} (t : ℕ) (h η : ZMod n → ℕ) (typ : ZMod n → Bool) (w : ZMod n → ℤ)
-    (U : ZMod n → Multiset ℤ) (hh : ∀ i, 2 ≤ h i) (hη : ∀ i, 1 ≤ η i) (ht : 1 ≤ t)
+    (U : ZMod n → Multiset ℤ) (_ : ∀ i, 2 ≤ h i) (_ : ∀ i, 1 ≤ η i) (ht : 1 ≤ t)
     (hc : ∀ i, Multiset.card (U i) = r) (hU : ∀ i, ∀ u ∈ U i, 1 ≤ u ∧ u ≤ (h i : ℤ) - 1)
     (hB : ∀ i (β : ℤ), w i ≤ β → β < w i + t →
       1 ≤ β ∧ β ≤ (h i : ℤ) - 1 ∧ InWin (typ i) (h i) (η i) β) : TopData n r where
@@ -706,8 +706,6 @@ def ofWindow {n r : ℕ} (t : ℕ) (h η : ZMod n → ℕ) (typ : ZMod n → Boo
   t := t
   lows := fun i => (U i).filter (InWin (typ i) (h i) (η i))
   cloud := fun i => (U i).filter fun u => ¬ InWin (typ i) (h i) (η i) u
-  two_le_h := hh
-  one_le_η := hη
   one_le_letterBlockLength := ht
   card_eq := fun i => by rw [Multiset.filter_add_not, hc]
   range := fun i u hu => by
@@ -721,22 +719,12 @@ def ofWindow {n r : ℕ} (t : ℕ) (h η : ZMod n → ℕ) (typ : ZMod n → Boo
     rcases hu with hu | hu
     · exact ⟨(hU i u hu.1).1, by simpa [InWin, hi'] using hu.2⟩
     · exact ⟨(hB i u hu.1 hu.2).1, by simpa [InWin, hi'] using (hB i u hu.1 hu.2).2.2⟩
-  cloudG := fun i hi u hu => by
-    have hi' : typ i = true := by by_contra hn; simp [hn] at hi
-    rw [Multiset.mem_filter] at hu
-    simpa [InWin, hi'] using hu.2
   lowBd := fun i hi u hu => by
     have hi' : typ i = false := by by_contra hn; simp at hn; simp [hn] at hi
     rw [Multiset.mem_add, mem_block, Multiset.mem_filter] at hu
     rcases hu with hu | hu
     · exact ⟨by simpa [InWin, hi'] using hu.2, (hU i u hu.1).2⟩
     · exact ⟨by simpa [InWin, hi'] using (hB i u hu.1 hu.2).2.2, (hB i u hu.1 hu.2).2.1⟩
-  cloudBd := fun i hi u hu => by
-    have hi' : typ i = false := by by_contra hn; simp at hn; simp [hn] at hi
-    rw [Multiset.mem_filter] at hu
-    have := hu.2
-    simp only [InWin, hi', Bool.false_eq_true, ite_false, not_le] at this
-    exact this
 
 theorem exists_topData (l n t r : ℕ) (h η : ZMod n → ℕ) (typ : ZMod n → Bool) (w : ZMod n → ℤ)
     (U : ZMod n → Multiset ℤ) (hh : ∀ i, 2 ≤ h i) (hη : ∀ i, 1 ≤ η i) (ht : 1 ≤ t)

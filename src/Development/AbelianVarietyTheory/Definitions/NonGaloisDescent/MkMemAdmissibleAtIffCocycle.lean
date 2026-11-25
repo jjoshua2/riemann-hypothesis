@@ -33,15 +33,11 @@ structure TopData (n r : ℕ) where
   t : ℕ
   lows : ZMod n → Multiset ℤ
   cloud : ZMod n → Multiset ℤ
-  two_le_h : ∀ i, 2 ≤ h i
-  one_le_η : ∀ i, 1 ≤ η i
   one_le_letterBlockLength : 1 ≤ t
   card_eq : ∀ i, Multiset.card (lows i + cloud i) = r
   range : ∀ i, ∀ u ∈ lows i + cloud i + block (w i) t, 1 ≤ u ∧ u ≤ (h i : ℤ) - 1
   lowG : ∀ i, ty i = LType.G → ∀ u ∈ lows i + block (w i) t, 1 ≤ u ∧ u ≤ (η i : ℤ)
-  cloudG : ∀ i, ty i = LType.G → ∀ u ∈ cloud i, (η i : ℤ) < u
   lowBd : ∀ i, ty i = LType.Bd → ∀ u ∈ lows i + block (w i) t, (h i : ℤ) - η i ≤ u ∧ u ≤ (h i : ℤ) - 1
-  cloudBd : ∀ i, ty i = LType.Bd → ∀ u ∈ cloud i, u < (h i : ℤ) - η i
 
 theorem mem_block {w u : ℤ} {t : ℕ} : u ∈ block w t ↔ w ≤ u ∧ u < w + t := by
   simp [block]
@@ -89,8 +85,6 @@ def exData : TopData 2 2 where
   t := 2
   lows := fun i => if i = 0 then {7} else {52}
   cloud := fun i => if i = 0 then {20} else {40}
-  two_le_h := fun _ => by norm_num
-  one_le_η := fun _ => by norm_num
   one_le_letterBlockLength := by norm_num
   card_eq := fun i => by split_ifs <;> simp
   range := fun i u hu => by
@@ -98,15 +92,9 @@ def exData : TopData 2 2 where
   lowG := fun i hi u hu => by
     split_ifs at hu hi
     simp [mem_block] at hu; push_cast; omega
-  cloudG := fun i hi u hu => by
-    split_ifs at hu hi
-    simp at hu; push_cast; omega
   lowBd := fun i hi u hu => by
     split_ifs at hu hi
     simp [mem_block] at hu; push_cast; omega
-  cloudBd := fun i hi u hu => by
-    split_ifs at hu hi
-    simp at hu; push_cast; omega
 
 theorem exData_sg (i : ZMod 2) : exData.sg 41 i = 1 := by
   have h : ∑' j : ℕ, ((60 : ℕ) : ℝ) / ((41 : ℕ) : ℝ) ^ (j + 1) = 3 / 2 := by
