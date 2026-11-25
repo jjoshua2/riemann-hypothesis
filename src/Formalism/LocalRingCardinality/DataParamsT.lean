@@ -53,7 +53,6 @@ structure ParamsT (D : D7) (L : SizeData₂ D) (P : ParameterChoice' D L) : Type
   Dp_eq : Dp = D.R.f * D.R.r.choose 2
 
   PP_poly : PP ≤ L.sc.x ^ L.Ct
-  Dp_poly : (Dp : ℝ) ≤ L.sc.x ^ L.Ct
   TO_poly : (TO : ℝ) ≤ L.sc.x ^ L.Ct
 
   nW_win : nW L P.CnW ≤ (nWn : ℝ) ∧ (nWn : ℝ) < nW L P.CnW + 8
@@ -71,8 +70,6 @@ structure ParamsT (D : D7) (L : SizeData₂ D) (P : ParameterChoice' D L) : Type
   TO_eq : TO = ⌈L.sc.x ^ cTO⌉₊
 
   TO_ge : PP ^ 4 * (Dp : ℝ) ^ 3 * D.R.k * D.R.f * L.sc.x ^ Cp / ((D.R.m : ℝ) * L.de2) ≤ (TO : ℝ)
-
-  TO_PP : (TO : ℝ) * PP * L.sc.x ^ Cb ≤ L.sc.b
 
   TO_nW : (Dp + 2) * nWn + 2 * D.R.r ≤ TO
 
@@ -96,21 +93,11 @@ structure ParamsT (D : D7) (L : SizeData₂ D) (P : ParameterChoice' D L) : Type
 
   heightBound_ge_order_sq : 4 * (TO : ℝ) ^ 2 + 2 * D.R.t ≤ h0 L
 
-  heightBound_ge_precision_degree : PP * Dp * D.R.f * (D.R.m : ℝ) ^ 2 * (D.R.N D.R.m : ℝ) * TO ≤ h0 L
-
-  heightBound_ge_precision_cubic : PP * ((D.R.f : ℝ) * D.R.m * D.R.k) ^ 3 * D.R.k / D.R.m ≤ h0 L
-
   heightBound_ge_order_product : ChT * TO * (D.R.N D.R.m : ℝ) * (D.R.f : ℝ) ^ 2 * (D.R.m : ℝ) ^ 2 * D.R.k * Dp * PP ≤ h0 L
-
-  log_bound_le_sqrt : (TO : ℝ) * (Dp : ℝ) ^ 2 * Real.log L.sc.b * L.sc.x ^ Cb ≤ L.sc.b
 
   TD2' : (TO : ℝ) * (Dp : ℝ) ^ 2 * Real.log L.sc.b ≤ L.sc.b ^ (1 / 2 : ℝ)
 
   b_ge : CbN * (D.R.r : ℝ) * D.R.m * D.R.k * PP ^ 2 * (Dp : ℝ) ^ 3 ≤ L.sc.b
-
-  s_odd : Odd s
-  s_lo : D.R.r + 5 < s
-  s_hi : s ≤ D.R.r + 7
 
 theorem ParamsT.Cp_nonneg {D : D7} {L : SizeData₂ D} {P : ParameterChoice' D L} (T : ParamsT D L P) : 0 ≤ T.Cp :=
   le_trans zero_le_one T.Cp_ge

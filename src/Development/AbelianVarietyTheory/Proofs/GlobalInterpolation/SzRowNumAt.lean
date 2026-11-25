@@ -1052,8 +1052,8 @@ theorem szRow_blockLengthParams : SzRow (fun C D L => ∀ P : ParameterChoice' D
     hand _ _ _root_.GlobalTheory.EX.szRow_TO_lower <| hand _ _ _root_.GlobalTheory.EX.szRow_rank_polys_le_TO <| hand _ _ _root_.GlobalTheory.EX.szRow_TO_PP_le_b <|
     hand _ _ _root_.GlobalTheory.EX.szRow_Del_TO_gap <| hand _ _ szRow_nodeGap_blockLength _root_.GlobalTheory.EX.szRow_poly_le_b
   refine szRow_and_imp.2 _ _ hall ?_
-  rintro C cD ch D L hS - ⟨⟨a1, a2, a3⟩, ⟨b1, b2, b3, b4, b5, b6, b7, b8⟩, ⟨c1, c2⟩, ⟨d1, d2⟩,
-    ⟨e1, e2, e3, e4⟩, ⟨f1, f2, f3, f4⟩, ⟨g1, g2⟩, ⟨h1, h2, h3, h4⟩, ⟨i1, i2, i3⟩⟩ P hP
+  rintro C cD ch D L hS - ⟨⟨a1, _, a3⟩, ⟨b1, b2, b3, b4, _, _, _, b8⟩, ⟨c1, c2⟩, ⟨d1, d2⟩,
+    ⟨e1, e2, e3, e4⟩, ⟨_, f2, f3, f4⟩, ⟨g1, g2⟩, ⟨h1, _, _, h4⟩, ⟨_, i2, i3⟩⟩ P hP
   obtain ⟨-, -, -, -, -, -, -, hCp, heP, -, -, -, -, hCP, -, hlast⟩ := hS
   have hCb : 1 ≤ C.T.Cb := hlast _ (by simp [FC.cLast])
   have hChT : 1 ≤ C.T.ChT := hlast _ (by simp [FC.cLast])
@@ -1081,7 +1081,6 @@ theorem szRow_blockLengthParams : SzRow (fun C D L => ∀ P : ParameterChoice' D
     PP_eq := rfl
     Dp_eq := rfl
     PP_poly := a1
-    Dp_poly := a2
     TO_poly := a3
     nW_win := hP ▸ b1
     nW_dvd := b2
@@ -1092,7 +1091,6 @@ theorem szRow_blockLengthParams : SzRow (fun C D L => ∀ P : ParameterChoice' D
     nP_eq := rfl
     TO_eq := b4
     TO_ge := d1
-    TO_PP := f1
     TO_nW := e1
     TO_40 := e2
     TO_11D2 := e3
@@ -1104,15 +1102,9 @@ theorem szRow_blockLengthParams : SzRow (fun C D L => ∀ P : ParameterChoice' D
     Del_TO := g1
     Del_gap := g2
     heightBound_ge_order_sq := h1
-    heightBound_ge_precision_degree := h2
-    heightBound_ge_precision_cubic := h3
     heightBound_ge_order_product := h4
-    log_bound_le_sqrt := i1
     TD2' := i2
-    b_ge := i3
-    s_odd := b5
-    s_lo := b6
-    s_hi := b7 }, rfl, rfl⟩
+    b_ge := i3 }, rfl, rfl⟩
 
 end GlobalTheory.EX
 end -- clump:auto
