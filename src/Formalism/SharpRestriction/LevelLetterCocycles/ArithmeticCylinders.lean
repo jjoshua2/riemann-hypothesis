@@ -95,15 +95,11 @@ structure AllRows (D : D7) : Type 1 where
   n_eq : B.I.n = D.R.r
   f_eq : B.I.f = D.R.f
   labAll : ∀ k, Fin D.what₂.Dall → D.nd.PlG k → (ZMod (D.host.g k))[X]
-  labAll_label : ∀ k σ v, IsLabel D k (labAll k σ v)
   inc : Fin D.what₂.Drows → Fin D.what₂.Dall
   eVec : ∀ k, D.nd.PlG k → MonoidAlgebra ℂ (GL (Fin D.R.r) (ZMod (D.host.g k)))
-  eVec_idem : ∀ k v, eVec k v * eVec k v = eVec k v
   eT : Set (Tup2 D) → B.I.Gf → ℂ
   ReT : Set (Tup2 D) → (B.I.L2 B.μf B.fund →L[ℂ] B.I.L2 B.μf B.fund)
-  ReT_spec : ∀ S, B.I.IsRConvF B.μf B.fund B.R (eT S) (ReT S)
   eT_univ : eT Set.univ = B.e
-  ReT_univ : ReT Set.univ = B.Re
   eT_one : ∀ (k : Fin 2) (S : Finset (Tup D k)),
     (eT (cyl D k (S : Set (Tup D k))) 1).re =
       (B.e 1).re * ∑ t ∈ S, ∏ v, wtOf D k (eVec k v) (t v)

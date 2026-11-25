@@ -604,21 +604,17 @@ section Ctor
 
 variable {D : D7} (X : HidaSetting D)
 
-def allRowsOf (ψ₀ : ∀ k : Fin 2, AddChar (ZMod (D.host.g k)) ℂ) (hJ : EJIdem D ψ₀) (hU : EtUniv X)
-    (hO : EtOne X ψ₀) (hI : EtInt X) (hL : RowsLab X) : AllRows D where
+def allRowsOf (ψ₀ : ∀ k : Fin 2, AddChar (ZMod (D.host.g k)) ℂ) (_ : EJIdem D ψ₀) (hU : EtUniv X)
+    (hO : EtOne X ψ₀) (_ : EtInt X) (hL : RowsLab X) : AllRows D where
   B := X.B
   n_eq := X.n_eq
   f_eq := Formalism.L2.SG.Pf.RowDictPf.f_eq X
   labAll := Classical.choose hL
-  labAll_label := (Classical.choose_spec (Classical.choose_spec hL)).1
   inc := Classical.choose (Classical.choose_spec hL)
   eVec := fun k _ => eJk D k (ψ₀ k)
-  eVec_idem := fun k _ => hJ k
   eT := eT X
   ReT := ReT X
-  ReT_spec := reT_spec X hI
   eT_univ := hU
-  ReT_univ := reT_univ X hU hI
   eT_one := hO
 
 variable {X} {ψ₀ : ∀ k : Fin 2, AddChar (ZMod (D.host.g k)) ℂ} {hJ : EJIdem D ψ₀} {hU : EtUniv X} {hO : EtOne X ψ₀}
