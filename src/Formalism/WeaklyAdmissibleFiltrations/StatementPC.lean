@@ -26,11 +26,6 @@ structure PotCrysData (G : Type) [Group G] (Qp K₀ K K₀' K' : Type) [Field Qp
   PD : PeriodData G Qp K₀ K B BdR
   PD' : PeriodData H Qp K₀' K' B BdR
   actB_eq : ∀ (h : H) (b : B), PD'.actB h b = PD.actB (h : G) b
-  actdR_eq : ∀ (h : H) (b : BdR), PD'.actdR h b = PD.actdR (h : G) b
-  φ_eq : ∀ b : B, PD'.φ b = PD.φ b
-  ι_eq : ∀ b : B, PD'.ι b = PD.ι b
-  Fil_eq : ∀ a, (PD'.Fil a : Set BdR) = PD.Fil a
-  p_eq : PD'.p = PD.p
   t_eq : PD'.t = PD.t
   χ_eq : ∀ h : H, PD'.χ h = PD.χ (h : G)
   stableK₀' : ∀ (g : G) (c : K₀'), ∃ c' : K₀', PD.actB g (algebraMap K₀' B c) = algebraMap K₀' B c'

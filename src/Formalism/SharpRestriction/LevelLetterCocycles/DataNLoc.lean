@@ -654,20 +654,6 @@ def pc (P : LocPrime l) {K K' : FinExt l} (h : K.1 ≤ K'.1) (hN : (GKin h).Norm
     change (P.PD K').actB (GKinEquiv h x) b = (P.PD K).actB (x : ↥(GK K)) b
     rw [P.PD_actB, P.PD_actB]
     rfl
-  actdR_eq := fun x b => by
-    change (P.PD K').actdR (GKinEquiv h x) b = (P.PD K).actdR (x : ↥(GK K)) b
-    rw [P.PD_actdR, P.PD_actdR]
-    rfl
-  φ_eq := fun b => by
-    change (P.PD K').φ b = (P.PD K).φ b
-    rw [P.PD_φ, P.PD_φ]
-  ι_eq := fun b => by
-    change (P.PD K').ι b = (P.PD K).ι b
-    rw [P.PD_ι, P.PD_ι]
-  Fil_eq := fun a => P.PD_Fil K' K a
-  p_eq := by
-    change (P.PD K').p = (P.PD K).p
-    rw [P.PD_p, P.PD_p]
   t_eq := by
     change (P.PD K').t = (P.PD K).t
     rw [P.period_datum_t_eq, P.period_datum_t_eq]
