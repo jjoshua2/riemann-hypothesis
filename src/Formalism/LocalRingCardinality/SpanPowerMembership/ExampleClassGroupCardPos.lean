@@ -628,16 +628,6 @@ theorem tameHyp {R : Ranks} (H : Host R) : TameHyp H := fun k w hw =>
     have := (ReciprocityTheory.Gal.isPlaceOver_placeOf AlgC w ((H.g k : ℕ) : 𝓞 H.E)).mpr hw
     simpa using this)
 
-theorem discr_prime {R : Ranks} (H : Host R) (p : ℕ) (hp : p.Prime) (h : (p : ℤ) ∣ discr H.E) :
-    p ∣ H.QS * H.q * H.d :=
-  H.der.discr_primes.1 p hp h
-
-theorem galK_comm {R : Ranks} (H : Host R) (σ τ : H.E ≃ₐ[H.K] H.E) : σ * τ = τ * σ := by
-  have h : σ.restrictScalars ℚ * τ.restrictScalars ℚ = τ.restrictScalars ℚ * σ.restrictScalars ℚ := by
-    apply (H.gal).injective
-    rw [map_mul, map_mul, mul_comm]
-  ext x
-  exact AlgEquiv.congr_fun h x
 
 
 
@@ -652,16 +642,10 @@ def toyNtypes (ht : THyp H) (htm : TameHyp H)
       iota k w x = iota k w y → x = y) :
     NTypes (nautToy H what₂ h) where
   Mray := H.E
-  Mray_gal := IsGalois.tower_top_of_isGalois ℚ H.K H.E
-  Mray_ab := galK_comm H
-  Mray_unr := discr_prime H
   g_Mray := h.hg
   g_cond := ht.cond
   BB_disj := ht.bb
   bc := fun _ => {(R.r, 1)}
-  bc_pos := fun _ p hp => by
-    rw [Multiset.mem_singleton.mp hp]; exact ⟨Nat.pos_of_ne_zero (r_ne_zero R), one_pos⟩
-  bc_sum := fun _ => by simp
   rbar := fun _ _ => 1
   rbar_open := fun _ _ => by simp
   tg := fun k v => (htm k _ ((nautToy H what₂ h).plGw_over k v)).choose
@@ -706,7 +690,6 @@ def toyNtypes (ht : THyp H) (htm : TameHyp H)
   locPar_dim := fun σ => σ.elim
   labPar_def := fun _ σ => σ.elim
   MtPar := fun _ _ σ => σ.elim
-  AmbPar := fun _ σ => σ.elim
 
 theorem exampleNewtypes_idempotent_zero (ht htm teichC teichC_inj iota iota_inj) (g) :
     (toyNtypes H what₂ h ht htm teichC teichC_inj iota iota_inj).e0.coeff g = 0 := by

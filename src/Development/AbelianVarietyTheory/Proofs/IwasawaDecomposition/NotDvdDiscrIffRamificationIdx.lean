@@ -246,13 +246,6 @@ theorem isEmpty_real : IsEmpty (H.K →+* ℝ) := ⟨fun φ => by
 
 variable {H} {M : Type} [Field M] [NumberField M] [Algebra H.K M]
 
-theorem isGalois_of_ray (hM : IsRayField H.K M (condIdeal H)) : IsGalois H.K M :=
-  have := hM.1
-  inferInstance
-
-theorem comm_of_ray (hM : IsRayField H.K M (condIdeal H)) (σ τ : M ≃ₐ[H.K] M) : σ * τ = τ * σ :=
-  have := hM.1
-  mul_comm' σ τ
 
 theorem unr_of_ray (hM : IsRayField H.K M (condIdeal H)) (p : ℕ) (hp : p.Prime) (h : (p : ℤ) ∣ discr M) :
     p ∣ H.QS * H.q * H.d := by
