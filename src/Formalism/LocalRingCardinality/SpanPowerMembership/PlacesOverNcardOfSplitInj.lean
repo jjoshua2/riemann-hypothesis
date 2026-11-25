@@ -662,14 +662,11 @@ def nbcToy (what₂ : Rows.Data R) (h : NHyp H what₂) : NBC (nautToy H what₂
   sphAU _ π := π.elim
   locAU _ π := π.elim
   satAU _ π := π.elim
-  satAU_card _ π := π.elim
   Wt _ := Empty
   infW _ W := W.elim
-  infW_card _ W := W.elim
   infW_alg _ W := W.elim
   wtAU _ π := π.elim
   embAV i := i.elim
-  embAV_inj i := i.elim
   embAV_loc i := i.elim
   embAV_sat i := i.elim
   embAV_sph i := i.elim

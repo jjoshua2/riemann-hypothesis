@@ -136,7 +136,6 @@ def LowForm (R : RealDat D A Ks) (F : Face D A) (b : ℝ) : Prop :=
       Real.exp (lowB D i b) * (Formalism.HermitianLatticesTheory.majAt (Pi.basisFun D.what₂.LL _) ((lv (F.fc (R.toCx F).zs) false).XT i A.μ0) v x x).re ≤
         ‖(R.toCx F).wC false i v (cpt v.embedding (((R.toCx F).liftMat F.cr false i A.μ0).mulVec x))‖ ^ 2
 
-def reScal (R : RealDat D A Ks) (lam : type_of% R.lam) (kap : ℝ) : RealDat D A Ks := { R with lam := lam, kap := kap }
 
 end Low
 

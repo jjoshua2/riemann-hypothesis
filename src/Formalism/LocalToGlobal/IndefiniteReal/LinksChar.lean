@@ -342,7 +342,6 @@ structure IsThP : Prop where
   thF : R.thP_thF
   thG : R.thP_thG
 
-def lamN (t : T) (j : ℕ) (p : A.fam.base.Ix) : ℝ := if h : j - 1 < D.R.m then R.lam ⟨j - 1, h⟩ t p A.v0 else 1
 
 def NonzeroIndexPlace (w : HeightOneSpectrum (𝓞 D.what₂.LL)) : Prop :=
   ∃ w', (w' = w ∨ w' = conjPl w) ∧ ∃ i : Fin D.R.m,
@@ -350,9 +349,6 @@ def NonzeroIndexPlace (w : HeightOneSpectrum (𝓞 D.what₂.LL)) : Prop :=
     jw ((lv (F.fc (R.toCx F).zs) false).HT i A.μ0) w' ((lv (F.fc (R.toCx F).zs) false).Tl i A.μ0) ≠ 0 ∨
     (F.Zsc (R.toCx F).zs).F0 w' i ≠ 0 ∨ (F.Zsc (R.toCx F).zs).F0 (conjPl w') i ≠ 0
 
-def PartAt (b : Bool) (i : Fin D.R.m) (p : A.fam.base.Ix) (v : InfinitePlace D.what₂.LL) : Prop :=
-  ∃ x, (R.toCx F).tC F.cr b i A.μ0 (cpt A.v0.embedding x) ∈ (R.toCx F).Wp i p ∧
-    Formalism.HermitianLatticesTheory.majAt (Pi.basisFun D.what₂.LL _) ((lv (F.fc (R.toCx F).zs) b).XT i A.μ0) v x x ≠ 0
 
 abbrev tup_tw : Prop :=
   ∀ w, R.NonzeroIndexPlace F w → w ∈ R.twPl

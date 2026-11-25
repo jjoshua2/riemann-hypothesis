@@ -48,17 +48,12 @@ theorem preliminary_of_scalar_update (h : R.Pre1 F) (kap lam) : (R.upd6 kap lam)
   ⟨⟨h.1.lev, h.1.red_R, h.1.red_L, h.1.levels, h.1.record, ⟨h.1.fam.tie, h.1.fam.Sb, h.1.fam.roots, h.1.fam.pl_onto, h.1.fam.degR, h.1.fam.degL, h.1.fam.muVal, h.1.fam.etaVal⟩, h.1.inf, h.1.vpos, h.1.cX, h.1.cV, h.1.prX, h.1.order, h.1.std⟩,
     ⟨h.2.inf, h.2.vpos, h.2.cX, h.2.cV, h.2.prX, h.2.HX, h.2.HV, h.2.HE, h.2.HW, h.2.gE, h.2.gW, h.2.jX, h.2.jV, h.2.νY, h.2.νY', h.2.ν0, h.2.νX, h.2.νV, h.2.νW, h.2.BV, h.2.order⟩⟩
 
-theorem chain_of_scalar_update (h : R.IsChain) (kap lam) : (R.upd6 kap lam).IsChain :=
-  ⟨h.ωY, h.ωX, h.vY, h.vX, h.ptY, h.ptX, h.ItY, h.ItX, h.ioY, h.ioX, h.Th⟩
 
 theorem full_Y_of_scalar_update (h : R.FullY) (kap lam) : (R.upd6 kap lam).FullY := h
 
-theorem theta_props_of_scalar_update (h : R.IsThP) (kap lam) : (R.upd6 kap lam).IsThP :=
-  ⟨h.ωP, h.vP, h.pt_theta, h.ioP, h.thF_mem, h.thF, h.thG⟩
 
 theorem full_P_of_scalar_update (h : R.FullP) (kap lam) : (R.upd6 kap lam).FullP := h
 
-theorem complex_side_of_scalar_update (kap lam) : (R.upd6 kap lam).toCx F = reScal (R.toCx F) (fun _ => kap) lam := rfl
 
 end RealDat
 
