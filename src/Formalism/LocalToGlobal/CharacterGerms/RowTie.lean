@@ -104,8 +104,6 @@ def rowData [NeZero d] (H : X.Hyps V) : RowData C V d I (JJ I) where
   R1 := fun hA g a hb N w x h1 h2 h3 => by simpa using H.R1 hA g a hb N w x h1 h2 h3
   G0 := H.G0
   hL := X.hLf
-  hL_leaf := X.hLf_leaf
-  hL_swap := X.hLf_swap
   hL_axes := X.hLf_axes H.axes
   C_eq := H.CEq
   CH := H.CH

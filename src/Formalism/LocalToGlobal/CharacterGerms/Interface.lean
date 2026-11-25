@@ -372,9 +372,6 @@ structure RowData (C : Type) [Field C] (V : VF C) (d : ℕ) [NeZero d] (I J : Fi
     (∀ g, (S g).IsT (t g)) → (∀ g, (S₂ g).IsT (t₂ g)) → IntGerm V t = IntGerm V t₂
 
   hL : Fin 2 → ZMod d → ZMod d → MvPowerSeries (WV I) C
-  hL_leaf : ∀ g a a' μ, MvPowerSeries.coeff μ (hL g a a') ≠ 0 → ∀ w ∈ μ.support, OnLeafV G g a a' w
-
-  hL_swap : ∀ a a', hL 1 a' a = hL 0 a a'
 
   hL_axes : ∀ g a a' (μ : WV I →₀ ℕ), ((∀ w ∈ μ.support, w.1 = g) ∨ (∀ w ∈ μ.support, w.1 = 1 - g)) →
     MvPowerSeries.coeff μ (hL g a a') = 0

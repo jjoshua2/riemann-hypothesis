@@ -117,23 +117,6 @@ def OnLf (g : Fin 2) (a a' : ZMod d) (w : WV I) : Prop :=
 def hLf (g : Fin 2) (a a' : ZMod d) : MvPowerSeries (WV I) C :=
   fun μ => if ∀ w ∈ μ.support, X.OnLf g a a' w then MvPowerSeries.coeff μ X.hRow else 0
 
-theorem onLf_swap (a a' : ZMod d) (w : WV I) : X.OnLf 1 a' a w ↔ X.OnLf 0 a a' w := by
-  unfold OnLf
-  simp only [sub_self, sub_zero]
-  exact or_comm
-
-theorem hLf_swap (a a' : ZMod d) : X.hLf 1 a' a = X.hLf 0 a a' := by
-  unfold hLf
-  funext μ
-  exact if_congr (by simp only [onLf_swap]) rfl rfl
-
-theorem hLf_leaf (g : Fin 2) (a a' : ZMod d) (μ : WV I →₀ ℕ)
-    (h : MvPowerSeries.coeff μ (X.hLf g a a') ≠ 0) : ∀ w ∈ μ.support, X.OnLf g a a' w := by
-  by_contra hn
-  apply h
-  show (if ∀ w ∈ μ.support, X.OnLf g a a' w then MvPowerSeries.coeff μ X.hRow else 0) = 0
-  rw [ite_eq_right hn]
-
 structure RankHyp : Prop where
   big_compl : ∀ g a, X.big (1 - g) a ↔ ¬ X.big g a
   rk_big : ∀ g a, X.big g a → (Finset.univ.filter fun c : I g => X.ty g c = a).card = X.n + X.j
