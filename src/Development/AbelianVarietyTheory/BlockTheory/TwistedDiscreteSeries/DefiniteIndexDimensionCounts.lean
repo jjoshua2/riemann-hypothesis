@@ -104,7 +104,6 @@ structure HidaSetting : Prop where
   models : R.IsModels
   chain : R.IsChain
   thP : R.IsThP
-  scal : R.IsScal F
 
 theorem GoodShare.ne_bot {δ : ℝ} {b : Bool} {i : Fin D.R.m} (h : GoodShare R F δ b i) :
     R.Wat i (sg0 D A) (levB R F b) ≠ ⊥ := by

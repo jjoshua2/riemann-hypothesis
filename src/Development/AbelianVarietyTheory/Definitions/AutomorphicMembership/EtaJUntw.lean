@@ -188,8 +188,6 @@ structure CharAll (R : RealDat D A Ks) (F : Face D A) : Prop where
   models : R.IsModels
   chain : R.IsChain
   thP : R.IsThP
-  scal : R.IsScal F
-  kap_use : (useReal R).scal_kap
   tup : IsTupAll R F
 
 variable {R : RealDat D A Ks} {F : Face D A}

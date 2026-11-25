@@ -87,8 +87,6 @@ variable (nth' : NTh D.R D.host D.what₂ D.LL0 D.nd D.ntw (keepEx D Dat th lev 
 
 def keepTw : TwNew D := ⟨D.ntw, keepEx D Dat th lev thPsi h1 thU thP MtLat h2 h3, D.nStage_trivialCharacter_coeff_eq, nth', D.ntwbr, D.ntwbr_ind⟩
 
-variable (hU : ∀ i j b M (d : Dat i j b), 1 ≤ j → j ≤ D.R.m →
-  thU i j b ∅ M d = th i j b d ⊗ₜ[D.ntw.O i] (1 : AddMonoidAlgebra (D.ntw.O i) (DelQM D.host (D.ntw.l i) ∅ M)))
 
 
 
@@ -98,7 +96,6 @@ def keepExp (E : NExpTied D) : NExpTied (keepTw D Dat th lev thPsi h1 thU thP Mt
     acgWt := E.acgWt
     modWt := E.modWt
     fdWt := E.fdWt
-    thU_empty := fun i j b M d hj hj' => hU i j b M d hj hj'
     mtV := fun i j b k Q ψ hj hj' hA => by
       letI : AddCommGroup (E.Wt i j b) := E.acgWt i j b
       letI : Module (FractionRing ((keepTw D Dat th lev thPsi h1 thU thP MtLat h2 h3 nth').toD7.ntw.O i)) (E.Wt i j b) := E.modWt i j b
@@ -120,7 +117,7 @@ def keepSideB (Bs : SideB D cf Rw low Pq S hL eig θ) :
     tw := { Bs.tw with }
     chiD := { Bs.chiD with }
     chi := { Bs.chi with }
-    exp := keepExp D Dat th lev thPsi h1 thU thP MtLat h2 h3 nth' hU Bs.exp
+    exp := keepExp D Dat th lev thPsi h1 thU thP MtLat h2 h3 nth' Bs.exp
     pq := fun i j b k Q ψ hj hj' hA => Bs.pq i j b k Q ψ hj hj' hA }
 
 section Same
@@ -271,12 +268,6 @@ variable {YS : NExpRealS R cG S} {v₀ : ∀ (j : Fin D.R.m) (σ : D.what₂.LL 
   (p : PreTie YS v₀ X hF Pq)
 
 abbrev ex : NExp D.R D.host D.what₂ D.LL0 D.nd D.ntw := keepEx D p.Dat p.th p.lev p.thPsi p.h1 p.thU p.thP p.MtLat p.h2 p.h3
-
-theorem hU : ∀ i j b M (d : p.Dat i j b), 1 ≤ j → j ≤ D.R.m →
-    p.thU i j b ∅ M d = p.th i j b d ⊗ₜ[D.ntw.O i] (1 : AddMonoidAlgebra (D.ntw.O i) (DelQM D.host (D.ntw.l i) ∅ M)) := by
-  intro i j b M d h1 h2
-  obtain ⟨n, rfl⟩ := Nat.exists_eq_add_of_le' h1
-  exact (p.tie i ⟨n, h2⟩ b).thU_empty M d
 
 def nth : NTh D.R D.host D.what₂ D.LL0 D.nd D.ntw p.ex :=
   { D.nth with datPhi := fun _ _ _ _ => 0, datP := fun _ _ _ _ => 0 }
