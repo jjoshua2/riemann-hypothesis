@@ -64,61 +64,6 @@ end OrdUnimod
 
 open OrdUnimod
 
-private theorem galE_fst_snd_eq_one_of_mem_stabilizer_of_jacobiSym_eq_one {e q d : ℕ} {L : Type} [Field L] [NumberField L] {ζ a b : L}
-    (hodd : HypOdd q d) (hL : IsLayer (e + 2) q d ζ a b)
-    (p : ℕ) [hpF : Fact p.Prime] (hp2 : p ≠ 2) (hpd : p ≠ d)
-    (P : Ideal (𝓞 (hostE ζ a b))) [hPp : P.IsPrime] [P.LiesOver (span {(p : ℤ)})]
-    (hj : jacobiSym (-(d : ℤ)) p = 1)
-    (τ : hostE ζ a b ≃ₐ[ℚ] hostE ζ a b)
-    (hτ : τ ∈ MulAction.stabilizer (hostE ζ a b ≃ₐ[ℚ] hostE ζ a b) P) :
-    (galE e ζ a b τ).1.2 = 1 := by
-  have hp : p.Prime := hpF.out
-  have hspec := (hostGalSpec e q d hodd L ζ a b hL τ).2.1
-  by_contra hs
-  have hs' : (galE e ζ a b τ).1.2 = -1 := (Int.units_eq_one_or _).resolve_left hs
-  have hτb : τ (bE ζ a b) = -(bE ζ a b) := Subtype.ext (by rw [hspec, hs']; simp [bE])
-  have hb2 : (bE ζ a b) ^ 2 = algebraMap ℤ (hostE ζ a b) (-(d : ℤ)) :=
-    Subtype.ext (by simp [bE, hL.2.2.1])
-  have hbI : IsIntegral ℤ (bE ζ a b) :=
-    IsIntegral.of_pow two_pos (hb2 ▸ isIntegral_algebraMap (R := ℤ) (A := hostE ζ a b) (x := -(d : ℤ)))
-  obtain ⟨β, hβ⟩ := (IsIntegralClosure.isIntegral_iff (A := 𝓞 (hostE ζ a b))).mp hbI
-  have hinj : Function.Injective (algebraMap (𝓞 (hostE ζ a b)) (hostE ζ a b)) :=
-    IsIntegralClosure.algebraMap_injective (𝓞 (hostE ζ a b)) ℤ (hostE ζ a b)
-  have hβ2 : β ^ 2 = -(d : 𝓞 (hostE ζ a b)) := hinj (by rw [map_pow, hβ, hb2]; simp)
-  have hZ : ∀ x : ℤ, (x : 𝓞 (hostE ζ a b)) ∈ P ↔ (p : ℤ) ∣ x := fun x => by
-    rw [← eq_intCast (algebraMap ℤ (𝓞 (hostE ζ a b))) x, ← Ideal.mem_span_singleton]
-    exact (Ideal.mem_of_liesOver P (span {(p : ℤ)}) x).symm
-  have hl : legendreSym p (-(d : ℤ)) = 1 := by rwa [jacobiSym.legendreSym.to_jacobiSym]
-  have h0 : (((-(d : ℤ)) : ℤ) : ZMod p) ≠ 0 := fun h0 =>
-    one_ne_zero (hl ▸ (legendreSym.eq_zero_iff p (-(d : ℤ))).mpr h0)
-  obtain ⟨c, hc⟩ := (legendreSym.eq_one_iff p h0).mp hl
-  set r : ℤ := (c.val : ℤ)
-  have hdiv : (p : ℤ) ∣ r * r + d := by
-    rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]
-    push_cast [r]
-    rw [ZMod.natCast_zmod_val, ← hc]
-    push_cast; ring
-  have hstab : τ • P = P := MulAction.mem_stabilizer_iff.mp hτ
-  have key : ∀ s : ℤ, β - (s : 𝓞 (hostE ζ a b)) ∈ P → False := fun s hs => by
-    have h1 : τ • (β - (s : 𝓞 (hostE ζ a b))) ∈ P :=
-      hstab ▸ Ideal.smul_mem_pointwise_smul τ _ P hs
-    have h2 : τ • (β - (s : 𝓞 (hostE ζ a b))) = -β - (s : 𝓞 (hostE ζ a b)) :=
-      hinj (by change τ (algebraMap (𝓞 (hostE ζ a b)) (hostE ζ a b) (β - s)) = _; simp [hβ, hτb])
-    rw [h2] at h1
-    have e3 : ((4 * (d : ℤ) : ℤ) : 𝓞 (hostE ζ a b)) =
-        -(((β - s) - (-β - s)) * ((β - s) - (-β - s))) := by push_cast; linear_combination 4 * hβ2
-    have h4 : p ∣ 4 * d := by
-      exact_mod_cast (hZ _).mp (e3 ▸ neg_mem (Ideal.mul_mem_left _ _ (sub_mem hs h1)))
-    rcases (Nat.Prime.dvd_mul hp).mp h4 with h5 | h5
-    · exact hp2 ((Nat.prime_dvd_prime_iff_eq hp Nat.prime_two).mp
-        (hp.dvd_of_dvd_pow (show p ∣ 2 ^ 2 by simpa using h5)))
-    · exact hpd ((Nat.prime_dvd_prime_iff_eq hp hodd.2.1).mp h5)
-  have hm : (β - (r : 𝓞 (hostE ζ a b))) * (β - ((-r : ℤ) : 𝓞 (hostE ζ a b))) ∈ P := by
-    rw [show (β - (r : 𝓞 (hostE ζ a b))) * (β - ((-r : ℤ) : 𝓞 (hostE ζ a b))) =
-        (((-(r * r + d)) : ℤ) : 𝓞 (hostE ζ a b)) by push_cast; linear_combination hβ2, hZ]
-    exact dvd_neg.mpr hdiv
-  exact (hPp.mem_or_mem hm).elim (key r) (key (-r))
-
 attribute [local instance] FractionRing.liftAlgebra FractionRing.isScalarTower_liftAlgebra
 
 theorem hostUnimodular : HostUnimodular := by
