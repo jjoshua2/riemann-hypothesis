@@ -82,7 +82,6 @@ structure LocalRepresentationTheoryHypothesesAlt : Prop where
   cos : StandardCosocleGL
   llc : _root_.UpperTheory.Zero.LLC.RecTExists
   dzi : DepthZeroInduction
-  brauer : BrauerDegreeZero
   chev : ChevalleyUnits
   green : GreenRegularCharacters
 structure GlobalAutomorphicGaloisHypotheses' : Prop where
