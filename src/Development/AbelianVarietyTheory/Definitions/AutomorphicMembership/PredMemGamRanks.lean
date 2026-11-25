@@ -923,16 +923,7 @@ structure TopLev (X : Fields) (Pr : Primes X) (R : Ranks) (Q : Finset (HeightOne
 
 structure TopLev.Ok {X : Fields} {Pr : Primes X} {R : Ranks} {Q : Finset (HeightOneSpectrum (𝓞 X.E))}
     (Tp : TopLev X Pr R Q) : Prop where
-  idx : ∀ j P, (Tp.levQ j P).H.FiniteIndex
   root : ∀ j P g, ∃ m : ℕ, 0 < m ∧ (Tp.levQ j P).lam g ^ m = 1
-  levG_top : (Tp.levG R.m).grp ≤ (extGH (N_m_succ R)).range
-  levQ_last : ∀ P, ∀ κ ∈ (Tp.levQ R.m P).H, ∀ x ∈ stdAt X.E (R.N R.m) P.1,
-    redP P.1 (κ.1 x (Br.iL (N_m_succ R))) = redP P.1 (x (Br.iL (N_m_succ R)))
-  levQ_ini : ∀ P, ∀ κ ∈ (Tp.levQ R.m P).H, ∀ i,
-    redP P.1 (κ.1 (Pi.single (Br.iL (N_m_succ R)) 1) (Br.iC (N_m_succ R) i)) = 0
-  pref_off : ∀ u j, j ≠ R.m → ∀ p, Tp.pref u j p
-  pref_top : ∀ u p, Tp.pref u R.m p → ∃ d, p.deco = DecoSet.tilH (N_m_succ R) (Pr.piT u) d
-
 
 variable (R) in
 open Classical in
