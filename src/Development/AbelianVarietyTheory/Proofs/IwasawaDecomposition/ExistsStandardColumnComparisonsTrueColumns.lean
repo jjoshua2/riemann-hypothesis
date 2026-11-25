@@ -534,25 +534,6 @@ noncomputable section
 
 namespace GlobalTheory.Mem.FormSym
 
-theorem hform_last {E : Type} [CommRing E] (σ : E →+* E) {N : ℕ} (hN : 0 < N) {J : Matrix (Fin N) (Fin N) E} (hJ : J = 1) {p : E}
-    {z : Fin N → E} (hz : ∀ j, z j = if j.1 + 1 = N then p else 0) (x : Fin N → E) :
-    hform σ J z x = σ p * x ⟨N - 1, by omega⟩ := by
-  obtain rfl : z = fun j => if j.1 + 1 = N then p else 0 := funext hz
-  subst hJ
-  unfold hform
-  simp only [Matrix.one_apply, mul_ite, mul_one, mul_zero, ite_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ, if_true]
-  rw [Finset.sum_eq_single ⟨N - 1, by omega⟩]
-  · simp [show N - 1 + 1 = N by omega]
-  · intro b _ hb
-    have : ¬ (b.1 + 1 = N) := fun h => hb (Fin.ext (by simp; omega))
-    simp [this]
-  · simp
-
-theorem sigD_conj (D : D7) (x : D.host.E) : (sigD D : D.host.E →+* D.host.E) x = D.host.conj x := by
-  first | exact Formalism.BasicNotions.Examples₂.star_eq_conj _ _
-
-
-
 theorem formsTiedSym_std : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.Pins B X → ∀ (l : I.Laws) (Z : TC.Later B (I.cols l)), ∃ (Ch : B.Word → ℕ → Type) (chOf : ∀ u i, ((I.rec7 l Z).mem u).C.cls i → Ch u i) (F : ∀ u, FormsTiedSym (I.rec7 l Z) u (Ch u) (chOf u)), (∀ u, I.StdF l Z u (F u) ∧ I.StdLvC l Z u (F u)) ∧ (∀ u i, Finite (Ch u i)) ∧ (∀ u, Nonempty (Unique (Ch u B.R.m))) ∧ (∀ u u', (F u).gl = (F u').gl) ∧ CharacterCompatible (F B.u₀).gl B.R.m := by
   intro B X I hOk hPins l Z
   obtain ⟨G, hG, hChi⟩ := GlobalTheory.Mem.TypePrimes.exists_gLoc_idG_chiTied I hOk hPins l Z
