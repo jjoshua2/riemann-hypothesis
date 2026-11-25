@@ -16,9 +16,7 @@ structure PlaceMap (F K : Type) [Field F] [NumberField F] [Field K] [Algebra F K
   proj : AF F →ₐ[F] K
 
   inj : K →ₙₐ[F] AF F
-  proj_inj : ∀ x, proj (inj x) = x
   inj_proj : ∀ a, inj (proj a) = inj 1 * a
-  cont_proj : Continuous proj
   cont_inj : Continuous inj
 
 section Inhabitants
@@ -93,7 +91,6 @@ def placeMapFin (v : HeightOneSpectrum (𝓞 F)) : PlaceMap F (Fv F v) where
           · subst h
             simp only [StrongApprox.evalV_single_same]
           · simp only [StrongApprox.evalV_single_ne h, mul_zero] }
-  proj_inj := fun x => StrongApprox.evalV_single_same v x
   inj_proj := by
     intro a
     refine adele_ext ?_ (finAdele_ext fun w => ?_)
@@ -105,7 +102,6 @@ def placeMapFin (v : HeightOneSpectrum (𝓞 F)) : PlaceMap F (Fv F v) where
       · subst h
         simp only [StrongApprox.evalV_single_same, one_mul]
       · simp only [StrongApprox.evalV_single_ne h, zero_mul]
-  cont_proj := StrongApprox.continuous_evalV v
   cont_inj := continuous_const.prodMk (continuous_singleV' v)
 
 
@@ -153,7 +149,6 @@ def placeMapInf (w : InfinitePlace F) : PlaceMap F w.Completion where
         · rw [map_mul, fstA_pairA, fstA_pairA, fstA_pairA]
           exact Pi.single_mul (α := fun u : InfinitePlace F => u.Completion) w x y
         · rw [map_mul, sndA_pairA, sndA_pairA, sndA_pairA, mul_zero] }
-  proj_inj := fun x => singleI_self w x
   inj_proj := by
     intro a
     refine adele_ext ?_ ?_
@@ -168,7 +163,6 @@ def placeMapInf (w : InfinitePlace F) : PlaceMap F w.Completion where
       · rw [singleI_ne h, singleI_ne h, zero_mul]
     · change (0 : Af F) = sndA F (pairA F (singleI w 1) 0 * a)
       rw [map_mul, sndA_pairA, zero_mul]
-  cont_proj := (continuous_apply w).comp continuous_fst
   cont_inj := (continuous_single w).prodMk continuous_const
 
 end Inhabitants
