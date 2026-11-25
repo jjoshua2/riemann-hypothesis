@@ -67,22 +67,6 @@ def IsoRep {W' : Type} [AddCommGroup W'] [Module ℂ W'] (S : Submodule ℂ (GAf
 def isoTyp (ρ : Representation ℂ (GQ L n) W) (S : Submodule ℂ (GAf L n → W)) : Submodule ℂ (GAf L n → W) :=
   sSup {S' | IsIrrRep ρ S' ∧ IsoRep S S'}
 
-def HomG (ρ : Representation ℂ (GQ L n) W) (S : Submodule ℂ (GAf L n → W)) :
-    Submodule ℂ (S →ₗ[ℂ] (GAf L n → W)) where
-  carrier := {T | (∀ f, T f ∈ AFall L n ρ) ∧ ∀ (h : GAf L n) (f f' : S),
-    (f' : GAf L n → W) = rt L n h (f : GAf L n → W) → T f' = rt L n h (T f)}
-  zero_mem' := ⟨fun _ => Submodule.zero_mem _, fun _ _ _ _ => by simp⟩
-  add_mem' := by
-    rintro T T' ⟨h1, h2⟩ ⟨h1', h2'⟩
-    exact ⟨fun f => Submodule.add_mem _ (h1 f) (h1' f), fun h f f' e => by
-      simp [h2 h f f' e, h2' h f f' e]⟩
-  smul_mem' := by
-    rintro c T ⟨h1, h2⟩
-    exact ⟨fun f => Submodule.smul_mem _ c (h1 f), fun h f f' e => by simp [h2 h f f' e]⟩
-
-def multRep (ρ : Representation ℂ (GQ L n) W) (S : Submodule ℂ (GAf L n → W)) : ℕ :=
-  Module.finrank ℂ (HomG ρ S)
-
 variable (L n)
 
 structure AlgWt where
@@ -129,8 +113,6 @@ def infOf (lam : Fin n → ℤ) : Multiset ℂ :=
   Finset.univ.val.map fun i : Fin n => (lam i : ℂ) + ((n : ℂ) - 1) / 2 - ((i : ℕ) : ℂ)
 
 def AutRep.Iso (π π' : AutRep L n) : Prop := π.toAlgWt.Iso π'.toAlgWt ∧ IsoRep π.S π'.S
-
-def AutRep.mult (π : AutRep L n) : ℕ := multRep π.ρ π.S
 
 def AutRep.SphAt (π : AutRep L n) (v : HeightOneSpectrum (𝓞 L⁺)) : Prop :=
   ∃ f ∈ π.S, f ≠ 0 ∧ ∀ κ ∈ Umax L n, TrivOutside (L := L) {v} κ → rt L n κ f = f

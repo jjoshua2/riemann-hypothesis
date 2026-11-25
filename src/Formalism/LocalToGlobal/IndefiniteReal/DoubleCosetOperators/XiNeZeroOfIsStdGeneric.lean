@@ -99,12 +99,6 @@ def psiUD (D : D7) (i : D.ntw.Tw) (θ : ∀ k : Fin 2, Multiplicative (ZMod (D.h
     (b : Bool) : U D.nd →* (FractionRing (D.ntw.O i))ˣ :=
   psiUOf D.nd (xiRed D) (thSide D.host.g θ b)
 
-theorem psiUD_side (D : D7) (i : D.ntw.Tw)
-    (θ : ∀ k : Fin 2, Multiplicative (ZMod (D.host.g k)) →* (FractionRing (D.ntw.O i))ˣ) (u : U D.nd) :
-    psiUD D i θ false u = (psiUD D i θ true u)⁻¹ := by
-  simp only [psiUD, psiUOf_apply, thSide, Bool.false_eq_true, if_false, if_true, MonoidHom.inv_apply,
-    Finset.prod_inv_distrib]
-
 def XiRedNZ (D : D7) : Prop := ∀ kv : (Σ k : Fin 2, D.nd.PlG k), xiRed D kv ≠ 0
 
 theorem tied_U_clauses (D : D7)
@@ -113,20 +107,12 @@ theorem tied_U_clauses (D : D7)
     (hU : D.nexp.U = U D.nd)
     (hψ : ∀ i b (u : D.nexp.U), D.nexp.psiU i b u = psiUD D i (θ i) b ⟨u.1, by rw [← hU]; exact u.2⟩) :
     D.nexp.U = Uup (fun kv : (Σ k : Fin 2, D.nd.PlG k) => D.host.g kv.1) D.R.r ∧
-    (∀ i b, IsStdGeneric (fun kv : (Σ k : Fin 2, D.nd.PlG k) => D.host.g kv.1) D.R.r (D.nexp.psiU i b)) ∧
-    (∀ i (u : D.nexp.U), D.nexp.psiU i false u = (D.nexp.psiU i true u)⁻¹) ∧
-    (∀ i b, ∃ θ : ∀ kk : Fin 2, Multiplicative (ZMod (D.host.g kk)) →* (FractionRing (D.ntw.O i))ˣ,
-      (2 ≤ D.R.r → ∀ kk, θ kk ≠ 1) ∧ ∀ u : D.nexp.U, D.nexp.psiU i b u = ∏ kv : (Σ kk : Fin 2, D.nd.PlG kk),
-        θ kv.1 (Multiplicative.ofAdd (xiRed D kv *
-          supSum D.R.r (((u : G0g D.nd) kv : GL (Fin D.R.r) (ZMod (D.host.g kv.1))) :
-            Matrix (Fin D.R.r) (Fin D.R.r) (ZMod (D.host.g kv.1)))))) := by
-  refine ⟨hU, fun i b => ?_, fun i u => ?_, fun i b => ?_⟩
+    (∀ i b, IsStdGeneric (fun kv : (Σ k : Fin 2, D.nd.PlG k) => D.host.g kv.1) D.R.r (D.nexp.psiU i b)) := by
+  refine ⟨hU, fun i b => ?_⟩
   · refine ⟨thXi _ (xiRed D) (fun kv => thSide D.host.g (θ i) b kv.1), fun hr kv => ?_, fun u => ?_⟩
     · have : Fact (D.host.g kv.1).Prime := ⟨D.host.g_prime kv.1⟩
       exact comp_mulC_ne_one _ (thSide_ne_one _ _ b _ (hθ hr i kv.1)) (hξ hr kv)
     · rw [hψ]; rfl
-  · rw [hψ, hψ]; exact psiUD_side D i (θ i) _
-  · exact ⟨thSide D.host.g (θ i) b, fun hr kk => thSide_ne_one _ _ b _ (hθ hr i kk), fun u => by rw [hψ]; rfl⟩
 
 end Rec
 

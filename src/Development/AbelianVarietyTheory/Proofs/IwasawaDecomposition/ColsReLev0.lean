@@ -141,8 +141,7 @@ def hermRe (H : Formalism.L2.Herm.ColsHermS (recOf Z)) : Formalism.L2.Herm.ColsH
 def colsRe (T : ColsTiedSym (recOf Z)) : ColsTiedSym (recOf Z') :=
   { T with
     herm := hermRe Z' T.herm
-    forms := fun u => formsRe Z' (T.forms u)
-    gl_const := T.gl_const }
+    forms := fun u => formsRe Z' (T.forms u) }
 
 end GlobalTheory.Mem.Top.ColOwe
 

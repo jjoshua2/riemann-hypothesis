@@ -95,24 +95,5 @@ theorem exists_act_equiv (h : A.Ok T) (b : S.β) (g : S.G b) (d : S.D b) (M : Su
             left_inv := fun x => Subtype.ext (h2 _)
             right_inv := fun y => Subtype.ext (h1 _) }, fun x => rfl⟩
 
-theorem dil_fv : ∀ {E K : Type} [Field E] [NumberField E] [StarRing E] [Field K] {n : ℕ} {S : GStep E K n}
-    {ST : Finset (HeightOneSpectrum (𝓞 E))} (A : TDat S ST) (T : ℕ), S.Ok → A.Ok T → ∀ P a c,
-    ∃ e : A.lv P (S.cl c.1 (A.diaPt P a c)) ≃ₗ[Res P.1] A.lv P c,
-      ∀ x, A.fv P (S.cl c.1 (A.diaPt P a c)) x = (a : Res P.1) * A.fv P c (e x) := by
-  intro E K _ _ _ _ n S ST A T _ h P a c
-  obtain ⟨g, hmv⟩ : ∃ g : S.G c.1, g • S.rep (S.cl c.1 (A.diaPt P a c)) = A.diaPt P a c :=
-    (MulAction.orbitRel (S.G c.1) (S.D c.1)).symm (Quotient.exact (S.rp_spec c.1 (Quotient.mk _ (A.diaPt P a c))))
-  obtain ⟨u, hu⟩ := exists_act_equiv A h c.1 g (S.rep (S.cl c.1 (A.diaPt P a c)))
-    (A.N c.1 (S.rep c)) (by rw [hmv]; exact h.dia_N _ _ _ _)
-  obtain ⟨e, he⟩ := exists_red_equiv P.1.asIdeal u
-  refine ⟨e, fun x => ?_⟩
-  obtain ⟨x, rfl⟩ := Submodule.Quotient.mk_surjective _ x
-  have e1 := fv_mk A h P (S.cl c.1 (A.diaPt P a c)) x
-  have e2 := fv_mk A h P c (u x)
-  have e3 := h.f_act c.1 g (S.rep (S.cl c.1 (A.diaPt P a c))) P x
-  rw [hmv, ← hu] at e3
-  have e4 := h.dia_f c.1 P a (S.rep c) (u x)
-  refine e1.trans (e3.symm.trans (e4.trans ?_))
-  exact congrArg _ (e2.symm.trans (congrArg _ (he x).symm))
 
 end GlobalTheory.Mem.Col2.DilFv

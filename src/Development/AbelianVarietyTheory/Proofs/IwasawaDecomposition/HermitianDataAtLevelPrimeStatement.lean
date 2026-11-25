@@ -1242,11 +1242,9 @@ theorem GlobalTheory.Mem.Col2.TC.hermitian_data_at_level_prime : ∀ {B : Base} 
       (dnG u) (fun i hi v c g h => (hdn u i v c g hi h).1) (dilG u) (fun i hi v a c => (hdil u i v a c hi).1)
       (lattice₂ u) (levP u) (clsP u) (F u).til (hlat u)
   have hT : CarT H F A := by
-    refine ⟨fun _ => rfl, fun _ => rfl, hcar, hlat, ?_, ?_, ?_, ?_, ?_⟩
+    refine ⟨fun _ => rfl, fun _ => rfl, hcar, ?_, ?_, ?_, ?_⟩
     · intro u i hi v c z z' h
       exact (congrArg _ (Subtype.ext h)).trans (prH_eq (F u).atT (F u).lv hi v c z).symm
-    · intro u i hi v c z z' h
-      exact (congrArg _ (Subtype.ext h)).trans (prkH_eq (F u).atT (F u).lv hi v c z).symm
     · intro u i h1 h2 v c z z' h
       refine ((hlvc u i h1 h2 v c).1 (toLd i (le_of_succ_m h2) c z) z' h).trans (prH_eq (F u).atT (F u).lv (le_of_succ_m h2) v c z).symm
     · intro u

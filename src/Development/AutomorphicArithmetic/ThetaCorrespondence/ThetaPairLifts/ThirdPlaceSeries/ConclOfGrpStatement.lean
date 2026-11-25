@@ -520,8 +520,6 @@ theorem rayField_isRay : GlobalTheory.Published.RayClassFieldSt → ∀ (D : D7)
     ∃ (h : KQbar D jE ≤ MrayC D jE) (hf : FiniteDimensional ℚ (MrayC D jE)),
       letI := GlobalTheory.ParRay.algK D jE h
       haveI := GlobalTheory.ParRay.nfOf hf
-      IsGalois D.host.K (MrayC D jE) ∧ (∀ σ τ : MrayC D jE ≃ₐ[D.host.K] MrayC D jE, σ * τ = τ * σ) ∧
-      (∀ p : ℕ, p.Prime → (p : ℤ) ∣ NumberField.discr (MrayC D jE) → p ∣ D.host.QS * D.host.q * D.host.d) ∧
       ∀ p, IsRayPrime (KQbar D jE) (D.host.QS * D.host.q * D.host.d) p → SplitsIn (MrayC D jE) p := by
   intro hray D jE
   obtain ⟨M, h, hf, hM⟩ := exists_embedded hray D jE
@@ -533,7 +531,7 @@ theorem rayField_isRay : GlobalTheory.Published.RayClassFieldSt → ∀ (D : D7)
   refine ⟨h, hf, ?_⟩
   letI := GlobalTheory.ParRay.algK D jE h
   haveI := GlobalTheory.ParRay.nfOf hf
-  exact ⟨GlobalTheory.Mem.RaySplit.isGalois_of_ray hM, GlobalTheory.Mem.RaySplit.comm_of_ray hM, GlobalTheory.Mem.RaySplit.unr_of_ray hM, hsplit⟩
+  exact hsplit
 
 end GlobalTheory.ParRayMax
 
@@ -562,7 +560,7 @@ theorem exists_types : GlobalTheory.Published.RayClassFieldSt → GlobalTheory.P
       X.cenMt = D.ntypes.cenMt ∧ Nonempty (ParSide (setTy D hE X h1 h0) jE) ∧
       (Nonempty (GrpSide D) → IotaOk (setTy D hE X h1 h0) ⟨Pl.ι, Pl.ι_w, Pl.plB, Pl.plB_eq, Pl.plκ⟩) := by
   intro hray _ D hE jE Pl hg
-  obtain ⟨h, hf, hgal, hab, hunr, hsplit⟩ := _root_.GlobalTheory.ParRayMax.rayField_isRay hray D jE
+  obtain ⟨h, hf, hsplit⟩ := _root_.GlobalTheory.ParRayMax.rayField_isRay hray D jE
   letI := algK D jE h
   have := nfOf hf
   let X : NTypes D.naut :=
@@ -571,9 +569,6 @@ theorem exists_types : GlobalTheory.Published.RayClassFieldSt → GlobalTheory.P
       instMray := inferInstance
       nfMray := nfOf hf
       algKM := algK D jE h
-      Mray_gal := hgal
-      Mray_ab := hab
-      Mray_unr := hunr
       g_Mray := fun k => hsplit _ (hg k)
       iota := fun k _ w =>
         haveI : Fact (D.host.g k).Prime := ⟨D.host.g_prime k⟩
@@ -587,8 +582,7 @@ theorem exists_types : GlobalTheory.Published.RayClassFieldSt → GlobalTheory.P
       locPar := fun σ w => isoLoc D.nd D.naut σ.1 w
       locPar_dim := fun σ w => (GlobalTheory.RowPar.lpDim_isoLoc D.naut σ.1 w).trans σ.2.2.2.1
       labPar_def := fun _ _ _ => rfl
-      MtPar := fun _ _ _ => ⊥
-      AmbPar := fun _ _ => ⊥ }
+      MtPar := fun _ _ _ => ⊥ }
   refine ⟨X, D.nStage_trivialCharacter_compat, D.nStage_trivialCharacter_coeff_eq, rfl, rfl, rfl, rfl, rfl, ⟨?_⟩, fun _ => ?_⟩
   · exact
       { eM := RingEquiv.refl _
