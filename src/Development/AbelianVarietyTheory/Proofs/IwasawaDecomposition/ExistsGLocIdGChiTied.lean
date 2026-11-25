@@ -212,6 +212,6 @@ theorem exists_gLoc_idG_chiTied : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X)
     have := B.R.ord_pos
     omega
   obtain ⟨G, h1, h2, h3⟩ := exists_gLoc I.Ch hf l.pr hI.ch_ok B.sp.cm B.embLL (I.rec7 l Z).nd.g_split
-  exact ⟨G, h1, h2, h3⟩
+  exact ⟨G, ⟨h1, h2, h3⟩⟩
 
 end GlobalTheory.Mem.TypePrimes
