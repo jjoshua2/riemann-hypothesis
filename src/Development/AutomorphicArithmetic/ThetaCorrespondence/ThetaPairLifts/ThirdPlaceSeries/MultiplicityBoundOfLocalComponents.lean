@@ -1176,8 +1176,7 @@ theorem UpperTheory.nonempty_coefficientRingData_of_isomorphic_CMDatum :
       m3, B.tw.concreteTwistFrame_extraExcluded_over_smallPrimes⟩,
     ⟨B.chiD.mu0, B.chiD.etaT, B.chiD.del, fun a => hE.elim a, B.chiD.chiI,
       (fun s b => (B.chiD.embO s b).comp e.toRingHom)⟩,
-    ⟨fun a => hE.elim a, B.chi.del_fix, m4, m5, m6, B.chi.etaT_unr,
-      B.chi.etaT_inf, m7⟩,
+    ⟨fun a => hE.elim a, m4, m5, m6, m7⟩,
     m8, m9, m10, m11,
     (fun s x y hy => m12 s x y (hst x y hy)), m13⟩⟩
 end -- clump:auto

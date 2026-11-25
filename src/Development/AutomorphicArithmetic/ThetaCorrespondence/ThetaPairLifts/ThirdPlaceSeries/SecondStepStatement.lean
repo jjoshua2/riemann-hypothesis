@@ -1810,8 +1810,8 @@ theorem second_step_alt : GlobalTheory.Published.GlobalArtinReciprocity → ∀ 
       cover := fun w => _root_.GlobalTheory.HeightCounting.FormsStep.CoverPl.exists_setting_of_place D cf b0 b1 Sx T Sp w
       chiD := { mu0 := Sp.mu0H, etaT := Sp.etaH, del := Sp.delH, psi := fun a => A.bare.elim a,
                 chiI := fun s lam => PEmpty.elim lam, embO := Sp.embO }
-      chi := { psi := fun a => A.bare.elim a, del_fix := Sp.del_fix, delta := Sp.delta, chi1 := Sp.chi1,
-               ringSpec_sidedEmbedding_fixedField := Sp.ringSpec_sidedEmbedding_fixedField, etaT_unr := Sp.etaT_unr, etaT_inf := Sp.etaT_inf,
+      chi := { psi := fun a => A.bare.elim a, delta := Sp.delta, chi1 := Sp.chi1,
+               ringSpec_sidedEmbedding_fixedField := Sp.ringSpec_sidedEmbedding_fixedField,
                lamG := fun s lam => PEmpty.elim lam }
       eta_eq := Sp.eta_eq
       ringSpec_normalisedCharacter_eq := Sp.ringSpec_normalisedCharacter_eq

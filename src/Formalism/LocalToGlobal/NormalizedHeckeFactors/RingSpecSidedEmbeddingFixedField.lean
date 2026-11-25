@@ -40,7 +40,6 @@ structure NormalizedCharacterCompatibility (D : D7) (K : NChiData D) : Prop wher
 
   psi : ∀ a, ReadC D.nd.plOm.1 (D.ntw.psiL a) (iotaC D a) (K.psi a) 0
 
-  del_fix : ∀ s s', D.ntw.pD s = D.ntw.pD s' → K.del s = K.del s'
 
   delta : ∀ s, Read D.nd.plOm.1 (D.ntw.delta s) (algebraMap (D.ntw.O0 s) (FractionRing (D.ntw.O0 s))) (D.ntw.emb0 s)
     (complexEmbeddingRestrictedToSubfield D) (K.del s) 0
@@ -52,9 +51,7 @@ structure NormalizedCharacterCompatibility (D : D7) (K : NChiData D) : Prop wher
     algebraMap (D.ntw.O0 s) (FractionRing (D.ntw.O0 s)) y = (if b then D.ntw.emb0 s else D.ntw.emb0b s) x →
     K.embO s b x = algebraMap (D.ntw.O s) (FractionRing (D.ntw.O s)) (algebraMap (D.ntw.O0 s) (D.ntw.O s) y)
 
-  etaT_unr : ∀ P, K.etaT.Unr P
 
-  etaT_inf : ∀ g : D.R.Psi, K.etaT.IsUnitArg (D.host.emb (g : D.R.GG))
 
   lamG : ∀ s lam, Read D.nd.plOm.1 (D.ntw.lamG s lam) (algebraMap (D.ntw.O s) (FractionRing (D.ntw.O s)))
     (K.embO s (D.ntw.sideL s lam)) (complexEmbeddingRestrictedToSubfield D) (K.lamH s lam) 0

@@ -85,25 +85,8 @@ theorem HC.At.unique {χ : HC E} {P : HeightOneSpectrum (𝓞 E)} {a b : ℂ} (h
   rw [← ha.2 ϖ hϖ, ← hb.2 ϖ hϖ]
 
 
-open scoped Classical in
-def locInf (v : InfinitePlace E) : v.Completion →* AdeleRing (𝓞 E) E where
-  toFun x := ((Pi.mulSingle v x : InfiniteAdeleRing E), (1 : FiniteAdeleRing (𝓞 E) E))
-  map_one' := by
-    show ((Pi.mulSingle v (1 : v.Completion) : InfiniteAdeleRing E), (1 : FiniteAdeleRing (𝓞 E) E)) =
-      ((1 : InfiniteAdeleRing E), (1 : FiniteAdeleRing (𝓞 E) E))
-    rw [Pi.mulSingle_one]
-  map_mul' x y := by
-    show ((Pi.mulSingle v (x * y) : InfiniteAdeleRing E), (1 : FiniteAdeleRing (𝓞 E) E)) =
-      ((Pi.mulSingle v x : InfiniteAdeleRing E) * Pi.mulSingle v y, (1 : FiniteAdeleRing (𝓞 E) E) * 1)
-    rw [Pi.mulSingle_mul, mul_one]
-
 def HC.Unr (χ : HC E) (P : HeightOneSpectrum (𝓞 E)) : Prop :=
   ∀ u : (P.adicCompletion E)ˣ, Valued.v (u : P.adicCompletion E) = 1 → χ.χ (Units.map (locM P) u) = 1
-
-def HC.IsUnitArg (χ : HC E) (τ : E →+* ℂ) : Prop :=
-  ∀ f : (InfinitePlace.mk τ).Completion →+* ℂ, Continuous f → (∀ x : E, f (x : (InfinitePlace.mk τ).Completion) = τ x) →
-    ∀ z : ((InfinitePlace.mk τ).Completion)ˣ,
-      ((χ.χ (Units.map (locInf (InfinitePlace.mk τ)) z) : ℂˣ) : ℂ) = f z / (‖f z‖ : ℂ)
 
 end hecke
 

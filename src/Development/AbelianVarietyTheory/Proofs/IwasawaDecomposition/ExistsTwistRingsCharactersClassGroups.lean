@@ -187,50 +187,6 @@ noncomputable section
 
 namespace GlobalTheory.EtaUnitArg
 
-theorem denseRange_atInf_single {L : Type} [Field L] [NumberField L] (w : InfinitePlace L) :
-    DenseRange (atInf w : Lˣ → (w.Completion)ˣ) := by
-  classical
-  have hs : Function.Surjective (fun u : ∀ v : InfinitePlace L, (v.Completion)ˣ => u w) := fun z =>
-    ⟨Function.update (1 : ∀ v : InfinitePlace L, (v.Completion)ˣ) w z, by simp⟩
-  exact hs.denseRange.comp (GlobalTheory.InfTypeLocal.denseRange_atInf L) (continuous_apply w)
-
-open Classical in
-theorem locInf_eq {L : Type} [Field L] [NumberField L] (w : InfinitePlace L) (z : (w.Completion)ˣ) :
-    Units.map (Formalism.L2.NC.locInf w) z = infIdele L w z := by
-  apply Units.ext
-  rfl
-
-theorem etaT_isUnitArg : ∀ {R : Ranks} (H : Host R) (χ : HChar H.E), IsEtaT H χ → ∀ (h : Formalism.L2.NC.HC H.E), h.χ = (χ : Ideles H.E →* ℂˣ) → ∀ (g : R.Psi), h.IsUnitArg (H.emb (g : R.GG)) := by
-  intro R H χ hχ h hh g f hf hfE z
-  obtain ⟨c, -, hcm, -⟩ := GlobalTheory.Mem.HostCM.host_cm R H
-  have hloc := (GlobalTheory.InfTypeLocal.infType_iff_local H.E (R.Psi) (embPsi H) hcm.bij χ.1 χ.2.1
-    (fun _ => 1)).1 (fun k => hχ.inf k) g
-  have key : (fun z : ((InfinitePlace.mk (H.emb (g : R.GG))).Completion)ˣ =>
-      ((χ.1 (infIdele H.E _ z) : ℂˣ) : ℂ)) =
-      fun z : ((InfinitePlace.mk (H.emb (g : R.GG))).Completion)ˣ =>
-        f (z : (InfinitePlace.mk (H.emb (g : R.GG))).Completion) /
-          ((‖f (z : (InfinitePlace.mk (H.emb (g : R.GG))).Completion)‖ : ℝ) : ℂ) := by
-    refine (denseRange_atInf_single _).equalizer ?_ ?_ ?_
-    · exact Units.continuous_val.comp (χ.2.1.comp (GlobalTheory.InfTypeLocal.continuous_infIdele _ _))
-    · have h1 := hf.comp Units.continuous_val
-      have h2 : ∀ u : ((InfinitePlace.mk (H.emb (g : R.GG))).Completion)ˣ,
-          f (u : (InfinitePlace.mk (H.emb (g : R.GG))).Completion) ≠ 0 := fun u =>
-        (_root_.map_ne_zero _).2 u.ne_zero
-      exact h1.div (Complex.continuous_ofReal.comp h1.norm) fun u => by exact_mod_cast norm_ne_zero_iff.2 (h2 u)
-    · funext k
-      have e : f ((atInf _ k : ((InfinitePlace.mk (H.emb (g : R.GG))).Completion)ˣ) :
-          (InfinitePlace.mk (H.emb (g : R.GG))).Completion) = H.emb (g : R.GG) k := by
-        change f (algebraMap H.E _ (k : H.E)) = H.emb (g : R.GG) k
-        rw [AbsoluteValue.Completion.algebraMap_def, WithAbs.algebraMap_right_apply,
-          Algebra.algebraMap_self_apply]
-        exact hfE k
-      simp only [Function.comp_apply]
-      rw [e]
-      have := hloc k
-      exact this.trans (zpow_one _)
-  rw [locInf_eq, hh]
-  exact congrFun key z
-
 end GlobalTheory.EtaUnitArg
 end -- clump:auto
 end -- clump:auto
@@ -591,25 +547,6 @@ end GlobalTheory.TwRing
 namespace GlobalTheory.TwRing
 open GlobalTheory.GalChar Neutral.B1 ReciprocityTheory.Neutral.Bridge.HCFR GlobalTheory.HeckeGal
 
-theorem placesOver_inj (E : Type) [Field E] [NumberField E] {p q : ℕ} (hp : p.Prime) (hq : q.Prime)
-    (h : placesOver E p = placesOver E q) : p = q := by
-  by_contra hne
-  obtain ⟨v, hv⟩ := placesOver_nonempty E p hp
-  have hv' : v ∈ placesOver E q := h ▸ hv
-  have hc : Nat.Coprime p q := (Nat.coprime_primes hp hq).2 hne
-  obtain ⟨a, b, hab⟩ : ∃ a b : ℤ, a * p + b * q = 1 := ⟨Nat.gcdA p q, Nat.gcdB p q, by
-    have := Nat.gcd_eq_gcd_ab p q; rw [hc] at this; push_cast at this; linarith⟩
-  apply v.isPrime.ne_top
-  rw [Ideal.eq_top_iff_one]
-  have : ((a : 𝓞 E) * (p : 𝓞 E) + (b : 𝓞 E) * (q : 𝓞 E)) = 1 := by exact_mod_cast congrArg (Int.cast (R := 𝓞 E)) hab
-  rw [← this]
-  exact v.asIdeal.add_mem (v.asIdeal.mul_mem_left _ hv) (v.asIdeal.mul_mem_left _ hv')
-
-theorem eta_unitArg {R : Ranks} (H : Host R) (χ : HChar H.E) (hχ : IsEtaT H χ) (h : Formalism.L2.NC.HC H.E)
-    (hh : h.χ = (χ : Ideles H.E →* ℂˣ)) (g : R.Psi) :
-    h.IsUnitArg (H.emb (g : R.GG)) :=
-  _root_.GlobalTheory.EtaUnitArg.etaT_isUnitArg H χ hχ h hh g
-
 theorem vals_block {E : Type} [Field E] [NumberField E] {K : Type} [Field K] (ε : K →+* ℂ) (μ η : HChar E)
     (hμ : AlmostIn ε μ) (hη : η.ValuesIn (1 / 2) ε) {r : ℕ} (hr : Odd r) (μH ηH : Formalism.L2.NC.HC E)
     (hμH : μH.χ = (μ : Ideles E →* ℂˣ)) (hηH : ηH.χ = (η : Ideles E →* ℂˣ)) :
@@ -930,16 +867,6 @@ theorem exists_ringSpec (hA : GlobalTheory.Published.GlobalArtinReciprocity) : �
       etaH := etaH
       delH := delH
       embO := fun w b => (mapO w).comp (if b then emb0 w else emb0b w)
-      del_fix := fun s s' h => by
-        change pDC D.host (lw s) = pDC D.host (lw s') at h
-        have h' := congrArg (fun F : Finset (PlE D.host) => (F : Set (PlE D.host))) h
-        simp only [coe_pDC] at h'
-        simp only [delH, CharFrame.delAt]
-        split_ifs at h' ⊢ with h1 h2 h2
-        · rfl
-        · exact absurd (placesOver_inj _ D.host.pde'_prime D.host.pde_prime h') D.host.pde_ne.symm
-        · exact absurd (placesOver_inj _ D.host.pde_prime D.host.pde'_prime h') D.host.pde_ne
-        · rfl
       delta := fun s => read_of_isGal ha (hdc s).1 D.nd.plOm.1 D.nd.plOm.2 (emb0 s) (embLL0 D) (hf s) (delH s) 0
         (vals_zero (embLL0 D) _ (hdel s) (delH s) rfl)
       chi1 := fun s j b h1 h2 => by
@@ -960,8 +887,6 @@ theorem exists_ringSpec (hA : GlobalTheory.Published.GlobalArtinReciprocity) : �
         show mapO s ((if b then emb0 s else emb0b s) x) = _
         rw [← h]
         exact IsLocalization.map_eq _ _
-      etaT_unr := fun P => ((_root_.GlobalTheory.HeckeUnifVal.at_val_and_unr_iff cf.eta etaH rfl P).2).1 (cf.isEta.unr P)
-      etaT_inf := _root_.GlobalTheory.EtaUnitArg.etaT_isUnitArg D.host cf.eta cf.isEta etaH rfl
       eta_eq := fun x => rfl
       ringSpec_normalisedCharacter_eq := fun j x => by rw [hmu0H]
       del_eq := fun s x => rfl

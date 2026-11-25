@@ -107,7 +107,6 @@ structure RingSpec (D : D7) (cf : CharFrame D) (b0 b1 : Big D) (Sx : Finset (PlE
   etaH : HC D.host.E
   delH : T.Tw → HC D.host.E
   embO : ∀ s, Bool → ↥D.LL0 →+* FractionRing (T.O s)
-  del_fix : ∀ s s', T.pD s = T.pD s' → delH s = delH s'
   delta : ∀ s, Read D.nd.plOm.1 (T.delta s) (algebraMap (T.O0 s) (FractionRing (T.O0 s))) (T.emb0 s)
     (embLL0 D) (delH s) 0
   chi1 : ∀ s j (b : Bool), 1 ≤ j → j ≤ D.R.m → Read D.nd.plOm.1 (T.chi1 s j b) (algebraMap (T.O0 s) (FractionRing (T.O0 s)))
@@ -115,8 +114,6 @@ structure RingSpec (D : D7) (cf : CharFrame D) (b0 b1 : Big D) (Sx : Finset (PlE
   ringSpec_sidedEmbedding_fixedField : ∀ s (b : Bool) (x : ↥D.LL0) (y : T.O0 s),
     algebraMap (T.O0 s) (FractionRing (T.O0 s)) y = (if b then T.emb0 s else T.emb0b s) x →
     embO s b x = algebraMap (T.O s) (FractionRing (T.O s)) (algebraMap (T.O0 s) (T.O s) y)
-  etaT_unr : ∀ P, etaH.Unr P
-  etaT_inf : ∀ g : D.R.Psi, etaH.IsUnitArg (D.host.emb (g : D.R.GG))
   eta_eq : ∀ x, etaH.χ x = cf.eta.1 x
   ringSpec_normalisedCharacter_eq : ∀ (j : Fin D.R.m) x, (mu0H (j.1 + 1)).χ x = (cf.mu0 j).1 x
   del_eq : ∀ s x, (delH s).χ x = (cf.delAt (T.l s)).1 x
