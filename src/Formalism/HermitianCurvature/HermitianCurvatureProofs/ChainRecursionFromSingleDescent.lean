@@ -1,59 +1,13 @@
 module
 
+import Formalism.HermitianCurvature.HermitianCurvatureProofs.RestrictionIrrelevantDoubleLevelOperator
+import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianHaarMeasure.NestedMinorExpansionOneZero
 public import Formalism.HermitianCurvature.StatementQ
 public import Formalism.RealPlaceAnalysis.RealPlaceTaylor.GeneratorCommutatorQuantumDet
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.WeylCellConjTransposeMulApply
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
 public import Mathlib.Analysis.Calculus.LineDeriv.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
 import Mathlib.Analysis.InnerProductSpace.Calculus
-import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.Order.CompletePartialOrder
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Sheaves.Init
-import Std.Tactic.BVDecide.Normalize.BitVec
 import Std.Tactic.BVDecide.Normalize.Prop
 public import Formalism.FormalDegreeBessel.FormalDegreeRatio.UnitaryWeylNormalHolds
 
@@ -121,14 +75,7 @@ section
 open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt.Q
 
 theorem skip_one_eq_succAbove {t : ℕ} (i : Fin (t + 1)) : (skip1 i : Fin t → Fin (t + 1)) = i.succAbove := by
-  funext j
-  apply Fin.ext
-  simp only [skip1]
-  split_ifs with h
-  · rw [Fin.succAbove_of_castSucc_lt _ _ (by rw [Fin.lt_iff_val_lt_val, Fin.coe_castSucc]; exact h)]
-    try rfl
-  · rw [Fin.succAbove_of_le_castSucc _ _ (by rw [Fin.le_iff_val_le_val, Fin.coe_castSucc]; omega)]
-    try rfl
+  apply _root_.PI.QnHermHaar.skip1Fun <;> assumption
 
 theorem skip_two_succAbove_comp_alt {t : ℕ} (b : Fin (t + 2)) (a : Fin (t + 1)) :
     (skip2 (min (b.succAbove a) b) (max (b.succAbove a) b) : Fin t → Fin (t + 2)) =
@@ -993,44 +940,13 @@ variable {Wp Wq : Type} [NormedAddCommGroup Wp] [NormedSpace ℂ Wp] [NormedAddC
 
 theorem ff_add {i : Fin (r + 1)} {D : Set (Mx k r)} {J J' : Mx k r → (Wq →L[ℂ] Wp)}
     (h : J ∈ FFl k r z z' π π' i D) (h' : J' ∈ FFl k r z z' π π' i D) : J + J' ∈ FFl k r z z' π π' i D := by
-  obtain ⟨hs, hl, hr, he⟩ := h
-  obtain ⟨hs', hl', hr', he'⟩ := h'
-  refine And.intro ?_ (And.intro ?_ (And.intro ?_ ?_))
-  · intro g₀ hg₀
-    obtain ⟨U, F, hU, hgU, hF, hFe⟩ := hs g₀ hg₀
-    obtain ⟨U', F', hU', hgU', hF', hFe'⟩ := hs' g₀ hg₀
-    refine ⟨U ∩ U', fun g => F g + F' g, hU.inter hU', Set.mem_inter hgU hgU',
-      (hF.mono Set.inter_subset_left).add (hF'.mono Set.inter_subset_right), fun g hg hgl => ?_⟩
-    show J g + J' g = F g + F' g
-    rw [hFe g hg.1 hgl, hFe' g hg.2 hgl]
-  · intro g hg n hn
-    simp only [Pi.add_apply]
-    rw [hl g hg n hn, hl' g hg n hn, smul_add]
-  · intro g hg n hn
-    simp only [Pi.add_apply]
-    rw [hr g hg n hn, hr' g hg n hn, smul_add]
-  · intro g hg x hx x' hx'
-    simp only [Pi.add_apply]
-    rw [he g hg x hx x' hx', he' g hg x hx x' hx', ContinuousLinearMap.add_comp, ContinuousLinearMap.comp_add]
+  intros
+  apply _root_.Formalism.FourierDecayAlt.P.Qx8.FFl_add <;> assumption
 
 theorem ff_smul {i : Fin (r + 1)} {D : Set (Mx k r)} {J : Mx k r → (Wq →L[ℂ] Wp)} (s : ℂ)
     (h : J ∈ FFl k r z z' π π' i D) : s • J ∈ FFl k r z z' π π' i D := by
-  obtain ⟨hs, hl, hr, he⟩ := h
-  refine And.intro ?_ (And.intro ?_ (And.intro ?_ ?_))
-  · intro g₀ hg₀
-    obtain ⟨U, F, hU, hgU, hF, hFe⟩ := hs g₀ hg₀
-    refine ⟨U, fun g => s • F g, hU, hgU, hF.const_smul s, fun g hg hgl => ?_⟩
-    show s • J g = s • F g
-    rw [hFe g hg hgl]
-  · intro g hg n hn
-    simp only [Pi.smul_apply]
-    rw [hl g hg n hn, smul_comm]
-  · intro g hg n hn
-    simp only [Pi.smul_apply]
-    rw [hr g hg n hn, smul_comm]
-  · intro g hg x hx x' hx'
-    simp only [Pi.smul_apply]
-    rw [he g hg x hx x' hx', ContinuousLinearMap.smul_comp, ContinuousLinearMap.comp_smul]
+  intros
+  apply _root_.Formalism.FourierDecayAlt.P.Qx8.FFl_smul <;> assumption
 
 variable {L : Fin (r + 1)} {Dc Dc₀ : (Fin r → ℂ) → Set (Mx k r)}
 
@@ -1486,16 +1402,8 @@ variable {Wp Wq : Type} [NormedAddCommGroup Wp] [NormedSpace ℂ Wp] [NormedAddC
 
 theorem ff_congr {i : Fin (r + 1)} {D : Set (Mx k r)} (hD : IsDom k r z z' i D) {J J' : Mx k r → (Wq →L[ℂ] Wp)}
     (h : J ∈ FFl k r z z' π π' i D) (he : ∀ g ∈ Glev k r i ∩ D, J' g = J g) : J' ∈ FFl k r z z' π π' i D := by
-  refine ⟨smooth_congr hD.1 h.1 he, ?_, ?_, ?_⟩
-  · intro g hg n hn
-    rw [he g hg, he _ (dom_left hD hg hn)]
-    exact h.2.1 g hg n hn
-  · intro g hg n hn
-    rw [he g hg, he _ (dom_right hD hg hn)]
-    exact h.2.2.1 g hg n hn
-  · intro g hg a ha b hb
-    rw [he g hg, he _ (dom_uw hD hg ha hb)]
-    exact h.2.2.2 g hg a ha b hb
+  intros
+  apply _root_.Formalism.FourierDecayAlt.P.Qx8.FFl_congr <;> assumption
 
 variable {L : Fin (r + 1)} {Dc : (Fin r → ℂ) → Set (Mx k r)}
 

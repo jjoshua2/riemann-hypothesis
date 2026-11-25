@@ -13,58 +13,10 @@ public import Formalism.HermitianCurvature.HermitianCurvatureProofs.CapelliAbstr
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.CommonEigenvectors
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.HighestWeightPolynomials
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.WeightMonotonicity
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
 import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 import Mathlib.Tactic.Linter.HaveILetI
 import Mathlib.Tactic.Linter.Style
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.Algebra.Module.StablyFree.Basic
-import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
-import Mathlib.RingTheory.Coalgebra.IsFrobenius
-import Mathlib.RingTheory.HopfAlgebra.Basic
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Formalism.HermitianCurvature.HermitianCurvatureProofs.BranchingSystems, Formalism.HermitianCurvature.HermitianCurvatureProofs.ClosureOperators, Formalism.HermitianCurvature.HermitianCurvatureProofs.StarSumLemmas, Formalism.HermitianCurvature.HermitianCurvatureProofs.StrictBoxOrder, Formalism.HermitianCurvature.HermitianCurvatureProofs.IrreducibleCapelliModules
@@ -937,20 +889,11 @@ theorem coeffs (hPV : PolyVanish) (K : Module.End ℂ W) (A : ℕ → Module.End
   rw [Finset.sum_sub_distrib, sub_self]
 
 theorem pow_mem (G : Submodule ℂ W) (K : Module.End ℂ W) (hK : ∀ x ∈ G, K x ∈ G) (s : ℕ) : ∀ x ∈ G, (K ^ s) x ∈ G := by
-  induction s with
-  | zero => intro x hx; simpa using hx
-  | succ s ih =>
-    intro x hx
-    rw [pow_succ', Module.End.mul_apply]
-    exact hK _ (ih x hx)
+  apply _root_.Formalism.FourierDecayAlt.P.CapelliAbstractCharacter.pow_mem <;> assumption
 
 theorem aeval_mem (G : Submodule ℂ W) (K : Module.End ℂ W) (hK : ∀ x ∈ G, K x ∈ G) (q : ℂ[X]) :
     ∀ x ∈ G, aeval K q x ∈ G := by
-  intro x hx
-  rw [Polynomial.aeval_eq_sum_range, LinearMap.sum_apply]
-  refine Submodule.sum_mem _ (fun s _ => ?_)
-  rw [LinearMap.smul_apply]
-  exact Submodule.smul_mem _ _ (pow_mem G K hK s x hx)
+  apply _root_.Formalism.FourierDecayAlt.P.CapelliAbstractCharacter.aeval_mem <;> assumption
 
 theorem ch (hPV : PolyVanish) (G : Submodule ℂ W) (K : Module.End ℂ W) (hK : ∀ x ∈ G, K x ∈ G)
     (A : ℕ → Module.End ℂ W) (d : ℕ) (P : ℂ[X]) (hP : P.natDegree < d + 1)
@@ -1175,16 +1118,7 @@ theorem box_strictAnti {n : ℕ} {L : Fin (n + 1) → ℤ} {M : Fin n → ℤ} (
     exact lt_of_le_of_lt h1 h2
 
 theorem sdec_shf {n : ℕ} (β : ℂ) {M : Fin n → ℤ} (h : StrictAnti M) : SDec (shf β M) := by
-  intro a b hab
-  have h1 := h hab
-  refine ⟨(M a - M b - 1).toNat, ?_⟩
-  simp only [shf]
-  have h2 : ((M a - M b - 1).toNat : ℤ) = M a - M b - 1 := Int.toNat_of_nonneg (by omega)
-  have h3 : (((M a - M b - 1).toNat : ℕ) : ℂ) = ((M a - M b - 1 : ℤ) : ℂ) := by
-    rw [← Int.cast_natCast, h2]
-  rw [h3]
-  push_cast
-  ring
+  apply _root_.Formalism.FourierDecayAlt.P.HighestWeightPolynomials.sdec_shf <;> assumption
 
 variable {V : Type} [AddCommGroup V] [Module ℂ V]
 

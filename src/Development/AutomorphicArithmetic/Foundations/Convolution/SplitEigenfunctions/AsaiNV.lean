@@ -313,7 +313,7 @@ theorem UpperTheory.ConvolutionTheory.RankTwoDescent.satU_of :
     SatU := by
   intro E _ _ _ D P ω χ hc hu _ w α β hB
   obtain ⟨κ, hn, hκ⟩ := exists_norm (isUnitary_of_cenN hc hu)
-  have hD := (GlobalTheory.T.cuspForm_sqIntegrable_and_isDiscrete_splitCentre E 2).2 _ hn
+  have hD := (_root_.GlobalTheory.ResW.cuspForm_isSqInt_and_isDiscrete E 2).2 _ hn
   have hU : GlobalTheory.LGrp.IsUnitarisable ((P.twist κ).locRep w) := PositivityTheory.Rg.Rs.SatakeHermitian.isUnitarisable_locRepD hD w
   have hB' : GlobalTheory.LFun.HasSatGL w ((P.twist κ).locRep w) {α * κ.val w, β * κ.val w} := by
     simpa using CG.HasSat.twist (π := CG.mk P) hB (hκ w).1
@@ -369,7 +369,7 @@ private theorem exists_bad {S : Set (H.P ℚ)} (hS : S.Finite) : ∃ m : ℕ, 0 
     exact Ideal.absNorm_mem _
 
 private theorem quad_sq {E : Type} [Field E] [NumberField E] {η : HChar ℚ} (hq : IsQuadCharOf E η) : η ^ 2 = 1 := by
-  apply GlobalTheory.T.hecke_character_eq_of_cofinite ℚ (η ^ 2) 1
+  apply _root_.GlobalTheory.HeckeMultOne.main ℚ (η ^ 2) 1
   have hc : ∀ᶠ v : H.P ℚ in cofinite, ∃ w : H.P E, w.under (𝓞 ℚ) = v ∧
       η.UnrAt v ∧ η.val v = if normV w = normV v then 1 else -1 := by
     unfold IsQuadCharOf at hq
