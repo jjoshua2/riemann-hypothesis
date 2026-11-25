@@ -162,7 +162,6 @@ structure LiftProb where
 
   GF : Subgroup Gam
   GF_top : kind = .GSp4 → GF = ⊤
-  GF_index : kind ≠ .GSp4 → GF.index = 2
   GF_open : IsOpen (GF : Set Gam)
 
   cc : Gam
@@ -173,16 +172,11 @@ structure LiftProb where
   [lF : Fintype lPl]
   lPl_ne : Nonempty lPl
   Gv : lPl → Subgroup Gam
-  Gv_closed : ∀ v, IsClosed (Gv v : Set Gam)
-
   qPl : Type
   [qF : Fintype qPl]
   Gq : qPl → Subgroup Gam
   Iq : qPl → Subgroup Gam
   Iq_le : ∀ q, Iq q ≤ Gq q
-  Gq_closed : ∀ q, IsClosed (Gq q : Set Gam)
-  Iq_closed : ∀ q, IsClosed (Iq q : Set Gam)
-
   rPl : Type
   [rF : Fintype rPl]
   cv : rPl → Gam
@@ -193,8 +187,6 @@ structure LiftProb where
 
   dv : lPl → ℕ
   dv_sum : ∑ v, dv v = degF
-
-  Iq_normal : ∀ q, ∀ g ∈ Gq q, ∀ h ∈ Iq q, g * h * g⁻¹ ∈ Iq q
 
   isQ : Prop
   isQ_deg : isQ ↔ degF = 1
@@ -214,32 +206,15 @@ structure LiftProb where
   rbar : Gam → Matrix (Fin kind.n) (Fin kind.n) (ResidueField O)
 
   chi_Uq : ∀ g, (∃ q, g ∈ Iq q ∧ g ∈ GF ∧ rbar g = 1) → chi g = 1
-  rbar_hom : ∀ g h, rbar (g * h) = rbar g * (if g ∈ GF then rbar h else
-    residue O (chi h : O) • ((rbar h)⁻¹).transpose)
-  rbar_unit : ∀ g, IsUnit (rbar g).det
-  rbar_sympl : kind = .GSp4 → ∀ g, kind.Sympl (rbar g) (residue O (chi g : O))
-  rbar_cont : IsLocallyConstant rbar
-
-  rbar_diag : ∀ g ∈ GF, ∀ i j, i ≠ j → rbar g i j = 0
-
-  rbar_centr : ∀ g ∉ GF, ∀ i j, rbar g i j ≠ 0 → dg i + dg j = 0
-
-  liftInvariants_finrank_eq : Module.finrank (ResidueField O) (invSub (adAct GF rbar) (gLie (ResidueField O) kind)) = rk
-
   rbar_Iq : ∀ q, ¬ l ∣ Nat.card ((rbar '' (Iq q : Set Gam)) : Set _)
 
   Rbox : TR O
   uBox : Gam → Matrix (Fin kind.n) (Fin kind.n) Rbox.C
-  uBox_lift : IsLiftG kind GF chi (fun g => ∃ q, g ∈ Iq q ∧ g ∈ GF ∧ rbar g = 1) rbar uBox
   univBox : ∀ (C : TR O) (r : Gam → Matrix (Fin kind.n) (Fin kind.n) C.C),
     IsLiftG kind GF chi (fun g => ∃ q, g ∈ Iq q ∧ g ∈ GF ∧ rbar g = 1) rbar r →
     ∃! f : Rbox.C →ₐ[O] C.C, ∀ g, (uBox g).map f = r g
 
   coBox : Rbox.C →ₐ[O] TA rk Rbox.C
-  coBox_counit : ∀ x, constantCoeff (coBox x) = x
-  coBox_conj : ConjG GF (diagTT dg Rbox.C) (fun g => (uBox g).map MvPowerSeries.C)
-    (fun g => (uBox g).map coBox)
-
   RV : lPl → TR O
   uV : ∀ v, Gv v → Matrix (Fin kind.n) (Fin kind.n) (RV v).C
   uV_lift : ∀ v, IsLiftG kind (GF.comap (Gv v).subtype) (chi.comp (Gv v).subtype) (fun _ => False)
@@ -249,10 +224,6 @@ structure LiftProb where
       (fun g => rbar g) r →
     ∃! f : (RV v).C →ₐ[O] C.C, ∀ g, (uV v g).map f = r g
   coV : ∀ v, (RV v).C →ₐ[O] TA rk (RV v).C
-  coV_counit : ∀ v x, constantCoeff (coV v x) = x
-  coV_conj : ∀ v, ConjG (GF.comap (Gv v).subtype) (diagTT dg (RV v).C)
-    (fun g => (uV v g).map MvPowerSeries.C) (fun g => (uV v g).map (coV v))
-
   nN : ℕ
   nN_eq : nN = kind.dimN - rk
   nx : Fin nN → Gam →₀ O
@@ -263,16 +234,6 @@ structure LiftProb where
   n_cst : ∀ i, ncst i ≠ 0 → ((∀ g ∈ (nx i).support, g ∈ GF) → dg (npos i).1 = dg (npos i).2) ∧
     ((∀ g ∈ (nx i).support, g ∉ GF) → dg (npos i).1 + dg (npos i).2 = 0)
 
-  n_exists : ∀ (C : TR O) (r : Gam → Matrix (Fin kind.n) (Fin kind.n) C.C),
-    IsLiftG kind GF chi (fun g => ∃ q, g ∈ Iq q ∧ g ∈ GF ∧ rbar g = 1) rbar r →
-    ∃ γ r', IsKerEl kind γ ∧ ConjG GF γ r r' ∧ ∀ i, nEqG (nx i) (npos i) (ncst i) r' = 0
-
-  n_unique : ∀ (C : TR O) (r r' r'' : Gam → Matrix (Fin kind.n) (Fin kind.n) C.C) γ γ',
-    IsLiftG kind GF chi (fun g => ∃ q, g ∈ Iq q ∧ g ∈ GF ∧ rbar g = 1) rbar r →
-    IsKerEl kind γ → IsKerEl kind γ' → ConjG GF γ r r' → ConjG GF γ' r r'' →
-    (∀ i, nEqG (nx i) (npos i) (ncst i) r' = 0) → (∀ i, nEqG (nx i) (npos i) (ncst i) r'' = 0) →
-    ∃ t : Fin rk → C.Cˣ, (∀ s, residue C.C (t s) = 1) ∧ ConjG GF (diagT dg t) r' r''
-
   Rl : TR O
   ιl : ∀ v, (RV v).C →ₐ[O] Rl.C
   Rl_univ : ∀ (C : TR O) (f : ∀ v, (RV v).C →ₐ[O] C.C), ∃! φ : Rl.C →ₐ[O] C.C, ∀ v, φ.comp (ιl v) = f v
@@ -282,7 +243,6 @@ structure LiftProb where
   Rfr : TR O
   uFr : Gam → Matrix (Fin kind.n) (Fin kind.n) Rfr.C
   aFr : lPl → Matrix (Fin kind.n) (Fin kind.n) Rfr.C
-  uFr_lift : IsLiftG kind GF chi (fun g => ∃ q, g ∈ Iq q ∧ g ∈ GF ∧ rbar g = 1) rbar uFr
   aFr_ker : ∀ v, IsKerEl kind (aFr v) ∧ (kind = .GSp4 → kind.Sympl (aFr v) 1)
   univFr : ∀ (C : TR O) (r : Gam → Matrix (Fin kind.n) (Fin kind.n) C.C)
     (al : lPl → Matrix (Fin kind.n) (Fin kind.n) C.C),
@@ -295,12 +255,6 @@ structure LiftProb where
   frl_def : ∀ v, ConjG (GF.comap (Gv v).subtype) (aFr v)⁻¹ (fun g => uFr g)
     (fun g => (uV v g).map ((frl.comp (ιl v))))
   coFr : Rfr.C →ₐ[O] TA rk Rfr.C
-  coFr_counit : ∀ x, constantCoeff (coFr x) = x
-  coFr_conj : ∃ γ, IsKerEl kind γ ∧
-    ConjG GF (γ * diagTT dg Rfr.C) (fun g => (uFr g).map MvPowerSeries.C) (fun g => (uFr g).map coFr) ∧
-    ∀ v, (aFr v).map coFr = γ * diagTT dg Rfr.C * (aFr v).map MvPowerSeries.C * (diagTT dg Rfr.C)⁻¹
-  coFr_frl : ∀ x, coFr (frl x) = MvPowerSeries.map frl.toRingHom (coRl x)
-
 attribute [instance] LiftProb.oR LiftProb.oD LiftProb.oV LiftProb.oC LiftProb.o0 LiftProb.oF
   LiftProb.oP LiftProb.gG LiftProb.gT LiftProb.gTG LiftProb.gC LiftProb.gTD LiftProb.lF LiftProb.qF
   LiftProb.rF
