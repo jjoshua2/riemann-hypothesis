@@ -1124,14 +1124,9 @@ theorem divisorReductionTerminationProperties (hres : FunctorialResolution.Blowu
     (hno : BlowupPreservesNoetherian.{u}) : DivisorReductionTerminationProperties hres hno := by
   have hlift : StrictNormalCrossingsLiftFromDivisor.{u} := hasStrictNormalCrossingsWith_ker_cons_of_comap
   exact
-    { exists_ideal_mul_preIdeal_pow := fun T hV _ j hj => exists_mul_pow_containedComponentsIdeal_eq_ideal T hV j hj
-      isBlowup_id_preIdeal := isBlowupAlongIdealSheaf_id_containedComponentsIdeal
+    { isBlowup_id_preIdeal := isBlowupAlongIdealSheaf_id_containedComponentsIdeal
       lowerTriple_dim_lt := dim_restrictToBoundaryDivisor_lt
       properCenters := centersContainNoComponent_of_isAdmissible
-      isOpen_preLocus := isOpen_setOf_connectedComponent_subset_orderAtLeastLocus
-      smooth_preIdeal := smooth_subschemeι_containedComponentsIdeal_comp
-      hasSNCWith_preIdeal := hasStrictNormalCrossingsWith_containedComponentsIdeal
-      support_preIdeal_subset := support_containedComponentsIdeal_subset_orderAtLeastLocus
       valid_lowerTop := DivisorReduction.isAdmissible_restrictToDivisor
       isMarked_pushedTop := by
         intro T hV hOB hbal j hj hZ hVlow inst s hpr

@@ -84,10 +84,6 @@ end DivisorReduction
 
 structure DivisorReductionTerminationProperties (hres : FunctorialResolution.Blowup.StrictTransformIsBlowupOfClosedSubscheme.{u})
     (hno : BlowupPreservesNoetherian.{u}) : Prop where
-  exists_ideal_mul_preIdeal_pow : ∀ (T : MarkedIdealWithBoundary.{u}), T.IsAdmissible → T.IsOrderBoundedByMult →
-    ∀ (j : ℕ) (hj : j < T.boundary.length),
-      ∃ J : T.scheme.IdealSheafData,
-        DivisorReduction.containedComponentsIdeal T j hj ^ T.mult * J = T.ideal
   isMarked_pushedTop : ∀ (T : MarkedIdealWithBoundary.{u}) (hV : T.IsAdmissible), T.IsOrderBoundedByMult →
     T.IsBalanced hV.locallyOfFiniteType → ∀ (j : ℕ) (hj : j < T.boundary.length),
       DivisorReduction.containedComponentsIdeal T j hj = ⊤ → (DivisorReduction.restrictToDivisor T j hj).IsAdmissible →
@@ -230,21 +226,5 @@ structure DivisorReductionTerminationProperties (hres : FunctorialResolution.Blo
             (fun D => D.comap (T.boundary.get ⟨j, hj⟩).subschemeι))).IsAdmissible →
       T.ideal = _root_.FunctorialResolution.Blowup.schemeImageIdeal (T.boundary.get ⟨j, hj⟩).subschemeι J →
       DivisorReduction.containedComponentsIdeal T j hj = ⊤
-  isOpen_preLocus : ∀ (T : MarkedIdealWithBoundary.{u}), T.IsAdmissible →
-    ∀ (j : ℕ) (hj : j < T.boundary.length),
-      IsOpen {x : ↥(T.boundary.get ⟨j, hj⟩).subscheme |
-        connectedComponent x ⊆
-          ⇑(T.boundary.get ⟨j, hj⟩).subschemeι ⁻¹' orderAtLeastLocus T.ideal T.mult}
-  smooth_preIdeal : ∀ (T : MarkedIdealWithBoundary.{u}), T.IsAdmissible →
-    ∀ (j : ℕ) (hj : j < T.boundary.length),
-      AlgebraicGeometry.Smooth
-        ((DivisorReduction.containedComponentsIdeal T j hj).subschemeι ≫ T.structMap)
-  hasSNCWith_preIdeal : ∀ (T : MarkedIdealWithBoundary.{u}), T.IsAdmissible →
-    ∀ (j : ℕ) (hj : j < T.boundary.length),
-      HasStrictNormalCrossingsWith T.structMap (DivisorReduction.containedComponentsIdeal T j hj) T.boundary
-  support_preIdeal_subset : ∀ (T : MarkedIdealWithBoundary.{u}), T.IsAdmissible →
-    ∀ (j : ℕ) (hj : j < T.boundary.length),
-      (((DivisorReduction.containedComponentsIdeal T j hj).support : Set ↥T.scheme)) ⊆
-        orderAtLeastLocus T.ideal T.mult
 
 end FunctorialResolution.EmbeddedResolution
