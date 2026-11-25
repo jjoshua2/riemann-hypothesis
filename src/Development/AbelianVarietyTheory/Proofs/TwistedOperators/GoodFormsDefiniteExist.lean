@@ -61,19 +61,17 @@ theorem goodForms_definite_exist : GlobalTheory.IndefiniteRowSideFullHecke.Degre
     obtain ⟨LD, hT, hE, _⟩ := hGiv.types k
     exact ⟨LD, hT, hE⟩
 
-  obtain ⟨kap, lam, hScal⟩ := Formalism.IndefR.Links.scal_exists (F := F) R
-  have hSet : GlobalTheory.IndefiniteRowSideFullHecke.DegreeClassification.HidaSetting (R.upd6 kap lam) F :=
+  have hSet : GlobalTheory.IndefiniteRowSideFullHecke.DegreeClassification.HidaSetting R F :=
     { lev := hGiv.core.lev
-      grp := { hGiv.core.grp with }
-      fam := { hGiv.core.fam with }
-      models := { hGiv.core.models with }
-      chain := Formalism.IndefR.Links.RealDat.chain_of_scalar_update hGiv.core.chain kap lam
-      thP := Formalism.IndefR.Links.RealDat.theta_props_of_scalar_update hGiv.core.thP kap lam
-      scal := hScal }
+      grp := hGiv.core.grp
+      fam := hGiv.core.fam
+      models := hGiv.core.models
+      chain := hGiv.core.chain
+      thP := hGiv.core.thP }
 
   obtain ⟨i, hi⟩ := GlobalTheory.IndefiniteRowSideFullHecke.DegreeClassification.exists_last D
-  have hShare := hx₀ D L hP heps' hxL hSz hTie G Pl0 T A Ks (R.upd6 kap lam) F hSet i hi b
-  exact ⟨i, GlobalTheory.IndefiniteRowSideFullHecke.DegreeClassification.GoodShare.ne_bot (R.upd6 kap lam) F hShare⟩
+  have hShare := hx₀ D L hP heps' hxL hSz hTie G Pl0 T A Ks R F hSet i hi b
+  exact ⟨i, GlobalTheory.IndefiniteRowSideFullHecke.DegreeClassification.GoodShare.ne_bot R F hShare⟩
 
 end GlobalTheory.LiftRows
 
