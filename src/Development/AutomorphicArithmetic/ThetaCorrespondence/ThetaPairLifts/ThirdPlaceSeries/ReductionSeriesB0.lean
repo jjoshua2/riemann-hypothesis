@@ -409,15 +409,13 @@ theorem sideB_keep {Rw : RowSide D} {low : Finset ℕ}
     (B : SideB (recE hE Sp F ex h0 th).toD7 ((recE hE Sp F ex h0 th).cf cf) ((recE hE Sp F ex h0 th).row Rw) low Pq
       ((recE hE Sp F ex h0 th).rat S) hL eig θ)
     (chiI : ∀ s, L.abelian₂ s → NC.HC D.host.E)
-    (hqs : ∀ i lam P, P ∉ T.S0 i →
-      B.twF.iCq i (L.qs i lam P) = ((((Ideal.absNorm P.asIdeal : ℕ) : ℝ) ^ (-(L.s2 i lam : ℝ) / 2) : ℝ) : ℂ))
     (hlam : ∀ s lam, NC.Read D.nd.plOm.1 (L.lamG s lam) (algebraMap (T.O s) (FractionRing (T.O s)))
       (B.chiD.embO s (L.sideL s lam)) (NC.complexEmbeddingRestrictedToSubfield D) (id (α := NC.HC D.host.E) (B.chiD.mu0 (L.jL s lam)) * id (α := NC.HC D.host.E) (B.chiD.del s) * (chiI s lam)⁻¹) 0) :
     Nonempty (SideB (recL hE Sp F L ex h0 th').toD7 ((recL hE Sp F L ex h0 th').cf cf) ((recL hE Sp F L ex h0 th').row Rw) low Pq
       ((recL hE Sp F L ex h0 th').rat S) hL eig θ) :=
   ⟨{ B with
       twF := twFC B.twF
-      tw := { B.tw with qs_pos := hqs }
+      tw := { B.tw with }
       chiD := { B.chiD with chiI := chiI }
       chi := { B.chi with lamG := hlam }
       exp := expC B.exp }⟩
@@ -603,16 +601,7 @@ theorem exists_twL_installed : GlobalTheory.Published.ChebotarevDegreeOne → Gl
   obtain ⟨L, e, hcl, hfull⟩ := exists_twL_full_teich hA hR D D.nd hE T Z hZ art ha κ ι hκ hι hμ hχ hδ hS hT
   refine ⟨L, fun F => ⟨hfull F, fun ex h0 th hB th' => ?_⟩⟩
   obtain ⟨B⟩ := hB
-  refine sideB_keep B (fun s lam => FitTw.toHC (Z.chi (e s lam).2.1)) ?_ ?_
-  · intro i lam P _
-    obtain ⟨-, -, h2, -, h4⟩ := hcl i lam
-    rw [h4 P, h2]
-    let f : FractionRing (T.O i) →+* ℂ := B.twF.iCq i
-    show f (((Ideal.absNorm P.asIdeal : ℕ) : FractionRing (T.O i)) ^ (-((e i lam).2.2.1.1 : ℤ))) = _
-    rw [map_zpow₀, map_natCast]
-    have e2 : (-(((2 * ((e i lam).2.2.1.1 : ℤ) : ℤ) : ℝ)) / 2) = ((-((e i lam).2.2.1.1 : ℤ) : ℤ) : ℝ) := by
-      push_cast; ring
-    rw [e2, Real.rpow_intCast, Complex.ofReal_zpow, Complex.ofReal_natCast]
+  refine sideB_keep B (fun s lam => FitTw.toHC (Z.chi (e s lam).2.1)) ?_
   · intro s lam
     obtain ⟨h1, h2, -, ⟨n, r, hr, hG⟩, -⟩ := hcl s lam
     let C : GlobalTheory.Mem.Chr.HFrame D.host (fun j => eExp D j) :=

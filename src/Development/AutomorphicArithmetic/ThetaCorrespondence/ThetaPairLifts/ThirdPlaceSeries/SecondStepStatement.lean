@@ -1537,8 +1537,6 @@ theorem sig_of_fg_alt (hfg : ∀ (D : D7) (S : RatDat D.ntw) (In : RatIn D S) (T
             sd.side i s = b ∧ ∀ k P, 1 ≤ k → k ≤ D.R.r → IsSplitPl D.host P → P ∉ T.S0 i →
               ((hkB D T S In hst i j b k P).baseChange (FractionRing (T.O i))) x =
                 algebraMap (T.O i) (FractionRing (T.O i)) (sd.hEig i s k P) • x} = ⊤) ∧
-      (∀ i (s s' : sd.Sig i), sd.jS i s = sd.jS i s' → sd.side i s = sd.side i s' →
-        (∀ k P, 1 ≤ k → k ≤ D.R.r → IsSplitPl D.host P → P ∉ T.S0 i → sd.hEig i s k P = sd.hEig i s' k P) → s = s') ∧
       (∀ i s, D.what₂.isot (sd.jS i s) (sd.rowS i s) ≠ ⊥ ∧ D.nd.goodRow (sd.rowS i s)) ∧
       (∀ i s k P, 1 ≤ k → k ≤ D.R.r → IsSplitPl D.host P → P ∉ T.S0 i →
         algebraMap (T.O i) (FractionRing (T.O i)) (sd.hEig i s k P) =
@@ -1546,7 +1544,7 @@ theorem sig_of_fg_alt (hfg : ∀ (D : D7) (S : RatDat D.ntw) (In : RatIn D S) (T
             readT D T i (sd.side i s) (In.eig (sd.jS i s) (sd.rowS i s) k P)) ∧
       ∀ i s P, sd.hEig i s 0 P = 1 := by
   intro D cf jE A S In b0 b1 Sx T Sp hst hSb hstar
-  refine ⟨sigDataOf D T In, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨sigDataOf D T In, ?_, ?_, ?_, ?_⟩
   · intro i j b h1 h2
     haveI : Module.Finite (T.O i) ↥(BI D T S In i j b) :=
       Module.Finite.iff_fg.mpr (fg_BI D T S In (fun i j b => (hfg D S In T i j b).1) i j b)
@@ -1564,18 +1562,6 @@ theorem sig_of_fg_alt (hfg : ∀ (D : D7) (S : RatDat D.ntw) (In : RatIn D S) (T
     rw [hy k P ⟨hk1, hk2, hsp, hP⟩]
     congr 1
     exact (sigEig_on D T In i x k P ⟨hk1, hk2, hsp, hP⟩).symm
-  · intro i s s' h1 h2 h3
-    have e1 := sigDataOf_spec D T In i s
-    have e2 := sigDataOf_spec D T In i s'
-    apply Subtype.ext
-    refine Prod.ext h1 (Prod.ext h2 ?_)
-    funext k P
-    by_cases hv : sigVal D T i k P
-    · exact h3 k P hv.1 hv.2.1 hv.2.2.1 hv.2.2.2
-    · change s.1.2.2 k P = s'.1.2.2 k P
-      rw [← e1, ← e2]
-      change sigEig D T In i _ k P = sigEig D T In i _ k P
-      rw [sigEig_off D T In i _ k P hv, sigEig_off D T In i _ k P hv]
   · intro i s
     have e1 := sigDataOf_spec D T In i s
     have hj : s.1.1 = (s.2.choose.1.1 : ℕ) := (congrArg Prod.fst e1).symm
@@ -1608,8 +1594,6 @@ theorem sigData_exists_alt : ∀ (D : D7) (cf : CharFrame D) (jE : D.host.E →+
             sd.side i s = b ∧ ∀ k P, 1 ≤ k → k ≤ D.R.r → IsSplitPl D.host P → P ∉ T.S0 i →
               ((hkB D T S In hst i j b k P).baseChange (FractionRing (T.O i))) x =
                 algebraMap (T.O i) (FractionRing (T.O i)) (sd.hEig i s k P) • x} = ⊤) ∧
-      (∀ i (s s' : sd.Sig i), sd.jS i s = sd.jS i s' → sd.side i s = sd.side i s' →
-        (∀ k P, 1 ≤ k → k ≤ D.R.r → IsSplitPl D.host P → P ∉ T.S0 i → sd.hEig i s k P = sd.hEig i s' k P) → s = s') ∧
       (∀ i s, D.what₂.isot (sd.jS i s) (sd.rowS i s) ≠ ⊥ ∧ D.nd.goodRow (sd.rowS i s)) ∧
       (∀ i s k P, 1 ≤ k → k ≤ D.R.r → IsSplitPl D.host P → P ∉ T.S0 i →
         algebraMap (T.O i) (FractionRing (T.O i)) (sd.hEig i s k P) =
@@ -1645,8 +1629,6 @@ theorem _root_.GlobalTheory.T.exists_signature_data_span_alt : ∀ (D : D7) (cf 
             sd.side i s = b ∧ ∀ k P, 1 ≤ k → k ≤ D.R.r → IsSplitPl D.host P → P ∉ T.S0 i →
               ((hkB D T S In hst i j b k P).baseChange (FractionRing (T.O i))) x =
                 algebraMap (T.O i) (FractionRing (T.O i)) (sd.hEig i s k P) • x} = ⊤) ∧
-      (∀ i (s s' : sd.Sig i), sd.jS i s = sd.jS i s' → sd.side i s = sd.side i s' →
-        (∀ k P, 1 ≤ k → k ≤ D.R.r → IsSplitPl D.host P → P ∉ T.S0 i → sd.hEig i s k P = sd.hEig i s' k P) → s = s') ∧
       (∀ i s, D.what₂.isot (sd.jS i s) (sd.rowS i s) ≠ ⊥ ∧ D.nd.goodRow (sd.rowS i s)) ∧
       (∀ i s k P, 1 ≤ k → k ≤ D.R.r → IsSplitPl D.host P → P ∉ T.S0 i →
         algebraMap (T.O i) (FractionRing (T.O i)) (sd.hEig i s k P) =
@@ -1687,7 +1669,7 @@ theorem second_step_alt : GlobalTheory.Published.GlobalArtinReciprocity → ∀ 
   have hfg := _root_.GlobalTheory.HeightCounting.FormsStep.bsupT_fg_span_all D S In T
   have hfg' : ∀ i j b, (BsupT D T S i j b).FG := fun i j b => (hfg i j b).1
   have hst := _root_.GlobalTheory.HeightCounting.FormsStep.hkStab_of_ringSpec_of_subset D cf jE A S In b0 b1 Sx T Sp hSb hstar
-  obtain ⟨sd, hsd1, hsd2, hsd3, hsd4, hsd5⟩ := _root_.GlobalTheory.T.exists_signature_data_span_alt D cf jE A S In b0 b1 Sx T Sp hst hSb hstar
+  obtain ⟨sd, hsd1, hsd3, hsd4, hsd5⟩ := _root_.GlobalTheory.T.exists_signature_data_span_alt D cf jE A S In b0 b1 Sx T Sp hst hSb hstar
   have he := _root_.GlobalTheory.HeightCounting.FormsStep.eIdem_all D
   have hpsi := _root_.GlobalTheory.HeightCounting.FormsStep.psiUT_eq_thSide D S In T hstar
   refine ⟨mkF D T S In hfg' hst sd rho hrho, mkEx D T S In A.bare hfg' hst sd rho hrho he Pq wt, D.nStage_trivialCharacter_coeff_eq,
@@ -1764,12 +1746,9 @@ theorem second_step_alt : GlobalTheory.Published.GlobalArtinReciprocity → ∀ 
   exact
     { twF := { K0 := Sp.K0, eO0 := Sp.eO0, j0 := Sp.j0, Lw := Sp.Lw, eO := Sp.eO, eOk := Sp.eOk, iCq := Sp.iCq,
                S0x := fun _ => Sx }
-      tw := { pl_emb := fun i => ⟨Sp.eTw i, Sp.pl_emb i⟩
-              ringSpec_baseIntegersEquiv_algebraMap := Sp.ringSpec_baseIntegersEquiv_algebraMap
-              ringSpec_baseEmbedding_compatible := Sp.ringSpec_baseEmbedding_compatible
+      tw := { ringSpec_baseIntegersEquiv_algebraMap := Sp.ringSpec_baseIntegersEquiv_algebraMap
               eO_alg := Sp.eO_alg
               eOk_alg := Sp.eOk_alg
-              mu_g := Sp.mu_g
               hk_split := fun i j b k P hP => _root_.GlobalTheory.HeightCounting.FormsStep.hkB_charpoly_splits_alt D cf jE A S In b0 b1 Sx T Sp hSb hstar hst i j b k P
                 (hfr := (mkF D T S In hfg' hst sd rho hrho).freeB i j b)
                 (hfi := (mkF D T S In hfg' hst sd rho hrho).finB i j b) hP
@@ -1779,8 +1758,6 @@ theorem second_step_alt : GlobalTheory.Published.GlobalArtinReciprocity → ∀ 
                 show LinearMap.range (BI D T S In i j b).subtype = _
                 rw [Submodule.range_subtype]
                 rfl
-              sig_inj := hsd2
-              qs_pos := fun i lam => PEmpty.elim lam
               concreteTwistFrame_extraExcluded_over_smallPrimes := fun i => hlow }
       cover := fun w => _root_.GlobalTheory.HeightCounting.FormsStep.CoverPl.exists_setting_of_place D cf b0 b1 Sx T Sp w
       chiD := { mu0 := Sp.mu0H, etaT := Sp.etaH, del := Sp.delH, psi := fun a => A.bare.elim a,

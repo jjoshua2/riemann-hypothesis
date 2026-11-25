@@ -265,15 +265,6 @@ noncomputable section
 
 namespace GlobalTheory.CoeffFieldLower
 
-theorem finiteDimensional_muK_one (l : ℕ) [Fact l.Prime] : FiniteDimensional ℚ_[l] (muK l 1) := by
-  classical
-  have hl : 0 < l ^ 1 := pow_pos (Fact.out : l.Prime).pos 1
-  have hfin : ({x : PadicAlgCl l | x ^ (l ^ 1) = 1}).Finite :=
-    (nthRoots (l ^ 1) (1 : PadicAlgCl l)).toFinset.finite_toSet.subset fun x hx => by
-      rw [Finset.mem_coe, Multiset.mem_toFinset, Polynomial.mem_nthRoots hl]; exact hx
-  have := hfin.to_subtype
-  show FiniteDimensional ℚ_[l] (IntermediateField.adjoin ℚ_[l] {x : PadicAlgCl l | x ^ (l ^ 1) = 1})
-  exact IntermediateField.finiteDimensional_adjoin fun x _ => Algebra.IsIntegral.isIntegral x
 
 
 open Classical in
@@ -285,19 +276,17 @@ def bridgeLow (D : D7) (l : ℕ) [Fact l.Prime] (w : HeightOneSpectrum (𝓞 D.h
 
 def low (D : D7) : Big D := fun l hl j =>
   haveI := hl
-  ⟨IntermediateField.adjoin ℚ_[l] (Set.range j) ⊔ muK l 1 ⊔
+  ⟨IntermediateField.adjoin ℚ_[l] (Set.range j) ⊔
       ⨆ w ∈ (placesOver_finite' D.host.E l (Fact.out : l.Prime).ne_zero).toFinset, (bridgeLow D l w).1, by
     have := GlobalTheory.PlaceBridge.finiteDimensional_adjoin_range j
-    have := finiteDimensional_muK_one l
     have : ∀ w, FiniteDimensional ℚ_[l] (bridgeLow D l w).1 := fun w => (bridgeLow D l w).2
     infer_instance⟩
 
-theorem exists_low : ∀ (D : D7), ∃ c0 : Big D, ∀ (l : ℕ) [Fact l.Prime] (j : ↥D.LL0 →+* PadicAlgCl l), (∀ x, j x ∈ (c0 l j).1) ∧ muK l 1 ≤ (c0 l j).1 ∧ ∀ K0 : Loc.FinExt l, (c0 l j).1 ≤ K0.1 → ∀ w ∈ placesOver D.host.E l, ∃ Bw : LocBridge l D.host.E D.nd.Om (Dec (F := D.host.E) (D.nd.plOm.1 w)) ↥(Loc.OL K0), ∀ x, x ∈ D.nd.plOm.1 w ↔ ‖Bw.j x‖ ≤ 1 := by
+theorem exists_low : ∀ (D : D7), ∃ c0 : Big D, ∀ (l : ℕ) [Fact l.Prime] (j : ↥D.LL0 →+* PadicAlgCl l), (∀ x, j x ∈ (c0 l j).1) ∧ ∀ K0 : Loc.FinExt l, (c0 l j).1 ≤ K0.1 → ∀ w ∈ placesOver D.host.E l, ∃ Bw : LocBridge l D.host.E D.nd.Om (Dec (F := D.host.E) (D.nd.plOm.1 w)) ↥(Loc.OL K0), ∀ x, x ∈ D.nd.plOm.1 w ↔ ‖Bw.j x‖ ≤ 1 := by
   intro D
-  refine ⟨low D, fun l _ j => ⟨fun x => ?_, ?_, fun K0 hK0 w hw => ?_⟩⟩
-  · have h1 : IntermediateField.adjoin ℚ_[l] (Set.range j) ≤ (low D l j).1 := le_sup_left.trans le_sup_left
+  refine ⟨low D, fun l _ j => ⟨fun x => ?_, fun K0 hK0 w hw => ?_⟩⟩
+  · have h1 : IntermediateField.adjoin ℚ_[l] (Set.range j) ≤ (low D l j).1 := le_sup_left
     exact h1 (IntermediateField.subset_adjoin _ _ ⟨x, rfl⟩)
-  · exact le_sup_right.trans le_sup_left
   · have hex := GlobalTheory.PlaceBridge.exists_locBridge l D.host.E D.nd.Om w (D.nd.plOm.1 w) hw (D.nd.plOm.2 w)
     have hspec := (Classical.choose_spec hex).choose_spec
     have hL : (bridgeLow D l w).1 ≤ K0.1 := by
@@ -849,7 +838,7 @@ theorem exists_ringSpec (hA : GlobalTheory.Published.GlobalArtinReciprocity) : �
 
   choose eO0 heO0 using fun w => _root_.GlobalTheory.IntOfFinExt.exists_ringEquiv_intOf (lw w) (K0 w)
   choose br hbr using fun w (v : PlE D.host) (hv : v ∈ placesOver D.host.E (lw w)) =>
-    (hc0 (lw w) (j0 w)).2.2 (K0 w) (hb _ _) v hv
+    (hc0 (lw w) (j0 w)).2 (K0 w) (hb _ _) v hv
   have hcardC : ∀ w, Cardinal.aleph0 < Cardinal.mk ℂ_[lw w] := fun w => by
     rw [card_padicComplex, Cardinal.mk_complex]; exact Cardinal.aleph0_lt_continuum
   choose ι' hι' using fun w => _root_.GlobalTheory.AlgClosedIsoOverNumberField.exists_ringEquiv_comp_eq ↥D.LL0 ℂ_[lw w] ℂ
@@ -922,7 +911,6 @@ theorem exists_ringSpec (hA : GlobalTheory.Published.GlobalArtinReciprocity) : �
       eO_alg := fun w y => by
         rw [RingEquiv.refl_apply, RingHom.algebraMap_toAlgebra, htoO, heO0]
       eOk_alg := fun w k x => by simp only [RingEquiv.refl_apply]; exact Subring.coe_inclusion _ x
-      mu_g := fun w k _ => ((hc0 (lw w) (j0 w)).2.1.trans (hb _ _)).trans (le_sup_left.trans le_sup_left)
       ringSpec_excludedPlaces_eq := fun w => Set.Finite.coe_toFinset _
       br := br
       br_ind := hbr
