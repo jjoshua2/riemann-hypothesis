@@ -21,7 +21,7 @@ public import Development.AbelianVarietyTheory.PublishedTheorems.GlobalTheta.Wey
 public import Development.AbelianVarietyTheory.PublishedTheorems.Landherr₂.DimEqZero
 public import Development.AbelianVarietyTheory.PublishedTheorems.Landherr₂.ExistsNormTensor
 public import Development.AbelianVarietyTheory.PublishedTheorems.Landherr₂.LandherrStIffLandherr
-public import Development.AbelianVarietyTheory.PublishedTheorems.PublishedFoundations.GreenSeriesSt
+public import Development.AbelianVarietyTheory.Definitions.Foundations.StandardFiveNontrivial
 public import Development.AbelianVarietyTheory.PublishedTheorems.PublishedFoundations.NonemptyAlgHomOfIsRayOfDvd
 public import Development.AbelianVarietyTheory.PublishedTheorems.SemiabelianTori.GeometricallyConnectedSplitTorusAff
 public import Development.AbelianVarietyTheory.PublishedTheorems.SemistableReduction₂.SemistableReductionSt
@@ -79,7 +79,6 @@ structure Hypotheses2 : Prop where
 
   p13 : GlobalTheory.Published.StrongApproxSU
 
-  p14 : GlobalTheory.Published.GreenSeriesSt
 
   p16 : GlobalTheory.Published.GoodChernWeil
 
@@ -91,7 +90,6 @@ structure Hypotheses2 : Prop where
 
   p23 : GlobalTheory.Published.InducedSimpleLowestAlcove
 
-  p25 : GlobalTheory.Published.principalPolarisationOneSection
 
   p26 : GlobalTheory.Published.AbMulNSt
 
