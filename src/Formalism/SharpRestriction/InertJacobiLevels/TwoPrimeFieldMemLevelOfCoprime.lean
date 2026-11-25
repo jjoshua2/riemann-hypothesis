@@ -107,33 +107,13 @@ structure Fld (R : Ranks) (x eps : ℝ) extends Formalism.HC.HostAx R.toFrame wh
   QS_tie : (QS : ℝ) ≤ 4 * R.n * x ^ (eps / 1000)
 
 structure Base (R : Ranks) (x eps Cp CT : ℝ) extends Fld R x eps where
-  q_big : 4 * R.t * R.r + 1 < q
-  d_big : 4 * R.t * R.r + 1 < d
   g0 : ℕ
   g1 : ℕ
-  first_prime_isPrime : g0.Prime
-  second_prime_isPrime : g1.Prime
-  g_ne : g0 ≠ g1
-  first_prime_in_window : Yof R x eps ≤ g0 ∧ (g0 : ℝ) ≤ 2 * Yof R x eps
-  second_prime_in_window : Yof R x eps ≤ g1 ∧ (g1 : ℝ) ≤ 2 * Yof R x eps
-  first_prime_norm_form : ∃ u v : ℤ, (g0 : ℤ) = (1 + (QS * q * d : ℕ) * u) ^ 2 + d * ((QS * q * d : ℕ) * v) ^ 2
-  second_prime_norm_form : ∃ u v : ℤ, (g1 : ℤ) = (1 + (QS * q * d : ℕ) * u) ^ 2 + d * ((QS * q * d : ℕ) * v) ^ 2
-  bb : Disjoint (Formalism.CyclotomicNorms.BB R.r g0) (Formalism.CyclotomicNorms.BB R.r g1)
   pde : ℕ
   pde' : ℕ
-  pde_prime : pde.Prime
-  pde'_prime : pde'.Prime
-  pde_ne : pde ≠ pde'
-  pde_mod : pde ≡ 1 [MOD 15 * (QS * q * d)]
-  pde'_mod : pde' ≡ 1 [MOD 15 * (QS * q * d)]
-  pde_ne_g : pde ≠ g0 ∧ pde ≠ g1 ∧ pde' ≠ g0 ∧ pde' ≠ g1
-  pde_log : Real.log pde < x ^ (eps / 3) ∧ Real.log pde' < x ^ (eps / 3)
   Cp_pos : 0 < Cp
   Lw : ℕ
-  two_le_Lw : 2 ≤ Lw
   T2 : Finset ℕ
-  second_set_range : ∀ s ∈ T2, 4 * Lw * s < R.n0
-  second_set_no_relation : NoRel T2 Lw
   T2_card : (R.n0 : ℝ) * Real.exp (-(CT * Real.sqrt (Real.log (R.n0 : ℝ) * Real.log Lw))) / Lw ≤ T2.card
   TT : Finset (R.A)
 
