@@ -92,8 +92,6 @@ structure Loc (D : Formalism.BasicNotions.D7) (r j p : ℕ) where
 
   IsInv : ∀ {Z : Mdl}, Sh Z → Prop
 
-  IsLocFree : ∀ {Z : Mdl}, Sh Z → Prop
-
   Sec : ∀ {Z : Mdl}, Sh Z → Type
   [secAdd : ∀ {Z : Mdl} (F : Sh Z), AddCommGroup (Sec F)]
 
@@ -102,20 +100,12 @@ structure Loc (D : Formalism.BasicNotions.D7) (r j p : ℕ) where
   nrm : ∀ {Z : Mdl} (F : Sh Z), Sec F → Pt Z → ℝ
   nrm_nonneg : ∀ {Z : Mdl} (F : Sh Z) (f : Sec F) (y : Pt Z), 0 ≤ nrm F f y
 
-  norm_le_one_of_mem_sections : ∀ {Z : Mdl} (F : Sh Z) (f : Sec F), f ∈ H0 F → ∀ y, nrm F f y ≤ 1
-
   GIso : ∀ {Z : Mdl}, Sh Z → Sh Z → Type
 
   vrat : ∀ {Z : Mdl} {F₁ F₂ : Sh Z}, GIso F₁ F₂ → Pt Z → ℝ
 
   Lb : (PsiT D → ℕ → ℤ) → Sh YY
-  Lb_inv : ∀ l, IsInv (Lb l)
-
-  nrmRef : ∀ l, Sec (Lb l) → Pt YY → ℝ
-
   DVP : Type
-
-  dvRho : DVP → ℕ
 
   Ext : DVP → Type
 
@@ -123,27 +113,13 @@ structure Loc (D : Formalism.BasicNotions.D7) (r j p : ℕ) where
 
   chAt : ∀ {Z y e}, Chart Z y e → Prop
 
-  chOpen : ∀ {Z y e}, Chart Z y e → Prop
-
-  chAbExact : ∀ {Z y e}, Chart Z y e → Prop
-
-  chModU : ∀ {Z y e}, Chart Z y e → Prop
-
-  chConst : ∀ {Z y e}, Chart Z y e → Prop
-
   PL : Type
 
   phiAt : PL → ∀ {Z : Mdl}, Pt Z → ℝ
 
-  phiAt_zero : ∀ (φ : PL) {Z : Mdl} (y : Pt Z), Subsingleton (Ylat y) → phiAt φ y = 0
-
-  divGe : ∀ {Z : Mdl} (F : Sh Z), Sec F → ℚ → PL → Prop
-
   FJd : Type
 
   Chr : FJd → Type
-
-  fjN : ∀ l, Sec (Lb l) → (t : FJd) → Chr t → ℝ
 
   Unim : Type
 
@@ -176,29 +152,17 @@ structure Loc (D : Formalism.BasicNotions.D7) (r j p : ℕ) where
   [atAdd : ∀ y La n, AddCommGroup (At y La n)]
   [atFin : ∀ y La n, Fintype (At y La n)]
 
-  at_tors : ∀ y La n (x : At y La n), n • x = 0
-  at_card : ∀ y nW n, 0 < n → Fintype.card (At y (latStd nW) n) = n ^ (2 * (D.R.f * r * nW))
-
   Th : Pt Xm → Unim → ℕ → Type
   [thGrp : ∀ y La n, Group (Th y La n)]
   ovr : ∀ y La n, Th y La n →* Multiplicative (At y La n)
-  ovr_surj : ∀ y La n, Function.Surjective (ovr y La n)
   scal : ∀ y La n, ((fld y).C)ˣ →* Th y La n
-  scal_inj : ∀ y La n, Function.Injective (scal y La n)
-  scal_central : ∀ y La n a g, scal y La n a * g = g * scal y La n a
-  ker_ovr : ∀ y La n g, ovr y La n g = 1 ↔ ∃ a, scal y La n a = g
-
   dl : ∀ y La n, Th y La n ≃* Th y La n
-  dl_ovr : ∀ y La n g, ovr y La n (dl y La n g) = (ovr y La n g)⁻¹
-  dl_scal : ∀ y La n a, dl y La n (scal y La n a) = scal y La n a
   dl_dl : ∀ y La n g, dl y La n (dl y La n g) = g
 
   Sn : Pt Xm → Unim → ℕ → Type
   [snAdd : ∀ y La n, AddCommGroup (Sn y La n)]
   [snMod : ∀ y La n, Module (fld y).C (Sn y La n)]
   act : ∀ y La n, Th y La n →* Module.End (fld y).C (Sn y La n)
-  act_scal : ∀ y La n a s, act y La n (scal y La n a) s = (a : (fld y).C) • s
-
   vth : ∀ y La n, Sn y La n
 
   Jet : Pt Xm → Unim → ℕ → ℕ → Type
@@ -216,14 +180,11 @@ structure Loc (D : Formalism.BasicNotions.D7) (r j p : ℕ) where
   resB : ∀ y σ, LieGt y σ →+ LieB y σ
   incT : ∀ y σ, LieT y σ →+ LieGt y σ
 
-  kapGt : ∀ y σ, LieGt y σ → LieGt y σ → (fld y).C
   kapB : ∀ y σ, LieB y σ → LieB y σ → (fld y).C
 
   Harm : Pt Xm → Type
   SecP : Pt Xm → Type
   evA : ∀ y, Harm y → SecP y → (fld y).C
-  evGt : ∀ y, Harm y → SecP y → (fld y).C
-
   Tp : ∀ {Z : Mdl}, Pt Z → Type
   [tpAdd : ∀ {Z : Mdl} (y : Pt Z), AddCommGroup (Tp y)]
 
@@ -234,22 +195,10 @@ structure Loc (D : Formalism.BasicNotions.D7) (r j p : ℕ) where
 
   ht : ∀ {Z : Mdl} (y : Pt Z), Tp y →+ OmV y
 
-  IsHTBlowup : Mdl → Mdl → Prop
-
-  eOmP : ∀ Z : Mdl, Bool → PsiT D → Sh Z
-
   SES : Mdl → Type
   ExactMod : ∀ {Z : Mdl}, SES Z → ℕ → Prop
 
-  htSES : ∀ Z : Mdl, PsiT D → SES Z
-
-  nefHT : Mdl → (PsiT D → ℕ → ℝ) → Prop
-
   nefQ : (PsiT D → ℕ → ℝ) → Prop
-
-  descK : Mdl → (PsiT D → ℕ → ℤ) → Prop
-
-  bdryLoci : Mdl → Prop
 
   BT : ℕ → Type
   extA : ∀ {n}, BT n → Prop

@@ -203,18 +203,6 @@ instance (n : ℕ) : NeZero (nn n) := ⟨by unfold nn; split_ifs <;> omega⟩
 
 abbrev AtM (k n : ℕ) : Type := Fin k → ZMod (nn n)
 
-theorem atM_tors (k n : ℕ) (x : AtM k n) : n • x = 0 := by
-  funext i
-  simp only [Pi.smul_apply, Pi.zero_apply, nsmul_eq_mul]
-  by_cases h : n = 0
-  · simp [h]
-  · have hn : nn n = n := ite_eq_right h
-    have : (n : ZMod (nn n)) = 0 := (CharP.cast_eq_zero_iff (ZMod (nn n)) (nn n) n).mpr (by rw [hn])
-    rw [this, zero_mul]
-
-theorem atM_card (k n : ℕ) (h : 0 < n) : Fintype.card (AtM k n) = n ^ k := by
-  rw [Fintype.card_fun, ZMod.card, Fintype.card_fin, (show nn n = n from ite_eq_right (by omega))]
-
 structure MP (D : D7) (p : ℕ) where
   K : CF p
   Gn : Type
@@ -249,34 +237,22 @@ variable (D : D7) (r j p : ℕ) (M : MP D p)
   abAt := fun η => M.ab η
   Sh := fun _ => Unit
   IsInv := fun _ => True
-  IsLocFree := fun _ => True
   Sec := fun _ => PUnit
   secAdd := fun _ => inferInstance
   H0 := fun _ => ⊤
   nrm := fun _ _ _ => 0
   nrm_nonneg := by intros; exact le_rfl
-  norm_le_one_of_mem_sections := by intros <;> simp_all
   GIso := fun _ _ => Empty
   vrat := fun _ _ => 0
   Lb := fun _ => ()
-  Lb_inv := by intros <;> simp_all
-  nrmRef := fun _ _ _ => 0
   DVP := M.Gn
-  dvRho := fun y => rk01 (M.ab y)
   Ext := fun _ => Unit
   Chart := fun _ _ _ => Empty
   chAt := fun _ => True
-  chOpen := fun _ => True
-  chAbExact := fun _ => True
-  chModU := fun _ => True
-  chConst := fun _ => True
   PL := Unit
   phiAt := fun _ _ _ => 0
-  phiAt_zero := fun _ {_} _ _ => rfl
-  divGe := fun _ _ _ _ => True
   FJd := Unit
   Chr := fun _ => Unit
-  fjN := fun _ _ _ _ => 0
   Unim := ℕ
   LBG := fun _ => Unit
   LBGq := fun _ => Unit
@@ -296,20 +272,11 @@ variable (D : D7) (r j p : ℕ) (M : MP D p)
   At := fun _ La n => AtM (2 * (D.R.f * r * La)) n
   atAdd := fun _ _ _ => inferInstance
   atFin := fun _ _ _ => inferInstance
-  at_tors := fun _ _ _ x => atM_tors _ _ x
-  at_card := fun _ _ _ h => atM_card _ _ h
   Th := fun _ La n => (M.K.C)ˣ × Multiplicative (AtM (2 * (D.R.f * r * La)) n)
   thGrp := fun _ _ _ => inferInstance
   ovr := fun _ _ _ => MonoidHom.snd _ _
-  ovr_surj := fun _ _ _ x => ⟨(1, x), rfl⟩
   scal := fun _ _ _ => MonoidHom.inl _ _
-  scal_inj := fun _ _ _ a b h => congrArg Prod.fst h
-  scal_central := fun _ _ _ a g => by
-    ext <;> simp [mul_comm]
-  ker_ovr := fun _ _ _ g => ⟨fun h => ⟨g.1, Prod.ext rfl h.symm⟩, fun ⟨a, h⟩ => by rw [← h]; rfl⟩
   dl := fun _ _ _ => MulEquiv.prodCongr (MulEquiv.refl _) (MulEquiv.inv _)
-  dl_ovr := fun _ _ _ _ => rfl
-  dl_scal := fun _ La n a => Prod.ext rfl (inv_one : (1 : Multiplicative (AtM (2 * (D.R.f * r * La)) n))⁻¹ = 1)
   dl_dl := fun _ _ _ g => by
     show (g.1, (g.2⁻¹)⁻¹) = g
     rw [inv_inv]
@@ -317,7 +284,6 @@ variable (D : D7) (r j p : ℕ) (M : MP D p)
   snAdd := fun _ _ _ => inferInstance
   snMod := fun _ _ _ => inferInstance
   act := fun _ _ _ => 1
-  act_scal := by intros <;> simp_all
   vth := fun _ _ _ => 0
   Jet := fun _ _ _ _ => PUnit
   jAdd := fun _ _ _ _ => inferInstance
@@ -332,12 +298,10 @@ variable (D : D7) (r j p : ℕ) (M : MP D p)
   ltAdd := fun _ _ => inferInstance
   resB := fun _ _ => 0
   incT := fun _ _ => 0
-  kapGt := fun _ _ _ _ => 0
   kapB := fun _ _ _ _ => 0
   Harm := fun _ => Unit
   SecP := fun _ => Unit
   evA := fun _ _ _ => 0
-  evGt := fun _ _ _ => 0
   Tp := fun _ => PUnit
   tpAdd := fun _ => inferInstance
   OmV := fun _ => PUnit
@@ -345,15 +309,9 @@ variable (D : D7) (r j p : ℕ) (M : MP D p)
   omMod := fun _ => inferInstance
   om := fun _ => ⊤
   ht := fun _ => 0
-  IsHTBlowup := fun _ _ => False
-  eOmP := fun _ _ _ => ()
   SES := fun _ => Unit
   ExactMod := fun _ _ => True
-  htSES := fun _ _ => ()
-  nefHT := fun _ _ => True
   nefQ := fun _ => True
-  descK := fun _ _ => True
-  bdryLoci := fun _ => True
   BT := fun _ => Unit
   extA := fun _ => True
   compat := fun _ _ => True

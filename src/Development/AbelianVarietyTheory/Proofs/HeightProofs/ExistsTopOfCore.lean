@@ -387,35 +387,23 @@ variable (D : D7) (r j p : ℕ) (M : MP D p) (Q : Type) (fl : Q → CF p) (Lt : 
   abAt := fun _ => True
   Sh := fun _ => Unit
   IsInv := fun _ => True
-  IsLocFree := fun _ => True
   Sec := fun _ => PUnit
   secAdd := fun _ => inferInstance
   H0 := fun _ => ⊤
   nrm := fun _ _ _ => 0
   nrm_nonneg := fun _ _ _ => le_rfl
-  norm_le_one_of_mem_sections := fun _ _ _ _ => zero_le_one
   GIso := fun _ _ => Empty
   vrat := fun _ _ => 0
   Lb := fun _ => ()
-  Lb_inv := fun _ => trivial
-  nrmRef := fun _ _ _ => 0
   DVP := M.Gn
-  dvRho := fun _ => 0
   Ext := fun _ => Unit
   Chart := fun _ _ _ => Empty
   chAt := fun _ => True
-  chOpen := fun _ => True
-  chAbExact := fun _ => True
-  chModU := fun _ => True
-  chConst := fun _ => True
 
   PL := Unit
   phiAt := fun _ _ _ => 0
-  phiAt_zero := fun _ {_} _ _ => rfl
-  divGe := fun _ _ _ _ => True
   FJd := Unit
   Chr := fun _ => Unit
-  fjN := fun _ _ _ _ => 0
   Unim := ℕ
   LBG := fun _ => Unit
   LBGq := fun _ => Unit
@@ -435,20 +423,11 @@ variable (D : D7) (r j p : ℕ) (M : MP D p) (Q : Type) (fl : Q → CF p) (Lt : 
   At := fun _ La n => AtM (2 * (D.R.f * r * La)) n
   atAdd := fun _ _ _ => inferInstance
   atFin := fun _ _ _ => inferInstance
-  at_tors := fun _ _ _ x => atM_tors _ _ x
-  at_card := fun _ _ _ h => atM_card _ _ h
   Th := fun y La n => ((fl y).C)ˣ × Multiplicative (AtM (2 * (D.R.f * r * La)) n)
   thGrp := fun _ _ _ => inferInstance
   ovr := fun _ _ _ => MonoidHom.snd _ _
-  ovr_surj := fun _ _ _ x => ⟨(1, x), rfl⟩
   scal := fun _ _ _ => MonoidHom.inl _ _
-  scal_inj := fun _ _ _ a b h => congrArg Prod.fst h
-  scal_central := fun _ _ _ a g => by
-    ext <;> simp [mul_comm]
-  ker_ovr := fun _ _ _ g => ⟨fun h => ⟨g.1, Prod.ext rfl h.symm⟩, fun ⟨a, h⟩ => by rw [← h]; rfl⟩
   dl := fun _ _ _ => MulEquiv.prodCongr (MulEquiv.refl _) (MulEquiv.inv _)
-  dl_ovr := fun _ _ _ _ => rfl
-  dl_scal := fun _ La n a => Prod.ext rfl (inv_one : (1 : Multiplicative (AtM (2 * (D.R.f * r * La)) n))⁻¹ = 1)
   dl_dl := fun _ _ _ g => by
     show (g.1, (g.2⁻¹)⁻¹) = g
     rw [inv_inv]
@@ -456,7 +435,6 @@ variable (D : D7) (r j p : ℕ) (M : MP D p) (Q : Type) (fl : Q → CF p) (Lt : 
   snAdd := fun _ _ _ => inferInstance
   snMod := fun _ _ _ => inferInstance
   act := fun _ _ _ => 1
-  act_scal := fun _ _ _ _ _ => Subsingleton.elim _ _
   vth := fun _ _ _ => 0
   Jet := fun _ _ _ _ => PUnit
   jAdd := fun _ _ _ _ => inferInstance
@@ -471,12 +449,10 @@ variable (D : D7) (r j p : ℕ) (M : MP D p) (Q : Type) (fl : Q → CF p) (Lt : 
   ltAdd := fun _ _ => inferInstance
   resB := fun _ _ => 0
   incT := fun _ _ => 0
-  kapGt := fun _ _ _ _ => 0
   kapB := fun _ _ _ _ => 0
   Harm := fun _ => Unit
   SecP := fun _ => Unit
   evA := fun _ _ _ => 0
-  evGt := fun _ _ _ => 0
   Tp := fun _ => PUnit
   tpAdd := fun _ => inferInstance
   OmV := fun _ => PUnit
@@ -484,15 +460,9 @@ variable (D : D7) (r j p : ℕ) (M : MP D p) (Q : Type) (fl : Q → CF p) (Lt : 
   omMod := fun _ => inferInstance
   om := fun _ => ⊤
   ht := fun _ => 0
-  IsHTBlowup := fun _ _ => False
-  eOmP := fun _ _ _ => ()
   SES := fun _ => Unit
   ExactMod := fun _ _ => True
-  htSES := fun _ _ => ()
-  nefHT := fun _ _ => True
   nefQ := fun _ => True
-  descK := fun _ _ => True
-  bdryLoci := fun _ => True
   BT := fun _ => Unit
   extA := fun _ => True
   compat := fun _ _ => True
