@@ -55,34 +55,9 @@ structure ColsTiedSym (D : D7) where
       (fun c s => ((herm.base.cls u D.R.m (one_le_m D.R) le_rfl (chM herm.base u)).stabI ⟨c, chOf_m herm.base u c⟩ s).1)
       (fun c s => (((forms u).cls D.R.m le_rfl (Or.inr rfl)).stabI c s).1)
 
-  carP : ∀ u, SameCar (rankP D) (Formalism.L2.Herm.crdLat D.sp.X' D.sp.X'.L0) (forms u).clsP.lev.Lb
-    (herm.atT u).levP.Uloc (forms u).clsP.lev.Uloc (herm.atT u).levP.U (forms u).clsP.lev.U
-    (fun c => ((herm.atT u).clsP.y c).1) (fun c => ((forms u).clsP.y c).1)
-    (fun c s => ((herm.atT u).clsP.stabI c s).1) (fun c s => ((forms u).clsP.stabI c s).1)
-  lattice₂ : ∀ u c, (forms u).clsP.lat c = ((herm.atT u).lattice₂ c).map
-    ((crdP D : D.sp.X'.V →ₗ[D.host.E] (Fin (D.R.N D.R.m - 1) → D.host.E)).restrictScalars (𝓞 D.host.E))
-
-  pr : ∀ u (i : ℕ) (hi : i ≤ D.R.m) v c (z : Formalism.L2.Herm.Ld D u i c) (z' : Ld D u i hi c),
-    z'.1 = crdN D i hi z.1 → ((forms u).lv i hi).pr v c z' = (herm.atT u).pr i v c z
-  prk : ∀ u (i : ℕ) (hi : i ≤ D.R.m) v c (z : Formalism.L2.Herm.Lk D u ((herm.atT u).Pv v) i c) (z' : Lk (forms u).atT i hi v c),
-    z'.1 = crdN D i hi z.1 → ((forms u).lv i hi).prk v c z' = (herm.atT u).prk i v c z
-  prC : ∀ u (i : ℕ) (h1 : 1 ≤ i) (h2 : i + 1 ≤ D.R.m) v c (z : Formalism.L2.Herm.Ld D u i c)
-    (z' : LdG D i (le_of_succ_m h2) (clsCrd D u i (le_of_succ_m h2) c)),
-    z'.1 = crdN D i (le_of_succ_m h2) z.1 → ((forms u).lvC i h1 h2).pr v c z' = (herm.atT u).pr i v c z
-
-  z0 : ∀ u, (forms u).til.z0 = crdN D D.R.m le_rfl (herm.atT u).z0
-  ga : ∀ u c, ((forms u).til.ga c).1 = reGL (rankN D D.R.m le_rfl) _
-    (Formalism.L2.Herm.toGLb (D.sp.X D.R.m).frame ((herm.atT u).tilG c).1)
-
   sp : ∀ u, (forms u).gl.sp = (herm.base.lev0 u).splitG
   piG : ∀ u, (forms u).gl.piG = (herm.levelZeroCompatibility u).piG
   fr0 : ∀ u i v h, (forms u).glev0.fr i v h = reGL (rank_eq_first_level D.R) _ ((herm.base.lev0 u).frG i v h)
-  gl_const : ∀ u u', (forms u).gl = (forms u').gl
-
-  chi : CharacterCompatible (forms D.u₀).gl D.R.m
-
-  frame_level_zero_const : ∀ u u', (forms u).glev0.fr = (forms u').glev0.fr
-  frP_const : ∀ u u', (forms u).glevP.fr = (forms u').glevP.fr
 
 
 end Formalism.L2.Forms

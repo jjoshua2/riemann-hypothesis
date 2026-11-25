@@ -403,20 +403,9 @@ theorem exists_colsFullS : ∀ {B : GlobalTheory.Mem.Base} {X : PreX B.toPre} (I
       car0 := C.car0
       carC := C.carC
       carM := C.carM
-      carP := hT.carP
-      lattice₂ := hT.lattice₂
-      pr := hT.pr
-      prk := hT.prk
-      prC := hT.prC
-      z0 := hT.z0
-      ga := hT.ga
       sp := C.sp
       piG := fun u => by rw [hX0 u]; exact (hS u).gl.piG
-      fr0 := C.fr0
-      gl_const := C.gl_const
-      chi := C.chi
-      frame_level_zero_const := C.frame_level_zero_const
-      frP_const := C.frP_const }
+      fr0 := C.fr0 }
   exact ⟨C', rfl, hS, hL,exists_colsFullS_of_compat I l Z C' hI hS g hCof hSt hFv⟩
 
 end Main
