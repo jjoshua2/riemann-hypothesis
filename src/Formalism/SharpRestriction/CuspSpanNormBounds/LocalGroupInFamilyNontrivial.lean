@@ -140,59 +140,9 @@ structure TermLoc (D : Formalism.BasicNotions.D7) (Y : TermTie D) (δ : ∀ p : 
   [mod : ∀ p, Module (D.s.atP p).Ep (V p)]
   H : ∀ p, Loc.HermSp (M p) (V p)
 
-  rank : ∀ p, Module.finrank (D.s.atP p).Ep (V p) = D.R.r
-
-  bc : ∀ p, (Lat.hS D).V →+ V p
-  bc_smul : ∀ p (a : D.host.E) (x : (Lat.hS D).V), bc p (a • x) = (D.s.atP p).ιE a • bc p x
-  bc_span : ∀ p, Submodule.span (D.s.atP p).Ep (Set.range (bc p)) = ⊤
-  bc_form : ∀ p (x y : (Lat.hS D).V), (H p).h (bc p x) (bc p y) = (D.s.atP p).ιE (brS (Lat.hS D) x y)
-
-  sgn : ∀ p, Fin (D.R.rS + 1) → (D.s.atP p).Ep
-  sgn' : ∀ p, Fin (D.R.rS + 1) → (D.s.atP p).Ep
-  sgn_sq : ∀ p a, sgn p a * sgn p a = 1 ∧ sgn' p a * sgn' p a = 1
-
   loc : D.s.Term u u' → ∀ p, Loc.Term (V p) (M p) D.R.rS
 
-  loc_Lam : ∀ γ p, (loc γ p).abelian₂ = Submodule.span (M p).L.O (bc p '' (Y.abelian₂ γ : Set (Lat.hS D).V))
-
-  loc_f : ∀ γ p a, (loc γ p).f a = (sgn p a * frFac δ p a) • bc p (Lat.frame (Y.fl γ) a)
-
-  loc_f' : ∀ γ p, ∃ ξ : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) (𝓞 D.host.E),
-    (∀ a b, b < a → ξ a b = 0) ∧ (∀ a, ξ a a = 1) ∧
-    ∀ b, (loc γ p).f' b = (sgn' p b * frFac δ p b) • bc p (Lat.frameAct (Lat.frame (Y.fl' γ)) ξ b)
-
-  local_group_in_family_nontrivial : ∀ γ p, (loc γ p).T = ((D.mem u).A.T : (D.s.atP p).Fp) ∧
-    (loc γ p).T' = ((D.mem u').A.T : (D.s.atP p).Fp)
-
-  G_pt : ∀ γ : D.s.Term u u', (D.s.Gterm γ ≠ 0 ∧ D.s.relevant γ) ↔
-    Gpt (D.mem u).A.T (D.mem u').A.T (D.s.ptOf γ) ≠ 0
-
-  generic_iff : ∀ γ : D.s.Term u u', D.s.Gterm γ ≠ 0 → (D.s.generic γ ↔ ∀ p, (H p).IsGeneric (loc γ p))
-
-  at_pt : ∀ γ : D.s.Term u u', D.s.generic γ → D.s.Gterm γ ≠ 0 → D.s.relevant γ → ∀ p,
-    ∃ uL uU : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) (D.s.atP p).Ep,
-      (∀ a, uL a a = 1 ∧ uU a a = 1) ∧ (∀ a b, a < b → uL a b = 0 ∧ uU b a = 0) ∧
-      (H p).ZZplus (loc γ p) = uL * modMat δ (D.mem u).A.T (D.mem u').A.T p (D.s.ptOf γ) * uU
-
-  scalar_loc : ∀ P : D.s.Pair u u', Formalism.MainNotions.S.scalarP D.s P → D.s.Gterm (D.s.pfst P) ≠ 0 →
-    D.s.Gterm (D.s.psnd P) ≠ 0 → ∀ p, (H p).IsScalarPair (loc (D.s.pfst P) p) (loc (D.s.psnd P) p)
-
   massT : D.s.Term u u' → ℝ
-  massT_nonneg : ∀ γ, 0 ≤ massT γ
-
-  massTot : ℝ
-  massTot_pos : 0 < massTot
-
-  mass_def : ∃ (F0 : FlagG (VS D) D.R.rS ((Lat.Tu D u : ℕ) : D.host.E)) (what₂ : Finset (Submodule (𝓞 D.host.E) (VS D).V)),
-    F0.e = D.sp.hypE ∧ F0.z = D.zmOf u ∧ IsRowReps D F0 what₂ ∧ massTot = ∑ Λ ∈ what₂, Formalism.MainNotions.S.wRow D F0 Λ ∧
-      ∀ γ, massT γ = Formalism.MainNotions.S.wRow D F0 (Y.abelian₂ γ) / massTot
-
-  term_inj : ∀ γ γ' : D.s.Term u u', Y.abelian₂ γ = Y.abelian₂ γ' →
-    (∃ n ∈ Lat.NLam (Y.abelian₂ γ) (Y.fl γ), ∃ m ∈ Lat.NLam (Y.abelian₂ γ) (Y.fl' γ),
-      ∀ b, Lat.frame (Y.fl' γ') b = n (m (Lat.frame (Y.fl' γ) b))) → γ = γ'
-
-  massPair_eq : ∀ P : D.s.Pair u u', D.s.massPair P = massT (D.s.pfst P) ∧
-    D.s.massPair P = massT (D.s.psnd P) ∧ D.s.massPair P = Y.wRow P / massTot
 
 attribute [instance] TermLoc.acg TermLoc.mod
 
