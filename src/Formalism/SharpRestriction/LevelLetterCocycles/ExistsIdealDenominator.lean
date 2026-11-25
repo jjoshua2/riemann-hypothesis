@@ -15,7 +15,6 @@ structure PtGeo (l : ℕ) [Fact l.Prime] (Λ : Type) [AddCommGroup Λ] (σ : Typ
 
   BB : Type
   [acgBB : AddCommGroup BB]
-  tor_fin : ∀ N : ℕ, N ≠ 0 → Finite {z : BB // N • z = 0}
 
   Sec : ℕ → Type
   [acgSec : ∀ k, AddCommGroup (Sec k)]
@@ -23,50 +22,26 @@ structure PtGeo (l : ℕ) [Fact l.Prime] (Λ : Type) [AddCommGroup Λ] (σ : Typ
   s : Sec 1
 
   nrm : ∀ k, Sec k → BB → ℝ
-  nrm_nonneg : ∀ k F x, 0 ≤ nrm k F x
-  nrm_smul : ∀ k (c : ℂ_[l]) F x, nrm k (c • F) x = ‖c‖ * nrm k F x
-  nrm_add : ∀ k F F' x, nrm k (F + F') x ≤ max (nrm k F x) (nrm k F' x)
 
   pull : ∀ N : ℕ, Sec 1 →ₗ[ℂ_[l]] Sec (N ^ 2)
-  pull_isom : ∀ N : ℕ, N ≠ 0 → ∀ F x, nrm (N ^ 2) (pull N F) x = nrm 1 F (N • x)
 
   Up : ∀ N : ℕ, BB → (Sec (N ^ 2) ≃ₗ[ℂ_[l]] Sec (N ^ 2))
-  Up_fin : ∀ (N : ℕ) (z : BB), (N ^ 2) • z = 0 → ∃ m : ℕ, m ≠ 0 ∧ (Up N z) ^ m = 1
 
-  Up_cube : ∀ (N : ℕ) (z : BB), (N ^ 2) • z = 0 → ∃ ph : BB → ℝ,
-    (∀ F x, nrm (N ^ 2) (Up N z F) x = Real.exp (ph x) * nrm (N ^ 2) F (x + z)) ∧
-    (∃ C, ∀ x, |ph x| ≤ C) ∧
-    ∃ c, ∀ x x' x'', ph (x + x' + x'') - ph (x + x') - ph (x + x'') - ph (x' + x'') + ph x + ph x' + ph x''
-      - ph 0 = c
 
   Gt : Type
   [acgGt : AddCommGroup Gt]
   Y : Type
   [acgY : AddCommGroup Y]
-  per : Y →+ Gt
-  unif : Gt →+ BB
 
   YR : Type
   [acgYR : AddCommGroup YR]
   [modYR : Module ℝ YR]
-  iY : Y →+ YR
-  Bf : YR →ₗ[ℝ] YR →ₗ[ℝ] ℝ
-  w0 : YR →ₗ[ℝ] YR
-  w0b : YR →ₗ[ℝ] YR
 
-  chr : Y → Gt → ℂ_[l]
-  cst : Y → ℂ_[l]
-  trop : Gt →+ YR
 
   SecM : Type
   [acgSecM : AddCommGroup SecM]
   [modSecM : Module ℂ_[l] SecM]
   nrmM : SecM → Gt → ℝ
-  nrmM_smul : ∀ (c : ℂ_[l]) F g, nrmM (c • F) g = ‖c‖ * nrmM F g
-  nrmM_add : ∀ F F' g, nrmM (F + F') g ≤ max (nrmM F g) (nrmM F' g)
-  up : Sec 1 →ₗ[ℂ_[l]] SecM
-  be : SecM
-  trY : Y → SecM →ₗ[ℂ_[l]] SecM
 
   Co : Type
   [finCo : Fintype Co]
@@ -76,43 +51,27 @@ structure PtGeo (l : ℕ) [Fact l.Prime] (Λ : Type) [AddCommGroup Λ] (σ : Typ
   [acgH : AddCommGroup H]
   [modH : Module ℂ_[l] H]
   HO : AddSubgroup H
-  HO_smul : ∀ c : ℂ_[l], ‖c‖ ≤ 1 → ∀ h ∈ HO, c • h ∈ HO
   Fil : Submodule ℂ_[l] H
-  curv : H →ₗ[ℂ_[l]] H →ₗ[ℂ_[l]] ℂ_[l]
 
   Gm : ℕ → Type
   [acgGm : ∀ k, AddCommGroup (Gm k)]
   [modGm : ∀ k, Module ℂ_[l] (Gm k)]
   germ : ∀ k, Sec k →ₗ[ℂ_[l]] Gm k
   pullG : ∀ N : ℕ, Gm 1 →ₗ[ℂ_[l]] Gm (N ^ 2)
-  pullG_germ : ∀ N F, pullG N (germ 1 F) = germ (N ^ 2) (pull N F)
-  pullG_inj : ∀ N : ℕ, N ≠ 0 → Function.Injective (pullG N)
   ev0 : ∀ k, Gm k →ₗ[ℂ_[l]] ℂ_[l]
-  ev_zero_pull_square : ∀ N G, ev0 (N ^ 2) (pullG N G) = ev0 1 G
   IntG : ∀ k, AddSubgroup (Gm k)
-  IntG_smul : ∀ k (c : ℂ_[l]), ‖c‖ ≤ 1 → ∀ G ∈ IntG k, c • G ∈ IntG k
-  integral_ev_zero_norm_le_one : ∀ k, ∀ G ∈ IntG k, ‖ev0 k G‖ ≤ 1
-  IntG_iff : ∀ k F, germ k F ∈ IntG k ↔ ∀ m, ‖MvPowerSeries.coeff m (ser k F)‖ ≤ 1
 
-  nab : ∀ k, H →ₗ[ℂ_[l]] Module.End ℂ_[l] (Gm k)
   nabD : H →ₗ[ℂ_[l]] Module.End ℂ_[l] (Gm 1)
 
   EL : Set (σ → H)
   lf : σ → H
-  lf_mem : lf ∈ EL
 
   half : ℕ → BB → BB
-  half_spec : ∀ N : ℕ, N ≠ 0 → ∀ z : BB, N • z = 0 → N • half N z = z
   Uz : ℕ → BB → Gm 1
-  Uz_def : ∀ N : ℕ, N ≠ 0 → ∀ z : BB, N • z = 0 →
-    pullG N (Uz N z) = germ (N ^ 2) (Up N (half N z) (pull N s))
 
   kr : ℕ → Λ → BB → ℂ_[l]
-  kr_per : ∀ (N : ℕ) x w z, kr N (x + N • w) z = kr N x z
-  kr_int : ∀ N x z, ‖kr N x z‖ ≤ 1
 
   key : ℂ_[l]
-  key_ne : key ≠ 0
 
 attribute [instance] PtGeo.acgBB PtGeo.acgSec PtGeo.modSec PtGeo.acgGt PtGeo.acgY PtGeo.acgYR PtGeo.modYR
   PtGeo.acgSecM PtGeo.modSecM PtGeo.finCo PtGeo.acgH PtGeo.modH PtGeo.acgGm PtGeo.modGm
