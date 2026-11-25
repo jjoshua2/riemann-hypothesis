@@ -603,7 +603,7 @@ theorem formsTiedSym_std : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok 
   have hNm : ∀ u i hi, NormTieG (D := I.rec7 l Z) ((I.rec7 l Z).fm u) (eY u i hi) := fun u i hi => (hIN u i hi).2
   have hDil := fun u i (hi : i ≤ B.R.m) => GlobalTheory.Mem.Col2.DiaChart.dilTied I hOk hPins l Z u I.mu0 i hi _ (Ch u i) (chOf u i) (K u i hi)
     (eY u i hi) (A u).eV (hRK u i hi) (hFK u i hi) (hIdY u i hi) (hIdV u)
-  choose fMe hFv hFvT using fun u i (hi : i ≤ B.R.m) => GlobalTheory.Mem.Col2.LevFun.fvTieG I hOk hPins l Z u I.mu0 i hi _ (Ch u i) (chOf u i)
+  choose fMe hFv _hFvT using fun u i (hi : i ≤ B.R.m) => GlobalTheory.Mem.Col2.LevFun.fvTieG I hOk hPins l Z u I.mu0 i hi _ (Ch u i) (chOf u i)
     (K u i hi) (A u).eV (Lv u i hi) (hRK u i hi) (hIdV u) (hLv u i hi) (hFK u i hi)
   have hUp := fun u i (hi : i ≤ B.R.m) => GlobalTheory.Mem.Col2.UpChart.upNatTie I hOk hPins l Z u I.mu0 i hi _ (Ch u i) (chOf u i) (K u i hi)
     (eY u i hi) (A u).eV (Lv u i hi) (hRK u i hi) (hIdY u i hi) (hIdV u) (hLv u i hi)
@@ -648,15 +648,6 @@ theorem formsTiedSym_std : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok 
     (lvOfG (A u) (Lv u B.R.m le_rfl)) (valF u B.R.m le_rfl (Or.inr rfl)) rfl (hR u _ le_rfl (Or.inr rfl)) (hKP u).1
     (fun v c z h => (hLv u B.R.m le_rfl).1 v c z h) (hIdY u B.R.m le_rfl)
   choose eW heW hEvz using fun u => (hTl u).2.2
-  have hNpos : 0 < B.R.N B.R.m := by
-    have := k_le_N B.R B.R.m
-    have := B.R.m_add_three_le_k
-    omega
-  have hTilFv : ∀ u, TilBaseFv (Tl u) (clsF u B.R.m le_rfl (Or.inr rfl)) (fun v => fMe u B.R.m le_rfl (β0 u B.R.m (Or.inr rfl)) v) := by
-    intro u v t x r ht hr
-    refine hFvT u B.R.m le_rfl (β0 u B.R.m (Or.inr rfl)) v x ⟨B.R.N B.R.m - 1, by omega⟩ r t (by show B.R.N B.R.m - 1 + 1 = _; omega) ht ?_
-    refine hr.trans ((hform_last _ hNpos (hN B.R.m le_rfl).1 (hTl u).1 x).trans ?_)
-    exact congrArg (fun s : B.host.E => s * (show B.host.E from x ⟨B.R.N B.R.m - 1, Nat.sub_lt hNpos Nat.one_pos⟩)) (sigD_conj (I.rec7 l Z) _)
   have hFrExt : ∀ u, FrExtFr (D := I.rec7 l Z) (Tl u).z0 G (VM u).fr (VP u).fr := by
     intro u
     rw [funext (hTl u).1]
@@ -687,27 +678,21 @@ theorem formsTiedSym_std : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok 
       eYC := fun i _ h2 => eY u i (le_of_succ_m h2)
       deC := fun i _ h2 => hde1 u i (le_of_succ_m h2)
       valC := fun i _ h2 => hVG u i (le_of_succ_m h2)
-      ipVC := fun i _ h2 => (hIN u i (le_of_succ_m h2)).1
-      normC := fun i _ h2 => (hIN u i (le_of_succ_m h2)).2
       dilC := fun i _ h2 => hDil u i (le_of_succ_m h2)
       lvC := fun i _ h2 => Lv u i (le_of_succ_m h2)
       fMeC := fun i _ h2 => fMe u i (le_of_succ_m h2)
       fvC := fun i _ h2 => hFv u i (le_of_succ_m h2)
       upC := fun i _ h2 => hUp u i (le_of_succ_m h2)
       dnC := fun i _ h2 => hDn u i (le_of_succ_m h2)
-      bwC := fun i _ h2 => hBw u i (le_of_succ_m h2)
       levJ := J u
       lamJ := lamJ u
-      lamJ_eq := (hJ u).2.1
       glevJ := VJ u
       Yb := Yb u
       YbFin := hYbF u
       YbAct := hYbA u
       yb := yb u
-      yb_orbit := (hJ u).2.2.1
       levJ_Lb := fun _ β => ((hJ u).2.2.2 β).1
       levJ_le := fun _ β => ((hJ u).2.2.2 β).2.1
-      levJ_stab := fun _ β => ((hJ u).2.2.2 β).2.2.1
       levJ_chi := fun _ β => ((hJ u).2.2.2 β).2.2.2
       clsP := KP u
       valP := WP u
@@ -717,14 +702,12 @@ theorem formsTiedSym_std : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok 
       glevP := VP u
       til := Tl u
       tilLat := (hTl u).2.1
-      tilFv := hTilFv u
       tilAd := Ta u
       frExt := hFrExt u
       eWz := eW u
       evz := hEvz u
       jM := jM u
-      per := ⟨(hjM u).2.1, (hjM u).2.2.1, (hjM u).2.2.2.1⟩
-      DGam := rfl }
+      per := ⟨(hjM u).2.1, (hjM u).2.2.1, (hjM u).2.2.2.1⟩ }
   refine ⟨Ch, chOf, F, fun u => ⟨?_, ?_⟩, hChF, fun u => hU u B.R.m (Or.inr rfl), fun _ _ => rfl, hChi⟩
   · exact
       { eV := fun _ => rfl

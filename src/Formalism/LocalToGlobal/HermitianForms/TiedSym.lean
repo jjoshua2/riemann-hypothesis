@@ -86,8 +86,6 @@ structure FormsTiedSym (D : D7) (u : D.what₂.Word) (Ch : ℕ → Type) (chOf :
     ∀ τ z, (D.mem u).C.de i z τ = embT D τ C.1.det * ((eYC i h1 h2 z).1 τ).det
   valC : ∀ i h1 h2, ValuationCompatibleChart (D.fm u) (eYC i h1 h2) (fun _ => True) (chOf i)
     (lat := fun c => clsCrd D u i (le_of_succ_m h2) c) (ch i h1 h2)
-  ipVC : ∀ i h1 h2, IpVTieG (D.fm u) (eYC i h1 h2)
-  normC : ∀ i h1 h2, NormTieG (D.fm u) (eYC i h1 h2)
   dilC : ∀ i h1 h2, DilationCompatibleChart (D.fm u) (eYC i h1 h2) atT.eV (chOf i)
     (lat := fun c => clsCrd D u i (le_of_succ_m h2) c) (ch i h1 h2)
   lvC : ∀ i (_ : 1 ≤ i) (h2 : i + 1 ≤ D.R.m),
@@ -96,26 +94,17 @@ structure FormsTiedSym (D : D7) (u : D.what₂.Word) (Ch : ℕ → Type) (chOf :
   fvC : ∀ i h1 h2, FvTieG (lvC i h1 h2) atT.eV (ch i h1 h2) (fMeC i h1 h2)
   upC : ∀ i h1 h2, UpNatTieG (lvC i h1 h2) (eYC i h1 h2) atT.eV (ch i h1 h2)
   dnC : ∀ i h1 h2, DnNatTieG (lvC i h1 h2) (eYC i h1 h2) atT.eV (ch i h1 h2)
-  bwC : ∀ i (_ : 1 ≤ i) (h2 : i + 1 ≤ D.R.m),
-    BwTieG (D.fm u) (D.mem u).A.T atT.res (eYC i ‹_› h2) (fun c => clsCrd D u i (le_of_succ_m h2) c)
 
   levJ : StepLevel D.host.F D.host.E (sigD D) (gramN D (D.R.m - 1) (Nat.sub_le _ _)) (D.mem u).A.T D.R.f (badG D)
   lamJ : ∀ (a : Fin 2) (v : HeightOneSpectrum (𝓞 D.host.F)), (D.host.g a : 𝓞 D.host.F) ∈ v.asIdeal →
     HSym D (D.R.N (D.R.m - 1)) false v →* ℂˣ
-  lamJ_eq : ∀ a v h (M : HSym D (D.R.N (D.R.m - 1)) false v), ((lamJ a v h M : ℂˣ) : ℂ) =
-    lamSym (gl.psi0 a v h) (gl.chiB a v h) D.R.k (rSD D.R) D.R.t (D.R.m - 1)
-      ((M : GL (Fin (D.R.N (D.R.m - 1))) (kv D.host.F v)) :
-        Matrix (Fin (D.R.N (D.R.m - 1))) (Fin (D.R.N (D.R.m - 1))) (kv D.host.F v))
   glevJ : GLevH levJ gl (fun _ v _ => HSym D (D.R.N (D.R.m - 1)) false v) lamJ
   Yb : Type
   [YbFin : Finite Yb]
   [YbAct : MulAction levJ.U Yb]
   yb : Ch (D.R.m - 1) → Yb
-  yb_orbit : ∀ y : Yb, ∃! β, ∃ κ : levJ.U, κ • yb β = y
   levJ_Lb : ∀ (h1 : 1 ≤ D.R.m - 1) β, (ch (D.R.m - 1) h1 (succ_pred_m D.R) β).lev.Lb = levJ.Lb
   levJ_le : ∀ (h1 : 1 ≤ D.R.m - 1) β, (ch (D.R.m - 1) h1 (succ_pred_m D.R) β).lev.U ≤ levJ.U
-  levJ_stab : ∀ (h1 : 1 ≤ D.R.m - 1) β (κ : levJ.U),
-    κ.1 ∈ (ch (D.R.m - 1) h1 (succ_pred_m D.R) β).lev.U ↔ κ • yb β = yb β
   levJ_chi : ∀ (h1 : 1 ≤ D.R.m - 1) β (κ : (ch (D.R.m - 1) h1 (succ_pred_m D.R) β).lev.U) (κ' : levJ.U), κ.1 = κ'.1 →
     (ch (D.R.m - 1) h1 (succ_pred_m D.R) β).lev.chi κ = levJ.chi κ'
 
@@ -131,7 +120,6 @@ structure FormsTiedSym (D : D7) (u : D.what₂.Word) (Ch : ℕ → Type) (chOf :
   glevP : GLevH clsP.lev gl (fun _ v _ => HSym D (D.R.N D.R.m - 1) false v) lamP
   til : TilTied u atT clsP (lv D.R.m le_rfl)
   tilLat : TilBaseLat til (cls D.R.m le_rfl (Or.inr rfl))
-  tilFv : TilBaseFv til (cls D.R.m le_rfl (Or.inr rfl)) (fMe D.R.m le_rfl (Or.inr rfl))
   tilAd : TilAd til (cls D.R.m le_rfl (Or.inr rfl))
   frExt : FrExtFr til.z0 gl glevM.fr glevP.fr
   eWz : (D.mem u).P.Wz ≃ₗ[ℂ] ((D.fm u).clsP → (D.mem u).C.Y D.R.m → ℂ)
@@ -139,12 +127,6 @@ structure FormsTiedSym (D : D7) (u : D.what₂.Word) (Ch : ℕ → Type) (chOf :
   jM : (D.mem u).P.Mt →ₛₗ[starRingEnd ℂ] (D.mem u).P.Wrow
   per : PerTie u jM
 
-  DGam : (D.mem u).C.DGam = (D.mem D.u₀).C.DGam
-
 attribute [instance] FormsTiedSym.YbFin FormsTiedSym.YbAct
-
-theorem k_le_N (R : Ranks) (i : ℕ) : R.k ≤ R.N i := by
-  exact Nat.le_add_right _ _
-
 
 end Formalism.L2.Forms
