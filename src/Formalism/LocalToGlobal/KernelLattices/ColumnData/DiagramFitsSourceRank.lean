@@ -63,52 +63,13 @@ theorem eval_detP {K S : Type} [Field K] [CommRing S] (f : K →+* S) {N : ℕ} 
 
 variable {Dx : DivX D} {Tw : TwForms D}
 
-theorem src_sharp (hL : TwLe D) (u : D.what₂.Word) (μ : D.what₂.Tup) (w : D.what₂.places.Pl) (i : ℕ) (hi : i < D.R.m) (v : ValQ O u μ i) :
-    (D.chTw u μ).sharp i (evC O u μ i v) = fun y => GL3Theta.evFr D (MvPolynomial.map (algebraMap Qbar ℂ)
-      (MvPolynomial.map (jL w) (srcPol u μ i (secC O u μ i v : MvPolynomial (GL3Theta.FrV D (D.R.N i)) D.what₂.LL)))) ((O u μ).frm i y) := by
-  funext y
-  rw [evC_sec, MvPolynomial.map_map, alg_jL]
-  show (∏ τ, ((D.chTw u μ).de i y τ) ^ ((D.chTw u μ).sSharp i τ)) * ((∏ τ, ((D.chTw u μ).de i y τ) ^ (-(twB D u μ i τ))) *
-    GL3Theta.evFr D (MvPolynomial.map D.what₂.embLL (secC O u μ i v : MvPolynomial (GL3Theta.FrV D (D.R.N i)) D.what₂.LL)) ((O u μ).frm i y)) = _
-  unfold srcPol GL3Theta.evFr
-  rw [map_mul, map_mul, map_prod, map_prod, ← mul_assoc, ← Finset.prod_mul_distrib, mul_comm]
-  congr 1
-  refine Finset.prod_congr rfl fun τ _ => ?_
-  rw [map_pow, map_pow, eval_detP, ← (O u μ).frm_de i hi.le y τ, ← zpow_add₀ ((D.chTw u μ).de_ne i y τ), ← zpow_natCast,
-    Int.toNat_of_nonneg (sub_nonneg.2 (hL u μ i hi τ)), sub_eq_add_neg]
-
-def kfTieC (hB : BasOk P O B) (hS : CanS P B) (hT : CanT P B) (hL : TwLe D) (h : KerEntHyp P O B Dx Tw) (u : D.what₂.Word) (μ : D.what₂.Tup)
+def kfTieC (hB : BasOk P O B) (_ : CanS P B) (_ : CanT P B) (_ : TwLe D) (h : KerEntHyp P O B Dx Tw) (u : D.what₂.Word) (μ : D.what₂.Tup)
     (w : D.what₂.places.Pl) : GL3Columns.KFTie (kerEntC P O B h) (O u μ) w where
   B := fun i c τ => B u μ w i c τ
   B_bas := fun i hi c τ => hB u μ w i hi c τ
   c0 := fun _ _ _ _ => 1
   unitAbs_eq_one := fun _ _ _ _ => norm_one
   th := fun _ _ _ _ => rfl
-  prS_can := fun i hi c (v : ValQ O u μ i) => by
-    refine ⟨MvPolynomial.map (jL w) (srcPol u μ i (secC O u μ i v : MvPolynomial (GL3Theta.FrV D (D.R.N i)) D.what₂.LL)),
-      src_sharp O hL u μ w i hi v, fun y => ?_⟩
-    have h1 := congrFun (canInv_spec D w (D.R.N i) (nuD D u i) _ (hS u μ w i hi c (secC O u μ i v))) y
-    refine h1.trans ?_
-    rw [MvPolynomial.map_map]
-    show _ = _ * MvPolynomial.eval _ (MvPolynomial.map ((P.lam w).comp (jL w)) _)
-    rw [lam_jL]
-    rfl
-  prT_can := fun i hi c' (v' : ValQ O u μ (i + 1)) => by
-    refine ⟨MvPolynomial.map (jL w) (secC O u μ (i + 1) v' : MvPolynomial (GL3Theta.FrV D (D.R.N (i + 1))) D.what₂.LL),
-      tgtPh P O B u μ w i c' v', fun y' => ?_, fun _ => rfl, fun y' => ?_⟩
-    · rw [MvPolynomial.map_map, alg_jL]
-      show _ * evC O u μ (i + 1) v' y' = _
-      rw [evC_sec]
-      show (∏ τ, ((D.chTw u μ).de (i + 1) y' τ) ^ ((D.chTw u μ).sDiv i τ)) * ((∏ τ, ((D.chTw u μ).de (i + 1) y' τ) ^ (-((D.chTw u μ).sDiv i τ))) * _) = _
-      rw [← mul_assoc, ← Finset.prod_mul_distrib, Finset.prod_eq_one, one_mul]
-      intro τ _
-      rw [← zpow_add₀ ((D.chTw u μ).de_ne (i + 1) y' τ), add_neg_cancel, zpow_zero]
-    · have h1 := congrFun (canInv_spec D w (D.R.N (i + 1)) (nuD D u i) _ (hT u μ w i hi c' (secC O u μ (i + 1) v'))) y'
-      refine h1.trans ?_
-      rw [MvPolynomial.map_map]
-      show _ = _ * MvPolynomial.eval _ (MvPolynomial.map ((P.lam w).comp (jL w)) _)
-      rw [lam_jL]
-      rfl
 
 theorem lamC_ne {p : ℕ} [Fact p.Prime] (lam : Qbar →+* ℂ_[p]) {x : ℂ} (hx : x ∈ Qbar) (h0 : x ≠ 0) : lamC lam x ≠ 0 := by
   unfold lamC

@@ -154,26 +154,6 @@ structure KFTie {D : D7} {Dx : DivX D} {Tw : TwForms D} (E : KerEnt D Dx Tw) {u 
           c0 i c c' k.1 * lamC (E.lam w) (O.dgen k.1) * B (i + 1) c' k.1 k.2.1 j.2.2 * (B i c k.1)⁻¹ j.2.1 k.2.2
         else 0)
       (fun j => MvPowerSeries.X j) (pSer D (E.lam w) (O.Th i c c'))
-  prS_can : ∀ i, i < D.R.m → ∀ c (v : E.VQ u μ i c), ∃ Qp : MvPolynomial (FrV D (D.R.N i)) Qbar,
-    (D.chTw u μ).sharp i (E.ev u μ i c v) =
-      (fun y => evFr D (MvPolynomial.map (algebraMap Qbar ℂ) Qp) (O.frm i y)) ∧
-    ∀ y : D.what₂.Tau → Matrix (Fin (D.R.N i)) (Fin (D.R.N i)) ℂ_[D.what₂.places.resChar w],
-      E.prS u μ w i c v (DeX (D.R.N i) (nuD D u i) fun s => colsOf (y (tauPl D s))) =
-        (∏ τ, (B i c τ).det ^ (-(D.chTw u μ).sSharp i τ)) *
-          MvPolynomial.eval (fun k : FrV D (D.R.N i) => (B i c k.1 * y k.1) k.2.1 k.2.2) (MvPolynomial.map (E.lam w) Qp)
-  prT_can : ∀ i, i < D.R.m → ∀ c' (v' : E.VQ u μ (i + 1) c'),
-    ∃ (Q' : MvPolynomial (FrV D (D.R.N (i + 1))) Qbar)
-      (ph' : Module.Dual ℂ_[D.what₂.places.resChar w]
-        (MvPolynomial ((Bool × HH D) × ℕ × Fin (D.R.N (i + 1))) ℂ_[D.what₂.places.resChar w])),
-    (∀ y', (∏ τ, ((D.chTw u μ).de (i + 1) y' τ) ^ ((D.chTw u μ).sDiv i τ)) * E.ev u μ (i + 1) c' v' y' =
-      evFr D (MvPolynomial.map (algebraMap Qbar ℂ) Q') (O.frm (i + 1) y')) ∧
-    (∀ I, E.prT u μ w i c' v' I =
-      ph' (MvPolynomial.map (Int.castRingHom _) (KM.nablaX (D.R.N (i + 1)) (nuD D u i) I))) ∧
-    ∀ y' : D.what₂.Tau → Matrix (Fin (D.R.N (i + 1))) (Fin (D.R.N (i + 1))) ℂ_[D.what₂.places.resChar w],
-      ph' (DeX (D.R.N (i + 1)) (nuD D u i) fun s => colsOf (y' (tauPl D s))) =
-        (∏ τ, (B (i + 1) c' τ).det ^ (-(D.chTw u μ).sDiv i τ)) *
-          MvPolynomial.eval (fun k : FrV D (D.R.N (i + 1)) => (B (i + 1) c' k.1 * y' k.1) k.2.1 k.2.2)
-            (MvPolynomial.map (E.lam w) Q')
 
 namespace KFTie
 
