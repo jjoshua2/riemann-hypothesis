@@ -83,41 +83,9 @@ structure PrismData (p : ℕ) [Fact p.Prime] : Type 1 where
 
   finite : ∀ S G, Module.Finite (Ainf p S.R) (M S G)
 
-  rank_eq : ∀ S G q, Module.rankAtStalk (R := Ainf p S.R) (M S G) q = G.height
-
-  exists_φ_eq : ∀ S G m, ∃ n, φ S G n = frobenius (xi S.ε) • m
-
-  lie_projective : ∀ (S : CycPerfd p) (G : PDivGroup p S.R), Module.Projective S.R G.dual.Lie
-
-  lie_finite : ∀ (S : CycPerfd p) (G : PDivGroup p S.R), Module.Finite S.R G.dual.Lie
-
-  lie_surjective : ∀ S G, Function.Surjective (lie S G)
-
-  lie_eq_zero_iff : ∀ S G m, lie S G m = 0 ↔ ∃ n, φ S G m = frobenius (xi S.ε) • n
-
   map_id : ∀ S G, map S G G (𝟙 G) = LinearMap.id
 
-  map_comp : ∀ S G H K (f : G ⟶ H) (g : H ⟶ K), map S G K (f ≫ g) = map S G H f ∘ₗ map S H K g
-
-  map_φ : ∀ S G H (f : G ⟶ H) (m : M S H), map S G H f (φ S H m) = φ S G (map S G H f m)
-
-  lie_map : ∀ S G H (f : G ⟶ H) (m : M S H),
-    lie S G (map S G H f m) = lieMap H.dual G.dual (dualHom G H f) (lie S H m)
-
-  du_map : ∀ S G H (f : G ⟶ H) (m : M S H) (x : M S G.dual),
-    du S H (map S H.dual G.dual (dualHom G H f) x) m = du S G x (map S G H f m)
-
-  l_bijective : ∀ S, Function.Bijective (LinearMap.toSpanSingleton (Ainf p S.R) _ (l S))
-
   e_bijective : ∀ S, Function.Bijective (LinearMap.toSpanSingleton (Ainf p S.R) _ (e S))
-
-  φ_l : ∀ S, φ S _ (l S) = frobenius (xi S.ε) • l S
-
-  φ_e : ∀ S, φ S _ (e S) = e S
-
-  map_eps : ∀ S, map S _ _ (epsHom (zeta S.ε) S.zeta_zero (zeta_succ_pow S.ε)) (l S) = Sandwich.mu S.ε • e S
-
-  du_e_l : ∀ S, du S (PDivGroup.mu p S.R) (e S) (l S) = 1
 
   baseChange : ∀ (S S' : CycPerfd p) [Algebra S.R S'.R] (α : Ainf p S.R →+* Ainf p S'.R), S.Over S' α →
     ∃ bc : ∀ G : PDivGroup p S.R, M S G →ₛₗ[α] M S' (G.baseChange S'.R),

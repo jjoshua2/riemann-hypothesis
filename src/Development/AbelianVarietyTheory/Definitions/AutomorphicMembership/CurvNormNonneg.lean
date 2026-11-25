@@ -165,32 +165,13 @@ structure BdData (ι : Type) [Fintype ι] (p q : ℕ) (Γ : Subgroup (ι → GL 
   nrm : Fin m → Pt ι p q → ℝ
   nrm_pos : ∀ i, ∀ z ∈ DomI ι p q, 0 < nrm i z
   nrm_le : ∀ i, ∀ z ∈ DomI ι p q, nrm i z ≤ 1
-  nrm_smooth : ∀ i, SmoothOn fun z => (nrm i z : ℂ)
-  nrm_inv : ∀ i, ∀ γ ∈ Γ, ∀ z ∈ DomI ι p q, nrm i (moebI γ z) = nrm i z
-
   kae : Pt ι p q → Pt ι p q →ₗ[ℂ] Pt ι p q →ₗ⋆[ℂ] ℂ
-  kae_herm : ∀ z ∈ DomI ι p q, ∀ ξ η, kae z η ξ = starRingEnd ℂ (kae z ξ η)
-  kae_pos : ∀ z ∈ DomI ι p q, ∀ ξ, ξ ≠ 0 → 0 < (kae z ξ ξ).re
-  kae_smooth : ∀ ξ η, SmoothOn fun z => kae z ξ η
-  kae_inv : ∀ γ ∈ Γ, ∀ z ∈ DomI ι p q, ∀ ξ η,
-    kae (moebI γ z) (fun τ => tanAct (γ τ) (z τ) (ξ τ)) (fun τ => tanAct (γ τ) (z τ) (η τ)) = kae z ξ η
-
   cst : ℝ
-  cst_pos : 0 < cst
-  cst_small : ∀ i, ∀ z ∈ DomI ι p q, ∀ ξ,
-    2 * m * cst * |ddc (fun w => Real.exp 1 - Real.log (nrm i w ^ 2)) z ξ| ≤ Real.exp 1 * (kae z ξ ξ).re
-
   metW : Pt ι p q → ι → Matrix (Fin p) (Fin p) ℂ
 
   metOm : Pt ι p q → ι → Matrix (Fin q) (Fin q) ℂ
   metW_pos : ∀ z ∈ DomI ι p q, ∀ τ, (metW z τ).PosDef
   metOm_pos : ∀ z ∈ DomI ι p q, ∀ τ, (metOm z τ).PosDef
-  metW_smooth : ∀ τ a b, SmoothOn fun z => metW z τ a b
-  metOm_smooth : ∀ τ a b, SmoothOn fun z => metOm z τ a b
-  metW_inv : ∀ γ ∈ Γ, ∀ z ∈ DomI ι p q, ∀ τ,
-    (jW (γ τ) (z τ))ᴴ * metW (moebI γ z) τ * jW (γ τ) (z τ) = metW z τ
-  metOm_inv : ∀ γ ∈ Γ, ∀ z ∈ DomI ι p q, ∀ τ,
-    (kapQ (γ τ) (z τ))ᴴ * metOm (moebI γ z) τ * kapQ (γ τ) (z τ) = metOm z τ
 
 def hodgeI (c : ι → ℝ) (z : Pt ι p q) (τ : ι) : Matrix (Fin p ⊕ Fin q) (Fin p ⊕ Fin q) ℂ := hodge (c τ) (z τ)
 
