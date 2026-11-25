@@ -87,7 +87,7 @@ import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.DiscreteValuationRin
 import Mathlib.AlgebraicGeometry.ZariskisMainTheorem
 
 -- This file was produced by scripts/clump.py from the modules listed below.
--- Members: Development.AutomorphicSpectrum.Proofs.GeometryProofs.FiniteMapEqOfThickeningsEq, Development.AutomorphicSpectrum.Proofs.GeometryProofs.GenericPointsOfClosedSubgroup, Development.AutomorphicSpectrum.Proofs.GeometryProofs.GenericPointsOfTorsionKernel, Development.AutomorphicSpectrum.Proofs.GeometryProofs.SplitTorusExtensionTorsion, Development.AutomorphicSpectrum.Proofs.GeometryProofs.FiniteSchemeMapFromSpecialFibre, Development.WeilBound.CoreStatements.HodgeTatePoints.PfibRing, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ModuleFlatOfFlatAndFibreFlat, Development.AutomorphicSpectrum.Proofs.GeometryProofs.FlatOfFlatSpecialFibre, Development.AutomorphicSpectrum.Proofs.GeometryProofs.SurjectiveLeftOfFibre, Development.AutomorphicSpectrum.Proofs.GeometryProofs.TorsionGroupOpenImmersionLift, Development.AutomorphicSpectrum.Proofs.GeometryProofs.UniformizationThickeningCompat, Development.WeilBound.CoreStatements.HodgeTatePoints.FinitePartExtensionCore
+-- Members: Development.AutomorphicSpectrum.Proofs.GeometryProofs.FiniteMapEqOfThickeningsEq, Development.AutomorphicSpectrum.Proofs.GeometryProofs.GenericPointsOfClosedSubgroup, Development.AutomorphicSpectrum.Proofs.GeometryProofs.GenericPointsOfTorsionKernel, Development.AutomorphicSpectrum.Proofs.GeometryProofs.SplitTorusExtensionTorsion, Development.AutomorphicSpectrum.Proofs.GeometryProofs.FiniteSchemeMapFromSpecialFibre, Development.WeilBound.CoreStatements.HodgeTatePoints.PfibRing, Development.AutomorphicSpectrum.Proofs.GeometryProofs.FlatOfFlatSpecialFibre, Development.AutomorphicSpectrum.Proofs.GeometryProofs.SurjectiveLeftOfFibre, Development.AutomorphicSpectrum.Proofs.GeometryProofs.TorsionGroupOpenImmersionLift, Development.AutomorphicSpectrum.Proofs.GeometryProofs.UniformizationThickeningCompat, Development.WeilBound.CoreStatements.HodgeTatePoints.FinitePartExtensionCore
 
 -- ===== clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.FiniteMapEqOfThickeningsEq =====
 -- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.GeometryProofs.FiniteMapEqOfThickeningsEq", "h": "module\n\nimport Development.AutomorphicSpectrum.Proofs.GeometryProofs.ThickeningGroupHomExtends\npublic import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.ExtensionDescent.ThickTransComp\npublic import Development.AbelianVarietyTheory.Proofs.JetHarmonics.IsAdicColimitOfFactor\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.AlgebraicGeometry.Modules.Sheaf\nimport Mathlib.AlgebraicGeometry.Morphisms.SchemeTheoreticallyDominant\nimport Mathlib.AlgebraicGeometry.Morphisms.WeaklyEtale\nimport Mathlib.AlgebraicGeometry.Sites.Fpqc\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.CategoryTheory.ExtremalEpi\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AutomorphicSpectrum.Definitions.CommutativeAlgebra.TranslateMemIndOrder\n\n"}
@@ -202,7 +202,7 @@ theorem exists_qfGroup_kernel : ∀ (R : Type) [CommRing R] [IsDomain R] [IsNoet
     infer_instance
   · refine { isOver := ?_, mul := ?_, inj := ?_, kernel := ?_ }
     · show (𝟙 _ ≫ j.left) ≫ B.hom = A.hom ≫ 𝟙 _
-      simpa using Over.w j
+      simp
     · intro Y y z y₀ z₀ hy hz
       have hy' : y ≫ j = toIdMk Y ≫ y₀ := hv y₀ y (by rw [hy]; simp)
       have hz' : z ≫ j = toIdMk Y ≫ z₀ := hv z₀ z (by rw [hz]; simp)
@@ -772,21 +772,8 @@ end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.WeilBound.CoreStatements.HodgeTatePoints.PfibRing =====
 
--- ===== clump member: Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ModuleFlatOfFlatAndFibreFlat =====
--- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ModuleFlatOfFlatAndFibreFlat", "h": "module\n\npublic import Mathlib.RingTheory.RingHom.Flat\npublic import Development.WeilBound.CoreStatements.HodgeTatePoints.PfibRing\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\n\n"}
-section -- clump:auto
-@[expose] public section
-
-open TensorProduct
-
-theorem _root_.GlobalTheory.CompanionTheory.Relay.module_flat_of_flat_and_fibre_flat : ∀ (R A B : Type) [CommRing R] [CommRing A] [CommRing B] [IsLocalRing R] [IsLocalRing A] [IsLocalRing B] [IsNoetherianRing R] [IsNoetherianRing A] [IsNoetherianRing B] [Algebra R A] [Algebra A B] [Algebra R B] [IsScalarTower R A B] [IsLocalHom (algebraMap R A)] [IsLocalHom (algebraMap A B)], Module.Flat R B → (Algebra.TensorProduct.map (AlgHom.id R (IsLocalRing.ResidueField R)) (IsScalarTower.toAlgHom R A B)).toRingHom.Flat → Module.Flat A B := by
-  first | exact @PositivityTheory.HtPt.Pfib.fibre_crit_ring
-end -- clump:auto
-end -- clump:auto
--- ===== end clump member: Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ModuleFlatOfFlatAndFibreFlat =====
-
 -- ===== clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.FlatOfFlatSpecialFibre =====
--- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.GeometryProofs.FlatOfFlatSpecialFibre", "h": "module\n\npublic import Mathlib.RingTheory.RingHom.Flat\npublic import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ModuleFlatOfFlatAndFibreFlat\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.GeometryProofs.FlatOfFlatSpecialFibre", "h": "module\n\npublic import Mathlib.RingTheory.RingHom.Flat\npublic import Development.WeilBound.CoreStatements.HodgeTatePoints.PfibRing\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -920,7 +907,7 @@ theorem flat_localization_of_fibre (R P Q : Type) [CommRing R] [IsLocalRing R] [
   have hfib := fibreMap_flat_localize R (IsLocalRing.ResidueField R) P Q (Localization.AtPrime p)
     (Localization.AtPrime n) p.primeCompl n.primeCompl h
   have hBA : Module.Flat (Localization.AtPrime p) (Localization.AtPrime n) :=
-    _root_.GlobalTheory.CompanionTheory.Relay.module_flat_of_flat_and_fibre_flat R (Localization.AtPrime p) (Localization.AtPrime n) hfl hfib
+    _root_.PositivityTheory.HtPt.Pfib.fibre_crit_ring R (Localization.AtPrime p) (Localization.AtPrime n) hfl hfib
   exact (Module.flat_iff_of_isLocalization (Localization.AtPrime p) p.primeCompl
     (Localization.AtPrime n)).mp hBA
 
@@ -1036,8 +1023,7 @@ theorem isIso_of_fibre (R : Type) [CommRing R] [IsLocalRing R] [IsNoetherianRing
   have hco : ⇑(φ.toLinearMap.lTensor (IsLocalRing.ResidueField R)) =
       ⇑(Algebra.TensorProduct.map (AlgHom.id R (IsLocalRing.ResidueField R)) φ) := by
     funext x
-    induction x using TensorProduct.induction_on with
-    | zero => simp
+    induction x using TensorProduct.inductionOn with
     | tmul a b => simp
     | add x y hx hy => simp only [map_add (f := _), hx, hy]
   have hφ : Function.Bijective φ :=
@@ -1082,7 +1068,7 @@ theorem main (R : Type) [CommRing R] [IsLocalRing R] [IsNoetherianRing R] (C A B
     rwa [toUnit_unique (pullback.snd _ _) (toUnit _)] at h
   have hKl := hK.map (Over.forget _)
   have hKl' : IsPullback (pullback.fst b e).left (pullback b e).hom b.left e.left := by
-    have hA : (toUnit (pullback b e)).left = (pullback b e).hom := by simpa using Over.w (toUnit (pullback b e))
+    have hA : (toUnit (pullback b e)).left = (pullback b e).hom := by simp
     rw [← hA]; exact hKl
   have hbfin : IsFinite b.left := by
     have : IsFinite (b.left ≫ B.hom) := by rw [Over.w b]; infer_instance
@@ -1093,7 +1079,7 @@ theorem main (R : Type) [CommRing R] [IsLocalRing R] [IsNoetherianRing R] (C A B
   have hclosed : IsClosedImmersion (pullback.fst b e).left := by
     have he : IsClosedImmersion e.left := by
       have : IsClosedImmersion (e.left ≫ B.hom) := by
-        have : e.left ≫ B.hom = 𝟙 _ := by simpa using Over.w e
+        have : e.left ≫ B.hom = 𝟙 _ := by simp
         rw [this]; infer_instance
       exact IsClosedImmersion.of_comp _ B.hom
     exact MorphismProperty.of_isPullback hKl'.flip he
@@ -1317,8 +1303,6 @@ open scoped CategoryTheory.Obj
 noncomputable section
 namespace GlobalTheory.CompanionTheory.Ar.BT.GtI
 
-attribute [local instance] Over.cartesianMonoidalCategory
-
 open ReciprocityTheory.ChartRestriction.G.DVR ReciprocityTheory.ChartRestriction.G.Out.TLinPf.ZeroLinearity
 
 section Units
@@ -1469,7 +1453,8 @@ theorem pullTop_val {Y Z : Scheme.{0}} (f : Y ⟶ Z) (w : Γ(Z, ⊤)ˣ) :
     ((pullTop f w : Γ(Y, ⊤)ˣ) : Γ(Y, ⊤)) = f.appTop.hom (w : Γ(Z, ⊤)) :=
   map_rfl' _
 
-set_option synthInstance.maxHeartbeats 200000 in
+-- TODO: Stopgap for https://github.com/leanprover-community/riemann-hypothesis/issues/1038: remove once Mathlib lowers its priority.
+attribute [-instance] CategoryTheory.Monoidal.fromInducedMonoidal in
 theorem one_fst {S S' : Scheme.{0}} (f : S' ⟶ S) (B : Over S) [GrpObj B] (T : Over S') :
     (toUnit T ≫ η[(Over.pullback f).obj B]).left ≫ pullback.fst B.hom f = T.hom ≫ f ≫ η[B].left := by
   have e := congrArg (fun z => z.left) (ReciprocityTheory.ChartRestriction.G.Geo.Tor.pushHom
@@ -1680,7 +1665,7 @@ theorem kernelOf : ∀ (S : Scheme.{0}) [IsLocallyNoetherian S] (P : Over S) [Gr
   refine ⟨_, g1, g2, _, g3, hp, ?_, h1⟩
   have hl := hp.map (Over.forget S)
   have hA : (toUnit (pullback ((𝟙 P) ^ N) η[P])).left = (pullback ((𝟙 P) ^ N) η[P]).hom := by
-    simpa using Over.w (toUnit (pullback ((𝟙 P) ^ N) η[P]))
+    simp
   have hl' : IsPullback (pullback.fst ((𝟙 P) ^ N) η[P]).left (pullback ((𝟙 P) ^ N) η[P]).hom ((𝟙 P) ^ N).left (η[P]).left := by
     rw [← hA]; exact hl
   exact MorphismProperty.of_isPullback hl' hfin

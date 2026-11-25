@@ -74,54 +74,10 @@ public import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.Pullback
 public import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ThetaConvergenceOfSiegelSet
 public import Development.AutomorphicSpectrum.Proofs.GlobalProofs.SiegelSetUnitary
 import Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.SchrodingerThetaEqSchwartzBruhat
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
-import Mathlib.Tactic.Basify
 import Mathlib.Tactic.Linter.Style
 import Std.Tactic.BVDecide.Normalize.Prop
 import Development.AbelianVarietyTheory.Definitions.Foundations.MemL2OfBoundedContinuousInvariant
-import Mathlib.RingTheory.Coalgebra.IsFrobenius
-import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.HopfAlgebra.Basic
-import Mathlib.RingTheory.TotallySplit
 import Mathlib.Tactic.Linter.HaveILetI
-import Mathlib.RingTheory.PicardGroup
-import Mathlib.Topology.UniformSpace.Uniformizable
 import Development.AbelianVarietyTheory.Proofs.HeightProofs.IsTopologicalRingAE
 import Formalism.LocalToGlobal.IndefiniteReal.FinitePlaces.IdemElt
 import Formalism.LocalToGlobal.IndefiniteReal.PHeisFCA
@@ -129,7 +85,6 @@ import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.StabilizerOrbitVolume.T
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.StabilizerOrbitVolume.TopoAF
 import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ArchimedeanGramFibreMeasureFormula
 import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.TwistedSchwartzFunctionIntegrableStatement
-import Mathlib.Tactic.ENatToNat
 import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SummableOfTsumEnormLtTop
 
 -- This file was produced by scripts/clump.py from the modules listed below.
@@ -695,20 +650,8 @@ theorem _root_.GlobalTheory.T.theta_sum_invariant_unipotent_translate : ∀ (D :
   ∀ (g : G D n) (b : Matrix (Fin n) (Fin n) D.host.E), mat g = blk4 1 (b.map (incA D)) 0 1 →
   ∀ Φ : schwartzA θ V.rank n,
     ∑' ξ : Matrix (Fin V.rank) (Fin n) D.host.E, (ω g Φ).1 (ξ.map (incA D)) =
-      ∑' ξ : Matrix (Fin V.rank) (Fin n) D.host.E, Φ.1 (ξ.map (incA D)) := by
-  intro D n V ψ χ θ μ ω hS g b hg Φ
-  obtain ⟨-, -, hψ, -, -, -, -, hW⟩ := hS
-  refine tsum_congr fun ξ => ?_
-  have hmul : (b.map (incA D) * inner V (ξ.map (incA D)) (ξ.map (incA D)) : Mx D n n) =
-      (b * (ξᴴ * (V.gram * ξ))).map (incA D) := by
-    change rat b * (adj (rat ξ) * (gA V * rat ξ)) = rat (b * (ξᴴ * (V.gram * ξ)))
-    rw [rat_mul, rat_mul, rat_mul, rat_conjTranspose, gA]
-  have htrace (M : Matrix (Fin n) (Fin n) D.host.E) :
-      Matrix.trace (M.map (incA D)) = incA D (Matrix.trace M) := by
-
-    simp only [Matrix.trace, Matrix.diag, Matrix.map_apply, map_sum]
-  rw [hW.unip g (b.map (incA D)) hg Φ (ξ.map (incA D)), hmul, htrace,
-    GlobalTheory.CompanionTheory.ThetaInv.halfTr_incA, hψ.2.2.1, one_mul]
+      ∑' ξ : Matrix (Fin V.rank) (Fin n) D.host.E, Φ.1 (ξ.map (incA D)) :=
+  _root_.GlobalTheory.CompanionTheory.ThetaInv.theta_unip
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ThetaSumInvariantUnipotentTranslateStatement =====
@@ -761,7 +704,7 @@ theorem thetaInv : PositivityTheory.GramSchwartzFunctions.EC.ThetaInv := by
         have := hg (ω g⁻¹ Φ)
         rw [← Module.End.mul_apply, ← map_mul, mul_inv_cancel, map_one, Module.End.one_apply] at this
         exact this.symm }
-  have hle : GF D n ≤ S := GlobalTheory.T.rational_group_le_of_generators_mem D n S (fun g a hg Φ => GlobalTheory.T.theta_sum_invariant_levi_element D n V ψ χ θ μ ω hS g a hg Φ)
+  have hle : GF D n ≤ S := _root_.GlobalTheory.CompanionTheory.RatGen.GF_le_of_levi_unip_weyl D n S (fun g a hg Φ => GlobalTheory.T.theta_sum_invariant_levi_element D n V ψ χ θ μ ω hS g a hg Φ)
     (fun g b hg Φ => GlobalTheory.T.theta_sum_invariant_unipotent_translate D n V ψ χ θ μ ω hS g b hg Φ)
     (fun g hg Φ => GlobalTheory.T.theta_sum_invariant_weyl_involution D n V ψ χ θ μ ω hS g hg Φ)
   intro Φ γ hγ
@@ -804,7 +747,7 @@ namespace GlobalTheory.CompanionTheory.EisCellsChapter
 
 theorem eisCells : PositivityTheory.GramSchwartzFunctions.EisCells :=
   GlobalTheory.T.eisenstein_cells_decomposition GlobalTheory.T.eisenstein_bruhat_decomposition GlobalTheory.T.eisenstein_rational_points GlobalTheory.T.eisenstein_siegel_parabolic_invariance
-    (GlobalTheory.T.eisenstein_second_term_from_parts GlobalTheory.T.eisenstein_heisenberg_schwartz GlobalTheory.T.eisenstein_covariance GlobalTheory.T.eisenstein_vanishing GlobalTheory.T.eisenstein_unfolding_second_term GlobalTheory.T.eisenstein_theta_invariance)
+    (GlobalTheory.T.eisenstein_second_term_from_parts _root_.PositivityTheory.RdEc.heisSch GlobalTheory.T.eisenstein_covariance _root_.GlobalTheory.CompanionTheory.EisZero.zero _root_.GlobalTheory.CompanionTheory.EisUnfold.unfold2 GlobalTheory.T.eisenstein_theta_invariance)
 
 end GlobalTheory.CompanionTheory.EisCellsChapter
 end -- clump:auto

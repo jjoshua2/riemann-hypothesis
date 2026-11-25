@@ -1,5 +1,6 @@
 module
 
+import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutGCoreGTKLineCut
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutSERDSIpInt
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.ActualAdjointnessFromHermitian
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.LevelFormSesquilinearFiniteClass
@@ -39,52 +40,10 @@ import Formalism.HermitianCurvature.HermitianCurvatureProofs.RegularisedPairingV
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.RestrictionIrrelevantDoubleLevelOperator
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.TwoByOneBlock
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.WCellMemOmPlus
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Algebra.Order.Star.Real
 import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Topology.Sheaves.Init
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.WeylCellConjTransposeMulApply
-import Mathlib.Algebra.Ring.IsFormallyReal
 import Mathlib.Analysis.InnerProductSpace.Calculus
-import Mathlib.Tactic.TypeStar
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.ChainRecursionFromSingleDescent
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.BigCellOpenDomain
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.CapelliUnderIntegral
@@ -98,11 +57,8 @@ import Formalism.HermitianCurvature.HermitianCurvatureProofs.ThetaCompactSupport
 import Std.Tactic.BVDecide.Normalize.Prop
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.BigCellHermitian
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.OrbitalIntegralIdentities
-import Mathlib.RingTheory.SimpleRing.Principal
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.MeasurableOfContinuousOnZero
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.OperatorPreservesFusionForms
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.ReduceModChar
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.TriangleInequalityAtPlace
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.DiagonalTransferAction
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.QNFAsm
@@ -228,15 +184,7 @@ variable {k r : ℕ} {z z' : Fin (2 * r + k + 1) → ℂ} {Wp Wq : Type} [Normed
   {π : Mx k r → (Wp →L[ℂ] Wp)} {π' : Mx k r → (Wq →L[ℂ] Wq)}
 
 theorem rds_hsVec_ne_zero {A : Wq →L[ℂ] Wp} (hA : A ≠ 0) : B.hsVec A ≠ 0 := by
-  intro h
-  apply hA
-  have hb : ∀ i, A (stdOrthonormalBasis ℂ Wq i) = 0 := fun i => by
-    have := congrArg (fun v => (WithLp.ofLp v) i) h
-    simpa [B.hsVec] using this
-  ext v
-
-  rw [← (stdOrthonormalBasis ℂ Wq).sum_repr v, map_sum]
-  simp [hb]
+  apply _root_.Formalism.FourierDecayAlt.P.CutMP.Gauge.GC.hsVec_ne_zero <;> assumption
 
 theorem rdsMul_mem (a : (Fin r → ℂ) → ℝ) (b : ℂ → ℝ) (ha : ContDiff ℝ ∞ a) (hb : ContDiff ℝ ∞ b)
     (Δ : RadSp k r z z' π π') :

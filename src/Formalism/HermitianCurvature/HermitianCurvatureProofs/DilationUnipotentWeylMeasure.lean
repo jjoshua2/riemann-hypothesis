@@ -5,61 +5,12 @@ public import Formalism.HermitianCurvature.StatementB
 public import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
 public import Formalism.FormalDegreeBessel.FormalDegreeRatio.UnitaryWeylNormalHolds
 public import Formalism.RealPlaceAnalysis.RealPlaceTaylor.CartanInvolutionConjTransposeMul
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Algebra.Ring.IsFormallyReal
 public import Mathlib.Analysis.Calculus.FDeriv.Symmetric
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.Normed.Algebra.MatrixExponential
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.Order.CompletePartialOrder
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.Lemma
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 public import Mathlib.Analysis.Calculus.Deriv.CompMul
 public import Mathlib.Analysis.Calculus.Deriv.Shift
+import ReciprocityTheory.ReductiveGroups.DiscreteSeries.MultiplicityOne.JInvCCA
 
 @[expose] public section
 
@@ -180,26 +131,7 @@ lemma inLie_sub {X Y : Mat k r} (hX : inLie k r X) (hY : inLie k r Y) : inLie k 
   exact inLie_add hX (inLie_neg hY)
 
 private lemma hpk_sq_lemma : Hpk k r * Hpk k r = 1 := by
-  ext i j
-  have hi := i.isLt
-  have hj := j.isLt
-  rw [Matrix.mul_apply, Matrix.one_apply]
-  have key : ∀ l : Fin (2 * r + k + 1),
-      l.val ≠ (if r ≤ i.val ∧ i.val ≤ r + k then i.val else 2 * r + k - i.val) →
-      Hpk k r i l = 0 := by
-    intro l hl
-    have hl' := l.isLt
-    unfold Hpk
-    simp only [Fin.ext_iff]
-    split_ifs at hl ⊢ <;> first | rfl | (exfalso; omega)
-  rw [Finset.sum_eq_single_of_mem
-    ⟨(if r ≤ i.val ∧ i.val ≤ r + k then i.val else 2 * r + k - i.val), by split_ifs <;> omega⟩
-    (Finset.mem_univ _)]
-  · unfold Hpk
-    simp only [Fin.ext_iff]
-    split_ifs <;> first | (exfalso; omega) | norm_num
-  · intro l _ hl
-    rw [key l (fun h => hl (Fin.ext h)), MulZeroClass.zero_mul]
+  apply _root_.ReciprocityTheory.ChartRestriction.DS.Mult1.InvCC.hpk_sq <;> assumption
 
 lemma hpk_inv : (Hpk k r)⁻¹ = Hpk k r := by
   exact Matrix.inv_eq_left_inv hpk_sq_lemma

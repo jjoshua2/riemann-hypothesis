@@ -12,57 +12,8 @@ public import Development.AutomorphicSpectrum.Proofs.DivisibilityProofs.CutoffCo
 public import Mathlib.RingTheory.MvPolynomial.Homogeneous
 public import Development.AutomorphicSpectrum.Proofs.DivisibilityProofs.HomogeneousPowerSumDecomposition
 public import Development.AutomorphicSpectrum.Proofs.DivisibilityProofs.TowerHeightIdentityExpansion
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Topology.Sheaves.Init
-import Mathlib.Algebra.Ring.IsFormallyReal
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Tactic.TypeStar
 import Std.Tactic.BVDecide.Normalize.BitVec
 import Std.Tactic.BVDecide.Normalize.Prop
-import Mathlib.Algebra.Order.Star.Int
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Analysis.Complex.ExponentialBounds
 import Mathlib.Tactic.Linter.Style
 
 -- This file was produced by scripts/clump.py from the modules listed below.
@@ -507,7 +458,7 @@ theorem testRest_bound : ∀ (Ψ : Type) [Fintype Ψ] [DecidableEq Ψ] (N : ℕ)
       ∑ p ∈ (Finset.Ioc B₀ B).filter (fun p => p.Prime ∧ p ∉ bad), restTerm j p (frob p τ) m (Q τ m))
       atTop (𝓝 (∑ τ, ∑ m ∈ Finset.Icc 1 (j + k), restSum j bad frob B₀ τ m (Q τ m))) :=
     tendsto_finsetSum _ fun τ _ => tendsto_finsetSum _ fun m _ =>
-      (_root_.GlobalTheory.CompanionTheory.Ar.Top.restTerm_bound_and_tendsto Ψ (j + k) j bad frob τ m (Q τ m)).2 B₀
+      (_root_.RootFieldNumerics.rest_term_bound_convergent Ψ (j + k) j bad frob τ m (Q τ m)).2 B₀
   refine le_of_tendsto hlim.abs (Eventually.of_forall fun B => ?_)
   have h := TestRest.finite_bound hj hk frob B₀ Q hB hQ
     ((Finset.Ioc B₀ B).filter (fun p => p.Prime ∧ p ∉ bad))
@@ -557,9 +508,9 @@ theorem test_height_bound_slope_flat : ∀ II : IntersectionSystem, ∀ (Ψ : Ty
   have hj1 := T.j_pos
   have hjN := T.j_lt
   obtain ⟨hhom, htd, hcase1, hcase2⟩ := _root_.GlobalTheory.CompanionTheory.Ar.Top.testPoly_facts Ψ N T.j hj1 hjN
-  obtain ⟨Q, hQ1, hQ2⟩ := _root_.GlobalTheory.CompanionTheory.Ar.Top.form_top_succ_eq_sum_pk Ψ N (testPoly T.j) (by omega) hhom
+  obtain ⟨Q, hQ1, hQ2⟩ := _root_.RootFieldNumerics.decomposition_power_sums_top_degree Ψ N (testPoly T.j) (by omega) hhom
   have hdec : IsDecomp (testPoly T.j) Q := ⟨hQ1, hQ2⟩
-  have hPP := _root_.GlobalTheory.CompanionTheory.Ar.Top.identOnDecomposedForm II Ψ N T hh frob B₀ A₀ b₀ (testPoly T.j) Q hId hdec
+  have hPP := _root_.RootFieldNumerics.tower_point_count_identity II Ψ N T hh frob B₀ A₀ b₀ (testPoly T.j) Q hId hdec
   have hR := _root_.GlobalTheory.CompanionTheory.Ar.Top.testRest_bound Ψ N T.j T.bad frob B₀ Q hj1 hjN hB4 hdec
   have hAb := _root_.GlobalTheory.CompanionTheory.Ar.Top.flat_85_bound II Ψ N T hh frob C' rd Lval B₀ A₀ b₀ hprop hI9 hPF hB128 hbad hId
   have hSL' := hSL B₀ hB128 hB4 hbad

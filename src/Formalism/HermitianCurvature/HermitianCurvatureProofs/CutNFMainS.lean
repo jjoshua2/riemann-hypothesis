@@ -24,59 +24,12 @@ public import Formalism.HermitianCurvature.HermitianCurvatureProofs.LimitOfModul
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.BetaSesquilinearity
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.NormDiagonalEntryDilationGeneratorLeOne
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.RegularisedPairingViaPhase
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.TriangleInequalityAtPlace
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.ReduceModChar
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.BigCellZetaMinors
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.ComponentFamilySettingOfSetting
 import Formalism.FormalDegreeBessel.FinalG
-import Mathlib.RingTheory.Coalgebra.IsFrobenius
-import Mathlib.RingTheory.HopfAlgebra.Basic
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Topology.Separation.CompletelyRegular
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.StabilizerFourthCondition
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.WittOrthonormalBasis
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.BigCellOpenDomain
@@ -85,8 +38,6 @@ import Formalism.HermitianCurvature.HermitianCurvatureProofs.LieBracketMultiplic
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.ParametersUPrimeForULower
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.RestrictionIrrelevantDoubleLevelOperator
 import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
-import Mathlib.RingTheory.TotallySplit
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Formalism.HermitianCurvature.HermitianCurvatureProofs.CutNFTopFormTDMDop, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutNFTopFormTDMSE, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutNFTopFormTDMVV, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutNFTopFormTDMAll, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutTypeNormMeasHM, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutTypeNormMeasV, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutTypeNormMeasMain, Formalism.HermitianCurvature.HermitianCurvatureProofs.cut_TypeNormMeas_Proof, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutNFTopFormDone, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutNFMainS
@@ -111,18 +62,7 @@ variable {k r : ℕ} {E₁ E₂ : Type*} [NormedAddCommGroup E₁] [NormedSpace 
 theorem dop_rdV_local {X : B.Mat k r} (hX : B.inLie k r X) {U : Set (B.Mat k r)} (hU : IsOpen U)
     {f f' : B.Mat k r → E₁} (he : ∀ x ∈ U, x ∈ B.GV k r → f x = f' x) {g : B.Mat k r} (hg : g ∈ U)
     (hgG : g ∈ B.GV k r) : Formalism.REAL.RdV X f g = Formalism.REAL.RdV X f' g := by
-  show deriv (fun t : ℝ => f (g * NormedSpace.exp ((t : ℂ) • X))) 0 =
-    deriv (fun t : ℝ => f' (g * NormedSpace.exp ((t : ℂ) • X))) 0
-  apply Filter.EventuallyEq.deriv_eq
-  have hc : Continuous (fun t : ℝ => g * NormedSpace.exp ((t : ℂ) • X)) :=
-    (Formalism.FourierDecayAlt.P.B5.curve_contDiff g X).continuous
-  have hev : ∀ᶠ t : ℝ in nhds (0 : ℝ), g * NormedSpace.exp (((t : ℝ) : ℂ) • X) ∈ U := by
-    apply hc.continuousAt.preimage_mem_nhds
-    show U ∈ nhds (g * NormedSpace.exp (((0 : ℝ) : ℂ) • X))
-    rw [Formalism.FourierDecayAlt.P.B5.curve_zero]
-    exact hU.mem_nhds hg
-  filter_upwards [hev] with t ht
-  exact he _ ht (Formalism.FourierDecayAlt.P.B5.curve_mem hgG hX t)
+  apply _root_.Formalism.FourierDecayAlt.P.PositiveOrbitOpen.rdV_local <;> assumption
 
 theorem dop_rw_local (w : List (B.Mat k r)) (hw : ∀ X ∈ w, B.inLie k r X) {U : Set (B.Mat k r)} (hU : IsOpen U)
     {f f' : B.Mat k r → E₁} (he : ∀ x ∈ U, x ∈ B.GV k r → f x = f' x) :
@@ -906,13 +846,8 @@ variable {k r : ℕ}
 
 theorem prW_inWb {z : Fin (2 * r + k + 1) → ℂ} (hz : inWb k r z) (v : Fin (2 * r + k + 1) → ℂ) :
     inWb k r (D.prW k r z v) := by
-  intro i hi
-  have hzi : z i = 0 := hz i hi
-  simp only [D.prW]
-  simp only [Pi.sub_apply, Pi.smul_apply, smul_eq_mul, hzi, mul_zero, sub_zero]
-  split_ifs with h
-  · exfalso; omega
-  · rfl
+  intros
+  apply _root_.Formalism.FourierDecayAlt.P.CutBP.TNM.HM.pW_inWb <;> assumption
 
 theorem projection_hermitian_orthogonal (z v : Fin (2 * r + k + 1) → ℂ) (hzz : herm (Hpk k r) z z ≠ 0) :
     herm (Hpk k r) (D.prW k r z v) z = 0 := by

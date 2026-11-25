@@ -9,56 +9,12 @@ public import Formalism.HermitianCurvature.HermitianCurvatureProofs.DiagonalTran
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.HomogeneityNaturalDegree
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.TheoremPIntegralOfPlaces
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.SplLen
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.Lemma
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
-import Mathlib.Topology.UniformSpace.Uniformizable
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.DifferentialOperatorBracket
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.FrameCompletion
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.QuadraticFormTwoTwo.ExistsFrameOfPositiveVector
-import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
 import Std.Tactic.BVDecide.Normalize.Prop
+import CompanionTheory.AutomorphicTheory.LocalBesselUniqueness.OpLocal
+import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutGCoreGenTransferKPt
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Formalism.HermitianCurvature.HermitianCurvatureProofs.Sq2UnitOfEqOneOfSq2EqDiv, Formalism.HermitianCurvature.HermitianCurvatureProofs.XFibreOfParts
@@ -291,15 +247,7 @@ variable {k r : ℕ}
 
 private theorem herm_swap_eq_zero_of_eq_zero {k r : ℕ} (v w : Fin (2 * r + k + 1) → ℂ) :
     herm (Hpk k r) w v = star (herm (Hpk k r) v w) := by
-  have hH : ∀ i j : Fin (2 * r + k + 1), star (Hpk k r i j) = Hpk k r j i := by
-    intro i j
-    simp only [Hpk, Fin.ext_iff]
-    split_ifs <;> first | (exfalso; omega) | norm_num
-  simp only [herm, dotProduct, mulVec, Pi.star_apply, star_sum, star_mul', star_star, Finset.mul_sum]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
-  rw [hH]
-  ring
+  apply _root_.Formalism.FourierDecayAlt.P.CutMP.Gauge.GC.KPt.herm_conj <;> assumption
 
 private theorem herm_Hpk_frame_sum_of_orthogonal {z' y u : Fin (2 * r + k + 1) → ℂ} {B0 : Fin k → Fin (2 * r + k + 1) → ℂ}
     (hz' : inWb k r z') (hT' : 0 < Tz k r z') (hB0 : IsFrameOf k r [z'] B0) (a : ℂ) (hu : inWb k r u)
@@ -390,31 +338,12 @@ theorem xf_Pi_cd (π' : Mx k r → (Wq →L[ℂ] Wq)) (B0 : Fin k → Fin (2 * r
     ContDiff ℝ ∞ (xfPi (Wp := Wp) π' B0 w) := by
   exact (((ContinuousLinearMap.compL ℂ Wq Wq Wp).flip).restrictScalars ℝ).contDiff.comp (xf_capV_cd π' B0 w)
 
-private theorem contDiff_of_isPolyDeg' {k r κ : ℕ} {P : B.Mat k r → ℂ} (h : U.IsPolyDeg κ P) : ContDiff ℝ ∞ P := by
-  obtain ⟨q, -, hq⟩ := h
-  have hP : P = fun g => MvPolynomial.eval (Sum.elim (fun x => g x.1 x.2) (fun x => star (g x.1 x.2))) q := funext hq
-  subst hP
-  clear hq
-  induction q using MvPolynomial.induction_on
-  next a =>
-    simp only [MvPolynomial.eval_C]
-    exact contDiff_const
-  next p q hp hq =>
-    simp only [map_add (f := _)]
-    exact hp.add hq
-  next p i hp =>
-    simp only [map_mul, MvPolynomial.eval_X]
-    refine hp.mul ?_
-    rcases i with ⟨a, b⟩ | ⟨a, b⟩
-    · exact JCx1.contDiff_entry a b
-    · exact Complex.conjCLE.contDiff.comp (JCx1.contDiff_entry a b)
-
 theorem xf_bound (hOm : OmFacts) (Bs : B.RealPlaceData k r Wp Wq) {B0 : Fin k → Fin (2 * r + k + 1) → ℂ}
     (hB0 : IsFrameOf k r [Bs.z'] B0) (w : ℂ) : C6.FibBound Bs (xFib Bs B0 w) := by
   obtain ⟨hom, hsq, -, -⟩ := hOm k r Wp Wq Bs B0 hB0
   have hGc : ContDiff ℝ ∞ (fun g : B.Mat k r => ((Gf k r Bs.z Bs.z' g : ℝ) : ℂ)) :=
     Complex.ofRealCLM.contDiff.comp (JCx1.contDiff_Gf Bs.z Bs.z')
-  have hoc : ∀ a, ContDiff ℝ ∞ (fun g => omC Bs B0 g a) := fun a => contDiff_of_isPolyDeg' (hom a)
+  have hoc : ∀ a, ContDiff ℝ ∞ (fun g => omC Bs B0 g a) := fun a => _root_.Formalism.FourierDecayAlt.P.CutBP.LimitNormalForms.contDiff_poly (hom a)
   refine ⟨fun g₀ hg₀ => ?_, fun ε hε i => ?_⟩
   · refine ⟨{g | Gf k r Bs.z Bs.z' g₀ / 2 < Gf k r Bs.z Bs.z' g},
       fun g => xfPi Bs.π' B0 w (AdmissibleLieWords.utv (Gf k r Bs.z Bs.z' g₀) (Tz k r Bs.z') (Gf k r Bs.z Bs.z') (omC Bs B0) g),
@@ -453,15 +382,7 @@ end TLC
 
 private theorem herm_Hpk_swap {k r : ℕ} (v w : Fin (2 * r + k + 1) → ℂ) :
     herm (Hpk k r) w v = star (herm (Hpk k r) v w) := by
-  have hH : ∀ i j : Fin (2 * r + k + 1), star (Hpk k r i j) = Hpk k r j i := by
-    intro i j
-    simp only [Hpk, Fin.ext_iff]
-    split_ifs <;> first | (exfalso; omega) | norm_num
-  simp only [herm, dotProduct, mulVec, Pi.star_apply, star_sum, star_mul', star_star, Finset.mul_sum]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
-  rw [hH]
-  ring
+  apply _root_.Formalism.FourierDecayAlt.P.CutMP.Gauge.GC.KPt.herm_conj <;> assumption
 
 private theorem exists_isFrameOf_singleton_of_Tz_pos {k r : ℕ} {z' : Fin (2 * r + k + 1) → ℂ} (hk : 1 ≤ k) (hz' : inWb k r z')
     (hT' : 0 < Tz k r z') : ∃ B0 : Fin k → Fin (2 * r + k + 1) → ℂ, IsFrameOf k r [z'] B0 := by

@@ -1,60 +1,14 @@
 module
 
+import Formalism.HermitianCurvature.HermitianCurvatureProofs.KernelNonzeroModulusDeterminantEq
 public import Formalism.HermitianCurvature.ThetaExistenceInductiveFromPieces
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.FirstKernelExplicitFormula
 public import Formalism.DoubleCosetMeasures.LowerUnipotentOrbits.LowUniMulVecELast
 import Formalism.DoubleCosetMeasures.LowerUnipotentOrbits.IsIntOfLatOfLe
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.KernelQuotientFinite
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.ModulusLocallyConstant
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
 import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.TotallySplit
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.Lemma
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
 
 @[expose] public section
 
@@ -431,20 +385,7 @@ variable {K : Type} [CommRing K]
 private alias blk_revIn_lemma_4 := _root_.Formalism.DoubleCosetMeasures.P.Phase.blk_revIn
 
 private lemma pt_unit_lemma_5 (s : List ℕ) (t : ℕ → Kˣ) : IsUnit (pt s t).det := by
-  refine Matrix.isUnit_det_of_right_inverse (B := Matrix.of fun b c : Fin s.sum =>
-    if (c : ℕ) = revIn s b then (((t (blk s b))⁻¹ : Kˣ) : K) else 0) ?_
-  ext a c
-  rw [Matrix.mul_apply, Finset.sum_eq_single ⟨revIn s a, _root_.Formalism.DoubleCosetMeasures.P.Phase.revIn_lt s a a.2⟩]
-  · by_cases hca : c = a
-    · subst hca
-      simp [pt, _root_.Formalism.DoubleCosetMeasures.P.Phase.revIn_revIn s c c.2, blk_revIn_lemma_4 s c c.2]
-    · have h1 : (c : ℕ) ≠ a := fun e => hca (Fin.ext e)
-      have h2 : a ≠ c := fun e => hca e.symm
-      simp [pt, _root_.Formalism.DoubleCosetMeasures.P.Phase.revIn_revIn s a a.2, h1, h2]
-  · intro b _ hb
-    have : (b : ℕ) ≠ revIn s a := fun e => hb (Fin.ext e)
-    simp [pt, this]
-  · simp
+  apply _root_.Formalism.FourierDecayAlt.P.A5x5.isUnit_det_pt <;> assumption
 
 theorem pt_append (l l' : List ℕ) (T T₁ T₂ : ℕ → Kˣ) (h₁ : ∀ b, b < l.length → T b = T₁ b)
     (h₂ : ∀ b, b < l'.length → T (l.length + b) = T₂ b) (hN : (l ++ l').sum = l.sum + l'.sum) :
