@@ -481,39 +481,20 @@ structure Prov (D : Formalism.BasicNotions.D7) where
   Dat : Type
   rk : Dat → ℕ
   jj : Dat → ℕ
-  jj_range : ∀ w, 1 ≤ jj w ∧ jj w + 1 ≤ rk w
 
   loc : ∀ (w : Dat) (p : ℕ), Loc D (rk w) (jj w) p
 
   ex : ∀ (w : Dat) (p : ℕ), ExtA D (loc w p)
 
   NgC : ℕ → Type
-  NgC_ne : ∀ g, Nonempty (NgC g)
 
   KF : ℕ → ℕ → Type
 
-  kfNorm : ∀ {g c : ℕ}, KF g c → NgC g → ℝ
-
-  pbKF : ∀ (w : Dat) (p : ℕ) {c : ℕ}, KF (D.R.f * rk w) c → (loc w p).Sec ((loc w p).keySh c)
-
-  levIn : Dat → ℕ → Prop
-
   Xg : Dat → Type
-
-  bc : ∀ {w} (p : ℕ), Xg w → (loc w p).Mdl
 
   DivX : ∀ {w}, Xg w → Type
 
-  effD : ∀ {w} {Z : Xg w}, DivX Z → Prop
-  noVertD : ∀ {w} {Z : Xg w}, DivX Z → Prop
-  posBdD : ∀ {w} {Z : Xg w}, DivX Z → Prop
-
-  ampleOnAbelianBase : ∀ {w} (Z : Xg w), ℕ → DivX Z → Prop
-
   Met : Dat → Type
-  nefFib : ∀ {w}, Met w → Prop
-  ampleGen : ∀ {w}, Met w → Prop
-  limRA : ∀ {w}, Met w → Prop
 
 variable {D : Formalism.BasicNotions.D7}
 

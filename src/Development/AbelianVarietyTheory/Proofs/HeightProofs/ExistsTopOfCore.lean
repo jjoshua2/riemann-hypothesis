@@ -569,33 +569,20 @@ variable (D : D7) (r j p : ℕ) (M : MP D p) (Q : Type) (fl : Q → CF p) (Lt : 
 
 end
 
-@[reducible] def provWithPoints (D : D7) (Dat : Type) (rk jj : Dat → ℕ) (h : ∀ w, 1 ≤ jj w ∧ jj w + 1 ≤ rk w)
+@[reducible] def provWithPoints (D : D7) (Dat : Type) (rk jj : Dat → ℕ) (_ : ∀ w, 1 ≤ jj w ∧ jj w + 1 ≤ rk w)
     (M : ∀ (_ : Dat) (p : ℕ), MP D p) (Q : Dat → ℕ → Type) (fl : ∀ w p, Q w p → CF p)
     (Lt : ∀ w p, Q w p → LatB D.host.E) (hL : ∀ w p y, LatticeLaws D (rk w) (jj w) (Lt w p y))
     (q₀ : ∀ w p, Q w p) (h₀ : ∀ w p, Subsingleton (Lt w p (q₀ w p)).Y) : ModuliIntegralCharts.Prov D where
   Dat := Dat
   rk := rk
   jj := jj
-  jj_range := h
   loc := fun w p => locWithPoints D (rk w) (jj w) p (M w p) (Q w p) (fl w p) (Lt w p) (hL w p)
   ex := fun w p => extWithPoints D (rk w) (jj w) p (M w p) (Q w p) (fl w p) (Lt w p) (hL w p) (q₀ w p) (h₀ w p)
   NgC := fun _ => Unit
-  NgC_ne := fun _ => ⟨()⟩
   KF := fun _ _ => Unit
-  kfNorm := fun _ _ => 1
-  pbKF := fun _ _ _ _ => 0
-  levIn := fun _ _ => True
   Xg := fun _ => Unit
-  bc := fun _ _ => ()
   DivX := fun _ => Unit
-  effD := fun _ => True
-  noVertD := fun _ => True
-  posBdD := fun _ => True
-  ampleOnAbelianBase := fun _ _ _ => True
   Met := fun _ => Unit
-  nefFib := fun _ => True
-  ampleGen := fun _ => True
-  limRA := fun _ => True
 
 end GlobalTheory.PrescribedPoints
 
