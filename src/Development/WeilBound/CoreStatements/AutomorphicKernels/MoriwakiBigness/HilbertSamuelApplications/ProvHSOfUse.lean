@@ -25,46 +25,6 @@ public import GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.PTwistMetric
 public import GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.SmallSectionCountLeOfIntegralMul
 public import Development.AutomorphicSpectrum.Statements.GeometryStatements.ZhangDimensionPushDownGrassmannianHeightBounds
 public import Development.WeilBound.CoreStatements.AutomorphicKernels.MoriwakiBigness.HilbertSamuelApplications.HsLinksOfUse
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Topology.Sheaves.Init
 import Development.AutomorphicSpectrum.Definitions.MetricPeriods.HasMultiplier
 import GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.PEmbeddingWeight
 
@@ -85,7 +45,7 @@ theorem selfIntersection_le_volNm_of_moriwakiBig : MoriwakiBigStatement → Bira
   have hN : NefOnGeneric (mCoordIdeal y) A :=
     GroundTheory.Heights₂.Heights.HilbertSamuel.NefOnGenericOfSemipos.proof K ι (mCoordIdeal y) P0 A hP hS
   have hb := h K ι Ω y D A P0 II hII hV hB hP hS hC hF hN
-  obtain ⟨hfin, C, hC'⟩ := _root_.GlobalTheory.CompanionTheory.Ar.Small.packing K ι Ω y D A (chartLatNm y A.a) hV hB hS.1 (fun _ => le_rfl)
+  obtain ⟨hfin, C, hC'⟩ := _root_.MultiProjectiveCoordinates.packing_statement K ι Ω y D A (chartLatNm y A.a) hV hB hS.1 (fun _ => le_rfl)
   refine hb.trans ?_
   unfold arVolP
   have h0 : ∀ (La : ℕ → AddSubgroup Ω) (τ : ℕ), 0 ≤ smallSectionCount (IsSmallH (mCoordIdeal y) y A) La τ := by
@@ -175,7 +135,7 @@ theorem smallSections_upper_of_use :
   have a0 := GroundTheory.Heights₂.Heights.HilbertSamuel.TwistIntersectionAnyDegree.proof (_root_.GlobalTheory.CompanionTheory.Ar.Giv.embeddingPieces_of_resK hAIS hRes) hDG
   have a1 := GroundTheory.Heights₂.Heights.HilbertSamuel.TwistMetric.proof
     GroundTheory.Heights₂.Heights.HilbertSamuel.EmbeddingWeight.proof a0
-  exact GroundTheory.Heights₂.Heights.HilbertSamuel.ArithmeticVolumeNefDual.proof hU.g7p _root_.GlobalTheory.CompanionTheory.Ar.Small.packing
+  exact GroundTheory.Heights₂.Heights.HilbertSamuel.ArithmeticVolumeNefDual.proof hU.g7p _root_.MultiProjectiveCoordinates.packing_statement
     GroundTheory.Heights₂.Heights.HilbertSamuel.UnitApprox.proof
     GroundTheory.Heights₂.Heights.HilbertSamuel.NonvanishingDense.full a1
 

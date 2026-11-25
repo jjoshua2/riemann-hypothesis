@@ -78,82 +78,25 @@ public import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.
 public import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.SiegelWeilFormulaRange
 public import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.GlobalVolumeRankOneIsotropic
 public import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.GlobalVolumeRankOneProduct
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Algebra.Ring.IsFormallyReal
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.HaveILetI
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Topology.Sheaves.Init
 import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HypOneZeroZero
 import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.InfiniteProductMultipliable
-import Mathlib.Algebra.FiniteSupport.Basic
 import CompanionTheory.AutomorphicTheory.ThetaDilations.ProdRho
 import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.AdelicHaarMeasureScaling
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.RegularLocalRing.Defs
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.WittVector.IsPoly
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.ReduceModChar
 import CompanionTheory.AutomorphicTheory.ThetaDilations.BoundedA
 import Development.WeilBound.CoreStatements.ThetaDilations.OrbitAdelic
-import Mathlib.Tactic.Polynomial.Basic
 import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.StandardAdelicCharacter
 import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.WeilOperatorIntegralInvariance
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.StabilizerVolume.TopoAF
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.Tactic.Lemma
-import Mathlib.Tactic.Monotonicity.Lemmas
-import Mathlib.Topology.Sheaves.Presheaf
 import Std.Tactic.BVDecide.Normalize.Prop
 import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.ThetaIntegralOverCoordinates
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.StabilizerVolume.DetAdmA
-import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.TotallySplit
 import Formalism.UnipotentAdelicQuotients.SiegelWeilUnitaryConvergent
 import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.UnitaryGroupFiniteVolume
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.AdelicLocalCompactness.T2SpaceTensorProductFiniteExtension
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.StabilizerOrbitVolume.TopoAF
 import GroundTheory.GlobalFields.LocalFieldAtPlace
-import Mathlib.Dynamics.Ergodic.Action.Regular
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.ArchimedeanOrbitMeasures.PushInv
 
 -- This file was produced by scripts/clump.py from the modules listed below.
@@ -382,56 +325,7 @@ namespace PositivityTheory.PlacePermOperatorBicommutantSpan
 
 variable {F : Type} [Field F] [NumberField F]
 
-theorem prod_rho {ρ : InfinitePlace F → (F →+* ℝ)} (hF : IsTotallyReal F)
-    (hρ : ∀ w x, ((ρ w x : ℝ) : ℂ) = w.embedding x) (a : F) : ∏ w, |ρ w a| = |((Algebra.norm ℚ a : ℚ) : ℝ)| := by
-  have h := InfinitePlace.prod_eq_abs_norm a
-  rw [← Rat.cast_abs, ← h]
-  refine Finset.prod_congr rfl fun w _ => ?_
-  rw [IsTotallyReal.mult_eq, pow_one, ← w.norm_embedding_eq, ← hρ, Complex.norm_real, Real.norm_eq_abs]
-
-theorem map_nMat {R S : Type} [CommRing R] [CommRing S] (f : R →+* S) (b : R) :
-    Matrix.SpecialLinearGroup.map f (nMat b) = nMat (f b) :=
-  Matrix.SpecialLinearGroup.ext _ _ fun i j => by
-    show f (nMat b i j) = _
-    fin_cases i <;> fin_cases j <;> simp [nMat]
-
-theorem map_wMat {R S : Type} [CommRing R] [CommRing S] (f : R →+* S) : Matrix.SpecialLinearGroup.map f wMat = wMat :=
-  Matrix.SpecialLinearGroup.ext _ _ fun i j => by
-    show f ((wMat : SL(2, R)) i j) = _
-    fin_cases i <;> fin_cases j <;> simp [wMat]
-
-theorem map_mMat {R S : Type} [CommRing R] [CommRing S] (f : R →+* S) (a : Rˣ) :
-    Matrix.SpecialLinearGroup.map f (mMat a) = mMat (Units.map (f : R →* S) a) :=
-  Matrix.SpecialLinearGroup.ext _ _ fun i j => by
-    show f (mMat a i j) = _
-    fin_cases i <;> fin_cases j <;> simp [mMat]
-
 def uA (a : Fˣ) : (A F)ˣ := Units.map (algebraMap F (A F) : F →* A F) a
-
-theorem mod_rat [MeasurableSpace (A F)] [BorelSpace (A F)] {lf : Measure (A F)} (hlf : lf.IsAddHaarMeasure)
-    (h1 : lf (Oh F) = 1) {ι : Type} [Fintype ι] [DecidableEq ι] {M : ℕ} (hc : Fintype.card ι = 2 * M)
-    (B : Matrix ι ι F) (a : Fˣ) (s : Set (ι → A F)) (hs : MeasurableSet s) :
-    muF B lf ((fun u => (uA a : A F) • u) '' s) =
-      ENNReal.ofReal ((|((Algebra.norm ℚ (a : F) : ℚ) : ℝ)|⁻¹ ^ M) ^ 2) * muF B lf s := by
-  have h2 := (_root_.GlobalTheory.CompanionTheory.SW.Core.PiScale.pi_scale F lf hlf h1 ι).2 (uA a) s hs
-  have h3 := (_root_.GlobalTheory.CompanionTheory.SW.Core.Scale.lf_scale F lf hlf h1).1 a a.ne_zero _ (_root_.GlobalTheory.CompanionTheory.SW.Core.AfTop.finiteAdele_topology F).2.2.2.2.1.measurableSet
-  rw [h1, mul_one] at h3
-  rw [muF, Measure.smul_apply, Measure.smul_apply, h2, smul_eq_mul, smul_eq_mul, mul_left_comm, ← pow_mul,
-    ENNReal.ofReal_pow (by positivity), hc, mul_comm M 2]
-  exact congrArg (fun t => t ^ (2 * M) * _) h3
-
-theorem good_ex [MeasurableSpace (A F)] [BorelSpace (A F)] {lf : Measure (A F)} (hlf : lf.IsAddHaarMeasure)
-    (h1 : lf (Oh F) = 1) {ψ : AddChar (A F) ℂ} (hψ : IsStdChar F ψ) {ι : Type} [Fintype ι] [DecidableEq ι] {M : ℕ}
-    {B : Matrix ι ι F} {ρ : InfinitePlace F → (F →+* ℝ)} {P : InfinitePlace F → Matrix ι ι ℝ} (hQ : QSetup M B ρ P)
-    {𝒟 : ((ι → A F) → ℂ) → (InfinitePlace F → ℂ) → ℂ}
-    (hD : ∀ φ τ, SB φ → (∀ w, 0 < (τ w).im) →
-      (∀ b : F, 𝒟 (opU ψ (hf F) (Bf B) (algebraMap F (A F) b) φ) (fun w => τ w + (ρ w b : ℝ)) = 𝒟 φ τ) ∧
-      (∀ a : F, a ≠ 0 → 𝒟 (opD 1 (algebraMap F (A F) a) φ) (fun w => ((ρ w a : ℝ) : ℂ) ^ 2 * τ w) = 𝒟 φ τ) ∧
-      (cG B ρ P τ * 𝒟 (fou (chiB ψ (Bf B)) (muF B lf) φ) (fun w => -(τ w)⁻¹) = 𝒟 φ τ) ∧
-      ∀ c : ℂ, 𝒟 (c • φ) τ = c * 𝒟 φ τ) (γ : SL(2, F)) :
-    ∃ T, Impl ψ (hf F) (Bf B) (muF B lf) (Matrix.SpecialLinearGroup.map (algebraMap F (A F)) γ) T ∧
-      ∀ φ τ, SB φ → (∀ w, 0 < (τ w).im) → wt M (mob ρ γ τ) * ‖𝒟 (T φ) (mob ρ γ τ)‖ = wt M τ * ‖𝒟 φ τ‖ := by
-  apply _root_.CompanionTheory.PlacePermOperatorBicommutantSpan.good_ex <;> assumption
 
 end PositivityTheory.PlacePermOperatorBicommutantSpan
 end -- clump:auto

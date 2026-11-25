@@ -1,53 +1,11 @@
 module
 
+import Formalism.PieriBlockIdeals.PieriColumnMinors.LowerTriangularIntegral
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.RadAATopOfParts
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.LevelFormSesquilinearFiniteClass
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.ActualAlgebraFacts
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.WCellMemOmPlus
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.WeylCellConjTransposeMulApply
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Sheaves.Init
 
 @[expose] public section
 
@@ -112,18 +70,7 @@ theorem xi_cell (c : Fin r → ℂ) {g : B.Mat k r} (hg : g ∈ Q.Glev k r (Fin.
   · intro h; exact absurd (Finset.mem_univ _) h
 
 theorem mono_ge {n : ℕ} {C : Fin r → Fin n} (hC : StrictMono C) : ∀ l : Fin r, l.val ≤ (C l).val := by
-  have key : ∀ m, ∀ l : Fin r, l.val = m → m ≤ (C l).val := by
-    intro m
-    induction m with
-    | zero => intro l _; exact Nat.zero_le _
-    | succ m ih =>
-      intro l hl
-      have hm : m < r := by have := l.isLt; omega
-      have h1 := ih ⟨m, hm⟩ rfl
-      have h2 : C ⟨m, hm⟩ < C l := hC (by rw [Fin.lt_def]; simp; omega)
-      rw [Fin.lt_def] at h2
-      omega
-  exact fun l => key l.val l rfl
+  apply +allowSynthFailures _root_.Formalism.CohomologicalDescent.LR.lre_le_apply <;> assumption
 
 theorem mono_le {n : ℕ} {C : Fin r → Fin n} (hC : StrictMono C) (hb : ∀ l, (C l).val < r) :
     ∀ l : Fin r, (C l).val ≤ l.val := by

@@ -1,5 +1,8 @@
 module
 
+import Formalism.FormalDegreeBessel.FormalDegreeRatio.BesselUnipotentEquivHolds
+import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.ConjugateTransposeLeibniz.YOperatorLeibnizRule
+import Development.AbelianVarietyTheory.Proofs.FlagMeasures.NormalFormFlagZeroMiddleInverseMinorOrthogonal
 public import Formalism.HermitianCurvature.StatementQ
 public import Formalism.FormalDegreeBessel.FormalDegreeRatio.GBasic
 public import Formalism.RealPlaceAnalysis.RealPlaceTaylor.ComplexifiedDerivativeCommutator
@@ -15,56 +18,10 @@ public import Formalism.HermitianCurvature.HermitianCurvatureProofs.TransferRtt
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.TwoByOneBlock
 import Formalism.RealPlaceAnalysis.RealPlaceTaylor.CartanInvolutionConjTransposeMul
 import Mathlib.Algebra.Order.Archimedean.Real.Hom
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
 public import Mathlib.Analysis.Calculus.Deriv.Prod
 import Mathlib.Analysis.Calculus.FDeriv.Symmetric
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.Normed.Algebra.MatrixExponential
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.HaveILetI
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 
 @[expose] public section
@@ -139,20 +96,8 @@ theorem Nlev_last {k r : ℕ} {n : Mx k r} (hn : n ∈ Nlev k r (Fin.last r)) : 
     rw [h1, Matrix.one_apply, bvec, Pi.single_apply]
 
 theorem psi_one {k r : ℕ} {z : Fin (2 * r + k + 1) → ℂ} (hz : inWb k r z) (c : ℂ) : psi k r z c 1 = 1 := by
-  have : ell k r z 1 = 0 := by
-    unfold ell
-    apply Finset.sum_eq_zero
-    intro a _
-    split_ifs with h
-    · rw [Matrix.one_apply, if_neg]
-      intro e
-      have := congrArg Fin.val e
-      simp [eI] at this
-    · rw [Matrix.one_mulVec]
-      exact hz _ (Or.inl a.isLt)
-  unfold psi
-  rw [this]
-  simp
+  intros
+  apply _root_.Formalism.QuantumDeterminants.BesselUnipotentEquiv.psi_one <;> assumption
 
 theorem zetaL_equiv {k r : ℕ} {z z' : Fin (2 * r + k + 1) → ℂ} {h h' : Mx k r} (hh : h ∈ UWset k r z)
     (hh' : h' ∈ UWset k r z') (g : Mx k r) :
@@ -855,17 +800,7 @@ theorem coord_es (v : Fin (2 * r + k + 1) → ℂ) (c : Fin r) : herm (Hpk k r) 
 
 theorem inWb_iff (v : Fin (2 * r + k + 1) → ℂ) :
     inWb k r v ↔ ∀ c : Fin r, v (eI k r c) = 0 ∧ v (esI k r c) = 0 := by
-  constructor
-  · intro h c
-    exact ⟨h _ (Or.inl c.isLt), h _ (Or.inr (by have := c.isLt; simp only [esI]; omega))⟩
-  · intro h i hi
-    rcases hi with hi | hi
-    · have e : eI k r ⟨i.val, hi⟩ = i := Fin.ext rfl
-      rw [← e]; exact (h _).1
-    · have hl := i.isLt
-      have ha : 2 * r + k - i.val < r := by omega
-      have e : esI k r ⟨2 * r + k - i.val, ha⟩ = i := Fin.ext (by simp only [esI]; omega)
-      rw [← e]; exact (h _).2
+  apply _root_.GlobalTheory.Amp.NfMid.inWb_iff <;> assumption
 
 theorem inWb_mulVec {g : Mx k r} (hg : g ∈ Glev k r (Fin.last r)) {v : Fin (2 * r + k + 1) → ℂ} (hv : inWb k r v) :
     inWb k r (g *ᵥ v) := by
@@ -1488,30 +1423,7 @@ theorem posL_ne_e (i : Fin (r + 1)) (a : Fin (mdim k r i)) (b : Fin r) (hb : b.v
 theorem hpart_lie (i : Fin (r + 1)) (a b : Fin (mdim k r i)) :
     inLieLev k r i (hpart1 (Hpk k r) (Matrix.single (posL k r i a) (posL k r i b) 1)) ∧
     inLieLev k r i (hpart2 (Hpk k r) (Matrix.single (posL k r i a) (posL k r i b) 1)) := by
-  have hs := hpart_skew (Hpk k r) (Matrix.single (posL k r i a) (posL k r i b) 1) WeylGroupFacts.hpk_sq hpk_herm
-  have hZh : (Matrix.single (posL k r i a) (posL k r i b) (1 : ℂ))ᴴ =
-      Matrix.single (posL k r i b) (posL k r i a) 1 := by
-    rw [Matrix.conjTranspose_single, star_one]
-  have hkill : ∀ c : Fin r, c.val < i.val →
-      (Matrix.single (posL k r i a) (posL k r i b) (1 : ℂ)) *ᵥ bvec (eI k r c) = 0 ∧
-      (Matrix.single (posL k r i a) (posL k r i b) (1 : ℂ)) *ᵥ bvec (esI k r c) = 0 ∧
-      (Hpk k r * (Matrix.single (posL k r i a) (posL k r i b) (1 : ℂ))ᴴ * Hpk k r) *ᵥ bvec (eI k r c) = 0 ∧
-      (Hpk k r * (Matrix.single (posL k r i a) (posL k r i b) (1 : ℂ))ᴴ * Hpk k r) *ᵥ bvec (esI k r c) = 0 := by
-    intro c hc
-    refine ⟨single_bvec (posL_ne_e i b c hc).1, single_bvec (posL_ne_e i b c hc).2, ?_, ?_⟩
-    · rw [← Matrix.mulVec_mulVec, hpk_e, ← Matrix.mulVec_mulVec, hZh, single_bvec (posL_ne_e i a c hc).2,
-        Matrix.mulVec_zero]
-    · rw [← Matrix.mulVec_mulVec, hpk_es, ← Matrix.mulVec_mulVec, hZh, single_bvec (posL_ne_e i a c hc).1,
-        Matrix.mulVec_zero]
-  refine ⟨⟨hs.1, fun c hc => ?_⟩, ⟨hs.2, fun c hc => ?_⟩⟩
-  · obtain ⟨k1, k2, k3, k4⟩ := hkill c hc
-    unfold hpart1
-    rw [hpk_inv]
-    simp only [Matrix.smul_mulVec, Matrix.sub_mulVec, k1, k2, k3, k4, sub_zero, smul_zero, and_self]
-  · obtain ⟨k1, k2, k3, k4⟩ := hkill c hc
-    unfold hpart2
-    rw [hpk_inv]
-    simp only [Matrix.smul_mulVec, Matrix.add_mulVec, k1, k2, k3, k4, add_zero, smul_zero, and_self]
+  apply _root_.QnYLeibnizW.hpart_mem <;> assumption
 
 theorem sf_mul {a b : Fn k r ℂ} (h : SmoothFam k r i U₀ a) (h' : SmoothFam k r i U₀ b) :
     SmoothFam k r i U₀ (fun c g => a c g * b c g) := sf_smul h h'

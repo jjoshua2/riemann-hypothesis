@@ -1,5 +1,6 @@
 module
 
+import CompanionTheory.SpectralGeometry.LocalGlobalProofs.StableLattices.AdaptExists
 public import Formalism.FormalDegreeBessel.StatementG
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutJABddSSn
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutJASSnRepDatumUnit
@@ -30,66 +31,18 @@ public import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutRegFF
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutJAPRhoExists
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.GaugeConstructionHolds
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.SsnRepOfOpen2
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
 import Formalism.HermitianCurvature.StatementI
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.FrameEntries
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.NFRadRedA
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.RestrictionIrrelevantDoubleLevelOperator
-import Mathlib.Tactic.Basify
 import Mathlib.Tactic.Linter.Style
 import Std.Tactic.BVDecide.Normalize.Prop
 import Formalism.FormalDegreeBessel.FinalG
 import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.TotallySplit
-import Mathlib.Tactic.ENatToNat
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutJABddKapNrmW
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.LieBracketMultiplication
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.DifferentialOperatorBracket
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutGCoreGTConnGaugeA
-import Mathlib.Algebra.Order.Star.Real
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutGCoreGTSSAdjH
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutGCoreGTSSLMat
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutGCoreGTSSTr
@@ -129,14 +82,7 @@ theorem herm_bvec_bvec (i j : Fin (2 * r + k + 1)) : herm (Hpk k r) (bvec i) (bv
 
 theorem herm_bvec_w {i : Fin (2 * r + k + 1)} (hi : i.val < r ∨ r + k < i.val) {w : Fin (2 * r + k + 1) → ℂ}
     (hw : inWb k r w) : herm (Hpk k r) (bvec i) w = 0 := by
-  have hc : ∀ l, (Hpk k r *ᵥ bvec i) l = Hpk k r l i := fun l => by
-    simp [bvec, Matrix.mulVec, dotProduct, Pi.single_apply]
-  simp only [herm, dotProduct, hc]
-  apply Finset.sum_eq_zero
-  intro l _
-  by_cases hl : r ≤ l.val ∧ l.val ≤ r + k
-  · rw [(hpk_out_in hi hl).2, mul_zero]
-  · rw [Pi.star_apply, hw l (by omega), star_zero, zero_mul]
+  apply _root_.GlobalTheory.CompanionTheory.BmuAdapt.herm_outer <;> assumption
 
 theorem herm_w_bvec {i : Fin (2 * r + k + 1)} (hi : i.val < r ∨ r + k < i.val) {w : Fin (2 * r + k + 1) → ℂ}
     (hw : inWb k r w) : herm (Hpk k r) w (bvec i) = 0 := by
