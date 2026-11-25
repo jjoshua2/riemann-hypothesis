@@ -813,36 +813,6 @@ theorem monomialGeometryHypotheses_of_monomialCaseHypotheses (hR : MonomialCaseH
     flat_components_up := by
       intro T hT Y k' hk q g hg hT' J C hC y hy
       exact FunctorialResolution.EmbeddedResolution.exists_mem_intersectionComponents_pullbackOverField_of_flat T hT Y k' q g hT' J C hC y hy
-    smooth_components_down := by
-      intro T hT Y q h hsm hq hV J C' hC'
-      have : AlgebraicGeometry.Flat h := inferInstance
-      have hV' : (T.pullbackOverField Y T.base q h).IsAdmissible := by
-        rw [MarkedIdealWithBoundary.pullbackOverField_eq_pullbackAlong]
-        exact hV
-      have e : pullbackOverFieldIndex T Y T.base q h = pullbackAlongIndex T Y q h := by
-        funext j
-        apply Fin.ext
-        rw [pullbackOverFieldIndex_val, pullbackAlongIndex_val]
-      have hC'' : C' ∈ intersectionComponents (T.pullbackOverField Y T.base q h).boundary
-          (Finset.image (pullbackOverFieldIndex T Y T.base q h) J) := by
-        rw [e]
-        exact hC'
-      exact FunctorialResolution.EmbeddedResolution.exists_intersectionComponents_mapsTo_of_flat T hT Y T.base q h hV' J C' hC''
-    smooth_components_up := by
-      intro T hT Y q h hsm hq hV J C hC y hy
-      have : AlgebraicGeometry.Flat h := inferInstance
-      have hV' : (T.pullbackOverField Y T.base q h).IsAdmissible := by
-        rw [MarkedIdealWithBoundary.pullbackOverField_eq_pullbackAlong]
-        exact hV
-      have e : pullbackOverFieldIndex T Y T.base q h = pullbackAlongIndex T Y q h := by
-        funext j
-        apply Fin.ext
-        rw [pullbackOverFieldIndex_val, pullbackAlongIndex_val]
-      obtain ⟨C', hC'mem, hyC', hgen⟩ :=
-        FunctorialResolution.EmbeddedResolution.exists_mem_intersectionComponents_pullbackOverField_of_flat T hT Y T.base q h hV' J C hC y hy
-      refine ⟨C', ?_, hyC', hgen⟩
-      rw [← e]
-      exact hC'mem
     components_disjoint := by
       intro T hT J C hC C' hC' hne
       exact FunctorialResolution.EmbeddedResolution.intersectionComponents_disjoint_of_smooth T J (hR.stratum_smooth T hT J) C C' hC hC' hne

@@ -193,29 +193,6 @@ structure MonomialGeometryHypotheses : Prop where
               (J.image (pullbackOverFieldIndex T Y k' q g)),
             y ∈ C' ∧
               ∀ (ξ' : ↥Y) (ξ : ↥T.scheme), IsGenericPoint ξ' C' → IsGenericPoint ξ C → g ξ' = ξ
-  smooth_components_down : ∀ (T : MarkedIdealWithBoundary.{u}), T.IsAdmissible →
-    ∀ (Y : Scheme.{u}) (q : Y ⟶ Spec (CommRingCat.of T.base)) (h : Y ⟶ T.scheme)
-      [AlgebraicGeometry.Smooth h],
-      h ≫ T.structMap = q →
-      (T.pullbackAlong Y q h).IsAdmissible →
-      ∀ (J : Finset (Fin T.boundary.length)) (C' : Set ↥Y),
-        C' ∈ intersectionComponents (T.pullbackAlong Y q h).boundary
-            (J.image (pullbackAlongIndex T Y q h)) →
-        ∃ C ∈ intersectionComponents T.boundary J,
-          Set.MapsTo (⇑h) C' C ∧
-            ∀ (ξ' : ↥Y) (ξ : ↥T.scheme), IsGenericPoint ξ' C' → IsGenericPoint ξ C → h ξ' = ξ
-  smooth_components_up : ∀ (T : MarkedIdealWithBoundary.{u}), T.IsAdmissible →
-    ∀ (Y : Scheme.{u}) (q : Y ⟶ Spec (CommRingCat.of T.base)) (h : Y ⟶ T.scheme)
-      [AlgebraicGeometry.Smooth h],
-      h ≫ T.structMap = q →
-      (T.pullbackAlong Y q h).IsAdmissible →
-      ∀ (J : Finset (Fin T.boundary.length)) (C : Set ↥T.scheme),
-        C ∈ intersectionComponents T.boundary J →
-        ∀ y : ↥Y, h y ∈ C →
-          ∃ C' ∈ intersectionComponents (T.pullbackAlong Y q h).boundary
-              (J.image (pullbackAlongIndex T Y q h)),
-            y ∈ C' ∧
-              ∀ (ξ' : ↥Y) (ξ : ↥T.scheme), IsGenericPoint ξ' C' → IsGenericPoint ξ C → h ξ' = ξ
   components_disjoint : ∀ (T : MarkedIdealWithBoundary.{u}), T.IsAdmissible →
     ∀ J : Finset (Fin T.boundary.length),
       ∀ C ∈ intersectionComponents T.boundary J, ∀ C' ∈ intersectionComponents T.boundary J, C ≠ C' → Disjoint C C'
