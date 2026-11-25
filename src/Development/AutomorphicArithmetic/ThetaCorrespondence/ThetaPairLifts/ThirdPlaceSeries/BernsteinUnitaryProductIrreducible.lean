@@ -93,25 +93,12 @@ structure UnitaryGroupThirdPlaceHypotheses : Prop where
   unramifiedDoublingGL : GlobalTheory.Published.UnramifiedDoublingGL
   bernsteinZelevinskyFiniteness : GlobalTheory.Published.BernsteinZelevinskyFiniteness
   formalDegreeCompactDual : GlobalTheory.Published.FormalDegreeCompactDual
-  bernsteinUnitaryProductIrreducible : GlobalTheory.Published.BernsteinUnitaryProductIrreducible
   geometricLemmaFiltration : GlobalTheory.Published.GeometricLemmaFiltration
-  unlinkedProductIrreducible : GlobalTheory.Published.UnlinkedProductIrreducible
-  depthZeroJacquetInjective : GlobalTheory.Published.DepthZeroJacquetInjective
-  jacquetShalika : GlobalTheory.Published.JacquetShalika
-  automorphicFormsFiniteGL : GlobalTheory.Published.AutomorphicFormsFiniteGL
-  localGlobalAboveL : _root_.UpperTheory.GalS.CarUAlt
-  regularAlgebraicPurity : GlobalTheory.Published.RegularAlgebraicPurity
   globalArtinReciprocity : GlobalTheory.Published.GlobalArtinReciprocity
-  heckeLAdicParameterAbove : _root_.GlobalTheory.Published.HeckeLAdicParameterAboveAlt
-  deRhamPotSemistable : GlobalTheory.Published.DeRhamPotSemistable
   harishChandraFinite : GlobalTheory.Published.HarishChandraFinite
   greenRegularCharacters : GlobalTheory.Published.GreenRegularCharacters
   zelevinskyPolynomialRing : GlobalTheory.Published.ZelevinskyPolynomialRing
   rayClassFieldSt : GlobalTheory.Published.RayClassFieldSt
-  rayCharacterArtin : GlobalTheory.Published.RayCharacterArtin
-  genericUnitaryDualGL : GlobalTheory.Published.GenericUnitaryDualGL
-  standardCosocleGL : GlobalTheory.Published.StandardCosocleGL
-  cheb : GlobalTheory.TwSys.Cheb
   discreteSeriesCover : GlobalTheory.Published.DiscreteSeriesCover
   harishChandraModules : GlobalTheory.Published.HarishChandraModules
   casselmanWallach : GlobalTheory.Published.CasselmanWallach
