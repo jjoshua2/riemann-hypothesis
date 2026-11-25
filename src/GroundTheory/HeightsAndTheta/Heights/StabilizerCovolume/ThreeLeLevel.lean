@@ -143,32 +143,16 @@ structure FullerData (II : IntersectionSystem) (Ψ : Type) [Fintype Ψ] (K : Typ
   herm : HermDatum Em Ψ N j
 
   per : ((Σ k, ι k) → ℂ) → Ψ → Matrix (Fin N) (Fin N) ℂ
-  per_witt : ∀ z ∈ mcPts (mCoordIdeal y) \ Bd, ∀ τ,
-    (per z τ)ᴴ * herm.H.map (herm.emb τ) * per z τ = signMat N j
-  per_torus : ∀ z, ∀ c : K → ℂ, (∀ k, c k ≠ 0) → per (torusSmul c z) = per z
 
   nStrata : ℕ
 
   stratum : Fin nStrata → Set ((Σ k, ι k) → ℂ)
-  stratum_sub : ∀ s, stratum s ⊆ Bd
-  stratum_cover : ∀ z ∈ Bd, ∃ s, z ∈ stratum s
-  stratum_torus : ∀ s, ∀ z ∈ stratum s, ∀ c : K → ℂ, (∀ k, c k ≠ 0) → torusSmul c z ∈ stratum s
 
   torLat : Fin nStrata → Submodule (𝓞 Em) (Fin N → Em)
-  torLat_le : ∀ s, torLat s ≤ herm.L
-  torLat_ne : ∀ s, torLat s ≠ ⊥
-  torLat_iso : ∀ s, herm.IsIso (torLat s)
-  torLat_sat : ∀ s, herm.IsSat (torLat s)
-
-  nz_near : ∀ s, ∀ z₀ ∈ stratum s, ∀ ε > (0 : ℝ), ∃ δ > (0 : ℝ), ∀ z ∈ mcPts (mCoordIdeal y) \ Bd,
-    ‖z - z₀‖ < δ → herm.nz (j_le.trans (Nat.sub_le _ _)) (per z) (torLat s) < ε
 
   mu : HodgeData toComponentData
-  mu_F : ∀ τ, mu.F τ = F τ
 
   htLat : ℕ → ∀ τ, ChartBundle ℤ (segreCoord y) N (E τ)
-  ht_away : ∀ p ∈ S, ∀ τ c, segreCoord y c ≠ 0 → ∀ e : E τ,
-    (∃ m : ℕ, ((p : Ω) ^ m) • e ∈ (W τ).lat c) ↔ ∃ m : ℕ, ((p : Ω) ^ m) • e ∈ (htLat p τ).lat c
 
 end GroundTheory.Heights₂.Heights.NineStatements
 end -- clump:auto
