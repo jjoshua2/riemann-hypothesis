@@ -248,11 +248,9 @@ structure RowT (D : D7) (fr : CharFrame D) (xi : D.what₂.Tup → HChar D.host.
   p0 : BaseLevelRowSide D
   tie : RowsTie R F p0
 
-  tup_onto : Function.Surjective tie.tup
   xi_eq : ∀ t, R.xiH t = xi (tie.tup t)
 
   rowForm : RowForm (RowSide.sharp D)
-  rowForm0 : RowForm p0.s
   rrDef : DV.RRDef D
   rationalRoots_def : p0.s.RRDef
   kap_def : DV.KapDef D
@@ -264,22 +262,12 @@ structure RowT (D : D7) (fr : CharFrame D) (xi : D.what₂.Tup → HChar D.host.
 
   amb : AmbForm D (RowSide.sharp D)
   amb0 : AmbForm D p0.s
-  amb_metric : AmbMetric tie.sharp amb
-  ambientBase_metric : AmbMetric tie.base amb0
 
   X : DivX D
   idx : IdxDefs D X
   kapR_def : DV.KapRBase X
 
-  kapR_const : ∀ e, X.kapR e = X.kapR D.what₂.embLL
   Qp_eq : ∀ μ (p : ℕ), p ∈ X.Qp μ ↔ p.Prime ∧ ∃ v : HeightOneSpectrum (𝓞 D.host.E), (p : 𝓞 D.host.E) ∈ v.asIdeal ∧ ¬ (xi μ).UnrAt v
-  logLam_eq : LogLamTie tie X
-
-  mj_metric : MjMetric tie X
-
-  rr_metric : RRMetricDef D X amb (eigOf tie X)
-
-  baseRow_metric : RowMetricDef p0.s amb0 D.what₂.onb0 D.what₂.ft0 X (eigOf tie X) fun _ => p0.kap0
 
   eQ : ∀ t, X.QPl (tie.tup t) ≃ R.Q t
 
