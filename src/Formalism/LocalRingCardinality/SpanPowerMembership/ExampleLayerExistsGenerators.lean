@@ -1382,7 +1382,6 @@ theorem hostDer : HostDer (hostRaw φ hinj hH he h) := by
         exact conjE_mem_hostF_iff hqd h x
       cmType := ⟨(Final.cmType φ.e q d hqd L ζ a b h).1,
         (Final.cmType φ.e q d hqd L ζ a b h).2.1.trans (by rw [hord]; ring), (Final.cmType φ.e q d hqd L ζ a b h).2.2⟩
-      ps_root := ⟨aE ζ a b, ?_, gal_sqq φ hH h⟩
       art_ch := artinMap_second_eq_jacobiSym φ.e hH
       ps_d := fun u hu => Units.ext ((artinMap_first_eq_jacobiSym_of_modEq φ.e hH u (hu.of_dvd (dvd_mul_left _ _))).trans (jac_dq hH))
       frob := fun p _ hp (P : Ideal (𝓞 (hostE ζ a b))) (_ : P.IsPrime) (_ : P.LiesOver (span {(p : ℤ)})) =>
@@ -1405,9 +1404,6 @@ theorem hostDer : HostDer (hostRaw φ hinj hH he h) := by
         hostDecompConj φ.e q d hH L ζ a b h _ hc l (hcase hl hN) P
       unramEF := fun P hP hP0 => hostUnramEF φ.e q d hH L ζ a b h P hP hP0 _ hc
       splitK := splitK_E hH h
-      ordinary := fun p _ (P : Ideal (𝓞 (hostE ζ a b))) (_ : P.IsPrime) (_ : P.LiesOver (span {(p : ℤ)})) =>
-        (hostOrdinary φ.e q d hH L ζ a b h p P).trans
-        (((Final.splitK φ.e q d hH L ζ a b h).1 p Fact.out).trans (splitK_E hH h p Fact.out).symm)
       eta := ⟨(hostEta φ.e q d hH L ζ a b h).1, fun p _ hp (P : Ideal (𝓞 (hostE ζ a b))) (_ : P.IsPrime) (_ : P.LiesOver (span {(p : ℤ)}))
         (σ : hostE ζ a b ≃ₐ[ℚ] hostE ζ a b) hσ => ?_,
         fun p _ hp (P : Ideal (𝓞 (hostE ζ a b))) (_ : P.IsPrime) (_ : P.LiesOver (span {(p : ℤ)})) =>
@@ -1421,12 +1417,6 @@ theorem hostDer : HostDer (hostRaw φ hinj hH he h) := by
       rd_le := (rd_eq hH h).le.trans (real_le φ.e _ (Real.sqrt_nonneg _))
       rd_sq_ge := ?_
       norm_mu := norm_mu hH h }
-  · intro h0
-    have h1 : a = 0 := congrArg Subtype.val h0
-    have h2 := h.2.1
-    rw [h1] at h2
-    have h3 : (q : L) = 0 := by simpa using h2.symm
-    exact hH.1.ne_zero (by exact_mod_cast h3)
   · have hp' : p.Prime := Fact.out
     obtain ⟨n2, nq, nd⟩ := hncase hp' hp
     obtain ⟨f1, f2, f3⟩ := Final.frob φ.e q d hqd L ζ a b h p n2 nq nd P

@@ -119,59 +119,6 @@ private theorem galE_fst_snd_eq_one_of_mem_stabilizer_of_jacobiSym_eq_one {e q d
     exact dvd_neg.mpr hdiv
   exact (hPp.mem_or_mem hm).elim (key r) (key (-r))
 
-theorem hostOrdinary : HostOrdinary := by
-  intro e q d hH L _ _ ζ a b hL p _ P _ _
-  have hH' : q.Prime ∧ d.Prime ∧ q % 8 = 3 ∧ d % 16 = 7 ∧ jacobiSym (-(d : ℤ)) q = 1 := hH
-  obtain ⟨hq, hd, hq8, hd16, -⟩ := hH'
-  have hq2 : q ≠ 2 := by omega
-  have hd2 : d ≠ 2 := by omega
-  have hodd : HypOdd q d := ⟨hq, hd, by omega, hq2, hd2⟩
-  have hG := hostGalois e q d hodd L ζ a b hL
-  have hmul := hG.2.2.1
-  have hbij := hG.2.2.2
-  have hg1 : galE e ζ a b 1 = 1 := map_one (MonoidHom.mk' (galE e ζ a b) hmul)
-  have hPsi : ∀ g : GG e, g ∈ Psi e ↔ g.1.2 = 1 := fun _ => Iff.rfl
-  have hS := hostSplitK_of (hostFrob_of hostGalois hostGalSpec) e q d hH L ζ a b hL
-  have hF := hostFrob_of hostGalois hostGalSpec e q d hodd L ζ a b hL
-  have hcq : Nat.Coprime q (2 ^ (e + 2)) :=
-    Nat.Coprime.pow_right _ ((Nat.coprime_primes hq Nat.prime_two).mpr hq2)
-  have hcd : Nat.Coprime d (2 ^ (e + 2)) :=
-    Nat.Coprime.pow_right _ ((Nat.coprime_primes hd Nat.prime_two).mpr hd2)
-  have hD := hostDecomp e q d hH L ζ a b hL (ZMod.unitOfCoprime q hcq) (ZMod.unitOfCoprime d hcd)
-    (ZMod.coe_unitOfCoprime _ _) (ZMod.coe_unitOfCoprime _ _)
-  have key : (∀ σ τ : hostE ζ a b ≃ₐ[ℚ] hostE ζ a b, τ ∈ MulAction.stabilizer _ P →
-      (galE e ζ a b (σ * τ) ∈ Psi e ↔ galE e ζ a b σ ∈ Psi e)) ↔
-      ∀ τ ∈ MulAction.stabilizer (hostE ζ a b ≃ₐ[ℚ] hostE ζ a b) P, galE e ζ a b τ ∈ Psi e :=
-    ⟨fun h τ hτ => by
-      have h1 := h 1 τ hτ
-      rw [one_mul] at h1
-      exact h1.mpr (hg1 ▸ (Psi e).one_mem),
-     fun h σ τ hτ => hmul σ τ ▸ Subgroup.mul_mem_cancel_right _ (h τ hτ)⟩
-  rw [key]
-  by_cases hp2 : p = 2
-  · subst hp2
-    have : P.LiesOver (span {(2 : ℤ)}) := by
-      simpa using (inferInstance : P.LiesOver (span {((2 : ℕ) : ℤ)}))
-    exact iff_of_true (fun τ hτ => ((hD τ).1 P).mp hτ) ((hS.1 2 Nat.prime_two).mpr (Or.inl rfl))
-  by_cases hpq : p = q
-  · subst hpq
-    exact iff_of_true (fun τ hτ => (hPsi _).mpr (((hD τ).2.1 P).mp hτ).1) hS.2.2.1
-  by_cases hpd : p = d
-  · subst hpd
-    refine iff_of_false (fun h => ?_) (by rw [hS.2.1]; decide)
-    obtain ⟨σ0, hσ0⟩ := hbij.2 (((-1 : ℤˣ), (-1 : ℤˣ)), hcl e (ZMod.unitOfCoprime p hcd))
-    have hst : σ0 ∈ MulAction.stabilizer _ P :=
-      ((hD σ0).2.2 P).mpr ⟨1, by rw [hσ0, pow_one], by rw [hσ0, pow_one]⟩
-    have h1 := (hPsi _).mp (h σ0 hst)
-    rw [hσ0] at h1
-    exact absurd (congrArg Units.val h1) (by norm_num)
-  obtain ⟨φ, hφ⟩ := (hF p hp2 hpq hpd P).1
-  rw [← hS.2.2.2 p hp2 hpq hpd P φ hφ]
-  refine ⟨fun h => h φ (IsArithFrobAt.mem_stabilizer hφ), fun hφΨ τ hτ => (hPsi _).mpr ?_⟩
-  have hj : jacobiSym (-(d : ℤ)) p = 1 :=
-    (((hS.1 p Fact.out).mp ((hS.2.2.2 p hp2 hpq hpd P φ hφ).mp hφΨ)).resolve_left hp2).2
-  exact galE_fst_snd_eq_one_of_mem_stabilizer_of_jacobiSym_eq_one hodd hL p hp2 hpd P hj τ hτ
-
 attribute [local instance] FractionRing.liftAlgebra FractionRing.isScalarTower_liftAlgebra
 
 theorem hostUnimodular : HostUnimodular := by

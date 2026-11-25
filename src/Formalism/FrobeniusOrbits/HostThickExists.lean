@@ -34,15 +34,6 @@ def bern {α : Type*} [Fintype α] (δ : ℝ) (T : Finset α) : ℝ :=
   δ ^ T.card * (1 - δ) ^ (Fintype.card α - T.card)
 
 
-def HostOrdinary : Prop :=
-  ∀ (e q d : ℕ), HostHyp q d →
-  ∀ (L : Type) [Field L] [NumberField L] (ζ a b : L), IsLayer (e + 2) q d ζ a b →
-  ∀ (p : ℕ) [Fact p.Prime] (P : Ideal (𝓞 (hostE ζ a b))) [P.IsPrime]
-    [P.LiesOver (span {(p : ℤ)})],
-    (∀ σ τ : hostE ζ a b ≃ₐ[ℚ] hostE ζ a b, τ ∈ MulAction.stabilizer _ P →
-      (galE e ζ a b (σ * τ) ∈ Psi e ↔ galE e ζ a b σ ∈ Psi e)) ↔
-    (primesOver (span {(p : ℤ)}) (𝓞 (Kd b))).ncard = 2
-
 def HostUnimodular : Prop :=
   ∀ (e q d : ℕ), HostHyp q d →
   ∀ (L : Type) [Field L] [NumberField L] (ζ a b : L), IsLayer (e + 2) q d ζ a b →

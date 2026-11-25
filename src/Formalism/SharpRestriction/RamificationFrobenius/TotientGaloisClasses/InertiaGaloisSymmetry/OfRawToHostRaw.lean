@@ -78,35 +78,6 @@ theorem cmType : (∀ ψ : H.E →+* ℂ, ψ ∈ H.cmType ↔ (starRingEnd ℂ).
     rw [← h1]
     exact ψ.injective.eq_iff
 
-theorem ps_root : ∃ a : H.E, a ≠ 0 ∧ ∀ σ : H.E ≃ₐ[ℚ] H.E, σ a = ((((H.gal σ).1.1 : ℤˣ) : ℤ) : H.E) * a := by
-  let χ : (H.E ≃ₐ[ℚ] H.E) →* ℤˣ := φ.chQ.comp H.gal.toMonoidHom
-  have hχ : ∀ σ, (H.gal σ).1.1 = χ σ := fun _ => rfl
-  have hs : χ H.conj = -1 := by rw [← hχ, gal_conj]; rfl
-  have h1 : H.conj ∉ (fixedField χ.ker).fixingSubgroup := by
-    rw [fixingSubgroup_fixedField, MonoidHom.mem_ker, hs]
-    decide
-  rw [IntermediateField.mem_fixingSubgroup_iff] at h1
-  push Not at h1
-  obtain ⟨x, hx, hne⟩ := h1
-  rw [IntermediateField.mem_fixedField_iff] at hx
-  have hx' : ∀ σ, χ σ = 1 → σ x = x := fun σ h => hx σ h
-  refine ⟨x - H.conj x, fun h => hne (sub_eq_zero.mp h).symm, fun σ => ?_⟩
-  rw [hχ, map_sub]
-  rcases Int.units_eq_one_or (χ σ) with h | h
-  · have h2 := hx' (H.conj⁻¹ * (σ * H.conj)) (by rw [map_mul, map_mul, map_inv, h, one_mul, inv_mul_cancel])
-    have h3 : σ (H.conj x) = H.conj x := by
-      have h4 := congrArg H.conj h2
-      rwa [← AlgEquiv.mul_apply, mul_inv_cancel_left] at h4
-    rw [h, hx' σ h, h3]
-    simp
-  · have h2 := hx' (H.conj⁻¹ * σ) (by rw [map_mul, map_inv, h, hs, inv_mul_cancel])
-    have h3 : σ x = H.conj x := by
-      have h4 := congrArg H.conj h2
-      rwa [← AlgEquiv.mul_apply, mul_inv_cancel_left] at h4
-    have h4 : σ (H.conj x) = x := hx' (σ * H.conj) (by rw [map_mul, h, hs]; decide)
-    rw [h, h3, h4]
-    simp
-
 theorem hostCore : HostCore H :=
   ⟨art_surj H, cm H, conj_iff H, finrank_E H, finrank_F H, mem_F H, art_ch H, ps_d H,
     frob H, frob_any H, inertia H, decomp H, inertia_d H, decomp_typeI H, decompConj H,
@@ -137,7 +108,6 @@ theorem HostRaw.der {φ : Frame} (H : HostRaw φ) : HostDer H :=
     finrank_F := C.finrank_F
     mem_F := C.mem_F
     cmType := Der.cmType H
-    ps_root := Der.ps_root H
     art_ch := C.art_ch
     ps_d := C.ps_d
     frob := C.frob
@@ -149,7 +119,6 @@ theorem HostRaw.der {φ : Frame} (H : HostRaw φ) : HostDer H :=
     decompConj := C.decompConj
     unramEF := C.unramEF
     splitK := Der.splitK H
-    ordinary := Der.ordinary H C
     eta := Der.eta H C
     diffSupport := Der.diffSupport H C
     principal := Der.principal H C
