@@ -53,7 +53,6 @@ theorem nonempty_nbc_of_isEmpty_loc :
   intro R H what₂ nd A hL
   exact ⟨{
     AU := fun _ => Empty
-    multAU := fun _ x => x.elim
     sphAU := fun _ x => x.elim
     locAU := fun _ x => x.elim
     satAU := fun _ x => x.elim

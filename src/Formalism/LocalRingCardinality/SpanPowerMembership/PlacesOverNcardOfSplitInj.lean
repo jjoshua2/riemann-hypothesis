@@ -658,7 +658,6 @@ theorem g_split_of (hg : ∀ k, H.g k % H.condN = 1) :
 
 def nbcToy (what₂ : Rows.Data R) (h : NHyp H what₂) : NBC (nautToy H what₂ h) where
   AU _ := Empty
-  multAU _ π := π.elim
   sphAU _ π := π.elim
   locAU _ π := π.elim
   satAU _ π := π.elim

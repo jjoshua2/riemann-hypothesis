@@ -636,7 +636,6 @@ def nAut (N : NData R H what₂) [IsEmpty N.Loc] (pl : ∀ k, N.PlG k → PlE H)
 
 def nBC {N : NData R H what₂} [IsEmpty N.Loc] (A : NAut N) : NBC A where
   AU := fun _ => Empty
-  multAU := fun _ x => x.elim
   sphAU := fun _ x => x.elim
   locAU := fun _ x => x.elim
   satAU := fun _ x => x.elim

@@ -698,7 +698,6 @@ structure NBC {R : Ranks} {H : Host R} {what₂ : Rows.Data R} {N : NData R H wh
 
   AU : ℕ → Type
 
-  multAU : ∀ j, AU j → ℕ
 
   sphAU : ∀ j, AU j → PlE H → Prop
 
