@@ -100,71 +100,15 @@ structure ColIface (K : Type) [Field K] [NumberField K] [StarRing K] (I : Type) 
 
   T_prime : ∀ u, (T u).Prime
 
-  T_big : ∀ u, 4 * f ≤ T u
-
-  Mf_good : ∀ u, (Mf u).Good
-
-  M_good : ∀ u, (M u).Good
   incl_inj : ∀ u, Function.Injective (incl u)
-
-  incl_norm : ∀ u v (x : (M u).V),
-    Formalism.HermitianLatticesTheory.normAt (M u).b (M u).X v x = Formalism.HermitianLatticesTheory.normAt (Mf u).b (Mf u).X v (incl u x)
 
   M_L : ∀ u, (M u).L = (Mf u).L.comap ((incl u).restrictScalars (𝓞 K))
 
-  Vr_iso : ∀ u v, (Vr u v)ᴴ * Vr u v = 1
-
-  Vr_fcoord : ∀ u v (x : (M u).V),
-    Formalism.HermitianLatticesTheory.fcoord (Mf u).b (Mf u).X v (incl u x) = (Vr u v).mulVec (Formalism.HermitianLatticesTheory.fcoord (M u).b (M u).X v x)
-
-  rank_full : ∀ u, (Fintype.card (Mf u).ι : ℝ) = dstar u * ((T u : ℝ) ^ k - 1) ^ f
-  dstar_pos : ∀ u, 0 < dstar u
-
-  rank_ram : ∀ u, (Fintype.card (M u).ι : ℝ) = (Fintype.card (Mf u).ι : ℝ) * (1 - 1 / ((T u : ℝ) - 1)) ^ f
   rank_pos : ∀ u, 0 < Fintype.card (M u).ι
-
-  slope_ram : ∀ u, (M u).mu = (Mf u).mu - (f : ℝ) * Real.log ((T u : ℝ) - 1) / ((T u : ℝ) - 2)
-
-  slopeMax_ram : ∀ u, (M u).muMax ≤ (Mf u).muMax
-
-  Nlam_le : ∀ u w, prW w = T u → atW w (Nlam u w) ≤ atW w (M u).L
-
-  Nlam_bar : ∀ u w, prW w = T u → ¬ overPi u w → atW w (Nlam u w) = atW w (M u).L
-
-  Nlam_len : ∀ u w, prW w = T u →
-    ((lenUW w (M u).L (Nlam u w) : ℚ) : ℝ) ≤ (Fintype.card (Mf u).ι : ℝ) * lamT u
-  lamT_nonneg : ∀ u, 0 ≤ lamT u
-
-  Nu_fg : ∀ u, (Nu u).FG
-
-  Nu_comm : ∀ u, ∃ c : 𝓞 K, c ≠ 0 ∧ ∀ y ∈ (M u).L, c • y ∈ Nu u
-
-  Nu_atT : ∀ u w, prW w = T u → atW w (Nu u) = atW w (Nlam u w)
-
-  Nu_off : ∀ u w, w ∉ supp → atW w (Nu u) = atW w (M u).L
-
-  Nu_le_ItM : ∀ u, Nu u ≤ toColObj.ItM u
-
-  tau_nonneg : ∀ w, 0 ≤ tau w
-
-  tau_eq_zero_at_T : ∀ u w, prW w = T u → tau w = 0
-
-  supp_alt : ∀ u w, prW w = T u → w ∈ supp
 
   supp_sat : ∀ w ∈ supp, ∀ w', prW w' = prW w → w' ∈ supp
 
-  propZ_low : ∀ u, zLow u ≤ (Mf u).mu
-
-  propZ_up : ∀ u, (Mf u).muMax ≤ zUp u
   Dstar_pos : 0 < Dstar
-  Xu_pos : ∀ u, 0 < Xu u
-
-  Xu_pow : ∀ u, Xu u ^ (f * k) = Dstar / dstar u
-  log_height_lower_bound : ∀ u, xLow ≤ Real.log (Xu u)
-  log_height_upper_bound : ∀ u, Real.log (Xu u) ≤ xUp
-  log_height_variation_bound : ∀ u u', |Real.log (Xu u) - Real.log (Xu u')| ≤ xVar
-
-  Mtil_good : Mtil.Good
 
 namespace ColIface
 
