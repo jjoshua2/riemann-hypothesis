@@ -268,7 +268,7 @@ def exP (hu : GlobalTheory.UnivChar.IsUnivChar (DN x N₁).nexp) : ExportTie (ys
     univ := (hu) }
 
 def expP : NExpTied (DN x (nP p)) :=
-  keepExp (DN x N₁) p.Dat (PreTie.th (D := DN x N₁) p) p.lev p.thPsi p.h1 p.thU p.thP p.MtLat p.h2 p.h3 p.nth p.hU X
+  keepExp (DN x N₁) p.Dat (PreTie.th (D := DN x N₁) p) p.lev p.thPsi p.h1 p.thU p.thP p.MtLat p.h2 p.h3 p.nth X
 
 def pvP (PV : ∀ j : Fin (DN x (nP p)).R.m, principalLevelFrame.RowPsi (Vc (DN x (nP p)) j) (DN x (nP p)).R.nV) (j : Fin (DN x N₁).R.m) :
     principalLevelFrame.RowPsi (Vc (DN x N₁) j) (DN x N₁).R.nV :=
@@ -830,7 +830,6 @@ def expN (hτ : ∀ i j b kv x, 1 ≤ j → j ≤ D.R.m → NX.pG D kv ∉ place
     acgWt := E.acgWt
     modWt := E.modWt
     fdWt := E.fdWt
-    delU_cont := fun i Q M => (GlobalTheory.GalChar.universal_anticyclotomic_character_laws D.host D.ntw.cc (D.ntw.l i)).2.2.2.1 Q M
     tauG := τ'
     tau_galois_first_character := fun i j b kv x u h1 h2 hl hu => (hτ i j b kv x h1 h2 hl).symm.trans (E.tau_galois_first_character i j b kv x u h1 h2 hl hu)
     mtV := fun i j b k Q ψ h1 h2 h =>
@@ -1184,7 +1183,6 @@ def cutExp (E : NExpTied D) : NExpTied (cutN D).toD7 :=
     acgWt := E.acgWt
     modWt := E.modWt
     fdWt := E.fdWt
-    thU_empty := fun _ _ _ _ d => Empty.elim d
     mtV := fun i j b k Q ψ hj hj' hA =>
       letI : AddCommGroup (E.Wt i j b) := E.acgWt i j b
       letI : Module (FractionRing ((cutN D).toD7.ntw.O i)) (E.Wt i j b) := E.modWt i j b
@@ -1370,7 +1368,7 @@ def bsP (p : PreTie (ysOf Bs) (Up.datTw x N₁).geo.v₀ Bs.exp hF Pq) :
       (lowAll (DN x (SerCopy.nP p))) Pq
       ((kwP p).rat (ratDatR (Up.datTw x N₁).R (Up.datTw x N₁).cG kKs hk)) hf eig θ := by
     exact keepSideB (DN x N₁) p.Dat (PreTie.th (D := DN x N₁) p) p.lev p.thPsi
-      p.h1 p.thU p.thP p.MtLat p.h2 p.h3 p.nth p.hU cf Rw _ Pq _ hf eig θ Bs
+      p.h1 p.thU p.thP p.MtLat p.h2 p.h3 p.nth cf Rw _ Pq _ hf eig θ Bs
 
 end Install
 

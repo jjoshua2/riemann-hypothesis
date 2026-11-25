@@ -206,19 +206,6 @@ structure NExpTied (D : D7) where
 
   psiU_gen : ∀ i b, IsStdGeneric (fun kv : (Σ k : Fin 2, D.nd.PlG k) => D.host.g kv.1) D.R.r (D.nexp.psiU i b)
 
-  psiU_side : ∀ i (u : D.nexp.U), D.nexp.psiU i false u = (D.nexp.psiU i true u)⁻¹
-
-  psiU_xi : ∀ i b, ∃ θ : ∀ kk : Fin 2, Multiplicative (ZMod (D.host.g kk)) →* (FractionRing (D.ntw.O i))ˣ,
-    (2 ≤ D.R.r → ∀ kk, θ kk ≠ 1) ∧ ∀ u : D.nexp.U, D.nexp.psiU i b u = ∏ kv : (Σ kk : Fin 2, D.nd.PlG kk),
-      θ kv.1 (Multiplicative.ofAdd (xiRed D kv *
-        supSum D.R.r (((u : G0g D.nd) kv : GL (Fin D.R.r) (ZMod (D.host.g kv.1))) :
-          Matrix (Fin D.R.r) (Fin D.R.r) (ZMod (D.host.g kv.1)))))
-
-  delU_cont : ∀ i (Q : Finset (PlE D.host)) (M : ℕ), IsOpen ((D.nexp.delU i Q M).ker : Set (G D.host.E D.nd.Om))
-
-  thU_empty : ∀ i j b M (d : D.nexp.Dat i j b), 1 ≤ j → j ≤ D.R.m →
-    D.nexp.thU i j b ∅ M d = D.nexp.th i j b d ⊗ₜ[D.ntw.O i] (1 : AddMonoidAlgebra (D.ntw.O i) (DelQM D.host (D.ntw.l i) ∅ M))
-
   sgnT : ℤ
 
   sgnT_one : sgnT = 1
@@ -229,7 +216,6 @@ structure NExpTied (D : D7) where
   [fdWt : ∀ i j b, FiniteDimensional (FractionRing (D.ntw.O i)) (Wt i j b)]
   rhoW : ∀ i j b, Representation (FractionRing (D.ntw.O i)) (GQ D.host.E D.R.nV) (Wt i j b)
   rhoW_irr : ∀ i j b, 1 ≤ j → j ≤ D.R.m → (rhoW i j b).IsIrreducible
-  rhoW_alg : ∀ i j b, 1 ≤ j → j ≤ D.R.m → IsAlgWeightF D.host.E D.R.nV (FractionRing (D.ntw.O i)) (rhoW i j b)
 
   tauG : ∀ i, ℕ → Bool → ∀ kv : (Σ k : Fin 2, D.nd.PlG k), (ZMod (D.host.g kv.1))ˣ →* (FractionRing (D.ntw.O i))ˣ
 

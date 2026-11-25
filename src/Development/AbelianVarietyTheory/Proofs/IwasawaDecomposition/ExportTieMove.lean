@@ -1255,25 +1255,9 @@ theorem core (D : D7) (r : Rest D) (X : NExpTied D) (hpl : HEq D.naut.plGw (over
           GlobalTheory.HeightCounting.Reads X' ((by exact i)) j b k ((by exact Q)) ((by exact ψ)) h1 ((by exact h2)) ((by exact hA)) ((by exact ε)) V ((by exact ρ)) := by
   have hpG : ∀ kv, NX.pG (overD D r) kv = NX.pG D kv := fun kv =>
     congrFun (congrFun (eq_of_heq hpl.symm) kv.1) kv.2
-  have hxi : ∀ kv, NX.xiRed (overD D r) kv = NX.xiRed D kv := fun kv => by
-    unfold NX.xiRed
-    have key : ∀ (P₁ P₂ : PlE D.host) (_ : P₁ = P₂)
-        (d₁ : Decidable (∃ x : ZMod (D.host.g kv.1), ∃ a c : 𝓞 D.host.E, c ∉ P₁.asIdeal ∧ (a : D.host.E) = D.host.xi0 * c ∧
-          ((x.val : 𝓞 D.host.E) * c - a) ∈ P₁.asIdeal))
-        (d₂ : Decidable (∃ x : ZMod (D.host.g kv.1), ∃ a c : 𝓞 D.host.E, c ∉ P₂.asIdeal ∧ (a : D.host.E) = D.host.xi0 * c ∧
-          ((x.val : 𝓞 D.host.E) * c - a) ∈ P₂.asIdeal)),
-        (@dite _ _ d₁ (fun h => h.choose) (fun _ => 0)) = (@dite _ _ d₂ (fun h => h.choose) (fun _ => 0)) := by
-      rintro P _ rfl d₁ d₂
-      exact dite_congr rfl (fun _ => rfl) (fun _ => rfl)
-    exact key _ _ (hpG kv) _ _
   refine ⟨@Formalism.L2.NExpTied.mk (overD D r)
       (U_eq := X.U_eq)
       (psiU_gen := X.psiU_gen)
-      (psiU_side := X.psiU_side)
-      (psiU_xi := fun i b => (X.psiU_xi i b).imp fun θ ⟨h1, h2⟩ =>
-        ⟨h1, fun u => (h2 u).trans (Finset.prod_congr rfl fun kv _ => by rw [hxi kv]; rfl)⟩)
-      (delU_cont := X.delU_cont)
-      (thU_empty := X.thU_empty)
       (sgnT := X.sgnT)
       (sgnT_one := X.sgnT_one)
       (Wt := X.Wt)
@@ -1282,7 +1266,6 @@ theorem core (D : D7) (r : Rest D) (X : NExpTied D) (hpl : HEq D.naut.plGw (over
       (fdWt := X.fdWt)
       (rhoW := X.rhoW)
       (rhoW_irr := X.rhoW_irr)
-      (rhoW_alg := X.rhoW_alg)
       (tauG := X.tauG)
       (sgnG := X.sgnG)
       (sgnG_one := X.sgnG_one)

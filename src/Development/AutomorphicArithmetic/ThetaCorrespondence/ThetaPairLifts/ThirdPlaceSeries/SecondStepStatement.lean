@@ -1706,11 +1706,7 @@ theorem second_step_alt : GlobalTheory.Published.GlobalArtinReciprocity → ∀ 
       i j b k Q ψ h1 h2 hadm.1 hadm.2.1 hadm.2.2.1 hadm.2.2.2.1 hadm.2.2.2.2.1 hadm.2.2.2.2.2
   let E : NExpTied N.toD7 :=
     { U_eq := hU.1
-      psiU_gen := hU.2.1
-      psiU_side := hU.2.2.1
-      psiU_xi := hU.2.2.2
-      delU_cont := fun (i : T.Tw) Q M => (GlobalTheory.GalChar.universal_anticyclotomic_character_laws D.host T.cc (T.l i)).2.2.2.1 Q M
-      thU_empty := fun i j b M d => PEmpty.elim d
+      psiU_gen := hU.2
       sgnT := 1
       sgnT_one := rfl
       Wt := wt.Wt
@@ -1719,7 +1715,6 @@ theorem second_step_alt : GlobalTheory.Published.GlobalArtinReciprocity → ∀ 
       fdWt := fun (i : T.Tw) j b => wt.fd i j b
       rhoW := fun (i : T.Tw) j b => wt.rhoW i j b
       rhoW_irr := fun i j b h1 h2 => (hwt i j b h1 h2).1
-      rhoW_alg := fun i j b h1 h2 => (hwt i j b h1 h2).2.1
       tauG := fun (i : T.Tw) j b kv => tauT D T i j b kv
       sgnG := 1
       sgnG_one := rfl
