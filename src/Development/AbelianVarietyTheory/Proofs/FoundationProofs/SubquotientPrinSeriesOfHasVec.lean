@@ -32,55 +32,11 @@ public import Development.AbelianVarietyTheory.PublishedTheorems.TwistedTraceFor
 public import Development.AbelianVarietyTheory.Proofs.SatakeParameters.ExistsTorusEigenformOfCompactTorusEigenvector
 public import Development.AbelianVarietyTheory.Proofs.SatakeParameters.SphericalRepGLExistsSatakeParameters
 public import Development.AbelianVarietyTheory.Proofs.SatakeParameters.TameParahoricRepSplitsAsProduct
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Topology.Sheaves.Init
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
 import Mathlib.Tactic.Linter.Style
 import Mathlib.Tactic.TypeStar
 import Development.AbelianVarietyTheory.Definitions.Foundations.SimpleSum
 import Mathlib.RingTheory.PiTensorProduct
 import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
 import Std.Tactic.BVDecide.Normalize.Prop
 import Mathlib.RingTheory.Henselian
 import Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsCharacterAverageEigenvectorCompactSubgroup
@@ -105,23 +61,9 @@ namespace GlobalTheory.PsType
 
 variable {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
 
-theorem triv_zero' (χ : kˣ →* ℂˣ) : Triv χ (0 : k) := by
-  intro u _ h
-  rw [map_zero] at h
-  have h0 : valuation k ((u : k) - 1) = 0 := le_antisymm h zero_le'
-  rw [(valuation k).zero_iff, sub_eq_zero] at h0
-  have : u = 1 := Units.ext h0
-  rw [this, map_one]
-
 section Blocks
 
 variable {r t : ℕ}
-
-theorem castAdd_eq_stdSum (i : Fin r) : Fin.castAdd t i = stdSum (rfl : r + t = r + t) (Sum.inl i) := by
-  ext; simp
-
-theorem natAdd_eq_stdSum (j : Fin t) : Fin.natAdd r j = stdSum (rfl : r + t = r + t) (Sum.inr j) := by
-  ext; simp
 
 theorem emb₂_std_apply (a : GL (Fin r) k) (b : GL (Fin t) k) (x y : Fin r ⊕ Fin t) :
     (emb₂ k (stdSum (rfl : r + t = r + t)) (a, b)).val (stdSum rfl x) (stdSum rfl y) =
@@ -189,9 +131,9 @@ theorem emb₂_mem_grp_iff (ψ : Fin (r + t) → kˣ →* ℂˣ) (a : GL (Fin r)
   · rintro ⟨⟨ha, hb⟩, h⟩
     refine ⟨⟨ha, fun i j hij => ?_⟩, ⟨hb, fun i j hij => ?_⟩⟩
     · have := h (Fin.castAdd t i) (Fin.castAdd t j) (Fin.lt_def.2 (Fin.lt_def.1 hij))
-      rwa [castAdd_eq_stdSum i, castAdd_eq_stdSum j, emb₂_std_apply, fromBlocks_apply₁₁] at this
+      rwa [GlobalTheory.PsType.BlockTheta.castAdd_eq i, GlobalTheory.PsType.BlockTheta.castAdd_eq j, emb₂_std_apply, fromBlocks_apply₁₁] at this
     · have := h (Fin.natAdd r i) (Fin.natAdd r j) ((Fin.natAdd_lt_natAdd_iff r).2 hij)
-      rwa [natAdd_eq_stdSum i, natAdd_eq_stdSum j, emb₂_std_apply, fromBlocks_apply₂₂] at this
+      rwa [GlobalTheory.PsType.BlockTheta.natAdd_eq i, GlobalTheory.PsType.BlockTheta.natAdd_eq j, emb₂_std_apply, fromBlocks_apply₂₂] at this
   · rintro ⟨⟨ha, ha'⟩, ⟨hb, hb'⟩⟩
     refine ⟨⟨ha, hb⟩, fun p q hpq => ?_⟩
     obtain ⟨x, rfl⟩ := (stdSum (rfl : r + t = r + t)).surjective p
@@ -200,21 +142,21 @@ theorem emb₂_mem_grp_iff (ψ : Fin (r + t) → kˣ →* ℂˣ) (a : GL (Fin r)
     rcases x with x | x <;> rcases y with y | y
     · rw [fromBlocks_apply₁₁]
       have hxy : x < y := by
-        rw [← castAdd_eq_stdSum, ← castAdd_eq_stdSum] at hpq
+        rw [← GlobalTheory.PsType.BlockTheta.castAdd_eq, ← GlobalTheory.PsType.BlockTheta.castAdd_eq] at hpq
         exact Fin.lt_def.2 (Fin.lt_def.1 hpq)
       have := ha' x y hxy
-      rwa [castAdd_eq_stdSum x, castAdd_eq_stdSum y] at this
-    · rw [fromBlocks_apply₁₂, Matrix.zero_apply]; exact triv_zero' _
+      rwa [GlobalTheory.PsType.BlockTheta.castAdd_eq x, GlobalTheory.PsType.BlockTheta.castAdd_eq y] at this
+    · rw [fromBlocks_apply₁₂, Matrix.zero_apply]; exact GlobalTheory.PsType.MinorMul.triv_zero _
     · exfalso
       have := Fin.lt_def.1 hpq
       rw [stdSum_inr, stdSum_inl] at this
       omega
     · rw [fromBlocks_apply₂₂]
       have hxy : x < y := by
-        rw [← natAdd_eq_stdSum, ← natAdd_eq_stdSum] at hpq
+        rw [← GlobalTheory.PsType.BlockTheta.natAdd_eq, ← GlobalTheory.PsType.BlockTheta.natAdd_eq] at hpq
         exact (Fin.natAdd_lt_natAdd_iff r).1 hpq
       have := hb' x y hxy
-      rwa [natAdd_eq_stdSum x, natAdd_eq_stdSum y] at this
+      rwa [GlobalTheory.PsType.BlockTheta.natAdd_eq x, GlobalTheory.PsType.BlockTheta.natAdd_eq y] at this
 
 end Blocks
 
@@ -856,7 +798,6 @@ theorem val_det_eq_one {n r : ℕ} {M M' : Matrix (Fin n) (Fin n) k}
 end GlobalTheory.PsType.ClearBlock
 
 namespace GlobalTheory.PsType
-
 
 open ClearBlock in
 theorem clear_upper_right : ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (n : ℕ)

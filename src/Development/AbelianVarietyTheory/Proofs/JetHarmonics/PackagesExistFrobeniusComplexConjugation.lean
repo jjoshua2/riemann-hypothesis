@@ -41,52 +41,12 @@ public import Development.AbelianVarietyTheory.Proofs.JetHarmonics.NotInPsiConj
 public import Development.AbelianVarietyTheory.Proofs.UnramifiedDepth.CmHostIdempotentTraceEqOne
 public import Development.AbelianVarietyTheory.Proofs.UnramifiedDepth.IsCanonGaugeMapFB
 public import Formalism.SharpRestriction.RamificationFrobenius.TotientGaloisClasses.HostFacts
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.ReduceModChar
 import Std.Tactic.BVDecide.Normalize.Prop
 import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Analysis.SpecialFunctions.Bernstein
 import Mathlib.GroupTheory.Nilpotent
 import Mathlib.RingTheory.Henselian
 import Mathlib.RingTheory.RegularLocalRing.Defs
-import Mathlib.RingTheory.WittVector.IsPoly
 import Mathlib.Tactic.Linter.HaveILetI
 import Formalism.LocalToGlobal.Divisibility.Numbers
 import Formalism.LocalToGlobal.CharacterGerms.RowTieLab
@@ -216,7 +176,6 @@ section Image
 
 variable {C : Type} [Field C] {Ty : Type} {r : Ty → ℕ} {Orb : Type} [Fintype Orb] (tau : Orb → ZMod 2 → Ty)
   {N n : ℕ} (pl : Fin N × Fin 2 ↪ Fin n)
-
 
 variable (r) in
 abbrev Var : Type := WVO fun (o : Orb) (_ : Fin 2) => Σ s : ZMod 2, Fin (r (tau o s))
@@ -414,7 +373,6 @@ variable {C : Type} [Field C] {V : VF C} {Ty : Type} {r : Ty → ℕ} {Orb : Typ
   {N n : ℕ} (pl : Fin N × Fin 2 ↪ Fin n) (gm : Orb → ZMod 2 → Matrix (Fin 2) (Fin 2) C)
   {J : Orb → Fin 2 → Type} [∀ o g, Fintype (J o g)]
   (X : ∀ o, RowData C V 2 (fun _ => Σ s : ZMod 2, Fin (r (tau o s))) (J o)) (F : ∀ o, RF.Flag (X o))
-
 
 omit [Fintype Orb] in
 theorem sub_minor (hty : ∀ o g c, ((X o).G g).ty (Sum.inl c) = c.1 + sh g)
@@ -687,7 +645,6 @@ theorem intS_inCol (col : Fin 2) {f : PS C 1 dd} (hf : IntS V f) : IntS V (inCol
   rw [inCol_eq]
   exact intS_subst V (fun _ => MvPowerSeries.constantCoeff_X _) (fun _ => intS_X V _) hf
 
-
 omit [CharZero C] in
 theorem coeff_inCol (col : Fin 2) (f : PS C 1 dd) (μ : Fin 2 × Fin dd →₀ ℕ) (hμ : μ.degree ≤ 1) :
     MvPowerSeries.coeff μ (inCol col (un1 f)) = MvPowerSeries.coeff μ
@@ -871,13 +828,6 @@ theorem mm_iff {x : C} : V.MM x ↔ ∃ c : ℝ, 0 < c ∧ V.Ge c x := by
       have : c ≤ t := by exact_mod_cast h
       exact_mod_cast hc.trans_le this
 
-theorem mm_or {x y : C} (h : V.MM (x * y)) : V.MM x ∨ V.MM y := by
-  unfold VF.MM at *
-  by_contra hn
-  push Not at hn
-  rw [V.v.map_mul] at h
-  exact absurd h (not_lt.2 (add_nonpos hn.1 hn.2))
-
 theorem not_mm_one : ¬ V.MM (1 : C) := by simp [VF.MM]
 
 def maxId (V : VF C) : Ideal V.RR where
@@ -892,7 +842,7 @@ def maxId (V : VF C) : Ideal V.RR where
     exact mm_iff.2 ⟨e, he, VF.Ge.mul_int c.2 h⟩
 
 theorem maxId_prime (V : VF C) : (maxId V).IsPrime :=
-  ⟨fun h => not_mm_one (V := V) ((Ideal.eq_top_iff_one _).1 h), fun h => mm_or h⟩
+  ⟨fun h => not_mm_one (V := V) ((Ideal.eq_top_iff_one _).1 h), fun h => GlobalTheory.RowLaw.GoodPair.mm_or h⟩
 
 theorem exists_residue (V : VF C) :
     ∃ (K : Type) (_ : Field K) (φ : V.RR →+* K), ∀ x, φ x = 0 ↔ V.MM (x : C) := by
@@ -1021,7 +971,7 @@ theorem exists_pair [IsAlgClosed C] (h2 : V.l ≠ 2) (O : Type) [CommRing O] [St
     have : V.MM ((s - 1) * (-s - 1)) := by
       convert hab using 1
       linear_combination -hs - hu
-    rcases mm_or this with h | h
+    rcases GlobalTheory.RowLaw.GoodPair.mm_or this with h | h
     · exact ⟨s, hs, h⟩
     · exact ⟨-s, by rw [neg_sq, hs], h⟩
   have hns : ¬ V.MM s := by

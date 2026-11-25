@@ -3,51 +3,8 @@ module
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.ArakelovVolumes.UpperBounds.InterpStatementPfH
 public import Mathlib.Algebra.DualNumber
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.ArakelovVolumes.UpperBounds.ExhaustFStatementPfC
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
 import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
 import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Sheaves.Init
 public import ReciprocityTheory.L2DbarEstimates.LeviForms.OfRealNormSqSumMul
 public import ReciprocityTheory.L2DbarEstimates.PlurisubharmonicCharts.DerivDerivNonposOfIsLocalMax
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.ArakelovVolumes.UpperBounds.InterpStatementPfE
@@ -75,10 +32,6 @@ def dDir (ξ : Fin n → ℂ) (f : V n → ℂ) (x : V n) : ℂ := ∑ j, wd n j
 
 def dbDir (ξ : Fin n → ℂ) (f : V n → ℂ) (x : V n) : ℂ := ∑ k, wdb n k f x * conj (ξ k)
 
-theorem wd_congr' {j : Fin n} {f g : V n → ℂ} {x : V n} (h : f =ᶠ[𝓝 x] g) :
-    wd n j f x = wd n j g x := by
-  simp only [wd, h.fderiv_eq]
-
 theorem leviV_add' {f g : V n → ℂ} {x : V n} (hf : ContDiffAt ℝ 2 f x) (hg : ContDiffAt ℝ 2 g x)
     (ξ : Fin n → ℂ) : leviV n (fun y => f y + g y) x ξ = leviV n f x ξ + leviV n g x ξ := by
   have hev : ∀ k : Fin n, wdb n k (fun y => f y + g y) =ᶠ[𝓝 x]
@@ -87,7 +40,7 @@ theorem leviV_add' {f g : V n → ℂ} {x : V n} (hf : ContDiffAt ℝ 2 f x) (hg
     filter_upwards [eventually_differentiableAt_of_contDiffAt hf,
       eventually_differentiableAt_of_contDiffAt hg] with y h1 h2
     exact wdb_add h1 h2
-  simp only [leviV, wd_congr' (hev _), wd_add (differentiableAt_wdb hf) (differentiableAt_wdb hg),
+  simp only [leviV, ReciprocityTheory.L2DbarEstimates.wd_congr (hev _), wd_add (differentiableAt_wdb hf) (differentiableAt_wdb hg),
     ← Finset.sum_add_distrib]
   refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun k _ => ?_
   ring
@@ -108,7 +61,7 @@ theorem leviV_mul' {f g : V n → ℂ} {x : V n} (hf : ContDiffAt ℝ 2 f x) (hg
       wd n j (wdb n k f) x * g x + wdb n k f x * wd n j g x +
         (wd n j f x * wdb n k g x + f x * wd n j (wdb n k g) x) := by
     intro j k
-    rw [wd_congr' (hev k), wd_add (f := fun y => wdb n k f y * g y) (g := fun y => f y * wdb n k g y)
+    rw [ReciprocityTheory.L2DbarEstimates.wd_congr (hev k), wd_add (f := fun y => wdb n k f y * g y) (g := fun y => f y * wdb n k g y)
       ((differentiableAt_wdb hf).mul hg1) (hf1.mul (differentiableAt_wdb hg)),
       wd_mul (differentiableAt_wdb hf) hg1, wd_mul hf1 (differentiableAt_wdb hg)]
   rw [mul_comm (dbDir ξ f x)]

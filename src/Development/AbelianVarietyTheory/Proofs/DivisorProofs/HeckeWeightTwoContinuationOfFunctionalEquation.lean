@@ -187,10 +187,6 @@ theorem coe_toIdeal {K : FractionalIdeal (𝓞 F)⁰ F} (h : K ≤ 1) :
 theorem nrm_nonneg (𝔞 : Frac F) : 0 ≤ nrm 𝔞 := by
   unfold nrm; exact_mod_cast absNorm_nonneg _
 
-theorem emb_nonempty [IsTotallyReal F] : Nonempty (Emb F) := by
-  obtain ⟨φ⟩ : Nonempty (F →+* ℂ) := inferInstance
-  exact ⟨(IsTotallyReal.complexEmbedding_isReal φ).embedding⟩
-
 theorem card_le_norm : ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F] (𝔞 𝔟 : Frac F) (ξ : F)
     (s : Finset (Quotient (qRel 𝔞 𝔟))), (∀ c ∈ s, c.out.1.1 * c.out.1.2 = ξ) →
     (s.card : ℝ) ≤ |(Algebra.norm ℚ ξ : ℝ)| / (nrm 𝔞 * nrm 𝔟) := by
@@ -202,7 +198,7 @@ theorem card_le_norm : ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F
   have hA : ((𝔞 : FractionalIdeal (𝓞 F)⁰ F)) ≠ 0 := 𝔞.ne_zero
   have hB : ((𝔟 : FractionalIdeal (𝓞 F)⁰ F)) ≠ 0 := 𝔟.ne_zero
   have hξ : ξ ≠ 0 := by
-    obtain ⟨τ⟩ := emb_nonempty (F := F)
+    obtain ⟨τ⟩ := GlobalTheory.HeckeTwoExp.emb_nonempty (F := F)
     have h := c0.out.2.2.2 τ
     rw [hs c0 hc0] at h
     intro h0
@@ -819,7 +815,6 @@ theorem summable_qClass_two [IsTotallyReal F] (𝔞 𝔟 : Frac F) (z : Emb F �
   set K : ℝ := ((2 * f + n).factorial : ℝ) / (2 * Real.pi * m) ^ (2 * f + n) with hK
   set C : ℝ := K / (nrm 𝔞 * κ) with hC
   have hK0 : 0 < K := by positivity
-  have hC0 : 0 < C := by positivity
   have key : ∀ ν b : F, ν ∈ (𝔞 : FractionalIdeal (𝓞 F)⁰ F) → ν ≠ 0 → b ≠ 0 → (∀ τ : Emb F, 0 < τ (ν * b)) →
       ‖qTerm 𝔞 2 z (ν, b)‖ ≤
         C * ((|((Algebra.norm ℚ b : ℚ) : ℝ)| ^ 2)⁻¹ * ‖remb F (ν * b)‖⁻¹ ^ n) := by
@@ -922,7 +917,6 @@ theorem summable_qClass_two [IsTotallyReal F] (𝔞 𝔟 : Frac F) (z : Emb F �
       rw [tsum_mul_left, tsum_mul_left, Real.rpow_neg (abs_nonneg _), Real.rpow_two]
       have hH : ∑' ν, ‖ι c ν‖⁻¹ ^ n ≤ ∑' v : latOf N, ‖v‖⁻¹ ^ n :=
         tsum_comp_le_tsum_of_inj hL (fun _ => by positivity) (hι c)
-      have hB : 0 ≤ (Bf c ^ 2)⁻¹ := by positivity
       calc C * ((Bf c ^ 2)⁻¹ * ∑' ν, ‖ι c ν‖⁻¹ ^ n) ≤ C * ((Bf c ^ 2)⁻¹ * ∑' v : latOf N, ‖v‖⁻¹ ^ n) := by
             gcongr
         _ = _ := by simp only [hBf]; ring

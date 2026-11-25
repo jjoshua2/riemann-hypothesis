@@ -58,7 +58,6 @@ import Formalism.RealPlaceAnalysis.RealPlaceTaylor.LieOperatorConjHolds
 open MeasureTheory Matrix Finset Formalism.MainNotions.S Formalism.REAL Formalism.QuantumDeterminants GlobalTheory.Count GlobalTheory.Dec
 open scoped InnerProductSpace ComplexOrder
 
-noncomputable section
 namespace GlobalTheory.Dec.FormF
 
 private lemma matrix_of_pow_apply_eq_epow {n : ℕ} {A : Type} [Ring A] (E : Fin n → Fin n → A) (k : ℕ) (a b : Fin n) :
@@ -413,14 +412,6 @@ private lemma cpart2_submatrix_perm (ε : Fin n → Bool) (s : Equiv.Perm (Fin n
     fun _ _ => rfl
   simp only [Formalism.REAL.cpart2, hsm, hadd, Jm_perm,
     Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv]
-
-lemma Eab_perm (ε : Fin n → Bool) (s : Equiv.Perm (Fin n)) (a b : Fin n) (f : Matrix (Fin n) (Fin n) ℂ → ℂ) (g : Matrix (Fin n) (Fin n) ℂ) :
-    Eab ε (s a) (s b) (fun x => f (x.submatrix s s)) g = Eab (ε ∘ s) a b f (g.submatrix s s) := by
-  have hsg : (Matrix.single (s a) (s b) (1 : ℂ)).submatrix s s = Matrix.single a b 1 := by
-    ext i j
-    simp [Matrix.single_apply, s.injective.eq_iff]
-  simp only [Formalism.REAL.Eab, Formalism.REAL.Ec, rd_submatrix_perm, cpart1_submatrix_perm, cpart2_submatrix_perm, hsg]
-
 
 theorem trWord : ∀ (n : ℕ) (ε : Fin n → Bool) (χ : Fin n → ℂ) (f : Matrix (Fin n) (Fin n) ℂ → ℂ), SmoothOnG ε f → IsZEigen ε χ f → ∀ m : ℕ, ∀ g ∈ UJset ε, ∑ a : Fin (m + 1) → Fin n, Eword ε ((cycWord a).map Prod.swap) f g = (-1) ^ (m + 1) * gelfVal (fun a => -χ a) (m + 1) * f g := by
   intro n ε χ f hf hz m g hg

@@ -20,54 +20,10 @@ public import Development.AbelianVarietyTheory.Proofs.JetHarmonics.SplitCasEigen
 public import Development.AbelianVarietyTheory.Proofs.JetHarmonics.UnitaryGlModuleProjComponentsLevelAddTwo
 public import Development.AbelianVarietyTheory.Proofs.JetHarmonics.AlgTensWtNear
 public import Development.AbelianVarietyTheory.Proofs.JetHarmonics.CompactCasimirBoundProjectionDualTensor
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
-import Mathlib.Analysis.SpecialFunctions.Bernstein
 import Mathlib.Algebra.Order.Star.Real
 import Mathlib.Analysis.CStarAlgebra.Classes
 import Mathlib.Tactic.Lemma
 import Mathlib.Tactic.Linter.HaveILetI
-import Mathlib.Tactic.Polynomial.Basic
 import Mathlib.Tactic.TypeStar
 import Development.AbelianVarietyTheory.Proofs.JetHarmonics.WeightNearDiagonalOperatorsBounds
 import Mathlib.Algebra.Ring.IsFormallyReal
@@ -279,7 +235,6 @@ private lemma circleIntegral_finset_sum_of_continuousOn {E ι : Type*} [NormedAd
       continuousOn_finsetSum s hs
     simp only [Finset.sum_insert ha]
     rw [circleIntegral.integral_add (ha'.circleIntegrable hR) (hsum.circleIntegrable hR), ih hs]
-
 
 open Finset Complex in
 open scoped InnerProductSpace in
@@ -878,24 +833,17 @@ open scoped InnerProductSpace
 
 namespace GlobalTheory.LowCasShift
 
-theorem card_le {n : ℕ} (p : Fin n → Prop) [DecidablePred p] :
-    (0 : ℝ) ≤ ((univ.filter p).card : ℝ) ∧ ((univ.filter p).card : ℝ) ≤ n := by
-  refine ⟨Nat.cast_nonneg _, ?_⟩
-  have h : (univ.filter p).card ≤ n := by
-    simpa using card_filter_le (univ : Finset (Fin n)) p
-  exact_mod_cast h
-
 theorem rhoC_bd {n : ℕ} (ε : Fin n → Bool) (a : Fin n) :
     -((n : ℝ) / 2) ≤ rhoC ε a ∧ rhoC ε a ≤ (n : ℝ) / 2 := by
-  have h1 := card_le (fun b : Fin n => a < b ∧ ε b = ε a)
-  have h2 := card_le (fun b : Fin n => b < a ∧ ε b = ε a)
+  have h1 := GlobalTheory.card_filter_fin_bounds (fun b : Fin n => a < b ∧ ε b = ε a)
+  have h2 := GlobalTheory.card_filter_fin_bounds (fun b : Fin n => b < a ∧ ε b = ε a)
   unfold rhoC
   constructor <;> linarith [h1.1, h1.2, h2.1, h2.2]
 
 theorem rhoN_bd {n : ℕ} (ε : Fin n → Bool) (a : Fin n) :
     -((n : ℝ) / 2) ≤ rhoN ε a ∧ rhoN ε a ≤ (n : ℝ) / 2 := by
-  have h1 := card_le (fun b : Fin n => a < b ∧ ε b ≠ ε a)
-  have h2 := card_le (fun b : Fin n => b < a ∧ ε b ≠ ε a)
+  have h1 := GlobalTheory.card_filter_fin_bounds (fun b : Fin n => a < b ∧ ε b ≠ ε a)
+  have h2 := GlobalTheory.card_filter_fin_bounds (fun b : Fin n => b < a ∧ ε b ≠ ε a)
   unfold rhoN
   constructor <;> linarith [h1.1, h1.2, h2.1, h2.2]
 
@@ -940,7 +888,6 @@ theorem sqrt_step {X Y b : ℝ} (hb : 4 ≤ b) (hX : (b / 2) ^ 2 ≤ X) (hY : X 
 end GlobalTheory.LowCasShift
 
 namespace GlobalTheory
-
 
 open LowCasShift in
 theorem lowK_sub_single_and_sqrt_ckv_le :

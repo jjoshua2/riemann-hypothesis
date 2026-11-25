@@ -291,24 +291,13 @@ open GlobalTheory.LevDesc (TypeFrame grpHR grpGHR levDet secRing move)
 open GlobalTheory.IndefiniteRowSideFullHecke.LevelStructureAutomorphisms (LevelAut)
 open GlobalTheory.OrbitSep
 
-namespace GlobalTheory.LogKSDiv.Spread'
-
-theorem germ_pt' {X : Scheme.{0}} (B : X.Opens) (y : B.toScheme) {U : X.Opens} (hU : IsAffineOpen U)
-    (hy : B.ι y ∈ U) :
-    spMap (X.presheaf.germ U (B.ι y) hy ≫ B.ι.stalkMap y).hom ≫ hU.fromSpec = B.toScheme.fromSpecStalk y ≫ B.ι := by
-  show Spec.map (X.presheaf.germ U (B.ι y) hy ≫ B.ι.stalkMap y) ≫ _ = _
-  rw [Spec.map_comp, Category.assoc, ← IsAffineOpen.fromSpecStalk, hU.fromSpecStalk_eq_fromSpecStalk,
-    Scheme.SpecMap_stalkMap_fromSpecStalk]
-
-end GlobalTheory.LogKSDiv.Spread'
-
 theorem GlobalTheory.LogKSDiv.chartRestr_eq_germ : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l) (c : Coeff l) (TF : TorFlag Xo c) (Z : Comp Xo c), ∀ [IsIntegral (X₀ TF.Y Z)] [SmoothOfRelativeDimension Dw.dim (s₀ TF.Y Z)] (x : X₀ TF.Y Z) (U : TF.Y.X.affineOpens), U.1 ≤ barComp TF.Y Z → ∀ (hx : (barComp TF.Y Z).ι x ∈ U.1) (ρ : Γ(TF.Y.X, U.1) →+* (X₀ TF.Y Z).functionField), spMap ρ ≫ LogKS.chart U = GlobalTheory.LogKSDiv.genPt TF Z ≫ (barComp TF.Y Z).ι → ∀ r, ρ r = algebraMap ((X₀ TF.Y Z).presheaf.stalk x) (X₀ TF.Y Z).functionField (GlobalTheory.LogKSDiv.stalkHom TF Z x U hx r) := by
   intro E _ _ _ H Dw l Xo c TF Z _ _ x U hU hx ρ hρ r
   have hη : (barComp TF.Y Z).ι (genericPoint (X₀ TF.Y Z)) ∈ U.1 := by
     have h := (genericPoint_spec (X₀ TF.Y Z)).mem_open_set_iff ((barComp TF.Y Z).ι ⁻¹ᵁ U.1).isOpen
     exact h.2 ⟨x, trivial, hx⟩
   set ψ := (TF.Y.X.presheaf.germ U.1 _ hη ≫ (barComp TF.Y Z).ι.stalkMap (genericPoint (X₀ TF.Y Z))).hom with hψ
-  have hg := GlobalTheory.LogKSDiv.Spread'.germ_pt' (barComp TF.Y Z) (genericPoint (X₀ TF.Y Z)) U.2 hη
+  have hg := GlobalTheory.LogKSDiv.Spread.germ_pt (barComp TF.Y Z) (genericPoint (X₀ TF.Y Z)) U.2 hη
   have hmono : Mono (LogKS.chart U) := by
     unfold LogKS.chart
     have : IsOpenImmersion U.2.fromSpec := IsAffineOpen.isOpenImmersion_fromSpec U.2
@@ -1047,8 +1036,6 @@ section Spread
 open MonoidalCategory CartesianMonoidalCategory MonObj
 open scoped CategoryTheory.Obj
 
-
-
 open GlobalTheory.LieLocBasis GlobalTheory.ShFam.EigLoc GlobalTheory.ShFam.EigSpread in
 theorem GlobalTheory.LogKSDiv.exists_spread_eigFrame : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l) (c : Coeff l) (TF : TorFlag Xo c) (Z : Comp Xo c), ∀ [IsIntegral (X₀ TF.Y Z)], ∀ (x : X₀ TF.Y Z) (φ : c.F →+* (X₀ TF.Y Z).presheaf.stalk x) (f : GlobalTheory.ShFam.EigFrame TF.Y φ ((show Sp ((X₀ TF.Y Z).presheaf.stalk x) ⟶ X₀ TF.Y Z from (X₀ TF.Y Z).fromSpecStalk x) ≫ (barComp TF.Y Z).ι)), (show Sp ((X₀ TF.Y Z).presheaf.stalk x) ⟶ X₀ TF.Y Z from (X₀ TF.Y Z).fromSpecStalk x) ≫ s₀ TF.Y Z = spMap φ → ∃ (U : TF.Y.X.affineOpens) (_ : U.1 ≤ barComp TF.Y Z) (_ : (barComp TF.Y Z).ι x ∈ U.1) (ρ : Γ(TF.Y.X, U.1) →+* (X₀ TF.Y Z).functionField) (n : ℕ) (e : (Σ τ : E →+* ℂ, Fin (Dw.mult τ)) ≃ Fin n) (v : Fin n → (Sp (DualNumber Γ(TF.Y.X, U.1)) ⟶ TF.Y.t.G.left)) (φU : c.F →+* Γ(TF.Y.X, U.1)), spMap ρ ≫ LogKS.chart U = GlobalTheory.LogKSDiv.genPt TF Z ≫ (barComp TF.Y Z).ι ∧ (∀ i, IsTanAtG TF.Y.t (LogKS.chart U) (v i)) ∧ (∀ w', IsTanAtG TF.Y.t (LogKS.chart U) w' → ∃! cf : Fin n → Γ(TF.Y.X, U.1), IsCombAtG TF.Y.t (LogKS.chart U) v cf w') ∧ (∀ (a : 𝓞 E) (τ : E →+* ℂ) (i : Fin (Dw.mult τ)), IsCombAtG TF.Y.t (LogKS.chart U) v (Pi.single (e ⟨τ, i⟩) (φU (embK c τ a))) (v (e ⟨τ, i⟩) ≫ (TF.Y.t.act.act a).left)) ∧ (∀ (τ : E →+* ℂ) (i : Fin (Dw.mult τ)), spMap (dualMap (algebraMap ((X₀ TF.Y Z).presheaf.stalk x) (X₀ TF.Y Z).functionField)) ≫ f.v τ i = spMap (dualMap ρ) ≫ v (e ⟨τ, i⟩)) := open GlobalTheory.ShFam.EigLoc GlobalTheory.ShFam.EigSpread GlobalTheory.LieLocBasis GlobalTheory.LogKSDiv.SpreadFrame ReciprocityTheory.ChartRestriction.G.PullbackSections in open ReciprocityTheory.ChartRestriction.G.Chart (sp IsUnivChart tmap) in open scoped Matrix in by
   intro E _ _ _ H Dw l Xo c TF Z _ x φ f hφ
@@ -1079,41 +1066,9 @@ theorem GlobalTheory.LogKSDiv.exists_spread_eigFrame : ∀ (E : Type) [Field E] 
   have hφl : φ = lam.comp φ₀ := spMap_inj (by
     rw [← hφ, ← ReciprocityTheory.ChartRestriction.G.PullbackSections.spMap_comp_spMap, hφ₀, ← Category.assoc, hpt, Category.assoc])
   subst hφl
-  have vec_bc_of_chart {S : Type} [CommRing S] {X : Scheme.{0}} {t : SAB H X} {x : Sp S ⟶ X} {n : ℕ}
-      {xc : ∀ m : ℕ, ReciprocityTheory.ChartRestriction.G.Chart.sp (R₀ := S) (ReciprocityTheory.ChartRestriction.G.Chart.JetR S (Fin n) m) ⟶ (Over.pullback x).obj t.G}
-      (C : ReciprocityTheory.ChartRestriction.G.Chart.Chart ((Over.pullback x).obj t.G)) (hx : ReciprocityTheory.ChartRestriction.G.Chart.IsUnivChart _ n xc)
-      {S' : Type} [CommRing S'] (ψ : S →+* S') {x' : Sp S' ⟶ X} (h : x' = spMap ψ ≫ x) :
-      ∃ (xc' : ∀ m : ℕ, ReciprocityTheory.ChartRestriction.G.Chart.sp (R₀ := S') (ReciprocityTheory.ChartRestriction.G.Chart.JetR S' (Fin n) m) ⟶ (Over.pullback x').obj t.G),
-        ReciprocityTheory.ChartRestriction.G.Chart.IsUnivChart _ n xc' ∧ ∀ cc : Fin n → S, vec t x' xc' (ψ ∘ cc) = spMap (dualMap ψ) ≫ vec t x xc cc := by
-    subst h
-    letI : Algebra S S' := ψ.toAlgebra
-    obtain ⟨x₁, hx₁, hcomp⟩ := LieChart.univChart_baseChange_of_chart (R := S) (R' := S') _ C n xc hx
-    have h₁ := IsGrpPullback.comp
-      (isGrpPullback_pullback ((Over.pullback x).obj t.G) (ReciprocityTheory.ChartRestriction.G.Chart.fB S S'))
-      (isGrpPullback_pullback t.G x)
-    obtain ⟨e, he, hφ⟩ := grpPullback_iso h₁
-      (isGrpPullback_pullback t.G (ReciprocityTheory.ChartRestriction.G.Chart.fB S S' ≫ x))
-    refine ⟨fun m => x₁ m ≫ e.hom, gfp_chart_iso e hx₁, fun cc => ?_⟩
-    have key : (ReciprocityTheory.ChartRestriction.G.Chart.tvec (x := fun m => x₁ m ≫ e.hom) (algebraMap S S' ∘ cc)).left =
-        (ReciprocityTheory.ChartRestriction.G.Chart.tvec (x := x₁) (algebraMap S S' ∘ cc)).left ≫ e.hom.left := by
-      show (_ ≫ x₁ 1 ≫ e.hom).left = (_ ≫ x₁ 1).left ≫ e.hom.left
-      rw [Over.comp_left, Over.comp_left, Over.comp_left, Category.assoc]
-    show (ReciprocityTheory.ChartRestriction.G.Chart.tvec (x := fun m => x₁ m ≫ e.hom) (algebraMap S S' ∘ cc)).left ≫ pullback.fst _ _ = _
-    rw [key, Category.assoc, hφ, ← Category.assoc, hcomp cc, Category.assoc]
-    rfl
   obtain ⟨xL, hxL, hvL⟩ := vec_bc_of_chart C hxc lam hpt
   choose B hB using fun τ i => vec_exists hxL _ (f.tan τ i)
-  have exists_projectors {L : Type} [CommRing L] (φ : c.F →+* L) {x : Sp L ⟶ TF.Y.X} {n : ℕ}
-      {xc : ∀ m : ℕ, sp (R₀ := L) (ReciprocityTheory.ChartRestriction.G.Chart.JetR L (Fin n) m) ⟶ (Over.pullback x).obj TF.Y.t.G}
-      (hx : IsUnivChart _ n xc) :
-      ∃ P : (E →+* ℂ) → Matrix (Fin n) (Fin n) L, ∀ {k : Type} [CommRing k] (ψ : L →+* k) {x' : Sp k ⟶ TF.Y.X}
-        {xc' : ∀ m : ℕ, sp (R₀ := k) (ReciprocityTheory.ChartRestriction.G.Chart.JetR k (Fin n) m) ⟶ (Over.pullback x').obj TF.Y.t.G}
-        (hx' : IsUnivChart _ n xc'), (∀ cc : Fin n → L, vec TF.Y.t x' xc' (ψ ∘ cc) = spMap (dualMap ψ) ≫ vec TF.Y.t x xc cc) → ∀ τ v, Matrix.mulVec ((P τ).map ψ) v ∈ eig c (ψ.comp φ) hx' τ ∧
-          (v ∈ eig c (ψ.comp φ) hx' τ → Matrix.mulVec ((P τ).map ψ) v = v) := by
-    first
-    | exact _root_.GlobalTheory.ShFam.EigSpread.exists_projectors
-    | apply _root_.GlobalTheory.ShFam.EigSpread.exists_projectors <;> assumption
-  obtain ⟨P, hP⟩ := exists_projectors φ₀ hxc
+  obtain ⟨P, hP⟩ := exists_projectors c φ₀ hxc
   have hPL := hP lam hxL hvL
   have hBe : ∀ τ i, B τ i ∈ eig c (lam.comp φ₀) hxL τ := fun τ i =>
     (vec_eig_iff hxL _ _).1 fun a => by rw [← hB]; exact f.eig τ i a
@@ -1484,7 +1439,6 @@ theorem local_of {D D' : CartierDiv X} {V : X.Opens} {h : X.functionField}
   exact ⟨hr.mul u.regAt, hu⟩
 
 end GlobalTheory.Cartier.RatSecDiv
-
 
 open GlobalTheory.Cartier.RatSecDiv in
 theorem GlobalTheory.Cartier.exists_sec_div_nonzeroLocus_eq :

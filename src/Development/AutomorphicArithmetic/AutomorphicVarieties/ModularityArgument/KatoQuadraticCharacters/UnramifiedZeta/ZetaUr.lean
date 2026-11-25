@@ -887,11 +887,6 @@ theorem norm_pow_mul_le {a : Qbar l} {k : ℕ} (h : ‖a‖ ≤ (l : ℝ) ^ k) :
 
 end GlobalTheory.LambdaValuationPowers.ZetaCoef
 
-namespace GlobalTheory.LambdaValuationPowers
-
-open ZetaCoef
-
-end GlobalTheory.LambdaValuationPowers
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -1534,7 +1529,6 @@ theorem dt_eq_one [IsAlgClosure ℚ Ω] {W : R2 Ω l} (hcont : Continuous W) (hd
   exact hsub
 
 end GlobalTheory.QuotInertia
-
 
 open GlobalTheory.QuotInertia in
 theorem GlobalTheory.quot_eq_one_of_cycBar_eq_one : ∀ (l : ℕ) [Fact l.Prime] (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω]

@@ -140,10 +140,6 @@ open scoped ComplexOrder
 
 namespace GlobalTheory.GaussHerm
 
-lemma finrank_V (n : ℕ) : Module.finrank ℝ (V n) = 2 * n := by
-  rw [← Module.finrank_mul_finrank ℝ ℂ (V n), Complex.finrank_real_complex, finrank_euclideanSpace,
-    Fintype.card_fin]
-
 lemma det_toEuclideanLin {n : ℕ} (C : Matrix (Fin n) (Fin n) ℂ) :
     LinearMap.det (Matrix.toEuclideanLin C) = C.det := by
   have : Matrix.toEuclideanLin C = Matrix.toLin (EuclideanSpace.basisFun (Fin n) ℂ).toBasis
@@ -205,7 +201,7 @@ theorem integral_exp_neg_herm : ∀ (n : ℕ) (H : Matrix (Fin n) (Fin n) ℂ), 
   have hmap := Measure.map_linearMap_addHaar_eq_smul_addHaar (volume : Measure (V n)) (f := L)
     (by rw [hdetL]; exact hpos.ne')
   have hG : ∫ v : V n, g v = Real.pi ^ n := by
-    rw [hg, GaussianFourier.integral_rexp_neg_mul_sq_norm one_pos, finrank_V, div_one]
+    rw [hg, GaussianFourier.integral_rexp_neg_mul_sq_norm one_pos, ReciprocityTheory.L2DbarEstimates.C.finrank_V, div_one]
     rw [show ((2 * n : ℕ) : ℝ) / 2 = (n : ℝ) by push_cast; ring, Real.rpow_natCast]
   have hgc : Continuous g := by rw [hg]; fun_prop
   have hI : ∫ w : V n, g (L w) = Real.pi ^ n / H.det.re := by
@@ -390,7 +386,6 @@ theorem trunc_gauss : ∀ (n : ℕ) (C ε : ℝ), 0 < ε → ∃ η : ℝ, 0 < �
   set A : ℝ := K / P + ε with hAdef
   have hA : 0 < A := by positivity
   set K2 : ℝ := K + r with hK2def
-  have hK2 : 0 < K2 := by positivity
   have hs : 0 < r / K2 / A := by positivity
   have hT : Tendsto (fun m : ℕ => Real.exp (-(m * η * δ ^ 2 / 2)) * (2 * Real.pi / η) ^ n)
       atTop (𝓝 0) := by
@@ -851,9 +846,6 @@ theorem morse_local : ∀ (n : ℕ) (U K : Set (V n)) (φ g : V n → ℝ) (ε :
       rw [hq]
       nlinarith
     have hP : 0 ≤ ‖f (z + w)‖ ^ 2 := by positivity
-    have hgz : 0 ≤ (1 - τ) * g z := by
-      have := hgpos z (hKU hz); have : 0 < 1 - τ := by linarith
-      positivity
     calc k * (‖F w‖ ^ 2 * Wf w)
         = ((1 - τ) * g z) * (‖f (z + w)‖ ^ 2 *
             (Real.exp (-(m * φ z)) * (Real.exp (-(m * (h w).re)) ^ 2 * Wf w))) := by
@@ -1151,7 +1143,6 @@ theorem local_bound {D : ℕ} (hX : IsArithVar p D) (hs : GenSmooth p D) (P : Pa
     simp only [Set.mem_setOf_eq, C.e.left_inv hy.1] at this
     exact this
   set I := ∫ w in Metric.ball (C.e y) δ, cmb (vals P m 1 f) c σ (C.e.symm w) * (ω σ).dens C (C.e.symm w)
-  have hM : 0 ≤ (m : ℝ) ^ D * I := mul_nonneg (by positivity) hInn
   have h3 : (ω σ).dens C y * cmb (vals P m 1 f) c σ y ≤
       (ω σ).dens C y * ((ρ σ y / D.factorial + ε) * (m : ℝ) ^ D * I) := by
     rw [mul_comm]

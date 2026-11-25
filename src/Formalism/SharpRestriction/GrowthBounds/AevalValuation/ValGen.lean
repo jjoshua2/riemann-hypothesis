@@ -137,8 +137,7 @@ theorem twist_aeval (LL : Letters ι) (LL' : Letters κ) (S L : Set ι) (S' : Se
         apply Finset.sum_congr rfl
         intro b _
         rw [(h1 (v.1, b) hv hS).1, map_X]
-      · set_option synthInstance.maxHeartbeats 100000 in
-          simp only [thetaG, map_sum, map_mul, eval₂Hom_C, eval₂Hom_X']
+      · simp only [thetaG, map_sum, map_mul, eval₂Hom_C, eval₂Hom_X']
         apply Finset.sum_congr rfl
         intro b _
         rw [(h1 (v.1, b) hv hS).1, map_X]
@@ -157,7 +156,7 @@ theorem twist_aeval (LL : Letters ι) (LL' : Letters κ) (S L : Set ι) (S' : Se
 theorem thetaG_mem (g : ι × Fin n → MvPolynomial (κ × Fin n) Kf) (e t : ℤ)
     (P : MvPolynomial (ι × Fin n) (GLLaurent Kf n)) (hP : P ∈ (laurentCoeffFiltration Kf n (ι × Fin n) e).F t) :
     thetaG g P ∈ (laurentCoeffFiltration Kf n (κ × Fin n) e).F t := by
-  refine flt_hom_mem (flt_L (GLCoord Kf n) e) (laurentCoeffFiltration Kf n (κ × Fin n) e) (thetaG g) 0 ?_ ?_ hP
+  refine flt_hom_mem (Formalism.MainNotions.G.GLWeightTheory.flt_L (GLCoord Kf n) e) (laurentCoeffFiltration Kf n (κ × Fin n) e) (thetaG g) 0 ?_ ?_ hP
   · intro t b hb
     rw [thetaG, eval₂Hom_C]
     exact flt_C_mem hb

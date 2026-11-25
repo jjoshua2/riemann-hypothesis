@@ -21,12 +21,7 @@ theorem tanVal_mul_all (hC : GlobalTheory.Published.CrystallineSmoothLift) (hH :
     (R : Type) [CommRing R] (A : Over (Sp R)) [GrpObj A] (g : ℕ) (hA : IsAbelianScheme A)
     (hg : SmoothOfRelativeDimension g A.hom) (f : Form (A.hom ≫ 𝟙 (Sp R))) (a b : epsR R ⟶ A) :
     tanVal (a * b) f = tanVal a f + tanVal b f := by
-  have hg2 : SmoothOfRelativeDimension (g + g) (A ⊗ A).hom := by
-    have : SmoothOfRelativeDimension g (Limits.pullback.fst A.hom A.hom) :=
-      (smoothOfRelativeDimension_isStableUnderBaseChange g).of_isPullback
-        (IsPullback.of_hasPullback A.hom A.hom).flip hg
-    rw [Over.tensorObj_hom]
-    exact smoothOfRelativeDimension_comp g g _ _
+  have hg2 : SmoothOfRelativeDimension (g + g) (A ⊗ A).hom := GlobalTheory.AbDual.smooth_prod hg hg
   have hP : AllPrim (dp0 R) (𝟙 _) A :=
     (GlobalTheory.AbelianPrim.abelianDeRham_free (_root_.GlobalTheory.Proof.abelianDeRhamFree_of_hodge hC hH) R A g hA hg).1
   have hc : Form.cl _ f ∈ prim (dp0 R) (𝟙 _) A := by rw [hP]; trivial
@@ -52,7 +47,7 @@ theorem tanVal_mul_all (hC : GlobalTheory.Published.CrystallineSmoothLift) (hH :
     (hH R (A ⊗ A) (g + g) (AbelianSchemeGerms.isAbelianScheme_tensor A A hA hA) hg2).2.2.2.2.1.2.1
   have hcmp : GlobalTheory.CechDR.cmpForm _ (mμ.pullForm f - (m1.pullForm f + m2.pullForm f)) = 0 :=
     hinj (((GlobalTheory.CechDR.comparison_formClass _ _).symm.trans ((congrArg _ hcl).trans (map_zero _))).trans (map_zero _).symm)
-  have h0 := GlobalTheory.T.formValueOnTangentVector_eq_zero_of_globalForm_zero R (A ⊗ A) (lift a b) _ hcmp
+  have h0 := GlobalTheory.TanVanish.tanVal_eq_zero_of_cmpForm_eq_zero R (A ⊗ A) (lift a b) _ hcmp
   have h1 : tanVal (lift a b) (mμ.pullForm f) = tanVal (lift a b) (m1.pullForm f + m2.pullForm f) :=
     sub_eq_zero.1 ((map_sub _ _ _).symm.trans h0)
   calc tanVal (a * b) f = tanVal (lift a b ≫ μ[A]) f := by rw [Hom.mul_def]

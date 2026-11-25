@@ -146,9 +146,9 @@ namespace GlobalTheory.Cong
 theorem extend_of_locallyCauchy : ∀ (l : ℕ) [Fact l.Prime] (Γ J : Type) [TopologicalSpace Γ] (x : J → Γ), DenseRange x → ∀ (θ : J → PadicAlgCl l) (L : IntermediateField ℚ_[l] (PadicAlgCl l)), FiniteDimensional ℚ_[l] L → (∀ j, θ j ∈ L) → (∀ ε : ℝ, 0 < ε → ∀ g : Γ, ∃ V ∈ nhds g, ∀ i j, x i ∈ V → x j ∈ V → ‖θ i - θ j‖ ≤ ε) → ∃ T : Γ → PadicAlgCl l, Continuous T ∧ ∀ j, T (x j) = θ j := by
   intro l _ Γ J _ x hx θ L hL hθL hC
   have hLc : IsComplete (L : Set (PadicAlgCl l)) := by
-    haveI : FiniteDimensional ℚ_[l] (Subalgebra.toSubmodule L.toSubalgebra) := hL
+    have : FiniteDimensional ℚ_[l] (Subalgebra.toSubmodule L.toSubalgebra) := hL
     exact Submodule.complete_of_finiteDimensional (Subalgebra.toSubmodule L.toSubalgebra)
-  letI : TopologicalSpace J := TopologicalSpace.induced x inferInstance
+  let : TopologicalSpace J := TopologicalSpace.induced x inferInstance
   have hx' : IsDenseInducing x := ⟨⟨rfl⟩, hx⟩
   have hex : ∀ g : Γ, ∃ t : PadicAlgCl l, Tendsto θ (comap x (𝓝 g)) (𝓝 t) := by
     intro g
@@ -1157,7 +1157,6 @@ theorem finite_semisimple (k R : Type) [Field k] [CharZero k] [IsAlgClosed k] [R
     choose a ha1 ha using hv
     obtain ⟨⟨s, hs, hsT⟩, -⟩ := _root_.GlobalTheory.PsChar.isPsChar_idempotent k R d T h (∑ i, e i) he.isIdempotentElem_sum
     have h1 : ((∑ i, a i : ℕ) : k) = s := by
-      set_option synthInstance.maxHeartbeats 100000 in
         rw [← hsT, map_sum]; push_cast; exact Finset.sum_congr rfl fun i _ => (ha i).symm
     have h2 : ∑ i, a i = s := by exact_mod_cast h1
     calc m = ∑ _i : Fin m, 1 := by simp
@@ -1233,7 +1232,7 @@ theorem exists_ssRep (Γ k : Type) [Group Γ] [Field k] [CharZero k] [IsAlgClose
     rw [hτ, hτ, map_mul e.symm, map_mul e.symm]; exact hS'.comm _ _
   have hcn : ∀ i, ∃ m : ℕ, c i = m := by
     intro i
-    haveI := hn i
+    have := hn i
     let E : Π j, Matrix (Fin (n j)) (Fin (n j)) k := Pi.single i (Matrix.single 0 0 1)
     have hE : IsIdempotentElem E := by
       unfold IsIdempotentElem

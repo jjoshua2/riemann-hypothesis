@@ -21,51 +21,8 @@ public import Development.AbelianVarietyTheory.Proofs.FlagMeasures.NotField
 public import Formalism.SharpRestriction.CuspSpanNormBounds.NonGenericAndKTwoTheorems
 public import Formalism.SharpRestriction.CuspSpanNormBounds.UniformConstantsAndStatements
 import Development.AbelianVarietyTheory.Proofs.FlagMeasures.IsPrincipalIdealRingOfHenselian
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
 import Mathlib.Algebra.Order.Star.Int
 import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
 import Development.AbelianVarietyTheory.Proofs.FlagMeasures.HermitianFramesComplementUnitaryActsOnTerms
 import Development.AbelianVarietyTheory.Proofs.FlagMeasures.HermitianFramesStabilizerActsOnTerms
 import Mathlib.Tactic.Linter.HaveILetI
@@ -74,7 +31,6 @@ import Mathlib.Order.CompletePartialOrder
 import Mathlib.RingTheory.Henselian
 import Mathlib.RingTheory.RegularLocalRing.Defs
 import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.Tactic.Polynomial.Basic
 import Std.Tactic.BVDecide.Normalize.Prop
 
 -- This file was produced by scripts/clump.py from the modules listed below.
@@ -94,7 +50,6 @@ variable {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchim
   [CharZero F] {E : Type} [CommRing E] [Algebra F E] [TopologicalSpace E] {L : LocE F E}
   {r k : ℕ} (S : Frames L r k)
 
-
 omit [IsNonarchimedeanLocalField F] [CharZero F] in
 theorem mass_le_sum {ι : Type} (s : Finset ι) (d : S.Datum) (P : Submodule L.O S.V → Prop)
     (Q : ι → Submodule L.O S.V → Prop) (h : ∀ Λ, S.IsTerm d Λ → P Λ → ∃ i ∈ s, Q i Λ) :
@@ -111,12 +66,10 @@ theorem mass_le_sum {ι : Type} (s : Finset ι) (d : S.Datum) (P : Submodule L.O
   · rw [ite_eq_right hP]
     exact zero_le
 
-
 omit [IsNonarchimedeanLocalField F] [CharZero F] in
 theorem mass_mono (d : S.Datum) (P Q : Submodule L.O S.V → Prop)
     (h : ∀ Λ, S.IsTerm d Λ → P Λ → Q Λ) : S.mass d P ≤ S.mass d Q := by
   simpa using mass_le_sum S {()} d P (fun _ => Q) (fun Λ h1 h2 => ⟨(), by simp, h Λ h1 h2⟩)
-
 
 omit [IsNonarchimedeanLocalField F] [CharZero F] in
 theorem sumData_mass_le (P : S.Datum → Submodule L.O S.V → Prop) :
@@ -247,7 +200,6 @@ open ValuativeRel Formalism.MainNotions.S Formalism.MainNotions.S.Loc GlobalTheo
 open scoped Pointwise ENNReal Classical
 
 namespace GlobalTheory.HL.CoordSq
-
 
 open scoped Pointwise ENNReal Classical in
 open ValuativeRel in
@@ -651,15 +603,6 @@ variable {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F]
 variable {E : Type} [CommRing E] [Algebra F E] [TopologicalSpace E]
 variable {L : LocE F E} {r k : ℕ} (S : Frames L r k)
 
-theorem mass_mono (d : S.Datum) (P Q : Submodule L.O S.V → Prop)
-    (h : ∀ Λ, S.IsTerm d Λ → P Λ → Q Λ) : S.mass d P ≤ S.mass d Q := by
-  apply _root_.GlobalTheory.HL.NoCancellation.mass_mono <;> assumption
-
-theorem mass_le_sum {ι : Type} (s : Finset ι) (d : S.Datum) (P : Submodule L.O S.V → Prop)
-    (Q : ι → Submodule L.O S.V → Prop)
-    (h : ∀ Λ, S.IsTerm d Λ → P Λ → ∃ m ∈ s, Q m Λ) : S.mass d P ≤ ∑ m ∈ s, S.mass d (Q m) := by
-  apply _root_.GlobalTheory.HL.NoCancellation.mass_le_sum <;> assumption
-
 theorem sumData_mono (φ ψ : S.Datum → ℝ≥0∞) (h : ∀ d, φ d ≤ ψ d) : S.sumData φ ≤ S.sumData ψ := by
   unfold Frames.sumData
   exact ENNReal.tsum_le_tsum fun o => by gcongr; exact h _
@@ -698,7 +641,7 @@ theorem family_bound : ∀ {F : Type} [Field F] [ValuativeRel F] [TopologicalSpa
   have hep : 0 ≤ e := by positivity
   have hmass : ∀ d, S.mass d (S.InFF β J βJ d) ≤ ENNReal.ofReal (2 * A0 * (β : ℝ) ^ (k - 1)) := by
     intro d
-    refine (mass_le_sum S (Finset.range (i + 1)) d _ (fun m Λ => S.cardI d Λ = S.q ^ m) ?_).trans ?_
+    refine (GlobalTheory.HL.NoCancellation.mass_le_sum S (Finset.range (i + 1)) d _ (fun m Λ => S.cardI d Λ = S.q ^ m) ?_).trans ?_
     · intro Λ hΛ hP
       obtain ⟨⟨m, hm⟩, hle, -⟩ := GlobalTheory.HL.SmallImage.small_image L r k S d Λ hΛ
       refine ⟨m, ?_, hm⟩
@@ -721,7 +664,7 @@ theorem family_bound : ∀ {F : Type} [Field F] [ValuativeRel F] [TopologicalSpa
     hmass (fun d => _root_.GlobalTheory.HL.AmpCancel.amp_le_mass L r k S hk β J βJ d)
   have h2 : (S.sumData fun d => S.mass d (S.InFF β J βJ d)) ≤
       ENNReal.ofReal (A1 * ((β : ℝ) ^ (k - 1))⁻¹) * S.nn :=
-    (sumData_mono S _ _ fun d => mass_mono S d _ _ fun Λ _ h => h.2.1).trans (_root_.GlobalTheory.DefectShare.mass_defect_order_le L r k S hk β hβ1)
+    (sumData_mono S _ _ fun d => GlobalTheory.HL.NoCancellation.mass_mono S d _ _ fun Λ _ h => h.2.1).trans (_root_.GlobalTheory.DefectShare.mass_defect_order_le L r k S hk β hβ1)
   refine h1.trans ?_
   refine (mul_le_mul_right h2 _).trans ?_
   rw [← mul_assoc, ← ENNReal.ofReal_mul (by positivity)]
@@ -747,9 +690,6 @@ open ValuativeRel Formalism.MainNotions.S.Loc GlobalTheory.HL MeasureTheory
 open scoped Pointwise ENNReal Classical
 
 namespace GlobalTheory.HL.FirstType
-
-theorem geom_le (x : ℝ) (hx : 2 ≤ x) (n : ℕ) : ∑ i ∈ Finset.range (n + 1), x ^ i ≤ 2 * x ^ n := by
-  apply _root_.GlobalTheory.HL.FamilyBound.geom_le <;> assumption
 
 variable {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F]
 variable {E : Type} [CommRing E] [Algebra F E] [TopologicalSpace E] {L : LocE F E} {r k : ℕ}
@@ -809,7 +749,7 @@ theorem first_type_bound : ∀ {F : Type} [Field F] [ValuativeRel F] [Topologica
         refine ENNReal.ofReal_le_ofReal ?_
         rw [← Finset.mul_sum]
         refine mul_le_mul_of_nonneg_left ?_ hA0
-        refine le_trans (le_of_eq ?_) (geom_le _ hx n)
+        refine le_trans (le_of_eq ?_) (GlobalTheory.HL.FamilyBound.geom_le _ hx n)
         refine Finset.sum_congr rfl fun i _ => ?_
         rw [Nat.add_sub_cancel, Nat.cast_pow, ← pow_mul, ← pow_mul, mul_comm]
     have h1 := hbasic (fun d Λ => ¬ S.BBzero d Λ ∧ ¬ S.TypeBe d Λ ∧ S.be d Λ = β) _ 1 zero_le_one hmass

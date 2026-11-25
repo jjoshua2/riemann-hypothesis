@@ -40,51 +40,9 @@ public import Development.AbelianVarietyTheory.Proofs.JetHarmonics.CapelliParamM
 public import Development.AbelianVarietyTheory.Statements.DiscreteSeriesShifts.ThmBpDS
 public import Development.AbelianVarietyTheory.Proofs.FlagMeasures.UpqRepVocabularyAgree
 public import Formalism.SharpRestriction.CuspSpanNormBounds.OnePlaceEstimates
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Topology.Sheaves.Init
 import Development.AbelianVarietyTheory.Proofs.FlagMeasures.BesselTorusElementProperties
 import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
 import Mathlib.Tactic.Linter.HaveILetI
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
 import Mathlib.Topology.Separation.CompletelyRegular
 import Std.Tactic.BVDecide.Normalize.Prop
 import Formalism.FormalDegreeBessel.FinalG
@@ -352,17 +310,10 @@ theorem ptWeight_swap (k r : ℕ) (hk : 1 ≤ k) (T T' : ℝ) (γ : Point ℂ (r
   rw [List.getLast?_map, hb]
   rfl
 
-theorem aT_one (k r : ℕ) : aT k r 1 = 1 := by
-  unfold aT
-  rw [← Matrix.diagonal_one]
-  congr 1
-  funext i
-  simp
-
 theorem conjF_one {k r : ℕ} {V : Type*} (F : B.Mat k r → V) : conjF 1 F = F := by
   funext x
   unfold conjF
-  rw [aT_one]; simp
+  rw [GlobalTheory.ThA.TorusJac.aT_one]; simp
 
 theorem gamLev_one (k r : ℕ) : D.GamLev k r 1 1 0 = 1 := by
   unfold D.GamLev
@@ -616,11 +567,6 @@ private lemma measurable_lmulM_flag_measures {k r : ℕ} (a : Matrix (Fin (2 * r
   simp only [lmulM, Matrix.mul_apply, Matrix.of_apply]
   exact Finset.measurable_sum _ fun l _ => measurable_const.mul ((measurable_pi_apply j).comp (measurable_pi_apply l))
 
-private lemma measurable_rmulF' {n : ℕ} (a : Matrix (Fin n) (Fin n) ℂ) : Measurable (B.rmulF a) := by
-  refine Measurable.of_eval fun i => Measurable.of_eval fun j => ?_
-  simp only [B.rmulF, Matrix.mul_apply, Matrix.of_apply]
-  fun_prop
-
 private lemma measurableSet_lmulM_pair_mem {k r : ℕ} {A : Set (Mt k r)} (hA : MeasurableSet A) :
     MeasurableSet {p : Mt k r × Mt k r | lmulM (Matrix.of p.2) p.1 ∈ A} := by
   have hm : Measurable (fun p : Mt k r × Mt k r => lmulM (Matrix.of p.2) p.1) := by
@@ -643,7 +589,7 @@ theorem measure_eq_smul_of_left_right {k r : ℕ} {U : Set (B.Mat k r)} {μ ν :
     have hslice : ∀ᵐ x ∂μ, ν (Prod.mk x ⁻¹' S) = ν A := by
       filter_upwards [hμ] with x hx
       have hpre : Prod.mk x ⁻¹' S = B.rmulF (Matrix.of x) ⁻¹' A := rfl
-      rw [hpre, ← Measure.map_apply (measurable_rmulF' _) hA, hr _ hx]
+      rw [hpre, ← Measure.map_apply (Formalism.FourierDecayAlt.P.B2x5.measurable_rmulF _) hA, hr _ hx]
     rw [lintegral_congr_ae hslice, lintegral_const, measure_univ, mul_one]
 
   have hy : (μ.prod ν) S = μ A * ν Set.univ := by
@@ -679,7 +625,7 @@ theorem haarW_twoSided_of_left : ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → �
   have hνr : ∀ a ∈ UWset k r z, Measure.map (B.rmulF a) ν = ν := by
     intro a ha
     obtain ⟨hai, haa, -⟩ := hinvU a ha
-    rw [hνdef, Measure.map_map (measurable_rmulF' a) hinvm]
+    rw [hνdef, Measure.map_map (Formalism.FourierDecayAlt.P.B2x5.measurable_rmulF a) hinvm]
     have hcomp : (B.rmulF a ∘ (Formalism.FourierDecayAlt.P.HermitianFormFactor.invF (m := Fin (2 * r + k + 1)))) = (Formalism.FourierDecayAlt.P.HermitianFormFactor.invF (m := Fin (2 * r + k + 1))) ∘ lmulM a⁻¹ := by
       funext x
       show ((Matrix.of x)⁻¹ * a : B.Mat k r) = (a⁻¹ * Matrix.of x)⁻¹

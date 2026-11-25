@@ -693,13 +693,6 @@ theorem step {p : ℕ} (T : ℕ) (g κ : Fin p → ℕ) (h : ∀ i, (T : ℤ) * 
   · have hi' : ¬ i + 1 < p := by omega
     simp [dite_eq_right hi, dite_eq_right hi']
 
-theorem gap_nonneg {p : ℕ} {κ : Fin p → ℕ} (h : Antitone κ) (i : Fin p) : 0 ≤ WeightAlgebra.gapZ κ i := by
-  unfold WeightAlgebra.gapZ
-  split_ifs with hi
-  · have : κ ⟨i.1 + 1, hi⟩ ≤ κ i := h (by simp [Fin.le_def])
-    omega
-  · positivity
-
 theorem entry_le {p : ℕ} (T : ℕ) (g κ : Fin p → ℕ) (h : ∀ i, (T : ℤ) * g i ≤ WeightAlgebra.gapZ κ i + 2) (i : ℕ) (hi : i ≤ p) :
     (T : ℝ) * (ext0 (ofGaps g) i : ℝ) ≤ (ext0 κ i : ℝ) + 2 * p := by
   have := telescope T (fun i => (ext0 (ofGaps g) i : ℝ)) (fun i => (ext0 κ i : ℝ)) (step T g κ h) i p
@@ -735,7 +728,7 @@ variable {D : D7} {L : SizeData₂ D} {Pm : ParameterChoice' D L} (Tp : ParamsT 
 
 theorem mul_lGapP_le_gapZ_add_two (τ : D.what₂.Tau) (i : Fin (D.R.sigW j).1) :
     (Tp.TO : ℤ) * lGapP D (kaR Tp hK j) Tp.TO Tp.nWn τ i ≤ WeightAlgebra.gapZ ((kaR Tp hK j).aP τ) i + 2 := by
-  have g0 := gap_nonneg ((kaR Tp hK j).aPlus_antitone τ) i
+  have g0 := GlobalTheory.RunDepth.gapZ_nonneg_of_antitone ((kaR Tp hK j).aPlus_antitone τ) i
   unfold lGapP
   split_ifs with h
   · exact floor_le _ _ (by unfold WeightAlgebra.Tp; omega) (by unfold WeightAlgebra.Tp; omega) _ _ (by omega) le_rfl
@@ -747,7 +740,7 @@ theorem mul_lGapP_le_gapZ_add_two (τ : D.what₂.Tau) (i : Fin (D.R.sigW j).1) 
 
 theorem gapM_le (τ : D.what₂.Tau) (i : Fin (D.R.sigW j).2) :
     (Tp.TO : ℤ) * lGapM D (kaR Tp hK j) Tp.TO τ i ≤ WeightAlgebra.gapZ ((kaR Tp hK j).aM τ) i + 2 := by
-  have g0 := gap_nonneg ((kaR Tp hK j).aM_anti τ) i
+  have g0 := GlobalTheory.RunDepth.gapZ_nonneg_of_antitone ((kaR Tp hK j).aM_anti τ) i
   unfold lGapM
   split_ifs with h
   · exact floor_le _ _ (by unfold WeightAlgebra.Tp; omega) (by unfold WeightAlgebra.Tp; omega) _ _ (by omega) le_rfl
@@ -779,7 +772,6 @@ theorem kappa_spread (hj : InR D j) (τ : D.what₂.Tau) :
   rw [big 0 (by omega), big (D.R.k - 2) (by omega)]
   have a1 := (L.cloud_v τ ⟨0, by omega⟩).2
   have a2 := (L.cloud_v τ ⟨D.R.k - 2, by omega⟩).1
-  have a3 : (0 : ℝ) ≤ ((D.R.k - 2 : ℕ) : ℝ) := Nat.cast_nonneg _
   push_cast at a1 a2 ⊢
   linarith
 
@@ -832,11 +824,9 @@ theorem restAt_bounds (hj : InR D j) (τ : D.what₂.Tau) :
   change (Tp.TO : ℝ) * (ext0 ((lR Tp hK j).aP τ) (D.R.k - 1) : ℝ) ≤ _ at t2
   change (Tp.TO : ℝ) * (ext0 ((lR Tp hK j).aM τ) 0 : ℝ) ≤ _ at t3
   have c0 : (5 : ℝ) ≤ D.R.k := by exact_mod_cast hk
-  have c1 : ((D.R.k - 2 : ℕ) : ℝ) ≤ D.R.k := by exact_mod_cast Nat.sub_le _ _
   have c2 : ((D.R.sigW j).1 : ℝ) ≤ 2 * D.R.k := by exact_mod_cast (by omega : (D.R.sigW j).1 ≤ 2 * D.R.k)
   have c3 : ((D.R.sigW j).2 : ℝ) ≤ D.R.k := by exact_mod_cast (by omega : (D.R.sigW j).2 ≤ D.R.k)
   have c4 : (j : ℝ) ≤ D.R.k := by exact_mod_cast (by omega : j ≤ D.R.k)
-  have c5 : (0 : ℝ) ≤ j := Nat.cast_nonneg _
   have c6 : (0 : ℝ) ≤ ((D.R.sigW j).2 : ℝ) := Nat.cast_nonneg _
   have hT : (0 : ℝ) ≤ Tp.TO := Nat.cast_nonneg _
   unfold restAt
@@ -866,7 +856,6 @@ theorem le_two_floor {x : ℝ} (h : 1 ≤ x) : 1 ≤ (⌊x⌋₊ : ℝ) ∧ x �
 include Tp in
 theorem sizes_le : L.Sc ≤ 2 * (numOf D L).Sc ∧ L.etaSz ≤ 2 * (numOf D L).eta ∧ (D.R.k : ℝ) ≤ (numOf D L).Sc := by
   have hT : (1 : ℝ) ≤ Tp.TO := by exact_mod_cast TO_pos Tp
-  have ht : (0 : ℝ) ≤ D.R.t := Nat.cast_nonneg _
   have hk : (0 : ℝ) ≤ D.R.k := Nat.cast_nonneg _
   have hm : (0 : ℝ) < D.R.m := by exact_mod_cast (by have := D.R.two_le_m; omega : 0 < D.R.m)
   obtain ⟨d1, d2⟩ := le_two_floor (x := ((D.s.Del : ℚ) : ℝ)) ((one_le_pow₀ hT).trans Tp.Del_TO)
@@ -905,7 +894,6 @@ theorem rest_degree_bounds : ∀ (D : D7) (L : SizeData₂ D) (Pm : ParameterCho
   have h1 := Finset.sum_le_card_nsmul Finset.univ _ _ (fun τ _ => (restAt_bounds Tp hK j hj τ).2)
   rw [Finset.card_univ, hc, nsmul_eq_mul] at h1
   obtain ⟨s1, s2, s3⟩ := sizes_le Tp
-  have hk : (0 : ℝ) ≤ D.R.k := Nat.cast_nonneg _
   have he := L.etaSz_pos
   have h2 : L.Sc + 3 * L.etaSz + 12 * D.R.k ≤ 100 * ((numOf D L).Sc + (numOf D L).eta) := by linarith
   have h3 := mul_le_mul_of_nonneg_left h2 (by positivity : (0 : ℝ) ≤ (D.R.f : ℝ) * D.R.k)
@@ -944,7 +932,6 @@ theorem goodPage_run : ∀ (D : D7) (L : SizeData₂ D) (Pm : ParameterChoice' D
     exact Nat.mul_pos hf (Nat.choose_pos hr)
   have h40 := Tp.TO_40
   have hTpos : (0 : ℝ) < Tp.TO := by exact_mod_cast TO_pos Tp
-  have hx0 : 0 < L.sc.x := by linarith
   have hw'' : 0 < L.sc.w'' D.R.n := by
     unfold Scale.w'' Scale.b' Scale.a Scale.b Scale.X'
     have : (0 : ℝ) < D.R.n := by exact_mod_cast hn
@@ -1028,7 +1015,6 @@ theorem comap_liesOver {E K : Type} [Field E] [Field K] [NumberField K] (f : �
     (la : HeightOneSpectrum (𝓞 K)) :
     (la.asIdeal.comap f).LiesOver (Ideal.span {((resCharOf la : ℕ) : ℤ)}) := by
   have hl := Crude.resCharOf_prime la
-  have hP := la.isPrime
   have hmax : (Ideal.span {((resCharOf la : ℕ) : ℤ)}).IsMaximal :=
     PrincipalIdealRing.isMaximal_of_irreducible (Nat.prime_iff_prime_int.mp hl).irreducible
   have hle : Ideal.span {((resCharOf la : ℕ) : ℤ)} ≤ (la.asIdeal.comap f).under ℤ := by
@@ -1240,8 +1226,6 @@ theorem numOf_sizes_le (D : D7) (L : SizeData₂ D) (hk : (1 : ℝ) ≤ D.R.k) (
 
 theorem card_RPl (R : Ranks) : Fintype.card (RPl R) = R.f := by
   simp [RPl, Ranks.f, Ranks.n, R.card_A]
-
-
 
 theorem leafGood_run : ∃ C0 : ℝ, ∀ (D : D7) (L : SizeData₂ D) (Pm : ParameterChoice' D L) (Tp : ParamsT D L Pm) (hK : DV.KapDef D) (T : Core D), LawsM T → ∀ (EX : ErrX D) [StarRing (𝓞 D.host.E)] (K : Type) [Field K] [NumberField K] [StarRing K] [Algebra (𝓞 T.Q.c.F) (𝓞 K)] [Algebra.IsIntegral (𝓞 T.Q.c.F) (𝓞 K)] [Algebra (𝓞 D.host.E) K] (Bs : DefBase K) (Df : DefSide Bs) (S : IndefData Df) (P : Type) [Group P] [Finite P] (oc : OnConst) (O : OnObj S P oc) (ι : Bs.J → ℕ) (Nm : IndefNum Bs),
   RunTie T EX Tp hK O ι → (∀ j, PkgSt (T.Q.Xo (ι j)) T.Q.c) → C0 ≤ oc.C → LeafPage O → LeafSizes O → 10 ≤ Pm.CnW → 3 ≤ L.sc.x ^ (L.sc.ez / 5) → 3 ≤ L.sc.x → (D.R.k : ℝ) * L.sc.b' ≤ L.sc.b →
