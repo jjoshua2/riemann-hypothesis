@@ -8,55 +8,8 @@ public import Formalism.FormalDegreeBessel.FormalDegreeRatio.GroupFactorizationH
 public import Mathlib.Algebra.Star.Basic
 public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.StabilizerFlagSplitting.MulVecColOfMul
 public import Formalism.HermitianCurvature.FiniteOrderIntersectionInSmooth
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.Lemma
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
-import Mathlib.Tactic.ENatToNat
 import Std.Tactic.BVDecide.Normalize.Prop
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.Tactic.TypeStar
 import Mathlib.Analysis.CStarAlgebra.CStarMatrix
 
 -- This file was produced by scripts/clump.py from the modules listed below.
@@ -434,40 +387,13 @@ lemma sig_ge {k r : ℕ} (i : Fin (2 * r + k + 1)) (h : i.val ≤ r + k) : r ≤
   · push_neg at h'
     exact h'.1
 
-private lemma hpk_apply_of_outer_index (k r : ℕ) (i j : Fin (2 * r + k + 1)) :
-    Hpk k r i j = if j = sig k r i then sgn k r i else 0 := by
-  by_cases hi : i.val < r ∨ r + k < i.val
-  · have hsig : sig k r i = ⟨2 * r + k - i.val, by omega⟩ := by
-      unfold sig
-      rw [if_pos hi]
-    rw [hsig]
-    have hj : (j = (⟨2 * r + k - i.val, by omega⟩ : Fin (2 * r + k + 1))) ↔ i.val + j.val = 2 * r + k := by
-      rw [Fin.ext_iff]
-      simp only
-      omega
-    simp only [Hpk, sgn, hj]
-    split_ifs <;> first | rfl | (exfalso; omega)
-  · have hsig : sig k r i = i := by
-      unfold sig
-      rw [if_neg hi]
-    rw [hsig]
-    push_neg at hi
-    simp only [Hpk, sgn]
-    by_cases hij : j = i
-    · subst hij
-      simp only [if_true, and_true]
-      split_ifs <;> first | rfl | (exfalso; omega)
-    · have hij' : ¬ i = j := fun h => hij h.symm
-      simp only [hij, hij', if_false, and_false]
-      split_ifs <;> first | rfl | (exfalso; omega)
-
 lemma herm_coord {k r : ℕ} (v w : Fin (2 * r + k + 1) → ℂ) :
     herm (Hpk k r) v w = ∑ i, star (w i) * (sgn k r i * v (sig k r i)) := by
   unfold herm
   simp only [dotProduct, Pi.star_apply]
   refine Finset.sum_congr rfl fun i _ => ?_
   congr 1
-  simp only [Matrix.mulVec, dotProduct, hpk_apply_of_outer_index, ite_mul, zero_mul, Finset.sum_ite_eq',
+  simp only [Matrix.mulVec, dotProduct, _root_.Formalism.QuantumDeterminants.GBasic.Hpk_eq, ite_mul, zero_mul, Finset.sum_ite_eq',
     Finset.mem_univ, if_true]
 
 lemma star_dotProduct_Hpk_mulVec_eq_sum_sub {k r : ℕ} {v w : Fin (2 * r + k + 1) → ℂ} (hv : perpX k r v) (hw : perpX k r w) :

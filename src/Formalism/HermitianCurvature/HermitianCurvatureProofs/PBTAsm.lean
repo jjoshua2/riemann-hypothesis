@@ -16,53 +16,9 @@ public import Formalism.HermitianCurvature.RealInputsClosedAdmissibleSettings
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.AutomorphicInSphericalLevel
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.VectorVanishesBigCell
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.DensityConstantOfParts
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.CompactGroupHaarExists
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.TypeStar
 import Mathlib.Tactic.Linter.HaveILetI
 import Formalism.FormalDegreeBessel.FormalDegreeRatio.UnitaryWeylNormalHolds
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.ComponentFamilySettingOfSetting
@@ -104,15 +60,7 @@ theorem kap_last : kap Zm (Fin.last r) = (Zm.submatrix Fin.castSucc Fin.castSucc
   simp [← two_mul, pow_mul]
 
 theorem nk_pos (hdet : Zm.det ≠ 0) : 0 < nk Zm := by
-  obtain ⟨b, hb⟩ : ∃ b, kap Zm b ≠ 0 := by
-    by_contra h
-    push_neg at h
-    have h2 := mul_kap Zm (Fin.last r)
-    simp [h] at h2
-    first
-      | exact hdet h2.symm
-  exact Finset.sum_pos' (fun i _ => Complex.normSq_nonneg _)
-    ⟨b, Finset.mem_univ _, Complex.normSq_pos.mpr hb⟩
+  apply _root_.Formalism.FourierDecayAlt.P.PBI.Sm.nk_pos_of_det <;> assumption
 
 theorem sum_kap_al (hT : 0 < T) (hT' : 0 < T') :
     ∑ b, kap Zm b * al T T' Zm b = -Zm.det / ((Real.sqrt (T * T') : ℝ) : ℂ) := by

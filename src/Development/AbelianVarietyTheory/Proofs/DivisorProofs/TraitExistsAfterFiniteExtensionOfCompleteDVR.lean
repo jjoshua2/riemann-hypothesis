@@ -104,7 +104,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 open GlobalTheory.Toroidal GlobalTheory.LocM GlobalTheory.PolFan GlobalTheory.ZM GlobalTheory.SiegelTor GlobalTheory.ZH
 open scoped CategoryTheory.Obj
 open GlobalTheory.Poinc Formalism.L2.Pj
-attribute [local instance] Over.cartesianMonoidalCategory
 open Classical
 open ReciprocityTheory.ChartRestriction.G.DVR
 
@@ -190,7 +189,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 open GlobalTheory.Toroidal GlobalTheory.LocM GlobalTheory.PolFan GlobalTheory.ZM GlobalTheory.SiegelTor GlobalTheory.ZH
 open scoped CategoryTheory.Obj
 open GlobalTheory.Poinc Formalism.L2.Pj
-attribute [local instance] Over.cartesianMonoidalCategory
 open Classical
 
 namespace GlobalTheory.CdvrFiniteAlgebra
@@ -556,7 +554,7 @@ theorem exists_extLam : ∀ (R : Type) [CommRing R] [IsDomain R] [IsDiscreteValu
   haveI := hG.quasiCompact
   haveI : GeometricallyIntegral G.hom :=
     GlobalTheory.forall_geometricallyIntegral_of_smooth_of_geometricallyConnected _ _ _ hG.smooth hG.geomConnected
-  obtain ⟨L', hL', hb⟩ := GlobalTheory.T.lineBundle_generic_fibre_extends_over_dvr R G L hL
+  obtain ⟨L', hL', hb⟩ := _root_.GlobalTheory.Mum.lb_extends_over_dvr R G L hL
   refine ⟨abelian₂ G L', DVR.linComb_isLB _ hL' _ _, fun κ₂ hκ => ?_⟩
   have h := isGrpPullback_pullback G (jK R)
   let V := lift (pushPt h.1.w (fst ((Over.pullback (jK R)).obj G) ((Over.pullback (jK R)).obj G)))

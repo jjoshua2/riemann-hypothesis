@@ -5,49 +5,6 @@ public import Formalism.HermitianCurvature.HermitianCurvatureProofs.ChainRecursi
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.LemmaDDeterminantIdentity
 import Formalism.RealPlaceAnalysis.RealPlaceTaylor.QuantumDetHighestWeightHolds
 import Formalism.RealPlaceAnalysis.RealPlaceTaylor.ShiftedGeneratorEqIteSmulAdd
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 
 @[expose] public section
@@ -174,18 +131,7 @@ end ring
 theorem skip_two_succAbove_comp {m : ℕ} (q : Fin (m + 2)) (i' : Fin (m + 1)) :
     (skip2 (min (q.succAbove i') q) (max (q.succAbove i') q) : Fin m → Fin (m + 2)) =
       q.succAbove ∘ i'.succAbove := by
-  funext j
-  by_cases h : i'.castSucc < q
-  · rw [Fin.succAbove_of_castSucc_lt _ _ h, min_eq_left h.le, max_eq_right h.le]
-    apply Fin.ext
-    simp only [skip2, Function.comp, Fin.succAbove, Fin.lt_def, Fin.val_castSucc] at h ⊢
-    split_ifs <;> simp at * <;> omega
-  · have h' := not_lt.mp h
-    have h2 : q ≤ q.succAbove i' := by
-      rw [Fin.succAbove_of_le_castSucc _ _ h']
-      exact h'.trans (Fin.castSucc_lt_succ).le
-    rw [min_eq_right h2, max_eq_left h2]
-    exact skip_succ_double_identity m q i' j (by simpa [Fin.le_def] using h')
+  apply _root_.Formalism.FourierDecayAlt.P.Qx6.skip_two_succAbove_comp_alt <;> assumption
 
 theorem sign_succ {m : ℕ} (q : Fin (m + 1)) (x : Fin m) :
     ((-1 : ℤ) ^ (x : ℕ)) = (-1) ^ ((q.succAbove x : Fin (m + 1)) : ℕ) * eps (q.succAbove x) q := by

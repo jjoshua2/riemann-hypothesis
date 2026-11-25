@@ -1855,32 +1855,19 @@ theorem secLaw : SecLaw := _root_.GlobalTheory.CompanionTheory.RgEisSec.secLaw
 theorem htLip : HtLip := _root_.GlobalTheory.CompanionTheory.RgEis.htLip
 theorem stage : PiLocalization₂ := _root_.GlobalTheory.CompanionTheory.RgEis.stage
 theorem wallLaw_of : SecLaw → WallLaw := _root_.GlobalTheory.CompanionTheory.RgEis.wallLaw_of_secLaw
-theorem cross_of : SecLaw → HtLip → PiLocalization₂ → WallLaw → Cross := _root_.GlobalTheory.CompanionTheory.RgEisCross.cross
-theorem gallery_of : SecLaw → IdTube → TubeChain → Cross → Gallery := _root_.GlobalTheory.CompanionTheory.RgEisGal.gallery
-theorem transfer_of : SecLaw → WallLaw → Transfer := _root_.GlobalTheory.CompanionTheory.RgTransfer.transfer
-theorem twist_of : SecLaw → Twist := _root_.GlobalTheory.CompanionTheory.RgEisTwist.twist
 theorem scale : Scale := _root_.GlobalTheory.CompanionTheory.RgEisScale.scale
 theorem grpTop : GrpTop := _root_.GlobalTheory.CompanionTheory.RgEisTop.grpTop
 theorem bdetLaw : BdetLaw := _root_.GlobalTheory.CompanionTheory.RgEis.bdetLaw
 theorem extLaw : ExtLaw := _root_.GlobalTheory.CompanionTheory.RgEisExt.extLaw
 theorem parLaw_of : BdetLaw → ExtLaw → GrpTop → ParLaw := _root_.GlobalTheory.CompanionTheory.RgEisPar.parLaw
-theorem leviS_of : BdetLaw → ExtLaw → GrpTop → LeviS := _root_.GlobalTheory.CompanionTheory.RgEisLevi.leviS
-theorem leviQ_of : BdetLaw → ExtLaw → GrpTop → LeviQ := _root_.GlobalTheory.CompanionTheory.RgEisLeviQUnit.leviQ
-theorem convGrOf_of : BdetLaw → ExtLaw → ConvGrOf := _root_.GlobalTheory.CompanionTheory.Plucker.convGrOf
-theorem convU_of : ParLaw → ConvU := _root_.GlobalTheory.CompanionTheory.RgEis.UnitaryConv.convU_of_parLaw
-theorem sgStep_of : Gallery → Transfer → Twist → GrpTop → ParLaw → LeviS → LeviQ → ConvGrOf → ConvU → SgStep := _root_.GlobalTheory.CompanionTheory.RgEis.sgStep
 theorem epConv : EpConv := GlobalTheory.CompanionTheory.EpConvB.epConv
 theorem epMain_of : EpConv → EpMain := GlobalTheory.CompanionTheory.EpsteinMain.Hd.epMain_of_epConv
 theorem testFun : TestFun := PositivityTheory.RgEis.TF.testFun
 theorem testSph : TestSph := _root_.GlobalTheory.CompanionTheory.RgEisTestSph.testSph
 theorem stdGood : StdGood := _root_.GlobalTheory.CompanionTheory.StdGoodAd.stdGood
-theorem mirGen_of : SecLaw → StdGood → BdetLaw → EpConv → EpMain → TestFun → TestSph → MirGen := PositivityTheory.RgEis.MG.mirGen
 theorem dict : Dict := _root_.GlobalTheory.CompanionTheory.EisDict.dict
 theorem dictInf : DictInf := _root_.GlobalTheory.CompanionTheory.RgEis.dictInf
 theorem cmGood_of : StdGood → Dict → DictInf → CMGood := _root_.GlobalTheory.CompanionTheory.RgEisCM.cmGood
-theorem cmMir_of : Dict → CMGood → GrpTop → BdetLaw → ExtLaw → ParLaw → MirGen → CMMir := _root_.GlobalTheory.CompanionTheory.CMMirror.cmMir
-theorem sgOne_of : SecLaw → WallLaw → Scale → StdGood → Dict → DictInf → CMGood → GrpTop → BdetLaw → ExtLaw → ParLaw →
-    MirGen → SgOne := PositivityTheory.RgEis.So.sgOne_hd
 theorem siegelMult_of : SecLaw → WallLaw → Dict → DictInf → CMGood → GrpTop → BdetLaw → ExtLaw → ParLaw → SgAll →
     SiegelEisensteinSeries.BRoad.SiegelMult := _root_.GlobalTheory.CompanionTheory.SiegelFrame.siegelMult_of
 
@@ -1912,7 +1899,7 @@ theorem eisBL : GlobalTheory.ThK.Dbl.EisBL :=
   have hW := wallLaw_of secLaw
   have hP := parLaw_of bdetLaw extLaw grpTop
   have hG := cmGood_of stdGood dict dictInf
-  have hM := mirGen_of secLaw stdGood bdetLaw epConv (epMain_of epConv) testFun testSph
+  have hM := _root_.PositivityTheory.RgEis.MG.mirGen secLaw stdGood bdetLaw epConv (epMain_of epConv) testFun testSph
   SiegelEisensteinSeries.BRoad.eisBL_of _root_.GlobalTheory.CompanionTheory.SiegelEisHalf.eisHalf
     (siegelMult_of secLaw hW dict dictInf hG grpTop bdetLaw extLaw hP
       (sgAll_of hG (_root_.GlobalTheory.CompanionTheory.CMMirror.cmMir dict hG grpTop bdetLaw extLaw hP hM)

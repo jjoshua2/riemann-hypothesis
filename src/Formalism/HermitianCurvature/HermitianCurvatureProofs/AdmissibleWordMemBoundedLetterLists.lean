@@ -7,52 +7,10 @@ public import Formalism.HermitianCurvature.HermitianCurvatureProofs.PeriodLattic
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.PoissonJointFirstReduction
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.TheoremPIntegralOfPlaces
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.UnipotentCoordinatesMeasurePreserving
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
 import Mathlib.MeasureTheory.Integral.Pi
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
+import Formalism.HermitianCurvature.HermitianCurvatureProofs.PBJoint
 
 @[expose] public section
 
@@ -395,20 +353,7 @@ theorem psiInf_eq_prod (S : C.HidaSetting E Wp Wq) (l : E) (c : J.CV E) :
 
 theorem prod_dlB (S : C.HidaSetting E Wp Wq) (hg : 0 < S.g) (hU : S6.Unram E) (i : ℕ) :
     ∏ _v : Fin S.f, KB.dlB S i 1 = ZLattice.covolume (J.eLat E (S6.perLat E S.g (S6.nuBlock S.G.r i 1) 1) 1) := by
-  rw [_root_.Formalism.FourierDecayAlt.P.Dx2.NH.nhat E hU S.g _ 1 hg]
-  have hf : S.f = S6.deg E := by
-    have h1 := (Formalism.FourierDecayAlt.P.degreeFacts_statement E).2.1
-    have h2 : Fintype.card (Fin S.f) = Fintype.card (InfinitePlace E) := Fintype.card_congr S.pl
-    rw [Fintype.card_fin] at h2
-    omega
-  rw [Finset.prod_const, Finset.card_univ, Fintype.card_fin, hf]
-  unfold KB.dlB D.deG
-  have hrd := Formalism.FourierDecayAlt.P.Jx4.rd_pos E
-  have hg' : (0 : ℝ) < (S.g : ℝ) := by exact_mod_cast hg
-  have e : S6.rd E ^ (2 * S6.nuBlock (S.G.r : ℤ) (i : ℤ) (1 : ℤ)) / (2 / (S6.rd E * (S.g : ℝ) ^ 3)) =
-      S6.rd E ^ (2 * S6.nuBlock (S.G.r : ℤ) (i : ℤ) (1 : ℤ)) * (S6.rd E / 2) * (S.g : ℝ) ^ 3 := by
-    field_simp
-  rw [Nat.cast_one, e, mul_pow, mul_pow, ← zpow_natCast, ← zpow_mul, ← pow_mul]
+  apply _root_.Formalism.FourierDecayAlt.P.PBJoint.prod_dlB <;> assumption
 
 theorem nhat_eq_nhatV (S : C.HidaSetting E Wp Wq) (hg : 0 < S.g) (hU : S6.Unram E) (hInt : KB.IntAll S)
     (ε : ℝ) (hε : 0 < ε) (i : ℕ) (hi1 : 1 ≤ i) (hi2 : i ≤ S.G.r + 1) (w : S.W) (Y : Finset (TB.Pt E))

@@ -1,59 +1,11 @@
 module
 
+import Formalism.HermitianCurvature.HermitianCurvatureProofs.CmHalfIntegralGeneratorMemAlgebraicClosure
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.ConjugationInvarianceEverySetting
 public import Formalism.HermitianCurvature.WeylElementCommutesLevelOne
 public import Formalism.FormalDegreeBessel.FinalG
-import Mathlib.Algebra.Module.StablyFree.Basic
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
 public import Mathlib.RingTheory.Complex
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.TotallySplit
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.Lemma
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Separation.CompletelyRegular
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 public import Mathlib.RingTheory.Norm.Transitivity
@@ -89,13 +41,7 @@ lemma herm_zero_right (u : ι → ℂ) : herm H u 0 = 0 := by
   simp [herm]
 
 lemma herm_conj (hH : Hᴴ = H) (u v : ι → ℂ) : conj (herm H u v) = herm H v u := by
-  have h : ∀ i j, star (H i j) = H j i := fun i j => by
-    have := congrFun (congrFun hH j) i
-    rwa [conjTranspose_apply] at this
-  simp only [herm, dotProduct, mulVec, Pi.star_apply, starRingEnd_apply, star_sum, star_mul', star_star, h,
-    Finset.mul_sum]
-  rw [Finset.sum_comm]
-  exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring
+  apply _root_.Formalism.FourierDecayAlt.P.B2x8.herm_conj <;> assumption
 
 lemma herm_UH [DecidableEq ι] {g : Matrix ι ι ℂ} (hg : g ∈ UH H) (u v : ι → ℂ) :
     herm H (g *ᵥ u) (g *ᵥ v) = herm H u v := by
@@ -373,11 +319,7 @@ lemma heisG_zero (k r' : ℕ) : heisG k r' (liftVec k 1 r' 0) 0 = 1 := by
   simpa [lift_zero, herm_zero_right] using heis_act' k r' 0 w 0
 
 lemma Hherm (k r : ℕ) : (Hpk k r)ᴴ = Hpk k r := by
-  ext i j
-  have hi := i.isLt
-  have hj := j.isLt
-  simp only [conjTranspose_apply, Hpk, Fin.ext_iff]
-  split_ifs <;> first | omega | simp
+  apply _root_.Formalism.FourierDecayAlt.P.B2x8.Hpk_herm <;> assumption
 
 lemma herm_self_im (k r : ℕ) (y : Fin (2 * r + k + 1) → ℂ) : (herm (Hpk k r) y y).im = 0 := by
   exact Complex.conj_eq_iff_im.mp (herm_conj _ (Hherm k r) y y)

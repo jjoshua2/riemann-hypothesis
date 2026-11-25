@@ -7,58 +7,8 @@ public import Formalism.HermitianCurvature.HermitianCurvatureProofs.FrameOfAdmis
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.Interlace
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.InterlaceSignTwo
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.ModelWordsAssemble
-import Mathlib.Algebra.AffineMonoid.UniqueSums
-import Mathlib.Algebra.Module.StablyFree.Basic
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Algebra.Order.Star.Real
 public import Mathlib.Analysis.Calculus.FDeriv.Symmetric
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 public import Mathlib.Analysis.Calculus.FDeriv.Mul
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.LevelNablaStarRelations
@@ -3213,10 +3163,7 @@ theorem coordinate_commute_raising_constant (u v : ℂ) : xA P D u * m0A P D v =
   rw [xA, kap_cz]
 
 theorem S12_commute_GGinv (u : ℂ) : S12 P D u * ggiA P D = ggiA P D * S12 P D u := by
-  unfold S12
-  rw [Finset.sum_mul, Finset.mul_sum]
-  refine Finset.sum_congr rfl fun l _ => ?_
-  rw [mul_assoc, G_sc, Ss_sc, ← mul_assoc, kap_sc, mul_assoc]
+  apply _root_.Formalism.FourierDecayAlt.P.MAx1.D5.upper_sum_gamma_inv_comm <;> assumption
 
 theorem nf11 (hN : SSNorm) (hP : P.OK) {u : ℂ} (hu : Good P u) :
     t11 P D u = dA P D u + mt P D u * t22 P D u * lA P D u := by
@@ -3447,14 +3394,7 @@ theorem absCombo {C : Type*} [CommRing C] [Algebra ℂ C] (κ : C →ₐ[ℂ] R)
 
 theorem sum_anti {M : Type*} [AddCommGroup M] [Module ℂ M] (s : Finset ℕ) (D : ℕ → ℕ → M)
     (h : ∀ l ∈ s, ∀ j ∈ s, D l j + D j l = 0) : ∑ l ∈ s, ∑ j ∈ s, D l j = 0 := by
-  have hc : ∑ l ∈ s, ∑ j ∈ s, D l j = ∑ l ∈ s, ∑ j ∈ s, D j l := Finset.sum_comm
-  have h2 : ∑ l ∈ s, ∑ j ∈ s, D l j + ∑ l ∈ s, ∑ j ∈ s, D l j = 0 := by
-    calc ∑ l ∈ s, ∑ j ∈ s, D l j + ∑ l ∈ s, ∑ j ∈ s, D l j
-        = ∑ l ∈ s, ∑ j ∈ s, D l j + ∑ l ∈ s, ∑ j ∈ s, D j l := by rw [← hc]
-      _ = ∑ l ∈ s, ∑ j ∈ s, (D l j + D j l) := by simp only [Finset.sum_add_distrib]
-      _ = 0 := Finset.sum_eq_zero (fun l hl => Finset.sum_eq_zero (fun j hj => h l hl j hj))
-  have h3 : (2 : ℂ) • ∑ l ∈ s, ∑ j ∈ s, D l j = 0 := by rw [two_smul]; exact h2
-  exact (smul_eq_zero.1 h3).resolve_left two_ne_zero
+  apply _root_.Formalism.FourierDecayAlt.P.MAx1.ModelAlgebraRelations.L3.sum_antisymm <;> assumption
 
 end abs
 

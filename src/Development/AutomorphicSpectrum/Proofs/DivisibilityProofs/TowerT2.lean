@@ -29,54 +29,9 @@ public import Development.AutomorphicSpectrum.Proofs.DivisibilityProofs.FlagShif
 public import Development.AutomorphicSpectrum.Proofs.DivisibilityProofs.HomogeneousPowerSumDecomposition
 public import Development.AutomorphicSpectrum.Proofs.DivisibilityProofs.TowerHeightIdentityExpansion
 public import Mathlib.RingTheory.MvPolynomial
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
-import Mathlib.Tactic.Basify
 import Std.Tactic.BVDecide.Normalize.Prop
-import Mathlib.Tactic.ENatToNat
 import Mathlib.Tactic.Linter.HaveILetI
 import GroundTheory.HeightsAndTheta.Heights.RemainderTerms.Elementary
-import Mathlib.Algebra.Order.Star.Real
 import Mathlib.Tactic.Linter.Style
 
 -- This file was produced by scripts/clump.py from the modules listed below.
@@ -1386,10 +1341,10 @@ theorem GlobalTheory.CompanionTheory.Ar.Top.exists_identAt : ∀ II : Intersecti
   have hN : 2 ≤ N := by have := T.j_pos; have := T.j_lt; omega
   obtain ⟨a, b, hid⟩ := exists_finite_identity II T hh frob hshape h6 hBA B₀ hB₀
   have hrest : ∀ (τ : Ψ) (k : ℕ) (Q : RP Ψ N), _ := fun τ k Q =>
-    (_root_.GlobalTheory.CompanionTheory.Ar.Top.restTerm_bound_and_tendsto Ψ N T.j T.bad frob τ k Q).2 B₀
+    (_root_.RootFieldNumerics.rest_term_bound_convergent Ψ N T.j T.bad frob τ k Q).2 B₀
   by_cases hΨ : Nonempty Ψ
   · obtain ⟨τ₀⟩ := hΨ
-    obtain ⟨⟨Q₁, hQ₁, hd₁⟩, Q₂, hQ₂, hd₂⟩ := _root_.GlobalTheory.CompanionTheory.Ar.Top.testForms_sh_tot Ψ N T.j τ₀ T.j_pos T.j_lt
+    obtain ⟨⟨Q₁, hQ₁, hd₁⟩, Q₂, hQ₂, hd₂⟩ := _root_.RootFieldNumerics.exists_degree_one_class Ψ N T.j τ₀ T.j_pos T.j_lt
     have hQ₁' : Q₁.IsHomogeneous (dimFl Ψ N + 1 - 1) := by simpa using hQ₁
     have hQ₂' : Q₂.IsHomogeneous (dimFl Ψ N + 1 - 2) := by
       have : dimFl Ψ N + 1 - 2 = dimFl Ψ N - 1 := by omega
@@ -1510,9 +1465,9 @@ theorem tower_T2_of_inputs : ∀ II : IntersectionSystem, ∀ (Ψ : Type) [Finty
   have hfl := _root_.GlobalTheory.CompanionTheory.Ar.Top.flat_85_bound II Ψ N T hh frob C' rd Lval B A₀ b₀ hprop hI9 hF hB128 hbad hId
   have hHom : (linRoot u ^ (dimFl Ψ N + 1) : RP Ψ N).IsHomogeneous (dimFl Ψ N + 1) := by
     simpa using (linRoot_isHomogeneous u).pow (dimFl Ψ N + 1)
-  obtain ⟨Q, hQ1, hQ2⟩ := _root_.GlobalTheory.CompanionTheory.Ar.Top.form_top_succ_eq_sum_pk Ψ N _ hN2 hHom
+  obtain ⟨Q, hQ1, hQ2⟩ := _root_.RootFieldNumerics.decomposition_power_sums_top_degree Ψ N _ hN2 hHom
   have hDec : IsDecomp (linRoot u ^ (dimFl Ψ N + 1)) Q := ⟨hQ1, hQ2⟩
-  have hEq := _root_.GlobalTheory.CompanionTheory.Ar.Top.identOnDecomposedForm II Ψ N T hh frob B A₀ b₀ _ Q hId hDec
+  have hEq := _root_.RootFieldNumerics.tower_point_count_identity II Ψ N T hh frob B A₀ b₀ _ Q hId hDec
   have hRest := _root_.GlobalTheory.CompanionTheory.Ar.Top.restSum_total_bound Ψ N T.j T.bad frob u g B Q T.j_pos T.j_lt hW hB0 hDec
   have hhF : 0 ≤ hh (linRoot u ^ (dimFl Ψ N + 1)) := hI9.2.1 u hdom
   have hdeg : 0 < flagDeg u := (GlobalTheory.CompanionTheory.Ar.Top.flagDeg_eq_weyl Ψ N u).2.1 hreg

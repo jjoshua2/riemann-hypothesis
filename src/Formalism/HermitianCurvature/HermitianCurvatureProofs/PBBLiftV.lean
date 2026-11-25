@@ -1,50 +1,10 @@
 module
 
+import Formalism.HermitianCurvature.HermitianCurvatureProofs.SizeAtNonneg
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.PBBStmt
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.AdmissibleWordMemBoundedLetterLists
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.JointInstanceTheoremA
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.TheoremPIntegralOfPlaces
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
 
 @[expose] public section
 
@@ -112,15 +72,7 @@ theorem sizeAt_nonneg (S : C.HidaSetting E Wp Wq) (v : Fin S.f) (a : List C.Lett
 
 theorem gN_psd (S : C.HidaSetting E Wp Wq) (hpos : C.ThmPPos S) (v : Fin S.f) (ε : ℝ) (hε : 0 < ε) (j : ℕ)
     (hj : j ≤ S.G.r + 1) (w : S.W) (Z : Finset C.LPt) : TB.PSDOn Z (KB.gN S v ε j (w.1 v)) := by
-  have h0 := hpos v ε hε j hj w Z
-  have h1 := _root_.Formalism.FourierDecayAlt.P.Jx7.t_DiagScale C.LPt Z _ (fun _ => (√(S.sizeAt v (w.1 v)))⁻¹) h0
-  refine psd_congr Z _ _ (fun x _ y _ => ?_) h1
-  unfold KB.gN
-  have hs := sizeAt_nonneg S v (w.1 v)
-  have e : (((√(S.sizeAt v (w.1 v)))⁻¹ : ℝ) : ℂ) * (((√(S.sizeAt v (w.1 v)))⁻¹ : ℝ) : ℂ) =
-      ((S.sizeAt v (w.1 v) : ℝ) : ℂ)⁻¹ := by
-    rw [← Complex.ofReal_mul, ← mul_inv, Real.mul_self_sqrt hs, Complex.ofReal_inv]
-  rw [e, div_eq_mul_inv, mul_comm]
+  apply _root_.Formalism.FourierDecayAlt.P.PBA.gN_psd <;> assumption
 
 theorem lift_block0 (S : C.HidaSetting E Wp Wq) (hpos : C.ThmPPos S) (v : Fin S.f) (ε : ℝ) (hε : 0 < ε) (j : ℕ)
     (hj : j ≤ S.G.r + 1) (w : S.W) (Y : Finset (TB.Pt E)) (P P' : TB.Pt E → C.LPt) :

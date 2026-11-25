@@ -28,64 +28,10 @@ public import Development.AutomorphicSpectrum.Proofs.GeometryProofs.JoinModelPoi
 public import Development.AutomorphicSpectrum.Proofs.GeometryProofs.LineHeightInvariantScaling
 public import Development.AutomorphicSpectrum.Proofs.GeometryProofs.RootHeightDifferenceBound
 import Development.AutomorphicSpectrum.Proofs.GeometryProofs.LocalRatioProductFormula
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Algebra.Ring.IsFormallyReal
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Bernstein
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.RegularLocalRing.Defs
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
-import Mathlib.Tactic.Lemma
 import Mathlib.Tactic.Linter.HaveILetI
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Presheaf
 import Std.Tactic.BVDecide.Normalize.Prop
 import GroundTheory.HeightsAndTheta.Heights.ElementarySymmetric.PBoundedSectionTransfer
-import Mathlib.RingTheory.Etale.Weakly
-import Mathlib.RingTheory.TotallySplit
-import Mathlib.Topology.Sheaves.Init
-import Mathlib.NumberTheory.Height.NumberField
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Analysis.CStarAlgebra.Classes
-import Mathlib.Algebra.Order.Star.Real
-import Mathlib.RingTheory.PiTensorProduct
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AutomorphicSpectrum.Proofs.GeometryProofs.AmpleHeightBounds, Development.AutomorphicSpectrum.Proofs.GeometryProofs.LineHeightBoundedUnit, Development.AutomorphicSpectrum.Proofs.MetricProofs.LocalNormOutsideFiniteSet, Development.AutomorphicSpectrum.Proofs.MetricProofs.OrthogonalFlagDegreeComparison, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.CentralizerCmFieldInvolution, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.FibrePowerMapOfTotalSpacesIsPullback, Development.AutomorphicSpectrum.Proofs.MetricProofs.NormDegreeStepZero, Development.AutomorphicSpectrum.Proofs.MetricProofs.NormalizedDegreeLeRankMulSlope, Development.AutomorphicSpectrum.Proofs.MetricProofs.WeightedFlagDegreeLowerBound, Development.AutomorphicSpectrum.Proofs.GeometryProofs.RefLowerOfFibreInput, Development.AutomorphicSpectrum.Proofs.GeometryProofs.TowerI5OfReference, Development.AutomorphicSpectrum.Proofs.GeometryProofs.TowerI5OfFibreInput
@@ -611,7 +557,7 @@ theorem two_sum_neg_degree_W : ∀ (K : Type) [Field K] [NumberField K] (E : Her
             Module.finrank (𝓞 K) E.carrier * Real.log |(d : ℝ)| := by
   intro K _ _ E Ψ _ j k A h
   obtain ⟨hdeg, hrk⟩ := iSup_part_degree_rank A h
-  obtain ⟨hle, hge⟩ := _root_.GlobalTheory.CompanionTheory.Ar.IndexBound.full_sublattice_normDegree_bounds K E (⨆ a, A.part a) hrk
+  obtain ⟨hle, hge⟩ := _root_.CoverDenseAlt.normDegree_full_rank_submodule_bounds K E (⨆ a, A.part a) hrk
   have hflat : ∑ τ, A.flatDeg τ =
       ∑ τ, E.normDegree (A.W τ).top - ∑ τ, E.normDegree (A.S τ).top := by
     simp only [GlobalTheory.CompanionTheory.Ar.FlagPair.flatDeg, Finset.sum_sub_distrib]
@@ -1366,7 +1312,7 @@ theorem transfer [DecidableEq Ψ] (M R : RootModel Ψ N) (i : R.Ω →+* M.Ω) (
     unfold rootHt
     refine Finset.sum_congr rfl fun j _ => ?_
     congr 1
-    rw [← _root_.GlobalTheory.CompanionTheory.Ar.Ht.lineHt_map_scale M.K M.ι (M.line t j) L F (algebraMap L F) w (fun _ => 1) hw.1 (fun _ => one_ne_zero)]
+    rw [← _root_.CoverDenseAlt.lineHt_invariant_base_change_scaling M.K M.ι (M.line t j) L F (algebraMap L F) w (fun _ => 1) hw.1 (fun _ => one_ne_zero)]
     congr 1
     funext p
     rw [one_mul]
