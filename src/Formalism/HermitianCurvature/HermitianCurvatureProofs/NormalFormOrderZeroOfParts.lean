@@ -1,5 +1,6 @@
 module
 
+import Formalism.HermitianCurvature.HermitianCurvatureProofs.RestrictionIrrelevantDoubleLevelOperator
 public import Formalism.HermitianCurvature.ActualZetaSmooth
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.ActualAdjointnessFromHermitian
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.EulerZetaGammaInvIdentity
@@ -11,57 +12,10 @@ public import Formalism.HermitianCurvature.HermitianCurvatureProofs.QuasiDetermi
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.RegularisedPairingViaPhase
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.TransferRtt
 public import Formalism.HermitianCurvature.HermitianCurvatureProofs.WeightedSumDifferenceIdentity
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Algebra.Order.Star.Int
 public import Mathlib.Analysis.Calculus.FDeriv.Star
 import Mathlib.Analysis.Calculus.FDeriv.Symmetric
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.PiTensorProduct
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.SimpleRing.Principal
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.HaveILetI
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Tactic.TypeStar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Bool
 import Std.Tactic.BVDecide.Normalize.Prop
 
@@ -991,20 +945,7 @@ theorem localization_quotient_separated_dvd (P : M.Par) (hP : P.OK) {ρ σ : M.T
   exact fun h => h1 h.symm
 
 theorem sep (P : M.Par) (hP : P.OK) {ρ σ : M.Ty P} (h : ρ ≠ σ) : ∃ Y : ℂ, M.xC P ρ Y ≠ M.xC P σ Y := by
-  classical
-  have hex : ∃ i, i ∈ Finset.Icc 1 (P.k - 1) ∧ M.rho P ρ i ≠ M.rho P σ i := by
-    by_contra hc
-    push_neg at hc
-    exact h ((Mx3.tyComplete P hP).2 ρ σ hc)
-  let i := Nat.find hex
-  have hi : i ∈ Finset.Icc 1 (P.k - 1) ∧ M.rho P ρ i ≠ M.rho P σ i := Nat.find_spec hex
-  have hmin : ∀ m ∈ Finset.Icc 1 (P.k - 1), m < i → M.rho P ρ m = M.rho P σ m := by
-    intro m hm hmi
-    by_contra hc
-    exact Nat.find_min hex hmi ⟨hm, hc⟩
-  rcases lt_or_gt_of_ne hi.2 with hl | hl
-  · exact ⟨_, fun e => localization_quotient_separated_dvd P hP hi.1 hl (fun m hm hmi => (hmin m hm hmi).symm) e.symm⟩
-  · exact ⟨_, localization_quotient_separated_dvd P hP hi.1 hl hmin⟩
+  apply _root_.Formalism.FourierDecayAlt.P.Qx8.xC_sep <;> assumption
 
 theorem comm_of_sep {T : Type} [Fintype T] [DecidableEq T] {A : Type} [Ring A] [Algebra ℂ A]
     (κ : (T → ℂ) →ₐ[ℂ] A) (w : A) (e : ℂ → T → ℂ)

@@ -1,5 +1,7 @@
 module
 
+import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.LowerInv
+import Formalism.SharpRestriction.CuspSpanNormBounds.StarVecMulDM
 public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HighestWeightUniqueness.UnitaryOfBlockWMem
 public import Formalism.FormalDegreeBessel.FormalDegreeRatio.GBasic
 public import Formalism.HermitianCurvature.FrameExists2
@@ -9,51 +11,7 @@ import Formalism.HermitianCurvature.HermitianCurvatureProofs.ExistsFrameTwo
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.FrameCompletion
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.LemmaDDeterminantIdentity
 import Formalism.HermitianCurvature.HermitianCurvatureProofs.RestrictionIrrelevantDoubleLevelOperator
-import Mathlib.Algebra.Order.Floor.Extended
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Algebra.Order.Interval.Basic
-import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
-import Mathlib.Analysis.Normed.Algebra.GelfandRadius
-import Mathlib.Analysis.Normed.Algebra.MatrixExponential
-import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Combinatorics.Enumerative.DyckWord
-import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
-import Mathlib.Data.NNRat.Floor
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Geometry.Euclidean.Volume.Basic
-import Mathlib.NumberTheory.Chebyshev
-import Mathlib.NumberTheory.Height.NumberField
-import Mathlib.NumberTheory.Height.Projectivization
-import Mathlib.NumberTheory.LucasLehmer
-import Mathlib.NumberTheory.SelbergSieve
-import Mathlib.RingTheory.Radical.NatInt
-import Mathlib.RingTheory.WittVector.IsPoly
-import Mathlib.Tactic.Basify
-import Mathlib.Tactic.ENatToNat
-import Mathlib.Tactic.Echelon.Zsqrtd
-import Mathlib.Tactic.Inclusion.Extension.Core.Core
-import Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic
-import Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses
 import Mathlib.Tactic.Linter.Style
-import Mathlib.Tactic.NormNum.Irrational
-import Mathlib.Tactic.NormNum.IsCoprime
-import Mathlib.Tactic.NormNum.IsSquare
-import Mathlib.Tactic.NormNum.LegendreSymbol
-import Mathlib.Tactic.NormNum.ModEq
-import Mathlib.Tactic.NormNum.NatFib
-import Mathlib.Tactic.NormNum.NatLog
-import Mathlib.Tactic.NormNum.NatSqrt
-import Mathlib.Tactic.NormNum.Ordinal
-import Mathlib.Tactic.NormNum.Parity
-import Mathlib.Tactic.NormNum.Prime
-import Mathlib.Tactic.NormNum.RealSqrt
-import Mathlib.Tactic.Polynomial.Basic
-import Mathlib.Tactic.ReduceModChar
-import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
 
 @[expose] public section
@@ -73,12 +31,7 @@ namespace QrCap
 variable {k r : ℕ}
 
 theorem inWb_bvec_wI (j : Fin (k + 1)) : inWb k r (bvec (wI k r j)) := by
-  intro i hi
-  unfold bvec
-  rw [Pi.single_apply, if_neg]
-  rintro rfl
-  simp [wI] at hi
-  omega
+  apply _root_.Formalism.MainNotions.FrameBoundFromBesselTorus.inWb_bvec_wI <;> assumption
 
 def fr (k r : ℕ) (g : Mx k r) : Fin k → Fin (2 * r + k + 1) → ℂ := fun a => g *ᵥ bvec (wI k r a.castSucc)
 
@@ -246,19 +199,7 @@ theorem torus {g : Mx k r} (hgU : g ∈ UH (Hpk k r)) (θ : Fin k → ℝ) :
   rw [hs, Matrix.exp_conj _ _ hu, Matrix.exp_diagonal, diag_exp_blockW]
 
 theorem Dg_mem (θ : Fin k → ℝ) : Dg θ ∈ PI.UpqRep.Kset (PI.UpqRep.allPos k) := by
-  refine ⟨?_, ?_⟩
-  · rw [Matrix.mem_unitaryGroup_iff']
-    unfold Dg
-    rw [Matrix.star_eq_conjTranspose, Matrix.diagonal_conjTranspose, Matrix.diagonal_mul_diagonal,
-      ← Matrix.diagonal_one]
-    congr 1
-    funext a
-    rw [Pi.star_apply, Complex.star_def, ← Complex.exp_conj, ← Complex.exp_add]
-    have e : (starRingEnd ℂ) ((θ a : ℂ) * Complex.I) + (θ a : ℂ) * Complex.I = 0 := by
-      rw [map_mul, Complex.conj_ofReal, Complex.conj_I]
-      ring
-    rw [e, Complex.exp_zero]
-  · rw [PI.HwUniqW.Jm_allPos, Matrix.mul_one, Matrix.one_mul]
+  apply _root_.PI.WMI.lowerInv_torus_mem <;> assumption
 
 theorem blockW_uh {h : Matrix (Fin k) (Fin k) ℂ} (hh : hᴴ * h = 1) :
     PI.UpqRep.blockW k r h ∈ UH (Hpk k r) := by

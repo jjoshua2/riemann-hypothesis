@@ -473,8 +473,8 @@ theorem exists_isBottom_of_isCoprime (hL : L.Is μ₀) (G : GridData L sc)
   obtain ⟨t0, ht⟩ := (GlobalTheory.TwoTorsionPt.exists_point D ⊤ δ hδ).1
   refine ⟨δ, t0, fun i j => ?_⟩
   obtain ⟨χν, hν, hw⟩ := GlobalTheory.BottomNu.exists_heckeU_nu_inv hL G i j
-  obtain ⟨χβ, hβ⟩ := exists_betaInv_heckeU hL G i j
-  obtain ⟨χα, hα⟩ := exists_heckeU_alphaH hL G i j
+  obtain ⟨χβ, hβ⟩ := exists_betaInv_heckeU G i j
+  obtain ⟨χα, hα⟩ := exists_heckeU_alphaH hL i j
   obtain ⟨P, h1, h2, h3, h4, h5⟩ := _root_.GlobalTheory.FunObj.StdDatum.exists_bottom_big hL G hm hδ ht i j χβ hβ χν hν hw
   obtain ⟨P', h1', h2', h3', h4', h5'⟩ := _root_.GlobalTheory.BotPairSmall.smallPair_exists hL G hm' hδ ht i j χα hα χν hν hw
   exact ⟨P, P', ⟨⟨h1, h1', h2, h2'.trans h2.symm⟩, h3, h3', h4, h4', ⟨h5, h5'⟩⟩⟩
@@ -714,13 +714,6 @@ open Formalism.DivisionValues (vw)
 
 namespace GlobalTheory.RhoLowProof
 
-theorem meanVal_lower {K : Type} [Field K] [NumberField K] (σ : K →+* ℂ) {β : ℂ} {p : K[X]}
-    (hp : IsMinPol σ β p) (hβ : β ≠ 0) {c : K} (hc : c ≠ 0) {l : ℕ} (hl : l.Prime)
-    {w : Formalism.PairingDivisionLocalBalance.Pl K} (hw : (l : 𝓞 K) ∈ w.asIdeal) {m : ℕ}
-    (h : IntAt l ((l : ℂ) ^ m * (σ c * β))) :
-    -((m : ℝ) * (vw w (l : K) : ℝ)) ≤ (vw w c : ℝ) + meanVal_vw w p :=
-  _root_.GlobalTheory.FunObj.SqNum.meanVal_vw_ge_of_intAt σ hp hβ hc hl hw h
-
 theorem classZetaVals_unique {E : Type} [Field E] [NumberField E] {k : ℕ} (hk : 2 ≤ k) {z z' : ClassGroup (OF E) → ℚ}
     (h : GlobalTheory.IndefiniteRowSideFullHecke.ClassZetaValuationBounds.IsClassZetaVals k z) (h' : GlobalTheory.IndefiniteRowSideFullHecke.ClassZetaValuationBounds.IsClassZetaVals k z') : z = z' :=
   _root_.GlobalTheory.ZetaValUnique.classZetaVals_unique hk h h'
@@ -729,21 +722,6 @@ section Twist
 variable {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} (G : GridData L sc)
 
 
-open Classical in
-theorem squareTopTwistPlaces_coprime_splitPlaces {μ₀ : T} (hL : L.Is μ₀) (t : T) :
-    IsFinSetSplitPlacesCoprimeConductor (condF G.pl) ((GlobalTheory.SqTop.twPl G t).image fun P => P.under (𝓞 D.host.F)) :=
-  _root_.GlobalTheory.KummerTwistLemmas.twist_places_under_split_coprime_conductor G hL t
-
-theorem twist_ram {μ₀ : T} (hL : L.Is μ₀) (t : T) (i j : Fin D.R.m) :
-    ∀ P ∈ GlobalTheory.SqTop.twPl G t, ¬ (nuH G t i j).UnrAt P :=
-  _root_.GlobalTheory.SqTop.nuH_not_unrAt_twPl G hL t i j
-
-
-open Classical in
-theorem twist_prime (t : T) {l : ℕ} (hl : l.Prime) {w : Formalism.PairingDivisionLocalBalance.Pl D.what₂.LL} (hlw : (l : 𝓞 D.what₂.LL) ∈ w.asIdeal)
-    (hQ : (GlobalTheory.SqTop.Qn G t : 𝓞 D.what₂.LL) ∉ w.asIdeal) :
-    ∀ q ∈ (GlobalTheory.SqTop.twPl G t).image (fun P => P.under (𝓞 D.host.F)), (l : 𝓞 D.host.F) ∉ q.asIdeal :=
-  _root_.GlobalTheory.twPl_under_not_mem_prime G t hl hlw hQ
 
 end Twist
 
@@ -1455,7 +1433,6 @@ open GlobalTheory.ChiGrid GlobalTheory.FunObj GlobalTheory.FunObj.SqNum GlobalTh
 open GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle (Tri)
 open GlobalTheory.NormSum (Pair Tup)
 open Classical
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 namespace GlobalTheory.SqTop.BotNeFormula
 
 theorem bottomTheta_ne_zero_of_innerProduct_formula : _root_.GlobalTheory.FunPr.ThetaLocalInputs → GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.ThetaIntegralsAgree → GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.LocalMatching →
@@ -1570,7 +1547,6 @@ open GlobalTheory.CMVal (IsHeckeL)
 
 noncomputable section
 namespace GlobalTheory.NormAdelic
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7} {cc : Ideal (𝓞 D.host.K)} {δ t0 : ℂ} {Q : ℕ} {P : Pair D cc δ t0 Q}
 
@@ -1605,7 +1581,6 @@ section -- clump:auto
 noncomputable section
 
 open NumberField Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.L2.Theta Formalism.IndefR Formalism.IndefR.Datum GlobalTheory.NormRatio
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.NormRatio
 
@@ -1641,7 +1616,6 @@ section -- clump:auto
 @[expose] public section
 
 open NumberField Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.L2.Theta Formalism.IndefR Formalism.IndefR.Datum GlobalTheory.NormRatio
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.NormRatio
 
@@ -1672,8 +1646,6 @@ section -- clump:auto
 @[expose] public section
 
 open NumberField Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.L2.Theta Formalism.IndefR Formalism.IndefR.Datum GlobalTheory.NormRatio
-
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.VacuumNorm
 
