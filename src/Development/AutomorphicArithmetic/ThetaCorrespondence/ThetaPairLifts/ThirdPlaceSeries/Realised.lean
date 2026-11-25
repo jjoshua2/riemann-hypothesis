@@ -27,15 +27,15 @@ def ofReal_alt (P : IndefiniteRowSideFullHecke ex) (Del h0 : ℕ) (hDel : D.s.De
     (Qp : _root_.Formalism.IndefR.IndefiniteRealisationNormalisation B.Q) (Qr : _root_.Formalism.IndefR.IndefiniteRealisationRecursion B.Q) : PtAt ex Csz :=
   { P := P, Del := Del, h0 := h0, hDel := hDel, hh0 := hh0, Dcf := Dcf, Spf := Spf, gamDvd := gamDvd
     T := B.T, alg := B.alg, R := B.Q.Rl
-    charW := B.Q.charW, zs := B.Q.zs, s0 := B.Q.s0, s1 := B.Q.s1, dc := B.Q.dc, stdChar := B.Q.stdChar, signs := B.Q.signs
+    charW := B.Q.charW, stdChar := B.Q.stdChar
     cG := B.Q.cG, Sx := B.Q.Sx, nexp := B.Q.nexp, stdV := B.Q.stdV, stdX := B.Q.stdX, host := B.Q.host, err_eq := B.Q.err_eq
     vpos := B.Q.vpos
     κ := B.κ, v₀ := B.v₀, fw := B.fw, bar := B.bar, O := B.O, pins := B.pins, rhoGeo := B.rhoGeo, equivAll := B.equivAll
     cTie := B.cTie, phase := B.phase
-    qGuard := Qp.qGuard, hF := Qp.hF, phsOne := Qp.phsOne, prXunit := Qp.prXunit, grpRecPin := Qp.grpRecPin, fdiag := Qp.fdiag
+    qGuard := Qp.qGuard, hF := Qp.hF, phsOne := Qp.phsOne, grpRecPin := Qp.grpRecPin
     eGtie := Qp.eGtie, betaStd := Qp.betaStd
     tupT := Qr.tupT, hm := Qr.hm, Tp := Qr.Tp, tupXi := Qr.recR.tupXi, tupAt := Qr.recR.tupAt, tupTie := Qr.tupTie
-    tupT_tup := Qr.tupT_tup, muEq := Qr.muEq }
+    tupT_tup := Qr.tupT_tup }
 variable (p : PtAt ex Csz)
 def RealisedCondition : Prop :=
   ∃ (Rc : _root_.Formalism.L2.RecTAlt ex) (S : _root_.Formalism.L2.SG.SpectralTiesReal.STiesRAlt Rc)

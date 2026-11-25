@@ -32,12 +32,7 @@ def pointOfRealisation (pin : _root_.Formalism.L2.Rows.RowSideDeterminedAlt Rc.T
   alg := B.alg
   R := B.Q.Rl
   charW := B.Q.charW
-  zs := B.Q.zs
-  s0 := B.Q.s0
-  s1 := B.Q.s1
-  dc := B.Q.dc
   stdChar := B.Q.stdChar
-  signs := B.Q.signs
   cG := B.Q.cG
   Sx := B.Q.Sx
   nexp := B.Q.nexp
@@ -59,9 +54,7 @@ def pointOfRealisation (pin : _root_.Formalism.L2.Rows.RowSideDeterminedAlt Rc.T
   qGuard := Qp.qGuard
   hF := Qp.hF
   phsOne := Qp.phsOne
-  prXunit := Qp.prXunit
   grpRecPin := Qp.grpRecPin
-  fdiag := Qp.fdiag
   eGtie := Qp.eGtie
   betaStd := Qp.betaStd
   tupT := Qr.tupT
@@ -71,7 +64,6 @@ def pointOfRealisation (pin : _root_.Formalism.L2.Rows.RowSideDeterminedAlt Rc.T
   tupAt := Qr.recR.tupAt
   tupTie := Qr.tupTie
   tupT_tup := Qr.tupT_tup
-  muEq := Qr.muEq
 def PointSummands.pt {D : D7} {O : Obj D} {c : ℝ} (b : _root_.GlobalTheory.Fc.Ind.PointSummands D O c) : PtAt O.ex c :=
   _root_.GlobalTheory.Fc.Ind.pointOfRealisation b.pin b.DH.2.1 b.DH.2.2 b.B b.pins b.Rr
 def conditionOnPoint (G : PtP) : BdP _root_.GlobalTheory.Fc.Ind.PointSummands := fun D O c b => G D O c b.pt

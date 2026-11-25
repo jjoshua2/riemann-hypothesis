@@ -164,17 +164,7 @@ structure PtAt (ex : Extra D L hT Gi Gl Kc Y cX) (Csz : ℝ) : Type 1 where
 
   charW : R.WeakCharacterisation (P.face Dcf Spf Del h0 Csz)
 
-  zs : (R.toCx3 (P.face Dcf Spf Del h0 Csz)).zs = P.Zs
-
-  s0 : HEq ((R.toCx3 (P.face Dcf Spf Del h0 Csz)).data (P.face Dcf Spf Del h0 Csz).cr false) P.S0
-
-  s1 : HEq ((R.toCx3 (P.face Dcf Spf Del h0 Csz)).data (P.face Dcf Spf Del h0 Csz).cr true) P.S1
-
-  dc : Dcf P.Zs = P.Dc
-
   stdChar : Formalism.L2.Theta.IsStdChar D R.ψ (-1)
-
-  signs : Formalism.IndefR.Mi.SignsAtG R.toRealDat (P.face Dcf Spf Del h0 Csz).lv2
 
   cG : Formalism.L2.DIV.G0 R.Pg D.R.r ≃* G0g D.nd
 
@@ -222,16 +212,12 @@ structure PtAt (ex : Extra D L hT Gi Gl Kc Y cX) (Csz : ℝ) : Type 1 where
 
   phsOne : ∀ i, R.phs i = 1
 
-  prXunit : Formalism.IndefR.Seed.PrIso R.MX R.cX R.prX
-
   grpRecPin : ∃ (plg : (Σ k : Fin 2, D.nd.PlG k) ≃ R.toRealDat.Pg)
       (iso : ∀ kv : (Σ k : Fin 2, D.nd.PlG k), ZMod (D.host.g kv.1) ≃+* kP (plg kv).1),
     (∀ kv, ((plg kv : R.toRealDat.Pg) : Pl D.host.E) = D.naut.plGw kv.1 kv.2) ∧
     (∀ g, D.what₂.embLL ((idemOf P.A3.A.X).coeff g) = D.ntypes.e0.coeff ((R.eG.trans cG) g)) ∧
     (∀ kv, R.toRealDat.C.P.Div kv.1 (plg kv).1) ∧
     ∀ g kv, R.toRealDat.eG g (plg kv) = Formalism.UG.bc (iso kv : ZMod (D.host.g kv.1) →+* kP (plg kv).1) ((R.eG.trans cG) g kv)
-
-  fdiag : ∀ i, IsFDiag (Wc D i) ∧ IsFDiag (Vc D i)
 
   eGtie : P.I.eG = R.eG.trans cG
 
@@ -251,8 +237,6 @@ structure PtAt (ex : Extra D L hT Gi Gl Kc Y cX) (Csz : ℝ) : Type 1 where
 
   tupT_tup : ∀ t, tupT (P.I.tup t) = t
 
-  muEq : R.mu = P.S0.μ
-
 attribute [instance] PtAt.alg
 
 namespace PtAt
@@ -269,15 +253,15 @@ def ofReal (P : IndefiniteRowSideFullHecke ex) (Del h0 : ℕ) (hDel : D.s.Del = 
     (Qp : RealPins B.Q) (Qr : RealRec B.Q) : PtAt ex Csz :=
   { P := P, Del := Del, h0 := h0, hDel := hDel, hh0 := hh0, Dcf := Dcf, Spf := Spf, gamDvd := gamDvd
     T := B.T, alg := B.alg, R := B.Q.Rl
-    charW := B.Q.charW, zs := B.Q.zs, s0 := B.Q.s0, s1 := B.Q.s1, dc := B.Q.dc, stdChar := B.Q.stdChar, signs := B.Q.signs
+    charW := B.Q.charW, stdChar := B.Q.stdChar
     cG := B.Q.cG, Sx := B.Q.Sx, nexp := B.Q.nexp, stdV := B.Q.stdV, stdX := B.Q.stdX, host := B.Q.host, err_eq := B.Q.err_eq
     vpos := B.Q.vpos
     κ := B.κ, v₀ := B.v₀, fw := B.fw, bar := B.bar, O := B.O, pins := B.pins, rhoGeo := B.rhoGeo, equivAll := B.equivAll
     cTie := B.cTie, phase := B.phase
-    qGuard := Qp.qGuard, hF := Qp.hF, phsOne := Qp.phsOne, prXunit := Qp.prXunit, grpRecPin := Qp.grpRecPin, fdiag := Qp.fdiag
+    qGuard := Qp.qGuard, hF := Qp.hF, phsOne := Qp.phsOne, grpRecPin := Qp.grpRecPin
     eGtie := Qp.eGtie, betaStd := Qp.betaStd
     tupT := Qr.tupT, hm := Qr.hm, Tp := Qr.Tp, tupXi := Qr.recR.tupXi, tupAt := Qr.recR.tupAt, tupTie := Qr.tupTie
-    tupT_tup := Qr.tupT_tup, muEq := Qr.muEq }
+    tupT_tup := Qr.tupT_tup }
 
 variable (p : PtAt ex Csz)
 
