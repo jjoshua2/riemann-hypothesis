@@ -9,7 +9,7 @@ public import Development.AbelianVarietyTheory.PublishedTheorems.Divisors₂.Tam
 public import Development.AbelianVarietyTheory.PublishedTheorems.PublishedFoundations.NonemptyAlgHomOfIsRayOfDvd
 public import Development.AbelianVarietyTheory.PublishedTheorems.SemistableReduction₂.SemistableReductionSt
 public import Development.AbelianVarietyTheory.PublishedTheorems.TwistedTraceFormula.NotIsCompactUnivFv
-public import Development.AbelianVarietyTheory.PublishedTheorems.PublishedFoundations.GreenSeriesSt
+public import Development.AbelianVarietyTheory.Definitions.Foundations.StandardFiveNontrivial
 public import Development.AbelianVarietyTheory.PublishedTheorems.AutomorphicForms₂.MumfordProportionality
 public import Development.AbelianVarietyTheory.PublishedTheorems.AdelicLattices₂.ExistsFiniteUnitaryClassesOfDualEqSmul
 public import Development.AbelianVarietyTheory.PublishedTheorems.Landherr₂.LandherrStIffLandherr
@@ -63,14 +63,12 @@ structure Hypotheses₂ : Prop where
   p8 : GlobalTheory.Published.RayClassFieldSt
   p12 : GlobalTheory.Published.SemistableReductionSt
   p13 : GlobalTheory.Published.StrongApproxSU
-  p14 : GlobalTheory.Published.GreenSeriesSt
   p16 : GlobalTheory.Published.MumfordProportionality
   p18 : GlobalTheory.Published.FinitenessOfHermitianClasses
   p19 : GlobalTheory.Published.LandherrSt
   p20 : GlobalTheory.Published.HasseNormSt
   p22 : GlobalTheory.Published.SemiAbelianHomExtension
   p23 : GlobalTheory.Published.InducedSimpleLowestAlcove
-  p25 : GlobalTheory.Published.principalPolarisationOneSection
   p26 : GlobalTheory.Published.AbMulNSt
 
 end GlobalTheory.CovTop
