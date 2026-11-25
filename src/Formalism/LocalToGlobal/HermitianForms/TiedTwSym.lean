@@ -16,13 +16,6 @@ namespace Formalism.L2.Herm
 structure TwChJointS {D : D7} {inQ : D.what₂.Tup → HeightOneSpectrum (𝓞 D.host.F) → Prop} (T : TwChTied D inQ)
     (H : HermColsCh D) where
 
-  gOf : ∀ u μ i, T.Ch u μ i → H.Ch u i
-
-  Uloc_off : ∀ u μ i (h1 : 1 ≤ i) (hm : i ≤ D.R.m) (β : T.Ch u μ i) (v : HeightOneSpectrum (𝓞 D.host.F)), v ∉ T.Q μ →
-    (i + 1 ≠ D.R.m ∨ v ∉ Formalism.L2.Forms.badG D) →
-    (T.lev u μ i h1 hm β).Uloc v = (H.lev u i h1 hm (gOf u μ i β)).Uloc v
-  Lb_off : ∀ u μ i (h1 : 1 ≤ i) (hm : i ≤ D.R.m) (β : T.Ch u μ i) (v : HeightOneSpectrum (𝓞 D.host.F)), v ∉ T.Q μ →
-    locL v (T.lev u μ i h1 hm β).Lb = locL v (H.lev u i h1 hm (gOf u μ i β)).Lb
   Q_off : ∀ u μ, ∀ v ∈ T.Q μ, (((D.mem u).A.T : ℕ) : 𝓞 D.host.F) ∉ v.asIdeal ∧ ∀ a, (D.host.g a : 𝓞 D.host.F) ∉ v.asIdeal
 
 end Formalism.L2.Herm

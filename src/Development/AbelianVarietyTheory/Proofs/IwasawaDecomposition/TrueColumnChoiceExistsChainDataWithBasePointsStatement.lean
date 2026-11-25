@@ -599,12 +599,6 @@ def twJ {H : Formalism.L2.Herm.HermColsCh (I.rec7 l Z)} {F : ∀ u, FormsTiedSym
     (p : ∀ u a, TwPack (I := I) (l := l) (Z := Z) H F (Q a) u a)
     (hoff : ∀ (u : B.Word) a, ∀ v ∈ Q a, ((B.T u : ℕ) : 𝓞 (I.rec7 l Z).host.F) ∉ v.asIdeal ∧ ∀ j, (((I.rec7 l Z).host.g j : ℕ) : 𝓞 (I.rec7 l Z).host.F) ∉ v.asIdeal) :
     Formalism.L2.Herm.TwChJointS (twT Q hQ p) H where
-  gOf u μ i := ((p u μ).St i).gOf
-  Uloc_off := by
-    intro u μ i h1 hm β v hv
-    intros
-    exact ((p u μ).St i).offU h1 hm β v hv
-  Lb_off u μ i h1 hm β v hv := congrArg _ (((p u μ).St i).offL h1 hm β)
   Q_off u μ := hoff u μ
 
 theorem idY_twYS {inQ : I.ι → HeightOneSpectrum (𝓞 (I.rec7 l Z).host.F) → Prop} {H : Formalism.L2.Herm.HermColsCh (I.rec7 l Z)}
